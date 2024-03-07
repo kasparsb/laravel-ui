@@ -1,0 +1,1200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+@import '../../../node_modules/calendar/less/calendar.less';
+@import 'resets';
+@import 'input-text';
+
+@desktopWidth: 950px;
+
+[type=button], [type=reset], [type=submit], button {
+    -webkit-appearance: button;
+    background-color: transparent;
+    background-image: none;
+}
+
+
+// Variables
+*,:after,:before {
+    --input: 240 5.9% 90%;
+    --radius: 0.5rem;
+    --font-family-sans: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 600;
+
+
+    --muted-foreground: 240 3.8% 46.1%;
+    --color-danger: 0 72% 51%;
+    --color-background: 0 0% 100%;
+
+
+    box-sizing: border-box;
+    border: 0 solid #e5e7eb;
+}
+
+.color-zinc {
+    // Color Zinc no tailwind
+    // tīri hsl definīcija bez hsl. Lai var izmantot var iekš hsl un papildus norādīt opacity
+    --color-50: 0 0% 98%;
+    --color-100: 240 5% 96%;
+    --color-200: 240 6% 90%;
+    --color-300: 240 5% 84%;
+    --color-400: 240 5% 65%;
+    --color-500: 240 4% 46%;
+    --color-600: 240 5% 34%;
+    --color-700: 240 5% 26%;
+    --color-800: 240 4% 16%;
+    --color-900: 240 6% 10%;
+    --color-950: 240 10% 4%;
+
+
+    // šie ir lai varētu vieglāk preview krāsu uzreiz saprast
+    --color-50-hsl: hsl(0, 0%, 98%);
+    --color-100-hsl: hsl(240, 5%, 96%);
+    --color-200-hsl: hsl(240, 6%, 90%);
+    --color-300-hsl: hsl(240, 5%, 84%);
+    --color-400-hsl: hsl(240, 5%, 65%);
+    --color-500-hsl: hsl(240, 4%, 46%);
+    --color-600-hsl: hsl(240, 5%, 34%);
+    --color-700-hsl: hsl(240, 5%, 26%);
+    --color-800-hsl: hsl(240, 4%, 16%);
+    --color-900-hsl: hsl(240, 6%, 10%);
+    --color-950-hsl: hsl(240, 10%, 4%);
+    --color-danger-hsl: hsl(0, 72%, 51%);
+    --color-background-hsl: hsl(0, 0%, 100%);
+
+    //color: hsl(240 5.9% 10%);
+}
+
+.font-sans {
+    font-family: var(--font-family-sans);
+}
+
+.font-inter {
+    font-family: Inter,ui-sans-serif,system-ui,sans-serif;
+}
+
+.remove-tap-highlite {
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+}
+
+
+
+
+
+body {
+    .color-zinc();
+    .font-inter();
+
+    min-height: 100dvh;
+    color: var(--color-950);
+
+    --desktop-width: @desktopWidth;
+    --layout-aside-width: 200px;
+}
+
+/*
+0.5:   0.125rem;
+1:     0.25rem;
+1.5:   0.375rem;
+2:     0.5rem;
+2.5:   0.625rem;
+3:     0.75rem;
+3.5:   0.875rem;
+4:     1rem;
+5:     1.25rem;
+6:     1.5rem;
+7:     1.75rem;
+8:     2rem;
+9:     2.25rem;
+10:    2.5rem;
+11:    2.75rem;
+12:    3rem;
+14:    3.5rem;
+16:    4rem;
+20:    5rem;
+24:    6rem;
+28:    7rem;
+32:    8rem;
+36:    9rem;
+40:    10rem;
+44:    11rem;
+48:    12rem;
+52:    13rem;
+56:    14rem;
+60:    15rem;
+64:    16rem;
+72:    18rem;
+80:    20rem;
+96:    24rem;
+*/
+
+@size005: 0.125rem;
+@size010: 0.25rem;
+@size015: 0.375rem;
+@size020: 0.5rem;
+@size025: 0.625rem;
+@size030: 0.75rem;
+@size035: 0.875rem;
+@size040: 1rem;
+@size050: 1.25rem;
+@size060: 1.5rem;
+@size070: 1.75rem;
+@size080: 2rem;
+@size090: 2.25rem;
+@size100: 2.5rem;
+@size110: 2.75rem;
+@size120: 3rem;
+@size140: 3.5rem;
+@size160: 4rem;
+@size200: 5rem;
+@size240: 6rem;
+@size280: 7rem;
+@size320: 8rem;
+@size360: 9rem;
+@size400: 10rem;
+@size440: 11rem;
+@size480: 12rem;
+@size520: 13rem;
+@size560: 14rem;
+@size600: 15rem;
+@size640: 16rem;
+@size720: 18rem;
+@size800: 20rem;
+@size960: 24rem;
+
+
+.my-0\.5 {
+    margin-top: @size005;
+    margin-bottom: @size005;
+}
+.my-4 {
+    margin-top: @size040;
+    margin-bottom: @size040;
+}
+.mb-4 {
+    margin-top: @size040;
+    margin-bottom: @size040;
+}
+.mt-1\.5 {
+    margin-top: @size015;
+}
+.mt-2 {
+    margin-top: @size020;
+}
+.mt-3 {
+    margin-top: @size030;
+}
+.mt-3\.5 {
+    margin-top: @size035;
+}
+.mt-4 {
+    margin-top: @size040;
+}
+.mt-5 {
+    margin-top: @size050;
+}
+
+.py-4 {
+    padding-top: @size040;
+    padding-bottom: @size040;
+}
+.pt-4 {
+    padding-top: @size040;
+    padding-bottom: @size040;
+}
+
+.w-2 {
+    width: @size020;
+}
+.w-2\.5 {
+    width: @size025;
+}
+.w-4 {
+    width: @size040;
+}
+.w-8 {
+    width: @size080;
+}
+.w-10 {
+    width: @size100;
+}
+.w-11 {
+    width: @size110;
+}
+.w-12 {
+    width: @size120;
+}
+.w-14 {
+    width: @size140;
+}
+.w-16 {
+    width: @size160;
+}
+.w-20 {
+    width: @size200;
+}
+.w-24 {
+    width: @size240;
+}
+.w-28 {
+    width: @size280;
+}
+.w-32 {
+    width: @size320;
+}
+.w-36 {
+    width: @size360;
+}
+.w-40 {
+    width: @size400;
+}
+.w-44 {
+    width: @size440;
+}
+.w-96 {
+    width: @size960;
+}
+.w-full {
+    width: 100%;
+}
+
+.text-size-2\.5,
+.t-2\.5 {
+    font-size: @size025;
+    line-height: @size035;
+}
+.text-size-3,
+.t-3 {
+    font-size: @size030;
+    line-height: @size040;
+}
+.text-size-3\.5,
+.t-3\.5 {
+    font-size: @size035;
+    line-height: @size050;
+}
+.text-size-4,
+.t-4 {
+    font-size: @size040;
+    line-height: @size060;
+}
+.text-size-5,
+.t-5 {
+    font-size: @size050;
+    line-height: @size070;
+}
+.text-size-6,
+.t-6 {
+    font-size: @size060;
+    line-height: @size080;
+}
+.t-7 {
+    font-size: @size070;
+    line-height: @size090;
+}
+.t-8 {
+    font-size: @size080;
+    line-height: @size100;
+}
+
+.label-3\.5 {
+    font-size: @size035;
+    line-height: @size050;
+    font-weight: var(--font-weight-medium);
+}
+
+.badge {
+    display: inline-flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: @size010;
+
+    .text-size-3();
+
+    padding-top: @size005;
+    padding-bottom: @size005;
+    padding-left: @size025;
+    padding-right: @size025;
+
+    border-radius: calc(var(--radius) - 2px);
+
+    svg {
+        width: @size030;
+        height: @size030;
+        //stroke-width: 2px;
+    }
+
+    background-color: hsl(var(--color-100));
+    color: hsl(var(--color-600));
+    font-weight: var(--font-weight-medium);
+}
+
+.transition-color {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+}
+.shadow {
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0 1px 2px 0 rgba(0,0,0,.05);
+}
+.shadow-md {
+    box-shadow:
+        0 0 #0000,
+        0 0 #0000,
+        0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+}
+
+.input-label {
+    font-weight: var(--font-weight-medium);
+    .text-size-3\.5();
+    line-height: 1;
+}
+
+
+.button-base {
+    .remove-tap-highlite();
+
+    &:is(a) {
+        text-decoration: none;
+    }
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+
+    height: @size090;
+    padding-left: @size040;
+    padding-right: @size040;
+    padding-top: @size020;
+    padding-bottom: @size020;
+
+    .text-size-3\.5();
+    font-weight: 500;
+
+    /**
+     * @todo vajag nodefinēts radius kā mainīgo. šitas ir border-md
+     */
+    border-radius: calc(var(--radius) - 2px);
+
+    .transition-color();
+
+    cursor: pointer;
+
+    svg {
+        margin-right: @size015;
+        width: @size040;
+        height: @size040;
+    }
+    // Tikai ikona, bet label
+    &.icon {
+        svg {
+            margin-right: 0;
+        }
+    }
+}
+
+.button-primary {
+    .button-base();
+    .shadow();
+    color: hsl(var(--color-100));
+    background-color: hsl(var(--color-950));
+    &:hover {
+        background-color: hsl(var(--color-950) / .9);
+    }
+}
+.button-secondary {
+    .button-base();
+    .shadow();
+    color: hsl(var(--color-900));
+    background-color: hsl(var(--color-100));
+    &:hover {
+        background-color: hsl(var(--color-100) / .8);
+    }
+}
+.button-danger {
+    .button-base();
+    .shadow();
+    color: hsl(var(--color-100));
+    background-color: hsl(var(--color-danger));
+    &:hover {
+        background-color: hsl(var(--color-danger) / .9);
+    }
+}
+.button-outline {
+    .button-base();
+    color: var(--color-950);
+    background-color: hsl(var(--color-background));
+    border: 1px solid hsl(var(--input));
+    &:hover {
+        background-color: hsl(var(--color-100));
+    }
+}
+.button-ghost {
+    .button-base();
+    color: var(--color-950);
+    background-color: hsl(var(--color-background));
+    &:hover {
+        background-color: hsl(var(--color-100));
+        .shadow();
+    }
+}
+.button-link {
+    .button-base();
+    color: var(--color-950);
+    background-color: hsl(var(--color-background));
+    text-underline-offset: 4px;
+    &:hover {
+        text-decoration-line: underline;
+    }
+}
+
+.delimiter {
+    color: hsl(var(--color-300));
+    width: 2px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+
+.form-field {
+    display: grid;
+    gap: @size020;
+
+    >label {
+        .input-label();
+    }
+    >[type=text],
+    >[type=email],
+    >[type=password],
+    >[type=date],
+    >.select-placeholder {
+        .input-text();
+        width: 100%;
+    }
+    >.select-placeholder {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: space-between;
+
+        position: relative;
+
+        select {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        svg {
+            pointer-events: none;
+            width: @size040;
+            height: @size040;
+        }
+    }
+    // Description text
+    >p {
+        font-size: @size035;
+        color: hsl(var(--color-500));
+    }
+}
+
+
+.form-vertical {
+    display: grid;
+    gap: @size040;
+}
+
+.col-items {
+    display: grid;
+    gap: @size040;
+}
+.col-items-condensed {
+    // Cards saspiežam ar bottom malām kopā
+    >.card {
+        border-radius: 0;
+        border-top: 0;
+        &:first-child {
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+            border-top: 1px solid #e5e7eb;
+        }
+        &:last-child {
+            border-bottom-left-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+        }
+    }
+}
+.row-items-space-between {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    gap: @size020;
+
+    &.items-center {
+        align-items: center
+    }
+}
+.row-items-condensed {
+    display: flex;
+    flex-flow: row wrap;
+    >.button-outline {
+        border-radius: 0;
+        border-left: 0;
+        &:first-child {
+            border-top-left-radius: var(--radius);
+            border-bottom-left-radius: var(--radius);
+            border-left: 1px solid #e5e7eb;
+        }
+        &:last-child {
+            border-top-right-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+        }
+    }
+    &.items-center {
+        align-items: center
+    }
+}
+.row-items {
+    display: flex;
+    flex-flow: row wrap;
+    gap: @size020;
+
+    &.items-center {
+        align-items: center
+    }
+}
+
+.title {
+    font-weight: var(--font-weight-bold);
+
+    &.fw-b {
+        font-weight: var(--font-weight-bold);
+    }
+    &.fw-m {
+        font-weight: var(--font-weight-medium);
+    }
+    &.fw-r {
+        font-weight: var(--font-weight-regular);
+    }
+
+    line-height: 1;
+
+    &.t-3\.5 {
+        letter-spacing: -.025em;
+    }
+}
+.title-description {
+    .text-size-3\.5();
+    color: hsl(var(--color-500));
+
+    margin-top: @size015;
+
+    display: flex;
+    align-items: center;
+
+    gap: @size010;
+}
+
+.card {
+    border-radius: var(--radius);
+    border: 1px solid #e5e7eb;
+
+    padding: @size060;
+
+    .shadow();
+
+    &.has-bg {
+        background-color: hsl(var(--color-background));
+    }
+
+    &.compact {
+        padding-top: @size040;
+        padding-bottom: @size040;
+    }
+    &.hover {
+        cursor: pointer;
+        .transition-color();
+        &:hover {
+            background-color: hsl(var(--color-100));
+        }
+    }
+
+    // Kā overlay
+    &.is-overlay {
+        .has-bg();
+        .shadow-md();
+        padding: @size020;
+    }
+
+    > * {
+        margin-top: @size060;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}
+
+
+.toggle-switch {
+    .remove-tap-highlite();
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    gap: @size020;
+
+    cursor: pointer;
+
+
+    /* The rule below is not implemented in browsers yet */
+    -o-user-select: none;
+    /* The rule below is implemented in most browsers by now */
+    user-select: none;
+
+
+
+    // Label
+    span:not(:has(input)) {
+        .text-size-3\.5();
+        line-height: 1;
+        font-weight: 500;
+    }
+
+    // Switch
+    span:has(input) {
+        position: relative;
+
+        display: inline-flex;
+        align-items: center;
+        border-radius: 9999px;
+        border: 2px solid #e5e7eb;
+
+        width: @size110;
+        height: @size060;
+
+        .transition-color();
+
+        &:after {
+            content: '';
+            display: block;
+
+            width: @size050;
+            height: @size050;
+
+            background-color: hsl(var(--color-50));
+            border-radius: 9999px;
+
+            pointer-events: none;
+
+            transition-property: transform;
+            transition-timing-function: cubic-bezier(.4,0,.2,1);
+            transition-duration: .15s;
+
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+        }
+
+        &:has([type=checkbox]:checked) {
+            background-color: hsl(var(--color-900));
+            border-color: hsl(var(--color-900));
+        }
+        &:has([type=checkbox]:checked):after {
+            transform: translate(@size050, 0);
+        }
+
+        input {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            cursor: inherit;
+        }
+
+        background-color: hsl(var(--color-200));
+    }
+}
+
+.toggle-switch-card {
+    border-radius: var(--radius);
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: @size040 @size030;
+    gap: @size040;
+
+    .shadow();
+
+    >div {
+        h4 {
+            .input-label();
+        }
+        p {
+            // @todo šito kā atsevišķu klasi, lai var reuse iekš form-field
+            font-size: 0.8rem;
+            color: hsl(var(--color-500));
+
+            margin-top: @size020;
+        }
+    }
+}
+
+
+.checkbox {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: @size020;
+
+    .input-label();
+
+    span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: @size040;
+        height: @size040;
+
+        border: 1px solid hsl(var(--color-900));
+        border-radius: calc(var(--radius) - 4px);
+
+        color: #fff;
+
+        svg {
+            opacity: 0;
+
+            width: @size040;
+            height: @size040;
+
+            display: block;
+        }
+
+        &:has(input:checked) {
+            background-color: hsl(var(--color-900));
+
+            svg {
+                opacity: 1;
+            }
+        }
+
+        input {
+            display: none;
+        }
+    }
+}
+
+table {
+    border-collapse: collapse;
+    .text-size-3\.5();
+
+    &.full {
+        width: 100%;
+    }
+
+    thead {
+        tr {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            vertical-align: middle;
+            text-align: left;
+            color: hsl(var(--color-500));
+            height: @size100;
+            padding-left: @size020;
+            padding-right: @size020;
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid #e5e7eb;
+            &:hover {
+                background-color: hsl(var(--color-100)/.5);
+            }
+        }
+        td {
+            vertical-align: middle;
+            padding: @size020;
+        }
+    }
+}
+
+.nav-menu-item {
+    .remove-tap-highlite();
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+
+
+    height: @size070;
+    padding-left: @size030;
+    padding-right: @size030;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    // Ja ir ielikta ikona, tad left padding samazinām
+    &:has(svg) {
+        padding-left: @size020;
+    }
+
+    .text-size-3\.5();
+    white-space: nowrap;
+    font-weight: 500;
+    color: hsl(var(--color-900));
+    text-decoration: none;
+
+
+
+    /**
+     * @todo vajag nodefinēts radius kā mainīgo. šitas ir border-md
+     */
+    border-radius: calc(var(--radius) - 2px);
+
+    .transition-color();
+
+    cursor: pointer;
+
+    svg {
+        margin-right: @size015;
+        width: @size040;
+        height: @size040;
+    }
+
+    &:hover {
+        background-color: hsl(var(--color-100));
+    }
+    &.selected {
+        background-color: hsl(var(--color-200));
+    }
+}
+.nav-menu {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    gap: @size005;
+
+    &.vertical {
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: flex-start;
+    }
+}
+
+.header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: @size040;
+}
+
+
+
+
+.layout {
+    /**
+     * LAYOUT
+     */
+    // mob
+    @media (max-width: 749px) {
+    }
+    // tablet
+    @media (min-width: 750px) and (max-width: (@desktopWidth - 1px)) {
+        display: block;
+    }
+    // desktop
+    @media (min-width: @desktopWidth) {
+        display: flex;
+        flex-flow: row nowrap;
+
+        position: relative;
+
+        >aside {
+            flex: 0 0 var(--layout-aside-width);
+            height: 100dvh;
+            max-height: 100dvh;
+
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            top: 0;
+            position: sticky;
+
+            display: flex;
+            flex-flow: column nowrap;
+
+            justify-content: space-between;
+        }
+        >section {
+            flex: 1;
+        }
+    }
+
+
+
+    /**
+     * VISUAL
+     */
+    >aside {
+        background-color: hsl(var(--color-50));
+        border-right: 1px solid hsl(var(--color-200));
+        padding-left: @size030;
+        padding-right: @size030;
+    }
+    >section {
+        // padding nelieka, to lai dara tas elements, kurš būs ielikts main content daļā
+    }
+}
+.page {
+    // desktop
+    @media (min-width: @desktopWidth) {
+        padding-left: @size060;
+        padding-right: @size060;
+        padding-top: @size040;
+        padding-bottom: @size040;
+    }
+
+    margin-left: auto;
+    margin-right: auto;
+
+    &.narrow {
+        max-width: 28rem;
+    }
+    &.regular {
+        max-width: 56rem;
+    }
+
+    >.header {
+        margin-bottom: @size120;
+    }
+
+    // Spacing starp direct elementiem
+    >* {
+        margin-top: @size100;
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}
+
+
+.wbcalendar-grid {
+    //gap: 2px;
+}
+.wbcalendar-switch {
+    justify-content: space-between;
+    align-items: center
+}
+.wbcalendar-navprev,
+.wbcalendar-navnext {
+    .button-ghost();
+}
+.wbcalendar-datecaption {
+    .text-size-3\.5();
+    font-weight: 500;
+}
+.wbcalendar-weekday {
+    .text-size-2\.5();
+    font-weight: 500;
+    color: hsl(var(--color-600));
+    text-transform: uppercase;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.wbcalendar-date {
+    .text-size-3\.5();
+    font-weight: 500;
+
+    &.wbcalendar--prevmonth,
+    &.wbcalendar--nextmonth {
+        color: hsl(var(--color-400));
+    }
+
+    // Kalendāra šūnā ir tikai datums, bez formatējums utt
+    >.calendar-single-date {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: calc(var(--radius) - 2px);
+        .transition-color();
+
+        &:hover {
+            background-color: hsl(var(--color-100));
+        }
+    }
+
+    &.wbcalendar--selected {
+        >.calendar-single-date {
+            color: hsl(var(--color-100));
+            background-color: hsl(var(--color-950));
+            &:hover {
+                background-color: hsl(var(--color-950) / .9);
+            }
+        }
+    }
+
+    &.wbcalendar--period-in {
+        >.calendar-single-date {
+            border-radius: 0;
+            background-color: hsl(var(--color-200));
+        }
+    }
+    &.wbcalendar--period-start,
+    &.wbcalendar--period-end {
+        >.calendar-single-date {
+            border-radius: calc(var(--radius) - 2px);
+            color: hsl(var(--color-100));
+            background-color: hsl(var(--color-950));
+        }
+    }
+    &.wbcalendar--period-start {
+        >.calendar-single-date {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
+    &.wbcalendar--period-end {
+        >.calendar-single-date {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+}
+.calendar {
+    &.size-8 {
+        .wbcalendar {
+            width: @size080 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size080;
+            height: @size080;
+        }
+    }
+    &.size-12 {
+        .wbcalendar {
+            width: @size120 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size120;
+            height: @size120;
+        }
+    }
+    &.size-16 {
+        .wbcalendar {
+            width: @size160 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size160;
+            height: @size160;
+        }
+    }
+    &.size-20 {
+        .wbcalendar {
+            width: @size200 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size200;
+            height: @size200;
+        }
+    }
+    &.size-24 {
+        .wbcalendar {
+            width: @size240 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size240;
+            height: @size240;
+        }
+    }
+    &.size-28 {
+        .wbcalendar {
+            width: @size280 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size280;
+            height: @size280;
+        }
+    }
+    &.size-32 {
+        .wbcalendar {
+            width: @size320 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size320;
+            height: @size320;
+        }
+    }
+    &.size-36 {
+        .wbcalendar {
+            width: @size360 * 7;
+        }
+        .wbcalendar-weekday,
+        .wbcalendar-date {
+            width: @size360;
+            height: @size360;
+        }
+    }
+}
+
+
+/**
+ * Absolūti pozicionēts conatiner elements, kurā ielikt
+ * kādu citu elemntu, lai to varētu nopozicionēt pret
+ * kādu citu ementu. Datepicker
+ */
+.overlay-container {
+    position: absolute;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    // top, left uzliks skripts
+
+    // Lai ir līdz ekrāna malām
+    right: 0;
+    bottom: 0;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    // Visible slēdzam ar data atribūtu
+    &[data-visible="yes"] {
+        opacity: 1;
+
+        // kad redzams, ieslēdzam pointer events
+        & >* {
+            pointer-events: all;
+        }
+    }
+}

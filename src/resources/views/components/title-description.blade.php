@@ -1,0 +1,1 @@
+<div {{ $attributes->class(['title-description']) }}>{{ $slot }}</div>

@@ -1,0 +1,1 @@
+<link href="{{ asset('/vendor/ui/dist/app.min-0.0.2.css') }}" rel="stylesheet">

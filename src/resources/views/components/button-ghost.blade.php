@@ -1,0 +1,1 @@
+<button {{ $attributes->class(['button-ghost']) }} >{{ $slot }}</button>

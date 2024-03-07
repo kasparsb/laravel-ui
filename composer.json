@@ -1,0 +1,10 @@
+{
+    "name": "kasparsb/ui",
+    "description": "UI",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Kasparsb\\Ui\\": "src/"
+        }
+    }
+}
