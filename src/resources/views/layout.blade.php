@@ -140,7 +140,8 @@
                     <x-ui::form-vertical>
 
                         <x-ui::field-date label="From" name="from" value="" description="Enter from date" />
-
+                        <x-ui::field-date label="From min date" name="from2" value="" description="Enter from date" min-date="2024-03-08" />
+                        <x-ui::field-date label="From min max date" name="from2" value="" description="Enter from date" min-date="2024-03-08" max-date="2024-03-20" />
                         <x-ui::field-text label="Surname" name="surname" value="" description="Enter your surname" />
 
                         <x-ui::field type="email" placeholder="Email" label="Email" name="email" value="" description="What is your email address" />
@@ -253,17 +254,27 @@
                 </x-ui::table>
 
 
-                <x-ui::calendar size="8" :status-url="route('calendar.status')" />
+                <x-ui::calendar size="8" maxDate="2024-03-20" />
 
-                <br />
-                <br />
+                <x-ui::calendar-period size="8" name_from="from" name_till="till" maxDate="2024-03-20" />
 
-                <x-ui::calendar size="8" />
+                <x-ui::title>Calendar ar default date state</x-ui::title>
+                <x-ui::calendar size="8" :default_date_state="['disabled' => true]" :state="['2024-03-12' => ['disabled' => false]]" />
 
-                <br />
-                <br />
+                <x-ui::title>Calendar ar stateUrl</x-ui::title>
+                <x-ui::calendar size="8" :state-url="route('calendar.status')" />
 
-                <x-ui::calendar-period size="8" name_from="from" name_till="till"  />
+                <x-ui::title>Calendar ar custom css class un krasam</x-ui::title>
+                <x-ui::calendar size="8" class="calendar-with-colors" />
+                <style>
+                    .calendar-with-colors {
+                        --text-color-date-default: var(--color-400);
+                        --text-color-date-secondary: var(--color-400);
+                        --border-radius-date: 0;
+                    }
+                </style>
+
+                <x-ui::calendar class="bordered" size="36" name_from="from" name_till="till"  />
 
                 <br />
                 <br />
