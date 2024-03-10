@@ -1,8 +1,8 @@
 <div
     class="calendar is-period size-{{ $size }}"
     data-period="yes"
-    @if ($statusUrl)
-    data-status-url="{{ $statusUrl }}"
+    @if ($stateUrl)
+    data-state-url="{{ $stateUrl }}"
     @endif
     @if ($name)
     data-name="{{ $name }}"

@@ -1,7 +1,9 @@
 <div
-    class="calendar size-{{ $size }}"
-    @if ($statusUrl)
-    data-status-url="{{ $statusUrl }}"
+
+    {{ $attributes->class(['calendar', 'size-'.$size]) }}
+
+    @if ($stateUrl)
+    data-state-url="{{ $stateUrl }}"
     @endif
     @if ($name)
     data-name="{{ $name }}"

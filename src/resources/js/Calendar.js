@@ -1,75 +1,34 @@
 import {jsx, q, qa, append, get} from 'dom-helpers';
 import BaseCalendar from 'calendar';
+import weekDayToText from './calendar/weekDayToText';
+import stringToDate from './calendar/stringToDate';
+import formatDate from './calendar/formatDate';
+import dateCaptionFormatter from './calendar/dateCaptionFormatter';
+import navPrevFormatter from './calendar/navPrevFormatter';
+import navNextFormatter from './calendar/navNextFormatter';
 
-function stringToDate(dateString) {
+/**
+ * Calendar month day formatter
+ */
+// function monthDayFormatter(date, el, dateState){
+//     let r = false;
+//     if (!el) {
+//         el = <div></div>
+//         r = true;
+//     }
 
-    // Sadalam pa datumu un laiku
-    var dp = dateString.split(' ');
+//     if (dateState) {
+//         el.innerHTML = dateState.html;
+//     }
+//     else {
+//         el.className = 'calendar-single-date';
+//         el.innerHTML = date.getDate();
+//     }
 
-    // gads, mēnesis, diena
-    var date = dp[0].split('-');
-    // stundas, minūtes, sekundes
-    var time = [0, 0, 0];
-    if (dp.length > 1) {
-        time = dp[1].split(':');
-    }
-
-    if ((date.length != 3) || (time.length != 3)) {
-        return new Date();
-    }
-
-    return new Date(date[0], date[1]-1, date[2], time[0], time[1], time[2]);
-}
-
-function sp(s) {
-    s = s+'';
-    if (s.length == 1) {
-        s = '0'+s;
-    }
-    return s;
-}
-
-function ymd(date) {
-    return date.getFullYear()+'-'+sp(date.getMonth()+1)+'-'+sp(date.getDate());
-}
-
-function cloneDate(date) {
-    return new Date(date.getTime());
-}
-
-function daysInMonthByDate(date) {
-    return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
-}
-
-function findMinMaxDates(dates) {
-    let min, max;
-
-    dates.forEach(date => {
-        date = cloneDate(date);
-        date.setDate(1);
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setMilliseconds(0);
-
-        if (!min) {
-            min = cloneDate(date);
-        }
-        else if (min.getTime() > date.getTime()) {
-            min = cloneDate(date);
-        }
-
-        date.setDate(daysInMonthByDate(date));
-
-        if (!max) {
-            max = cloneDate(date);
-        }
-        else if (max.getTime() < date.getTime()) {
-            max = cloneDate(date);
-        }
-    })
-
-    return {min, max};
-}
+//     if (r) {
+//         return el;
+//     }
+// }
 
 function Calendar(containerEl) {
 
@@ -87,9 +46,9 @@ function Calendar(containerEl) {
     this.fromInputField = q(this.containerEl, 'input[data-role="from"]');
     this.tillInputField = q(this.containerEl, 'input[data-role="till"]');
 
-    this.statusUrl = false;
-    if (containerEl.dataset.statusUrl) {
-        this.statusUrl = containerEl.dataset.statusUrl;
+    this.stateUrl = false;
+    if (containerEl.dataset.stateUrl) {
+        this.stateUrl = containerEl.dataset.stateUrl;
     }
 
     let firstDate = new Date();
@@ -106,49 +65,34 @@ function Calendar(containerEl) {
         }
     }
 
-
-    this.calendar = new BaseCalendar.dom(firstDate, {
+    let calendarProps = {
         //cssprefix: '',
         view: 'month',
         count: 1,
         showWeekdays: true,
         showDateSwitch: true,
-        showToday: false,
+        showToday: true,
         showSelectedDate: true,
-        // pazīme, ka jāļauj atzīmēt period
         selectPeriod: this.isPeriod,
-        // selectedPeriod: {
-        //     from: new Date('2023-05-10 00:00:00'),
-        //     till: new Date('2023-05-22 23:59:59')
-        // },
-        monthDayFormatter: function(date, el, dateState){
 
-            let r = false;
-            if (!el) {
-                el = <div></div>
-                r = true;
-            }
+        // Vai ļaut klikšķināt uz prev/next month datumiem
+        disablePrevMonthDate: true,
+        disableNextMonthDate: true,
 
-            if (dateState) {
-                el.className = '';
-                if (dateState.className) {
-                    el.className = dateState.className;
-                }
-                el.innerHTML = dateState.html;
-            }
-            else {
-                el.className = 'calendar-single-date';
-                el.innerHTML = date.getDate();
-            }
+        //monthDayFormatter: monthDayFormatter,
+        weekDayToText: weekDayToText,
+        dateCaptionFormatter: dateCaptionFormatter,
+        navPrevFormatter: navPrevFormatter,
+        navNextFormatter: navNextFormatter,
 
-            if (r) {
-                return el;
-            }
-        },
-        weekDayToText: function(dayIndex) {
-            return ['', 'P', 'O', 'T', 'C', 'Pk', 'S', 'Sv'][dayIndex];
-        }
-    });
+
+    }
+
+    if (this.stateUrl) {
+        calendarProps.stateUrl = this.stateUrl;
+    }
+
+    this.calendar = new BaseCalendar.dom(firstDate, calendarProps);
 
     if (this.isPeriod) {
         if (this.fromInputField.value && this.tillInputField.value) {
@@ -171,8 +115,8 @@ function Calendar(containerEl) {
             let period = findMinMaxDates(dates);
 
             get(this.statusUrl, {
-                from: ymd(period.min),
-                till: ymd(period.max)
+                from: formatDate.ymd(period.min),
+                till: formatDate.ymd(period.max)
             })
                 .then(status => {
                     this.calendar.setState(status)
@@ -183,17 +127,17 @@ function Calendar(containerEl) {
     // Ja ir date input field, tad uz dateclick ieliksim to datumu laukā
     if (this.dateInputField) {
         this.calendar.on('dateclick', date => {
-            this.dateInputField.value = ymd(date)
+            this.dateInputField.value = formatDate.ymd(date)
         })
     }
 
     if (this.fromInputField || this.tillInputField) {
         this.calendar.on('periodselect', period => {
             if (this.fromInputField) {
-                this.fromInputField.value = ymd(period.from)
+                this.fromInputField.value = formatDate.ymd(period.from)
             }
             if (this.tillInputField) {
-                this.tillInputField.value = ymd(period.till)
+                this.tillInputField.value = formatDate.ymd(period.till)
             }
         })
     }

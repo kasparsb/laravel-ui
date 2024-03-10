@@ -1,5 +1,9 @@
 import {jsx, q, addStyle, append, replaceContent, getOffset, isChild, click} from 'dom-helpers';
 import BaseCalendar from 'calendar';
+import weekDayToText from './calendar/weekDayToText';
+import dateCaptionFormatter from './calendar/dateCaptionFormatter';
+import navPrevFormatter from './calendar/navPrevFormatter';
+import navNextFormatter from './calendar/navNextFormatter';
 
 function sp(s) {
     s = s+'';
@@ -25,40 +29,22 @@ function createCalendar(date) {
         count: 1,
         showWeekdays: true,
         showDateSwitch: true,
-        showToday: false,
+        showToday: true,
+
+        // Vai ļaut klikšķināt uz prev/next month datumiem
+        disablePrevMonthDate: true,
+        disableNextMonthDate: true,
+
         // pazīme, ka jāļauj atzīmēt period
         // selectPeriod: true,
         // selectedPeriod: {
         //     from: new Date('2023-05-10 00:00:00'),
         //     till: new Date('2023-05-22 23:59:59')
         // },
-        monthDayFormatter: function(date, el, dateState){
-
-            let r = false;
-            if (!el) {
-                el = <div></div>
-                r = true;
-            }
-
-            if (dateState) {
-                el.className = '';
-                if (dateState.className) {
-                    el.className = dateState.className;
-                }
-                el.innerHTML = dateState.html;
-            }
-            else {
-                el.className = 'calendar-single-date';
-                el.innerHTML = date.getDate();
-            }
-
-            if (r) {
-                return el;
-            }
-        },
-        weekDayToText: function(dayIndex) {
-            return ['', 'P', 'O', 'T', 'C', 'Pk', 'S', 'Sv'][dayIndex];
-        }
+        weekDayToText: weekDayToText,
+        dateCaptionFormatter: dateCaptionFormatter,
+        navPrevFormatter: navPrevFormatter,
+        navNextFormatter: navNextFormatter,
     })
 }
 
@@ -71,7 +57,10 @@ function triggerEvent(el, eventName) {
 
 }
 
-function getContainer() {
+/**
+ * Ja nav izveidoti container un calendar, tad tos izveido
+ */
+function maybeCreateContainerAndCalendar() {
     if (!container) {
         container = (
             <div class="overlay-container">
@@ -91,6 +80,8 @@ function getContainer() {
     if (!calendar) {
         calendar = createCalendar(new Date());
         calendar.on('dateclick', dateSelected)
+
+        replaceContent(q(container, '[data-calendarcontainer]'), calendar.getEl());
     }
 }
 
@@ -121,17 +112,19 @@ function close() {
 }
 
 function open(field) {
+    maybeCreateContainerAndCalendar()
+
     activeField = field;
 
-    getContainer()
+    // Calendar state url. Ja nav, tad noņem state url
+    setTimeout(() => calendar.setStateUrl(field.dataset.stateUrl ? field.dataset.stateUrl : ''), 10)
 
+    // Pozicionē container pret input lauku
     let p = getOffset(field)
     addStyle(container, {
         top: (p.top+40)+'px',
         left: p.left+'px',
     })
-
-    replaceContent(q(container, '[data-calendarcontainer]'), calendar.getEl());
 
     container.dataset.visible = 'yes';
 

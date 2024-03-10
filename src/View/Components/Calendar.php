@@ -13,7 +13,7 @@ class Calendar extends Component
         /**
          * @todo Pārcelt uz pašu kalendāru
          */
-        public $statusUrl = '', // Url, kuru fetchot, lai iegūtu datumu statusu
+        public $stateUrl = '', // Url, kuru fetchot, lai iegūtu datumu state
         public $name = '',
         public $value= '',
     )

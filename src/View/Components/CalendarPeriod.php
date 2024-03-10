@@ -13,7 +13,7 @@ class CalendarPeriod extends Component
         /**
          * @todo Pārcelt uz pašu kalendāru
          */
-        public $statusUrl = '', // Url, kuru fetchot, lai iegūtu datumu statusu
+        public $stateUrl = '', // Url, kuru fetchot, lai iegūtu datumu state
         public $name = '', // name priekš calendar references
         public $nameFrom = '',
         public $nameTill = '',

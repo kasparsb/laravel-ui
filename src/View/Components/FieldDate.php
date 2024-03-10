@@ -9,12 +9,13 @@ use Illuminate\View\Component;
 class FieldDate extends Component
 {
     public function __construct(
-        public $label='',
-        public $name='',
-        public $value='',
-        public $description='',
-        public $placeholder='',
-        public $model=null,
+        public $label = '',
+        public $name = '',
+        public $value = '',
+        public $description = '',
+        public $placeholder = '',
+        public $model = null,
+        public $stateUrl = '',
     )
     {
         if ($this->model) {

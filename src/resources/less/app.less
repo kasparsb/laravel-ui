@@ -637,9 +637,16 @@ body {
 
     > * {
         margin-top: @size060;
-
         &:first-child {
             margin-top: 0;
+        }
+    }
+    &.compact {
+        > * {
+            margin-top: @size040;
+            &:first-child {
+                margin-top: 0;
+            }
         }
     }
 }
@@ -994,21 +1001,61 @@ table {
     }
 }
 
+.calendar {
+    --text-color-date-default: var(--color-950);
+    --text-color-date-secondary: var(--color-400);
+    --border-radius-date: calc(var(--radius) - 2px);
+    --border-today: 1px solid hsl(var(--color-400));
+    --grid-gap: 2px;
+    --border-width: 0px;
 
+    &.bordered {
+        --grid-gap: 0;
+        --border-radius-date: 0;
+        --border-width: 1px;
+    }
+}
 .wbcalendar-grid {
-    //gap: 2px;
+    gap: var(--grid-gap);
+
+    .wbcalendar-slide & {
+        border-left: var(--border-width) solid hsl(var(--color-300));
+        border-top: var(--border-width) solid hsl(var(--color-300));
+    }
 }
 .wbcalendar-switch {
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center
 }
 .wbcalendar-navprev,
 .wbcalendar-navnext {
     .button-ghost();
+    width: @size090;
+    padding-left: @size020;
+    padding-right: @size020;
+    svg {
+        margin-right: 0;
+    }
+}
+.wbcalendar-navprev {
+    order: 2;
+}
+.wbcalendar-navnext {
+    order: 3;
+}
+.wbcalendar-datecaption {
+    order: 1;
+    flex: 1 1 100%;
 }
 .wbcalendar-datecaption {
     .text-size-3\.5();
-    font-weight: 500;
+    .month {
+        font-weight: var(--font-weight-bold);
+        margin-right: @size010;
+    }
+    .year {
+        color: hsl(var(--color-500));
+    }
 }
 .wbcalendar-weekday {
     .text-size-2\.5();
@@ -1021,71 +1068,98 @@ table {
     align-items: center;
 }
 .wbcalendar-date {
+
+    /** 1. Date base formatting */
     .text-size-3\.5();
+    color: hsl(var(--text-color-date-default));
     font-weight: 500;
 
-    &.wbcalendar--prevmonth,
-    &.wbcalendar--nextmonth {
-        color: hsl(var(--color-400));
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: var(--border-radius-date);
+
+    box-sizing: border-box;
+
+    .transition-color();
+
+    &:hover {
+        background-color: hsl(var(--color-100));
     }
 
-    // Kalendāra šūnā ir tikai datums, bez formatējums utt
-    >.calendar-single-date {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
 
-        border-radius: calc(var(--radius) - 2px);
-        .transition-color();
 
+    /** 2. Today */
+    &.wbcalendar--today {
+        // background-color: hsl(var(--color-200));
+        // &:hover {
+        //     background-color: hsl(var(--color-100));
+        // }
+        border: var(--border-today);
+    }
+
+
+    /** 3. Prev next months */
+    &.wbcalendar--prevmonth,
+    &.wbcalendar--nextmonth {
+        color: hsl(var(--text-color-date-secondary));
+    }
+
+
+    /** 4. Period */
+    &.wbcalendar--period-in {
+        background-color: hsl(var(--color-200));
+        border-radius: 0;
         &:hover {
             background-color: hsl(var(--color-100));
         }
     }
-
-    &.wbcalendar--selected {
-        >.calendar-single-date {
-            color: hsl(var(--color-100));
-            background-color: hsl(var(--color-950));
-            &:hover {
-                background-color: hsl(var(--color-950) / .9);
-            }
-        }
-    }
-
-    &.wbcalendar--period-in {
-        >.calendar-single-date {
-            border-radius: 0;
-            background-color: hsl(var(--color-200));
-        }
-    }
     &.wbcalendar--period-start,
     &.wbcalendar--period-end {
-        >.calendar-single-date {
-            border-radius: calc(var(--radius) - 2px);
-            color: hsl(var(--color-100));
-            background-color: hsl(var(--color-950));
+        border-radius: calc(var(--radius) - 2px);
+        color: hsl(var(--color-100));
+        background-color: hsl(var(--color-950));
+        &:hover {
+            background-color: hsl(var(--color-950) / .8);
         }
     }
     &.wbcalendar--period-start {
-        >.calendar-single-date {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
     }
     &.wbcalendar--period-end {
-        >.calendar-single-date {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+
+    /** 5. User selected date */
+    &.wbcalendar--selected {
+        color: hsl(var(--color-100));
+        background-color: hsl(var(--color-950));
+        &:hover {
+            background-color: hsl(var(--color-950) / .8);
+        }
+    }
+
+
+    /** 6. Disabled date */
+    &.wbcalendar--date-disabled {
+        cursor: default;
+        color: hsl(var(--text-color-date-secondary));
+        // Noņemam hover krāsu
+        &:not(.wbcalendar--today):hover {
+            background-color: transparent;
         }
     }
 }
 .calendar {
     &.size-8 {
         .wbcalendar {
-            width: @size080 * 7;
+            width: ~'calc('(@size080 * 7)~' + (var(--grid-gap)*6))';
         }
         .wbcalendar-weekday,
         .wbcalendar-date {
@@ -1155,11 +1229,17 @@ table {
     }
     &.size-36 {
         .wbcalendar {
-            width: @size360 * 7;
+            //width: ~'calc('(@size360 * 7)~' + var(--grid-gap)*6)';
+            width: ~'calc('(@size360 * 7)~' + 7px)';
         }
         .wbcalendar-weekday,
         .wbcalendar-date {
             width: @size360;
+        }
+        .wbcalendar-weekday {
+            height: @size120;
+        }
+        .wbcalendar-date {
             height: @size360;
         }
     }

@@ -7,7 +7,11 @@
         type="text"
         name="{{ $name }}"
         value="{{ $value }}"
-        placeholder="{{ $placeholder }}" />
+        placeholder="{{ $placeholder }}"
+        @if ($stateUrl)
+        data-state-url="{{ $stateUrl }}"
+        @endif
+        />
     @if ($description)
     <p>{{ $description }}</p>
     @endif
