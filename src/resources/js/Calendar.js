@@ -7,29 +7,6 @@ import dateCaptionFormatter from './calendar/dateCaptionFormatter';
 import navPrevFormatter from './calendar/navPrevFormatter';
 import navNextFormatter from './calendar/navNextFormatter';
 
-/**
- * Calendar month day formatter
- */
-// function monthDayFormatter(date, el, dateState){
-//     let r = false;
-//     if (!el) {
-//         el = <div></div>
-//         r = true;
-//     }
-
-//     if (dateState) {
-//         el.innerHTML = dateState.html;
-//     }
-//     else {
-//         el.className = 'calendar-single-date';
-//         el.innerHTML = date.getDate();
-//     }
-
-//     if (r) {
-//         return el;
-//     }
-// }
-
 function Calendar(containerEl) {
 
     this.containerEl = containerEl;
@@ -84,12 +61,18 @@ function Calendar(containerEl) {
         dateCaptionFormatter: dateCaptionFormatter,
         navPrevFormatter: navPrevFormatter,
         navNextFormatter: navNextFormatter,
-
-
     }
 
     if (this.stateUrl) {
         calendarProps.stateUrl = this.stateUrl;
+    }
+
+    if (containerEl.dataset.minDate) {
+        calendarProps.minDate = containerEl.dataset.minDate;
+    }
+
+    if (containerEl.dataset.maxDate) {
+        calendarProps.maxDate = containerEl.dataset.maxDate;
     }
 
     this.calendar = new BaseCalendar.dom(firstDate, calendarProps);

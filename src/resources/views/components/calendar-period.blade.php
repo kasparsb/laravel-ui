@@ -7,6 +7,12 @@
     @if ($name)
     data-name="{{ $name }}"
     @endif
+    @if ($minDate)
+    data-min-date="{{ $minDate }}"
+    @endif
+    @if ($maxDate)
+    data-max-date="{{ $maxDate }}"
+    @endif
 >
     <input
         type="hidden"
@@ -22,4 +28,12 @@
         name="{{ $nameTill }}"
         @endif
         value="{{ $till }}" />
+
+    @if ($defaultDateState)
+    <script data-role="default-date-state" type="application/json">@json($defaultDateState)</script>
+    @endif
+
+    @if ($state)
+    <script data-role="state" type="application/json">@json($state)</script>
+    @endif
 </div>

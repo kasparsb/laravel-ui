@@ -16,6 +16,10 @@ class FieldDate extends Component
         public $placeholder = '',
         public $model = null,
         public $stateUrl = '',
+        public $minDate='',
+        public $maxDate='',
+        public $state='',
+        public $defaultDateState='',
     )
     {
         if ($this->model) {

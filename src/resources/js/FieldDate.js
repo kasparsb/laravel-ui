@@ -1,9 +1,10 @@
-import {jsx, q, addStyle, append, replaceContent, getOffset, isChild, click} from 'dom-helpers';
+import {jsx, q, parent, addStyle, append, replaceContent, getOffset, isChild, click} from 'dom-helpers';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
 import navPrevFormatter from './calendar/navPrevFormatter';
 import navNextFormatter from './calendar/navNextFormatter';
+import getJsonFromHtml from './helpers/getJsonFromHtml';
 
 function sp(s) {
     s = s+'';
@@ -49,12 +50,10 @@ function createCalendar(date) {
 }
 
 function triggerEvent(el, eventName) {
-
     var event = new Event(eventName, { bubbles: true });
     // Dispatch it.
     el.dispatchEvent(event);
     return;
-
 }
 
 /**
@@ -116,8 +115,28 @@ function open(field) {
 
     activeField = field;
 
-    // Calendar state url. Ja nav, tad noņem state url
-    setTimeout(() => calendar.setStateUrl(field.dataset.stateUrl ? field.dataset.stateUrl : ''), 10)
+    // Calendar props specific to current input field
+    setTimeout(() => {
+        // Default date state
+        calendar.setDefaultDateState(getJsonFromHtml(parent(activeField, '.field-date'), 'default-date-state'));
+        // State
+        calendar.setState(getJsonFromHtml(parent(activeField, '.field-date'), 'state'));
+
+        // State url
+        calendar.setStateUrl(field.dataset.stateUrl ? field.dataset.stateUrl : '')
+        // Min max date
+        calendar.setMinDate(field.dataset.minDate ? field.dataset.minDate : '')
+        calendar.setMaxDate(field.dataset.maxDate ? field.dataset.maxDate : '')
+
+        // Current date
+        calendar.setSelectedDate(activeField.value);
+
+        // Show
+        //setTimeout(() => {
+            container.dataset.visible = 'yes';
+            isOpen = true;
+        //}, 10)
+    }, 10)
 
     // Pozicionē container pret input lauku
     let p = getOffset(field)
@@ -125,10 +144,6 @@ function open(field) {
         top: (p.top+40)+'px',
         left: p.left+'px',
     })
-
-    container.dataset.visible = 'yes';
-
-    isOpen = true;
 }
 
 export default {

@@ -16,6 +16,10 @@ class Calendar extends Component
         public $stateUrl = '', // Url, kuru fetchot, lai iegūtu datumu state
         public $name = '',
         public $value= '',
+        public $minDate='',
+        public $maxDate='',
+        public $state='',
+        public $defaultDateState='',
     )
     {
         //

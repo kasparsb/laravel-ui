@@ -19,6 +19,10 @@ class CalendarPeriod extends Component
         public $nameTill = '',
         public $from = '',
         public $till = '',
+        public $minDate='',
+        public $maxDate='',
+        public $state='',
+        public $defaultDateState=''
     )
     {
         //
