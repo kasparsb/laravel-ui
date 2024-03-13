@@ -4,6 +4,7 @@ import weekDayToText from './calendar/weekDayToText';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
 import navPrevFormatter from './calendar/navPrevFormatter';
 import navNextFormatter from './calendar/navNextFormatter';
+import monthDayFormatter from './calendar/monthDayFormatter';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
 
 function sp(s) {
@@ -42,10 +43,11 @@ function createCalendar(date) {
         //     from: new Date('2023-05-10 00:00:00'),
         //     till: new Date('2023-05-22 23:59:59')
         // },
+        monthDayFormatter: monthDayFormatter,
         weekDayToText: weekDayToText,
         dateCaptionFormatter: dateCaptionFormatter,
         navPrevFormatter: navPrevFormatter,
-        navNextFormatter: navNextFormatter,
+        navNextFormatter: navNextFormatter
     })
 }
 

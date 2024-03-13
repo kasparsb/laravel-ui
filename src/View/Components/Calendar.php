@@ -20,6 +20,8 @@ class Calendar extends Component
         public $maxDate='',
         public $state='',
         public $defaultDateState='',
+
+        public $onDateSelect=''
     )
     {
         //

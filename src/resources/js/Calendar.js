@@ -1,4 +1,4 @@
-import {jsx, q, qa, append, get} from 'dom-helpers';
+import {jsx, q, qa, parent, append, get} from 'dom-helpers';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import stringToDate from './calendar/stringToDate';
@@ -6,6 +6,8 @@ import formatDate from './calendar/formatDate';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
 import navPrevFormatter from './calendar/navPrevFormatter';
 import navNextFormatter from './calendar/navNextFormatter';
+import monthDayFormatter from './calendar/monthDayFormatter';
+import getJsonFromHtml from './helpers/getJsonFromHtml';
 
 function Calendar(containerEl) {
 
@@ -13,6 +15,8 @@ function Calendar(containerEl) {
 
     // Vai ir period select
     this.isPeriod = containerEl.dataset.period == 'yes';
+
+    this.actionOnDateSelect = containerEl.dataset.onDateSelect;
 
     /**
      * Šie lauki ir vienmēr. By default bez name. Ja padots name, tad ar name
@@ -22,11 +26,6 @@ function Calendar(containerEl) {
     // Period lauki
     this.fromInputField = q(this.containerEl, 'input[data-role="from"]');
     this.tillInputField = q(this.containerEl, 'input[data-role="till"]');
-
-    this.stateUrl = false;
-    if (containerEl.dataset.stateUrl) {
-        this.stateUrl = containerEl.dataset.stateUrl;
-    }
 
     let firstDate = new Date();
 
@@ -56,15 +55,27 @@ function Calendar(containerEl) {
         disablePrevMonthDate: true,
         disableNextMonthDate: true,
 
-        //monthDayFormatter: monthDayFormatter,
+        monthDayFormatter: monthDayFormatter,
         weekDayToText: weekDayToText,
         dateCaptionFormatter: dateCaptionFormatter,
         navPrevFormatter: navPrevFormatter,
         navNextFormatter: navNextFormatter,
     }
 
-    if (this.stateUrl) {
-        calendarProps.stateUrl = this.stateUrl;
+    // State
+    let state = getJsonFromHtml(this.containerEl, 'state');
+    if (state) {
+        calendarProps.state = state;
+    }
+
+    // Default date state
+    let defaultDateState = getJsonFromHtml(this.containerEl, 'default-date-state');
+    if (defaultDateState) {
+        calendarProps.defaultDateState = defaultDateState;
+    }
+
+    if (containerEl.dataset.stateUrl) {
+        calendarProps.stateUrl = containerEl.dataset.stateUrl;
     }
 
     if (containerEl.dataset.minDate) {
@@ -91,26 +102,18 @@ function Calendar(containerEl) {
         }
     }
 
-
-    if (this.statusUrl) {
-        this.calendar.on('slideschange', dates => {
-
-            let period = findMinMaxDates(dates);
-
-            get(this.statusUrl, {
-                from: formatDate.ymd(period.min),
-                till: formatDate.ymd(period.max)
-            })
-                .then(status => {
-                    this.calendar.setState(status)
-                })
-        });
-    }
-
     // Ja ir date input field, tad uz dateclick ieliksim to datumu laukā
     if (this.dateInputField) {
         this.calendar.on('dateclick', date => {
             this.dateInputField.value = formatDate.ymd(date)
+
+            if (this.actionOnDateSelect == 'submit') {
+                // Atrodam parent formu un submit
+                let form = parent(this.containerEl, 'form');
+                if (form) {
+                    form.submit();
+                }
+            }
         })
     }
 

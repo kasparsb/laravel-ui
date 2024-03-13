@@ -12,6 +12,9 @@
     @if ($maxDate)
     data-max-date="{{ $maxDate }}"
     @endif
+    @if ($onDateSelect)
+    data-on-date-select="{{ $onDateSelect }}"
+    @endif
 >
     <input
         type="hidden"
