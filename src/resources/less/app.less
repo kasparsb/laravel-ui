@@ -65,6 +65,58 @@
     //color: hsl(240 5.9% 10%);
 }
 
+// Aditional colors as variable
+body {
+    --color-green-50: 138, 76%, 97%;
+    --color-green-100: 141, 84%, 93%;
+    --color-green-200: 141, 79%, 85%;
+    --color-green-300: 142, 77%, 73%;
+    --color-green-400: 142, 69%, 58%;
+    --color-green-500: 142, 71%, 45%;
+    --color-green-600: 142, 76%, 36%;
+    --color-green-700: 142, 72%, 29%;
+    --color-green-800: 143, 64%, 24%;
+    --color-green-900: 144, 61%, 20%;
+    --color-green-950: 145, 80%, 10%;
+
+    --color-green-50-hsl: hsl(138, 76%, 97%);
+    --color-green-100-hsl: hsl(141, 84%, 93%);
+    --color-green-200-hsl: hsl(141, 79%, 85%);
+    --color-green-300-hsl: hsl(142, 77%, 73%);
+    --color-green-400-hsl: hsl(142, 69%, 58%);
+    --color-green-500-hsl: hsl(142, 71%, 45%);
+    --color-green-600-hsl: hsl(142, 76%, 36%);
+    --color-green-700-hsl: hsl(142, 72%, 29%);
+    --color-green-800-hsl: hsl(143, 64%, 24%);
+    --color-green-900-hsl: hsl(144, 61%, 20%);
+    --color-green-950-hsl: hsl(145, 80%, 10%);
+
+
+    --color-red-50: 0, 86%, 97%;
+    --color-red-100: 0, 93%, 94%;
+    --color-red-200: 0, 96%, 89%;
+    --color-red-300: 0, 94%, 82%;
+    --color-red-400: 0, 91%, 71%;
+    --color-red-500: 0, 84%, 60%;
+    --color-red-600: 0, 72%, 51%;
+    --color-red-700: 0, 74%, 42%;
+    --color-red-800: 0, 70%, 35%;
+    --color-red-900: 0, 63%, 31%;
+    --color-red-950: 0, 75%, 15%;
+
+    --color-red-50-hsl: hsl(0, 86%, 97%);
+    --color-red-100-hsl: hsl(0, 93%, 94%);
+    --color-red-200-hsl: hsl(0, 96%, 89%);
+    --color-red-300-hsl: hsl(0, 94%, 82%);
+    --color-red-400-hsl: hsl(0, 91%, 71%);
+    --color-red-500-hsl: hsl(0, 84%, 60%);
+    --color-red-600-hsl: hsl(0, 72%, 51%);
+    --color-red-700-hsl: hsl(0, 74%, 42%);
+    --color-red-800-hsl: hsl(0, 70%, 35%);
+    --color-red-900-hsl: hsl(0, 63%, 31%);
+    --color-red-950-hsl: hsl(0, 75%, 15%);
+}
+
 .font-sans {
     font-family: var(--font-family-sans);
 }
@@ -1009,6 +1061,15 @@ table {
     --grid-gap: 2px;
     --border-width: 0px;
 
+    --opacity-color-hover: 0.8;
+    --bg-color-hover: var(--color-100);
+
+    --opacity-color-selected: 0.8;
+    --bg-color-selected: var(--color-950);
+
+    --opacity-color-periodin: 0.8;
+    --bg-color-periodin: var(--color-200);
+
     &.bordered {
         --grid-gap: 0;
         --border-radius-date: 0;
@@ -1069,90 +1130,131 @@ table {
 }
 .wbcalendar-date {
 
-    /** 1. Date base formatting */
-    .text-size-3\.5();
-    color: hsl(var(--text-color-date-default));
-    font-weight: 500;
-
-    cursor: pointer;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     border-radius: var(--border-radius-date);
 
     box-sizing: border-box;
 
+    position: relative;
+
     .transition-color();
 
-    &:hover {
-        background-color: hsl(var(--color-100));
+    // pašu date elementu izmantos, lai liktu custom bg krāsas
+
+    // Šo  izmanto, lai uzliktu state background krāsu
+    >span {
+        box-sizing: border-box;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        /** 1. Date base formatting */
+        border-radius: var(--border-radius-date);
+        .text-size-3\.5();
+        font-weight: 500;
+        color: hsl(var(--text-color-date-default));
+
+        cursor: pointer;
+
+        .transition-color();
+
+        background-blend-mode: multipy;
+
+        &:hover {
+            background-color: hsl(var(--bg-color-hover) / var(--opacity-color-hover));
+        }
     }
 
 
 
     /** 2. Today */
     &.wbcalendar--today {
-        // background-color: hsl(var(--color-200));
-        // &:hover {
-        //     background-color: hsl(var(--color-100));
-        // }
-        border: var(--border-today);
+        >span {
+            border: var(--border-today);
+        }
     }
 
 
     /** 3. Prev next months */
     &.wbcalendar--prevmonth,
     &.wbcalendar--nextmonth {
-        color: hsl(var(--text-color-date-secondary));
+        >span {
+            color: hsl(var(--text-color-date-secondary));
+        }
     }
+
 
 
     /** 4. Period */
     &.wbcalendar--period-in {
-        background-color: hsl(var(--color-200));
         border-radius: 0;
-        &:hover {
-            background-color: hsl(var(--color-100));
+
+        >span {
+            border-radius: 0;
+            background-color: hsl(var(--bg-color-periodin) / var(--opacity-color-periodin));
+            &:hover {
+                background-color: hsl(var(--bg-color-periodin) / calc(var(--opacity-color-periodin) - .1));
+            }
         }
     }
     &.wbcalendar--period-start,
     &.wbcalendar--period-end {
         border-radius: calc(var(--radius) - 2px);
-        color: hsl(var(--color-100));
-        background-color: hsl(var(--color-950));
-        &:hover {
-            background-color: hsl(var(--color-950) / .8);
+
+        >span {
+            border-radius: calc(var(--radius) - 2px);
+            color: hsl(var(--color-100));
+            background-color: hsl(var(--bg-color-selected) / var(--opacity-color-selected));
+            &:hover {
+                background-color: hsl(var(--bg-color-selected) / calc(var(--opacity-color-selected) - .1));
+            }
         }
     }
     &.wbcalendar--period-start {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        >span {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
     }
     &.wbcalendar--period-end {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
+        >span {
+            border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+        }
     }
 
 
     /** 5. User selected date */
     &.wbcalendar--selected {
-        color: hsl(var(--color-100));
-        background-color: hsl(var(--color-950));
-        &:hover {
-            background-color: hsl(var(--color-950) / .8);
+        >span {
+            color: hsl(var(--color-100));
+            background-color: hsl(var(--bg-color-selected) / var(--opacity-color-selected));
+            &:hover {
+                background-color: hsl(var(--bg-color-selected) / calc(var(--opacity-color-selected) - .1));
+            }
         }
     }
 
 
     /** 6. Disabled date */
     &.wbcalendar--date-disabled {
-        cursor: default;
-        color: hsl(var(--text-color-date-secondary));
-        // Noņemam hover krāsu
-        &:hover {
-            background-color: transparent;
+        >span {
+            cursor: default;
+            color: hsl(var(--text-color-date-secondary));
+            // Noņemam hover krāsu
+            &:hover {
+                background-color: transparent;
+            }
         }
     }
 }
