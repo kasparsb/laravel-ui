@@ -146,6 +146,8 @@
 
                         <x-ui::field type="email" placeholder="Email" label="Email" name="email" value="" description="What is your email address" />
 
+                        <x-ui::field-textarea placeholder="Enter comments" label="Comments" name="comments" value="" description="What is your comments about situation" />
+
 
                         @php
                             $options = [
