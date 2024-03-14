@@ -258,11 +258,9 @@ body {
     margin-top: @size040;
     margin-bottom: @size040;
 }
-.mb-4 {
-    margin-top: @size040;
-    margin-bottom: @size040;
-}
-.mt-1\.5 {
+
+
+.mt-1\.5{
     margin-top: @size015;
 }
 .mt-2 {
@@ -280,6 +278,60 @@ body {
 .mt-5 {
     margin-top: @size050;
 }
+.mt-6 {
+    margin-top: @size060;
+}
+.mt-7 {
+    margin-top: @size070;
+}
+.mt-8 {
+    margin-top: @size080;
+}
+.mt-9 {
+    margin-top: @size090;
+}
+.mt-10 {
+    margin-top: @size100;
+}
+
+
+.mb-1\.5{
+    margin-bottom: @size015;
+}
+.mb-2 {
+    margin-bottom: @size020;
+}
+.mb-3 {
+    margin-bottom: @size030;
+}
+.mb-3\.5 {
+    margin-bottom: @size035;
+}
+.mb-4 {
+    margin-bottom: @size040;
+}
+.mb-5 {
+    margin-bottom: @size050;
+}
+.mb-6 {
+    margin-bottom: @size060;
+}
+.mb-7 {
+    margin-bottom: @size070;
+}
+.mb-8 {
+    margin-bottom: @size080;
+}
+.mb-9 {
+    margin-bottom: @size090;
+}
+.mb-10 {
+    margin-bottom: @size100;
+}
+
+
+
+
 
 .py-4 {
     padding-top: @size040;
@@ -390,6 +442,16 @@ body {
     font-weight: var(--font-weight-medium);
 }
 
+.ta-left {
+    text-align: left;
+}
+.ta-right {
+    text-align: right;
+}
+.ta-center {
+    text-align: center;
+}
+
 .badge {
     display: inline-flex;
     flex-flow: row nowrap;
@@ -453,6 +515,13 @@ body {
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+
+    &.ta-left {
+        justify-content: flex-start;
+    }
+    &.ta-right {
+        justify-content: flex-end;
+    }
 
     height: @size090;
     padding-left: @size040;
