@@ -115,6 +115,31 @@ body {
     --color-red-800-hsl: hsl(0, 70%, 35%);
     --color-red-900-hsl: hsl(0, 63%, 31%);
     --color-red-950-hsl: hsl(0, 75%, 15%);
+
+
+    --color-blue-50: 214, 100%, 97%;
+    --color-blue-100: 214, 95%, 93%;
+    --color-blue-200: 213, 97%, 87%;
+    --color-blue-300: 212, 96%, 78%;
+    --color-blue-400: 213, 94%, 68%;
+    --color-blue-500: 217, 91%, 60%;
+    --color-blue-600: 221, 83%, 53%;
+    --color-blue-700: 224, 76%, 48%;
+    --color-blue-800: 226, 71%, 40%;
+    --color-blue-900: 224, 64%, 33%;
+    --color-blue-950: 226, 57%, 21%;
+
+    --color-blue-50-hsl: hsl(214, 100%, 97%);
+    --color-blue-100-hsl: hsl(214, 95%, 93%);
+    --color-blue-200-hsl: hsl(213, 97%, 87%);
+    --color-blue-300-hsl: hsl(212, 96%, 78%);
+    --color-blue-400-hsl: hsl(213, 94%, 68%);
+    --color-blue-500-hsl: hsl(217, 91%, 60%);
+    --color-blue-600-hsl: hsl(221, 83%, 53%);
+    --color-blue-700-hsl: hsl(224, 76%, 48%);
+    --color-blue-800-hsl: hsl(226, 71%, 40%);
+    --color-blue-900-hsl: hsl(224, 64%, 33%);
+    --color-blue-950-hsl: hsl(226, 57%, 21%);
 }
 
 .font-sans {
@@ -629,6 +654,7 @@ body {
     >[type=email],
     >[type=password],
     >[type=date],
+    >textarea,
     >.select-placeholder {
         .input-text();
         width: 100%;
@@ -655,6 +681,9 @@ body {
             width: @size040;
             height: @size040;
         }
+    }
+    >textarea {
+        min-height: @size200;
     }
     // Description text
     >p {
