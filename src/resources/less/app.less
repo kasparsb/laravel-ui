@@ -214,6 +214,41 @@ body {
 @size800: 20rem;
 @size960: 24rem;
 
+body {
+    --size-005: @size005;
+    --size-010: @size010;
+    --size-015: @size015;
+    --size-020: @size020;
+    --size-025: @size025;
+    --size-030: @size030;
+    --size-035: @size035;
+    --size-040: @size040;
+    --size-050: @size050;
+    --size-060: @size060;
+    --size-070: @size070;
+    --size-080: @size080;
+    --size-090: @size090;
+    --size-100: @size100;
+    --size-110: @size110;
+    --size-120: @size120;
+    --size-140: @size140;
+    --size-160: @size160;
+    --size-200: @size200;
+    --size-240: @size240;
+    --size-280: @size280;
+    --size-320: @size320;
+    --size-360: @size360;
+    --size-400: @size400;
+    --size-440: @size440;
+    --size-480: @size480;
+    --size-520: @size520;
+    --size-560: @size560;
+    --size-600: @size600;
+    --size-640: @size640;
+    --size-720: @size720;
+    --size-800: @size800;
+    --size-960: @size960;
+}
 
 .my-0\.5 {
     margin-top: @size005;
@@ -568,6 +603,8 @@ body {
 .col-items {
     display: grid;
     gap: @size040;
+
+    grid-auto-rows: min-content;
 }
 .col-items-condensed {
     // Cards saspiežam ar bottom malām kopā
