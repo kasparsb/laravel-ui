@@ -837,6 +837,31 @@ body {
     }
 }
 
+.empty-state {
+    border-radius: var(--radius);
+    border: 1px solid #e5e7eb;
+
+    padding: @size120 @size060;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    >.top {
+        >svg {
+            width: 5rem;
+            height: 5rem;
+        }
+        .mb-6();
+    }
+
+    >.bottom {
+        .mt-6();
+    }
+
+    .shadow();
+}
 
 .toggle-switch {
     .remove-tap-highlite();
