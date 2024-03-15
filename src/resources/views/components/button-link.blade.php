@@ -1,1 +1,0 @@
-<button {{ $attributes->class(['button-link']) }} >{{ $slot }}</button>

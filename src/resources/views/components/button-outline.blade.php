@@ -1,1 +1,0 @@
-<button {{ $attributes->class(['button-outline']) }} >{{ $slot }}</button>
