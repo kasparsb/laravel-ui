@@ -198,6 +198,14 @@
 
                 </x-ui::card>
 
+                <x-ui::empty-state>
+                    <x-slot:title>No working hours set.</x-slot>
+                    <x-slot:title-description>Add your working hours here</x-slot>
+                    <x-slot:button>
+                        <x-ui::button-primary>Add working hours</x-ui::button-primary>
+                    </x-slot>
+                </x-ui::empty-state>
+
                 <x-ui::table>
                     <thead>
                         <tr>
