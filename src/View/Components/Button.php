@@ -10,8 +10,10 @@ class Button extends Component
 {
     public function __construct(
         public $variant='primary',
-        public $as='', // link, ...
-        public $href='',
+        public $as='', // link, delete
+        public $href='', // link href
+        public $url='', // url for delete
+        public $redirect='', // redirect url after delete
     )
     {
         //

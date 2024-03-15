@@ -13,6 +13,8 @@ class ButtonLink extends Component
 
     public function __construct(
         public $href='',
+        public $url='', // url for delete
+        public $redirect='', // redirect url after delete
     )
     {
         //
