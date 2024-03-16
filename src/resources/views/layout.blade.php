@@ -127,6 +127,13 @@
                     <x-ui::tab value="orders">Orders</x-ui::tab>
                 </x-ui::tabs>
 
+                <x-ui::title class="t-4">Tabs without selected tab</x-ui::title>
+
+                <x-ui::tabs tab="orders">
+                    <x-ui::tab value="">Invoices</x-ui::tab>
+                    <x-ui::tab value="orders">Orders</x-ui::tab>
+                </x-ui::tabs>
+
 
                 <x-ui::card>
                     <x-slot:header>
