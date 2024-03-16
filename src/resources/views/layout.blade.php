@@ -83,7 +83,7 @@
 
                 <x-ui::nav-menu class="vertical">
                     <x-ui::nav-menu-item><x-tabler-alert-circle /> Invoices</x-ui:nav-menu-item>
-                    <x-ui::nav-menu-item :active="true"><x-tabler-alert-circle />Partners</x-ui:nav-menu-item>
+                    <x-ui::nav-menu-item :selected="true"><x-tabler-alert-circle />Partners</x-ui:nav-menu-item>
                 </x-ui::nav-menu>
 
                 <x-ui::card>
@@ -120,6 +120,12 @@
                         </x-ui::header>
                     </x-slot>
                 </x-ui::card>
+
+
+                <x-ui::tabs tab="invoices">
+                    <x-ui::tab value="invoices">Invoices</x-ui::tab>
+                    <x-ui::tab value="orders">Orders</x-ui::tab>
+                </x-ui::tabs>
 
 
                 <x-ui::card>
