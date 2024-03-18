@@ -9,10 +9,9 @@ use Illuminate\View\Component;
 class Tabs extends Component
 {
     public function __construct(
-        public $tab = '', // Selected tab
+        public $item = '', // Selected tab
     )
     {
-
 
     }
 

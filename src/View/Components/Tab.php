@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 class Tab extends Component
 {
     public function __construct(
-        public $value=null,
+        public $name=null,
         public $selected=null,
         public $as='',
         public $href='',
@@ -27,10 +27,10 @@ class Tab extends Component
              * Illuminate\View\Concerns\ManagesComponents::getConsumableComponentData();
              */
 
-            // Ja nav padota vērtība, tad nelieka selected
+            // Ja nav padots name, tad neliekam selected
             // tas ir gadījumam, kad ne Tabs ne Tab nav uzlikta aktīvais tab
-            if (!is_null($this->value)) {
-                $this->selected = $this->value == view()->getConsumableComponentData('tab');
+            if (!is_null($this->name)) {
+                $this->selected = $this->name == view()->getConsumableComponentData('item');
             }
         }
     }
