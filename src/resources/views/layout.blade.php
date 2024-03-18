@@ -10,12 +10,12 @@
 
     <x-ui::layout>
         <x-slot:menu>
-            <x-ui::nav-menu class="my-4">
-                <x-ui::nav-menu-item>
+            <x-ui::nav-menu class="my-4" item="invoices">
+                <x-ui::nav-menu-item name="invoices">
                     <x-tabler-file-invoice />
                     <span>Invoices</span>
                 </x-ui:nav-menu-item>
-                <x-ui::nav-menu-item :selected="true">
+                <x-ui::nav-menu-item name="partners">
                     <x-tabler-users-group />
                     Partners
                 </x-ui:nav-menu-item>
@@ -23,11 +23,11 @@
         </x-slot>
         <x-slot:menu-basement class="py-4">
             <x-ui::nav-menu>
-                <x-ui::nav-menu-item>
+                <x-ui::nav-menu-item name="settings">
                     <x-tabler-settings />
                     Settings
                 </x-ui:nav-menu-item>
-                <x-ui::nav-menu-item>
+                <x-ui::nav-menu-item name="logout">
                     <x-tabler-logout />
                     Logout
                 </x-ui::nav-menu-item>
