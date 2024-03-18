@@ -9,9 +9,8 @@ use Illuminate\View\Component;
 class NavMenu extends Component
 {
     public function __construct(
-        public $label='',
-        public $link='',
-        public $active=false,
+        // Kurš menu item ir selected
+        public $item='',
     )
     {
     }
