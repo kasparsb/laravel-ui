@@ -122,16 +122,16 @@
                 </x-ui::card>
 
 
-                <x-ui::tabs tab="invoices">
-                    <x-ui::tab value="invoices">Invoices</x-ui::tab>
-                    <x-ui::tab value="orders">Orders</x-ui::tab>
+                <x-ui::tabs item="invoices">
+                    <x-ui::tab name="invoices">Invoices</x-ui::tab>
+                    <x-ui::tab name="orders">Orders</x-ui::tab>
                 </x-ui::tabs>
 
                 <x-ui::title class="t-4">Tabs without selected tab</x-ui::title>
 
-                <x-ui::tabs tab="orders">
-                    <x-ui::tab value="">Invoices</x-ui::tab>
-                    <x-ui::tab value="orders">Orders</x-ui::tab>
+                <x-ui::tabs item="orders">
+                    <x-ui::tab name="">Invoices</x-ui::tab>
+                    <x-ui::tab name="orders">Orders</x-ui::tab>
                 </x-ui::tabs>
 
 
