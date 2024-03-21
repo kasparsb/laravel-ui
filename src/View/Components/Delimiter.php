@@ -9,10 +9,13 @@ use Illuminate\View\Component;
 class Delimiter extends Component
 {
     public function __construct(
-
+        public $dir = 'vertical',
+        public $direction = 'vertical',
     )
     {
-
+        if (!$this->direction) {
+            $this->direction = $this->dir;
+        }
     }
 
     public function render(): View|Closure|string
