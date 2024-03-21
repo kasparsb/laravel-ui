@@ -15,8 +15,8 @@
     >{{ $slot }}</button>
 @else
 <button
-    @if ($dropdownMenu)
-    data-dropdown-menu="{{ $dropdownMenu }}"
+    @if ($menu)
+    data-dropdown-menu="{{ $menu }}"
     @endif
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</button>
