@@ -253,6 +253,7 @@
                         <th>Total</th>
                         <th>VAT</th>
                         <th>E-mail</th>
+                        <th></th>
                     </x-slot>
                     <x-slot:body>
                         <tr>
@@ -263,6 +264,11 @@
                             <td>34.56Eur</td>
                             <td>4.5Eur</td>
                             <td><x-ui::toggle-switch name="prop1" :checked="true" /></td>
+                            <td>
+                                <x-ui::button-outline menu="menu1" class="icon">
+                                    <x-tabler-dots />
+                                </x-ui::button-outline>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -272,9 +278,19 @@
                             <td>4.56Eur</td>
                             <td>2.5Eur</td>
                             <td><x-ui::toggle-switch name="prop1" :checked="true" /></td>
+                            <td>
+                                <x-ui::button-outline menu="menu1" class="icon">
+                                    <x-tabler-dots />
+                                </x-ui::button-outline>
+                            </td>
                         </tr>
                     </x-slot>
                 </x-ui::table>
+
+                <x-ui::dropdown-menu name="menu1">
+                    <x-ui::menu-item>Viens</x-ui::menu-item>
+                    <x-ui::menu-item>Divi</x-ui::menu-item>
+                </x-ui::dropdown-menu>
 
 
                 <x-ui::calendar size="8" maxDate="2024-03-20" />
