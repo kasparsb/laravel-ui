@@ -909,6 +909,27 @@ body {
         &:hover {
             background-color: hsl(var(--color-100));
         }
+
+        svg {
+            margin-right: @size015;
+            width: @size040;
+            height: @size040;
+        }
+        // Tikai ikona, bet label
+        &.icon {
+            svg {
+                margin-right: 0;
+            }
+        }
+    }
+
+    // Visiem menu items tiek pieņemts, ka ir icon, ja nav, tad tiek atbrīvota vieta
+    &.has-icons {
+        >.menu-item {
+            &:not(:has(svg)) {
+                padding-left: @size015 + @size040 + @size015;
+            }
+        }
     }
 }
 
@@ -1317,7 +1338,7 @@ table {
 
     &.center-content {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
     }
@@ -1330,6 +1351,11 @@ table {
     >* {
         margin-top: @size100;
         &:first-child {
+            margin-top: 0;
+        }
+    }
+    &.center-content {
+        >* {
             margin-top: 0;
         }
     }

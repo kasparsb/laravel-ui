@@ -1,3 +1,3 @@
-<div class="dropdown-menu">
+<div {{ $attributes->class(['dropdown-menu']) }}>
     {{ $slot }}
 </div>
