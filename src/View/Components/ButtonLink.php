@@ -15,6 +15,7 @@ class ButtonLink extends Component
         public $href='',
         public $url='', // url for delete
         public $redirect='', // redirect url after delete
+        public $dropdownMenu='',
     )
     {
         //

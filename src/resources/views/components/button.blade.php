@@ -14,5 +14,10 @@
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</button>
 @else
-<button {{ $attributes->class(['button-'.$variant]) }} >{{ $slot }}</button>
+<button
+    @if ($dropdownMenu)
+    data-dropdown-menu="{{ $dropdownMenu }}"
+    @endif
+    {{ $attributes->class(['button-'.$variant]) }}
+    >{{ $slot }}</button>
 @endif

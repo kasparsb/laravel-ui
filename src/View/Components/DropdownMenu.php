@@ -9,7 +9,10 @@ use Illuminate\View\Component;
 class DropdownMenu extends Component
 {
     public function __construct(
-
+        // Menu name, pēc kura varēs noteikt, kādu menu rādit spiežo uz pogas
+        public $name='',
+        // Ja static, tad ir redzama, tur kur izvadīta. Nedarbojas kā uzpeldošā menu
+        public $isStatic=false,
     )
     {
 
