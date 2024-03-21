@@ -839,7 +839,9 @@ body {
         }
     }
 
-    // Kā overlay
+    // Kā overlay. Priekš date picker
+    // TODO varbūt šitā nevajag. Paša datepicker container nostilot kā card
+    // TODO nav īsti saprotams, kurā mirklī card ir is-overlay
     &.is-overlay {
         .has-bg();
         .shadow-md();
@@ -863,8 +865,19 @@ body {
 }
 
 .dropdown-menu {
+
+    &.floating {
+        position: absolute;
+        pointer-events: none;
+    }
+    &.hidden {
+        display: none;
+    }
+
+
     .border-md();
     border: 1px solid #e5e7eb;
+    background-color: hsl(var(--color-background));
 
     padding: @size005;
 
