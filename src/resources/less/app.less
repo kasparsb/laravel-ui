@@ -421,6 +421,10 @@ body {
     width: 100%;
 }
 
+.h-full {
+    height: 100%;
+}
+
 .text-size-2\.5,
 .t-2\.5 {
     font-size: @size025;
@@ -490,7 +494,7 @@ body {
     padding-left: @size025;
     padding-right: @size025;
 
-    border-radius: calc(var(--radius) - 2px);
+    .border-md();
 
     svg {
         width: @size030;
@@ -527,13 +531,21 @@ body {
         0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);
 }
 
+.border-lg {
+    border-radius: var(--radius);
+}
+.border-md {
+    border-radius: calc(var(--radius) - 2px);
+}
+.border-sm {
+    border-radius: calc(var(--radius) - 4px);
+}
 
 .input-label {
     font-weight: var(--font-weight-medium);
     .text-size-3\.5();
     line-height: 1;
 }
-
 
 .button-base {
     .remove-tap-highlite();
@@ -563,10 +575,7 @@ body {
     .text-size-3\.5();
     font-weight: 500;
 
-    /**
-     * @todo vajag nodefinēts radius kā mainīgo. šitas ir border-md
-     */
-    border-radius: calc(var(--radius) - 2px);
+    .border-md();
 
     .transition-color();
 
@@ -640,12 +649,19 @@ body {
     }
 }
 
-.delimiter {
+.delimiter-vertical {
     color: hsl(var(--color-300));
     width: 2px;
     height: 16px;
     vertical-align: middle;
     margin-right: 2px;
+}
+.delimiter-horizontal {
+    height: 1px;
+    border-top: 1px solid hsl(var(--color-100));
+    overflow: hidden;
+    margin-top: @size010;
+    margin-bottom: @size010;
 }
 
 
@@ -702,6 +718,8 @@ body {
 .form-vertical {
     display: grid;
     gap: @size040;
+
+    grid-auto-rows: min-content;
 }
 
 .col-items {
@@ -798,7 +816,7 @@ body {
 }
 
 .card {
-    border-radius: var(--radius);
+    .border-lg();
     border: 1px solid #e5e7eb;
 
     padding: @size060;
@@ -844,8 +862,58 @@ body {
     }
 }
 
+.dropdown-menu {
+    .border-md();
+    border: 1px solid #e5e7eb;
+
+    padding: @size005;
+
+    .shadow-lg();
+
+    display: grid;
+    grid-auto-rows: min-content;
+
+    min-width: @size320;
+
+    >.delimiter-horizontal {
+        margin-left: -@size005;
+        margin-right: -@size005;
+    }
+
+    >.menu-item {
+        .remove-tap-highlite();
+
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: center;
+        white-space: nowrap;
+
+        .border-sm();
+
+        .transition-color();
+
+        cursor: pointer;
+
+        &:is(a) {
+            text-decoration: none;
+        }
+        color: hsl(var(--color-950));
+        .text-size-3\.5();
+        font-weight: 500;
+
+        padding-left: @size015;
+        padding-right: @size015;
+        padding-top: @size015;
+        padding-bottom: @size015;
+
+        &:hover {
+            background-color: hsl(var(--color-100));
+        }
+    }
+}
+
 .empty-state {
-    border-radius: var(--radius);
+    .border-lg();
     border: 1px solid #e5e7eb;
 
     padding: @size120 @size060;
@@ -954,7 +1022,7 @@ body {
 }
 
 .toggle-switch-card {
-    border-radius: var(--radius);
+    .border-lg();
     border: 1px solid #e5e7eb;
     display: flex;
     flex-flow: row nowrap;
@@ -998,7 +1066,7 @@ body {
         height: @size040;
 
         border: 1px solid hsl(var(--color-900));
-        border-radius: calc(var(--radius) - 4px);
+        .border-sm();
 
         color: #fff;
 
@@ -1088,10 +1156,7 @@ table {
 
 
 
-    /**
-     * @todo vajag nodefinēts radius kā mainīgo. šitas ir border-md
-     */
-    border-radius: calc(var(--radius) - 2px);
+    .border-md();
 
     .transition-color();
 
@@ -1135,10 +1200,7 @@ table {
 
     padding: var(--size-010);
 
-    /**
-     * @todo vajag nodefinēts radius kā mainīgo. šitas ir border-md
-     */
-    border-radius: calc(var(--radius) - 2px);
+    .border-md();
 
     >.tab {
         .button-base();
@@ -1251,6 +1313,13 @@ table {
     }
     &.regular {
         max-width: 56rem;
+    }
+
+    &.center-content {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
     }
 
     >.header {
@@ -1418,10 +1487,10 @@ table {
     }
     &.wbcalendar--period-start,
     &.wbcalendar--period-end {
-        border-radius: calc(var(--radius) - 2px);
+        .border-md();
 
         >span {
-            border-radius: calc(var(--radius) - 2px);
+            .border-md();
             color: hsl(var(--color-100));
             background-color: hsl(var(--bg-color-selected) / var(--opacity-color-selected));
             &:hover {
