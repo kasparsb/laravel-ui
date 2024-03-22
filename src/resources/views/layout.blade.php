@@ -279,7 +279,12 @@
                             <td>2.5Eur</td>
                             <td><x-ui::toggle-switch name="prop1" :checked="true" /></td>
                             <td>
-                                <x-ui::button-outline menu="menu1" class="icon">
+                                <x-ui::button-outline
+                                    menu="menu1"
+                                    class="icon"
+                                    data-editlink="editlink"
+                                    data-removelink="removelink"
+                                    >
                                     <x-tabler-dots />
                                 </x-ui::button-outline>
                             </td>
@@ -287,9 +292,9 @@
                     </x-slot>
                 </x-ui::table>
 
-                <x-ui::dropdown-menu name="menu1" side="top" align="left" class="w-72">
-                    <x-ui::menu-item>Viens</x-ui::menu-item>
-                    <x-ui::menu-item>Divi</x-ui::menu-item>
+                <x-ui::dropdown-menu name="menu1" side="bottom" align="right">
+                    <x-ui::menu-item link-source="data-editlink">Viens</x-ui::menu-item>
+                    <x-ui::menu-item link-source="data-removelink">Divi</x-ui::menu-item>
                 </x-ui::dropdown-menu>
 
 
