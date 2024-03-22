@@ -121,10 +121,6 @@ function open(clickTriggerEl, menuEl) {
 function setOverrideFromClickTriggerEl(clickTriggerEl, menuEl) {
     qa(menuEl, '[data-role="menuitem"]').forEach(menuItemEl => {
 
-        console.log(menuItemEl);
-        console.log(menuItemEl.dataset);
-        console.log('buttondelete' in menuItemEl.dataset);
-
         if (menuItemEl.dataset.linkSource) {
             menuItemEl.setAttribute('href', clickTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
             if ('buttondelete' in menuItemEl.dataset) {
