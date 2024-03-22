@@ -13,6 +13,21 @@ class DropdownMenu extends Component
         public $name='',
         // Ja static, tad ir redzama, tur kur izvadīta. Nedarbojas kā uzpeldošā menu
         public $isStatic=false,
+
+
+        /**
+         * pret kuru malu novietot (attiecībā pret click trigger)
+         * top, left, bottom, right
+         */
+        public $side = 'bottom',
+        /**
+         * kā nopzicionēt pret malu
+         * bottom | top:
+         *     left, right, center
+         * left | right:
+         *     top, bottom, center
+         */
+        public $align = 'left',
     )
     {
 

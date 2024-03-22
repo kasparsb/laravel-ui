@@ -6,6 +6,8 @@
         'hidden' => !$isStatic,
     ]) }}
     data-dropdown-menu-name="{{ $name }}"
+    data-side="{{ $side }}"
+    data-align="{{ $align }}"
     >
     {{ $slot }}
 </div>

@@ -1,4 +1,9 @@
-import {jsx, q, parent, addStyle, addClass, removeClass, append, replaceContent, getOffset, isChild, click} from 'dom-helpers';
+import {
+    jsx, q, parent,
+    addStyle, addClass, removeClass,
+    append, replaceContent,
+    getOffset, getOuterDimensions, getWindowDimensions, getWindowScrollLeft,
+    isChild, click} from 'dom-helpers';
 
 let container;
 let isOpen = false;
@@ -39,22 +44,72 @@ function close() {
 }
 
 function open(clickTriggerEl, menuEl) {
+
     maybeCreateContainerAndCalendar(menuEl);
 
-    setTimeout(() => {
-        container.dataset.visible = 'yes';
-        isOpen = true;
-    }, 10)
+    isOpen = true;
 
     // Novācam hidden klasi no dropdown menu
     removeClass(q(container, '[data-dropdown-menu-name]'), 'hidden');
 
+    let side = menuEl.dataset.side;
+    let align = menuEl.dataset.align;
+
     // Pozicionē container pret input lauku
     let p = getOffset(clickTriggerEl)
+    let triggerDimensions = getOuterDimensions(clickTriggerEl);
+    let menuDimensions = getOuterDimensions(menuEl);
+
+    let gap = 4;
+
+    let css = {};
+
+    if (side == 'bottom' || side == 'top') {
+        if (side == 'bottom') {
+            css.top = (p.top + triggerDimensions.height + gap);
+        }
+        else {
+            css.top = (p.top - menuDimensions.height - gap);
+        }
+
+        /**
+         * ! css.right apzīmē kādas būs menu labās puses koordinātes
+         * tas vajadzīgs, lai noteiktu, vai menu būs ārpus window robežām
+         */
+
+
+        if (align == 'left') {
+            css.left = p.left;
+            css.right = p.left + menuDimensions.width;
+        }
+        else if (align == 'right') {
+            css.left = ((p.left + triggerDimensions.width) - menuDimensions.width);
+            css.right = css.left
+        }
+        else if (align == 'center') {
+            css.left = ((p.left + (triggerDimensions.width / 2)) - (menuDimensions.width / 2));
+            css.right = css.left + (menuDimensions.width / 2);
+        }
+    }
+
+
+    // Ierobežojam left, ja tas ir novieto menu ārpus window robežām
+    let windowDimensions = getWindowDimensions();
+    // Atņemam scrollbar width
+    windowDimensions.width = windowDimensions.width - 20;
+    if (css.right > windowDimensions.width) {
+        css.left = css.left - (css.right - windowDimensions.width) - gap;
+    }
+    else if (css.left < gap) {
+        css.left = gap;
+    }
+
     addStyle(container, {
-        top: (p.top+40)+'px',
-        left: p.left+'px',
+        top: css.top + 'px',
+        left: css.left + 'px'
     })
+
+    container.dataset.visible = 'yes';
 }
 
 export default {
