@@ -10,7 +10,7 @@ class Delimiter extends Component
 {
     public function __construct(
         public $dir = 'vertical',
-        public $direction = 'vertical',
+        public $direction = '',
     )
     {
         if (!$this->direction) {
