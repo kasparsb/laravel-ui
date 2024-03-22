@@ -1,11 +1,12 @@
 import {
-    jsx, q, parent,
+    jsx, q, qa, parent,
     addStyle, addClass, removeClass,
     append, replaceContent,
     getOffset, getOuterDimensions, getWindowDimensions, getWindowScrollLeft,
     isChild, click} from 'dom-helpers';
 
 let container;
+let activeClickTriggerEl;
 let isOpen = false;
 
 /**
@@ -41,13 +42,18 @@ function close() {
     container.dataset.visible = '';
 
     isOpen = false;
+
+    activeClickTriggerEl = undefined;
 }
 
 function open(clickTriggerEl, menuEl) {
 
+    activeClickTriggerEl = clickTriggerEl;
+
     maybeCreateContainerAndCalendar(menuEl);
 
     isOpen = true;
+
 
     // Novācam hidden klasi no dropdown menu
     removeClass(q(container, '[data-dropdown-menu-name]'), 'hidden');
@@ -112,16 +118,45 @@ function open(clickTriggerEl, menuEl) {
     container.dataset.visible = 'yes';
 }
 
+function setOverrideFromClickTriggerEl(clickTriggerEl, menuEl) {
+    qa(menuEl, '[data-role="menuitem"]').forEach(menuItemEl => {
+
+        console.log(menuItemEl);
+        console.log(menuItemEl.dataset);
+        console.log('buttondelete' in menuItemEl.dataset);
+
+        if (menuItemEl.dataset.linkSource) {
+            menuItemEl.setAttribute('href', clickTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
+            if ('buttondelete' in menuItemEl.dataset) {
+                menuItemEl.setAttribute('data-url', clickTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
+            }
+        }
+
+        if (menuItemEl.dataset.redirectSource) {
+            menuItemEl.setAttribute('data-redirect', clickTriggerEl.getAttribute(menuItemEl.dataset.redirectSource))
+        }
+
+    })
+}
+
 export default {
     init() {
         click('html', (ev, el) => {
             if (isOpen) {
-                // Ja el nav date pickerī, tad aizveram kalendāru
-                if (!isChild(ev.target, container)) {
+                let clickTriggerEl = parent(ev.target, '[data-dropdown-menu]');
+
+                // Ja nospiests jau uz nospiestā click trigger
+                if (clickTriggerEl && (activeClickTriggerEl === clickTriggerEl)) {
+
+                }
+                // Ja el nav container, tad aizveram container
+                else if (isChild(ev.target, container)) {
+
+                }
+                else {
                     close();
                 }
             }
-
         })
 
         // Click triggeri, kuri atvērs menu
@@ -129,7 +164,15 @@ export default {
             if (clickTriggerEl.dataset.dropdownMenu) {
                 let menuEl = findDropdownMenu(clickTriggerEl.dataset.dropdownMenu);
                 if (menuEl) {
-                    open(clickTriggerEl, menuEl);
+                    if (isOpen) {
+                        close();
+                    }
+                    else {
+
+                        setOverrideFromClickTriggerEl(clickTriggerEl, menuEl);
+
+                        open(clickTriggerEl, menuEl);
+                    }
                 }
             }
         })

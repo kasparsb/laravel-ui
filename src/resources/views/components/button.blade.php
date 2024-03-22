@@ -1,16 +1,13 @@
 @if ($as == 'link')
 <a
     href="{{ $href }}"
-    @if ($as == 'delete')
-    data-role="button-delete"
-    @endif
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</a>
 @elseif ($as == 'delete')
 <button
     data-url="{{ $url }}"
     data-redirect="{{ $redirect }}"
-    data-role="button-delete"
+    data-buttondelete
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</button>
 @else

@@ -11,7 +11,11 @@ class MenuItem extends Component
     public function __construct(
         public $name = '',
         public $link = '',
+        public $redirect = '', // redirect link pēc delete
         public $selected = null,
+        public $as='', // link, delet
+        public $linkSource = '', // data-{attribute name} lai varētu link ielasīt no click trigger el
+        public $redirectSource = '', // data-{attribute name} lai varētu link ielasīt no click trigger el
     )
     {
 
