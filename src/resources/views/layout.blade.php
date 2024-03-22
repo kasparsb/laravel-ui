@@ -287,7 +287,7 @@
                     </x-slot>
                 </x-ui::table>
 
-                <x-ui::dropdown-menu name="menu1">
+                <x-ui::dropdown-menu name="menu1" side="top" align="left" class="w-72">
                     <x-ui::menu-item>Viens</x-ui::menu-item>
                     <x-ui::menu-item>Divi</x-ui::menu-item>
                 </x-ui::dropdown-menu>
