@@ -1,4 +1,4 @@
-<div {{ $attributes->class(['form-field']) }}>
+<div {{ $attributes->class(['form-field field-text']) }}>
     @if ($label)
         <label>{{ $label }}</label>
     @endif
