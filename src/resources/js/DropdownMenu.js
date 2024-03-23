@@ -4,6 +4,7 @@ import {
     append, replaceContent,
     getOffset, getOuterDimensions, getWindowDimensions, getWindowScrollLeft,
     isChild, click} from 'dom-helpers';
+import ButtonDelete from './ButtonDelete';
 
 let container;
 let activeClickTriggerEl;
@@ -123,7 +124,7 @@ function setOverrideFromClickTriggerEl(clickTriggerEl, menuEl) {
 
         if (menuItemEl.dataset.linkSource) {
             menuItemEl.setAttribute('href', clickTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
-            if ('buttondelete' in menuItemEl.dataset) {
+            if (ButtonDelete.isButtonDelete(menuItemEl)) {
                 menuItemEl.setAttribute('data-url', clickTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
             }
         }

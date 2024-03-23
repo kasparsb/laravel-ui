@@ -10,5 +10,14 @@ export default {
                     .then(r => window.location.href = el.dataset.redirect)
             }
         })
+    },
+    /**
+     * Pārbauda vai padotais el ir delete button
+     */
+    isButtonDelete(el) {
+        if ('buttondelete' in el.dataset) {
+            return true;
+        }
+        return false;
     }
 }
