@@ -94,6 +94,6 @@ class Table extends Component
 
     public function render(): View|Closure|string
     {
-        return view('ui::components.table2');
+        return view('ui::components.table');
     }
 }
