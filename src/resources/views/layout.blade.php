@@ -258,7 +258,6 @@
                 @endphp
                 <x-ui::table
                     :rows="$table1Rows"
-                    :formatter="\Kasparsb\Ui\InvoicesTable::class"
                     class="w-full"
                     >
                     <x-ui::table-col name="number" class="w-36">
@@ -298,7 +297,7 @@
                         ],
                     ];
                 @endphp
-                <x-ui::table :rows="$table2Rows" class="w-full">
+                <x-ui::table :rows="$table2Rows" class="w-full" :formatter="\App\InvoicesTable::class">
                     <x-ui::table-col class="w-52" name="sdf">Alha</x-ui::table-col>
                     <x-ui::table-col class="w-52" name="asdwe">beta</x-ui::table-col>
                     <x-ui::table-col name="don">domina</x-ui::table-col>
