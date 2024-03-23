@@ -25,6 +25,12 @@ class Tab extends Component
              * īsti tieši parent nezinu kā iegūt
              *
              * Illuminate\View\Concerns\ManagesComponents::getConsumableComponentData();
+             *
+             * Var izmanto šo
+             * @aware([
+             *     'item' => '',
+             * ])
+             * bet šis ir pieejams tikai view failā, šeit comopoent klasē tas nav pieejams
              */
 
             // Ja nav padots name, tad neliekam selected
