@@ -219,83 +219,90 @@
                     </x-slot>
                 </x-ui::empty-state>
 
-                <x-ui::table>
-                    <thead>
-                        <tr>
-                            <th>
-                                <x-ui::checkbox name="asdasd" />
-                            </th>
-                            <th>Number</th>
-                            <th>Total</th>
-                            <th>VAT</th>
-                            <th>E-mail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <x-ui::checkbox name="asdasd" />
-                            </td>
-                            <td>SA-123123</td>
-                            <td>34.56Eur</td>
-                            <td>4.5Eur</td>
-                            <td>kaspars@webit.lv</td>
-                        </tr>
-                    </tbody>
-                </x-ui::table>
 
-                <x-ui::table width="full">
-                    <x-slot:head>
-                        <th>
-                            <x-ui::checkbox name="asdasd" />
-                        </th>
-                        <th>Number</th>
-                        <th>Total</th>
-                        <th>VAT</th>
-                        <th>E-mail</th>
-                        <th></th>
-                    </x-slot>
-                    <x-slot:body>
-                        <tr>
-                            <td>
-                                <x-ui::checkbox name="asdasd" />
-                            </td>
-                            <td>SA-123123</td>
-                            <td>34.56Eur</td>
-                            <td>4.5Eur</td>
-                            <td><x-ui::toggle-switch name="prop1" :checked="true" /></td>
-                            <td>
-                                <x-ui::button-outline menu="menu1" class="icon">
-                                    <x-tabler-dots />
-                                </x-ui::button-outline>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <x-ui::checkbox name="asdasd" />
-                            </td>
-                            <td>SA-133</td>
-                            <td>4.56Eur</td>
-                            <td>2.5Eur</td>
-                            <td><x-ui::toggle-switch name="prop1" :checked="true" /></td>
-                            <td>
-                                <x-ui::button-outline
-                                    menu="menu1"
-                                    class="icon"
-                                    data-editlink="editlink"
-                                    data-removelink="removelink"
-                                    >
-                                    <x-tabler-dots />
-                                </x-ui::button-outline>
-                            </td>
-                        </tr>
-                    </x-slot>
-                </x-ui::table>
 
                 <x-ui::dropdown-menu name="menu1" side="bottom" align="right">
                     <x-ui::menu-item link-source="data-editlink">Viens</x-ui::menu-item>
                     <x-ui::menu-item link-source="data-removelink">Divi</x-ui::menu-item>
                 </x-ui::dropdown-menu>
+
+                <x-ui::title>First table</x-ui::title>
+                @php
+                    $table1Rows = [
+                        [
+                            'number' => 'number 1',
+                            'total' => '2024-01-01',
+                            'email' => '1',
+                        ],
+                        [
+                            'number' => 'number 2',
+                            'total' => '2024-02-01',
+                            'email' => '0',
+                        ],
+                        [
+                            'number' => 'number 3',
+                            'total' => '2024-03-21',
+                            'email' => '0',
+                        ],
+                        [
+                            'number' => 'number 4',
+                            'total' => '2024-04-20',
+                            'email' => '1',
+                        ],
+                        [
+                            'number' => 'number 5',
+                            'total' => '2024-05-12',
+                            'email' => '1',
+                        ],
+                    ];
+                @endphp
+                <x-ui::table
+                    :rows="$table1Rows"
+                    :formatter="\Kasparsb\Ui\InvoicesTable::class"
+                    class="w-full"
+                    >
+                    <x-ui::table-col name="number" class="w-36">
+                        <x-tabler-edit />Total
+                    </x-ui::table-col>
+                    <x-ui::table-col
+                        type="field-date"
+                        name="total"
+                        >
+                        Total
+                    </x-ui::table-col>
+                    <x-ui::table-col
+                        type="toggle-switch"
+                        name="email"
+                        class="w-28"
+                        >Email</x-ui::table-col>
+                </x-ui::table>
+
+
+                <x-ui::title>Second table</x-ui::title>
+                @php
+                    $table2Rows = [
+                        [
+                            'sdf' => 'sdf 1',
+                            'asdwe' => 'asdwe 1',
+                            'don' => 'don 1',
+                        ],
+                        [
+                            'sdf' => 'sdf 2',
+                            'asdwe' => 'asdwe 2',
+                            'don' => 'don 2',
+                        ],
+                        [
+                            'sdf' => 'sdf 3',
+                            'asdwe' => 'asdwe 3',
+                            'don' => 'don 3',
+                        ],
+                    ];
+                @endphp
+                <x-ui::table :rows="$table2Rows" class="w-full">
+                    <x-ui::table-col class="w-52" name="sdf">Alha</x-ui::table-col>
+                    <x-ui::table-col class="w-52" name="asdwe">beta</x-ui::table-col>
+                    <x-ui::table-col name="don">domina</x-ui::table-col>
+                </x-ui::table>
 
 
                 <x-ui::calendar size="8" maxDate="2024-03-20" />
