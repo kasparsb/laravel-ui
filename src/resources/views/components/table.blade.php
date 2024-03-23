@@ -1,20 +1,20 @@
-<table {{ $attributes->class(['table', $width]) }} >
-
-    @if (!$slot->isEmpty())
-        {{ $slot }}
-    @else
-        @if ($head)
-        <thead>
-            <tr>
-                {{ $head }}
-            </tr>
-        </thead>
-        @endif
-        @if ($body)
-        <tbody>
-            {{ $body }}
-        </tbody>
-        @endif
-    @endif
-
+<table {{ $attributes->class(['table']) }}>
+<thead>
+    <tr>
+        @foreach ($cols() as $col)
+        <th {{ $col->attributes }}>
+            <div>{{ $col->slot }}</div>
+        </th>
+        @endforeach
+    </tr>
+</thead>
+<tbody>
+    @foreach ($rows as $row)
+    <tr>
+        @foreach ($cols() as $col)
+        <td {{ $col->attributes }}>{!! $cellContent($col, $row) !!}</td>
+        @endforeach
+    </tr>
+    @endforeach
+</tbody>
 </table>

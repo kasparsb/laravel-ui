@@ -1152,25 +1152,41 @@ body {
     }
 }
 
-table {
+.table {
     border-collapse: collapse;
-    .text-size-3\.5();
-
-    &.full {
-        width: 100%;
-    }
 
     thead {
         tr {
             border-bottom: 1px solid #e5e7eb;
         }
         th {
-            vertical-align: middle;
-            text-align: left;
+            >div {
+                .text-size-3\.5();
+                line-height: 1;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                height: @size100;
+                padding-left: @size020;
+                padding-right: @size020;
+            }
             color: hsl(var(--color-500));
-            height: @size100;
-            padding-left: @size020;
-            padding-right: @size020;
+
+            svg {
+                margin-right: @size015;
+                width: @size040;
+                height: @size040;
+            }
+            // Tikai ikona, bet label
+            &.icon {
+                padding-left: @size020;
+                padding-right: @size020;
+                svg {
+                    margin-right: 0;
+                }
+            }
         }
     }
 
@@ -1182,8 +1198,28 @@ table {
             }
         }
         td {
+            .text-size-3\.5();
+
             vertical-align: middle;
             padding: @size020;
+            &:has(.form-field) {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+            .form-field {
+                >[type=text],
+                >[type=email],
+                >[type=password],
+                >[type=date],
+                >textarea,
+                >.select-placeholder {
+                    box-shadow: none;
+                    border: 0;
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+            }
         }
     }
 }
