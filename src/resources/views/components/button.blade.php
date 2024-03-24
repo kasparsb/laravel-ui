@@ -32,6 +32,7 @@
 <button
     @if ($menu)
     data-dropdown-menu="{{ $menu }}"
+    type="button"
     @endif
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</button>
