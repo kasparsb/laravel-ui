@@ -8,6 +8,10 @@ export default {
             let link = '';
             if (data.id) {
                 link = parent(el, '.table').dataset.linkUpdate;
+
+                /**
+                 * TODO vajag kaut kā dabūt link, lai te nekas nav jārepleico
+                 */
                 link = link.replace('#id#', data.id);
             }
             else {

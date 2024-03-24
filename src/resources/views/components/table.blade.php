@@ -26,7 +26,9 @@
     @foreach ($rows as $row)
     <tr>
         @foreach ($cols() as $col)
-        <td {{ $col->attributes }}>{!! $cellContent($col, $row) !!}</td>
+        <td {{ $col->attributes }}>
+            {!! $cellContent($col, $row) !!}
+        </td>
         @endforeach
     </tr>
     @endforeach

@@ -1198,16 +1198,26 @@ body {
             }
         }
         td {
-            .text-size-3\.5();
 
-            vertical-align: middle;
-            padding: @size020;
+            // nav input lauka
+            &:not(:has(.form-field)) {
+                padding: @size020;
+                .text-size-3\.5();
+            }
+            // ir input lauks
             &:has(.form-field) {
-                padding-top: 0;
-                padding-bottom: 0;
+
             }
 
             .form-field {
+                border: 2px solid transparent;
+
+                &:has(input:focus),
+                &:has(textarea:focus),
+                &:has(select:focus) {
+                    border-color: hsl(var(--color-blue-400));
+                }
+
                 >[type=text],
                 >[type=email],
                 >[type=password],
@@ -1216,8 +1226,8 @@ body {
                 >.select-placeholder {
                     box-shadow: none;
                     border: 0;
-                    padding-left: 0;
-                    padding-right: 0;
+                    padding-left: @size020;
+                    padding-right: @size020;
                 }
             }
         }
