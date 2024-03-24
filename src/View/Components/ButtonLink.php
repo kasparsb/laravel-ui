@@ -6,16 +6,18 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
+use Illuminate\Database\Eloquent\Model;
+
 class ButtonLink extends Component
 {
     public $variant='link';
     public $as='';
 
     public function __construct(
-        public $href='',
-        public $url='', // url for delete
-        public $redirect='', // redirect url after delete
-        public $menu='',
+        public $link = '', // link: priekš href, delete, dinamiskais, ja sākas ar "model:"
+        public $redirect = '', // redirect url after delete
+        public $menu = '',
+        public ?Model $model = null,
     )
     {
         //

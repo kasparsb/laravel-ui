@@ -6,16 +6,18 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
+use Illuminate\Database\Eloquent\Model;
+
 class ButtonDanger extends Component
 {
     public $variant='danger';
 
     public function __construct(
-        public $as='', // link, ...
-        public $href='',
-        public $url='', // url for delete
-        public $redirect='', // redirect url after delete
-        public $menu='',
+        public $as = '', // link, delete
+        public $link = '', // link: priekš href, delete, dinamiskais, ja sākas ar "model:"
+        public $redirect = '', // redirect url after delete
+        public $menu = '',
+        public ?Model $model = null,
     )
     {
         //
