@@ -25,7 +25,7 @@ class Page extends Component
          *
          * Model routē ir jāievēro šis naming
          *
-         * services = $mode--getTable();
+         * services = $mode->getTable();
          *
          * Route::get('/services', 'index')->name('services.index');
          * Route::get('/services/new', 'new')->name('services.new');
