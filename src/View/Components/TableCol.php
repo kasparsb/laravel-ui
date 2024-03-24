@@ -14,6 +14,8 @@ class TableCol extends Component
     public function __construct(
         public $name = '',
         public $type = '',
+        // View, kurš tiks renderēts table cell
+        public $v = '',
         // button specific attributes
         public $as = '',
         public $link = '',

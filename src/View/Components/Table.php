@@ -3,9 +3,10 @@
 namespace Kasparsb\Ui\View\Components;
 
 use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\ComponentAttributeBag;
+use Illuminate\Support\Facades\View as FacadeView;
 
 use Kasparsb\Ui\View\TableComponentsManager;
 
@@ -41,6 +42,15 @@ class Table extends Component
     public function cellContent($col, $row) {
         $value = data_get($row, $col->name);
 
+        // Custom view
+        if ($col->v && FacadeView::exists($col->v)) {
+            return view($col->v, [
+                'name' => $col->name,
+                'row' => $row,
+                'value' => $value,
+            ])->render();
+        }
+
         if ($col->type == 'field-text') {
             return view('ui::components.field-text', [
                 'attributes' => new ComponentAttributeBag(),
@@ -75,21 +85,6 @@ class Table extends Component
                 'checked' => $value ? true : false,
                 'placeholder' => $col->placeholder,
                 'description' => '',
-            ])->render();
-        }
-        else if ($col->type == 'button-outline') {
-            return view('ui::components.button', [
-                'attributes' => new ComponentAttributeBag(),
-                'variant' => 'outline',
-                'as' => $col->as,
-                'link' => $col->link,
-                'model' => $row,
-                'menu' => '',
-                /**
-                 * TODO kā dabūt button label no table col
-                 */
-                'slot' => 'Edit'
-
             ])->render();
         }
         else {
