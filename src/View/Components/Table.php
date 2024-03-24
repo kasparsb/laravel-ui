@@ -17,6 +17,9 @@ class Table extends Component
         // Data
         public $rows = [],
         public $formatter = null,
+        public $submitable = false,
+        public $routeCreate = '',
+        public $routeUpdate = '',
     )
     {
         // Klases, kura nodrošinās cell vērtību formatēšanu
