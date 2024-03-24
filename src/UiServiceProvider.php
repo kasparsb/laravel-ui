@@ -5,6 +5,7 @@ namespace Kasparsb\Ui;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
+use Kasparsb\Ui\Helpers;
 use Kasparsb\Ui\View\TableComponentsManager;
 
 class UiServiceProvider extends ServiceProvider
@@ -14,6 +15,9 @@ class UiServiceProvider extends ServiceProvider
     {
         $this->app->singleton('Kasparsb\Ui\View\TableComponentsManager', function($app) {
             return new TableComponentsManager();
+        });
+        $this->app->singleton('Kasparsb\Ui\Helpers', function($app) {
+            return new Helpers();
         });
     }
 
