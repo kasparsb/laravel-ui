@@ -274,6 +274,11 @@
                         name="email"
                         class="w-28"
                         >Email</x-ui::table-col>
+                    <x-ui::table-col
+                        type="button-outline"
+                        name="email"
+                        class="w-28"
+                        >Email</x-ui::table-col>
                 </x-ui::table>
 
 
