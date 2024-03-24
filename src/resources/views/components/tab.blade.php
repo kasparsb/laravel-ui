@@ -1,6 +1,6 @@
 @if ($as == 'link')
 <a
-    href="{{ $href }}"
+    href="{{ $link }}"
     {{ $attributes->class([
     'tab',
     'selected' => $selected ? true : false,

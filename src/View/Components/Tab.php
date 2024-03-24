@@ -9,10 +9,10 @@ use Illuminate\View\Component;
 class Tab extends Component
 {
     public function __construct(
-        public $name=null,
-        public $selected=null,
-        public $as='',
-        public $href='',
+        public $name = null,
+        public $selected = null,
+        public $as = '',
+        public $link = '',
     )
     {
         if (is_null($this->selected)) {
