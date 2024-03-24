@@ -44,7 +44,7 @@ class Table extends Component
                 'label' => '',
                 'name' => $col->name,
                 'value' => $value,
-                'placeholder' => '',
+                'placeholder' => $col->placeholder,
                 'description' => '',
             ])->render();
         }
@@ -54,7 +54,7 @@ class Table extends Component
                 'label' => '',
                 'name' => $col->name,
                 'value' => $value,
-                'placeholder' => '',
+                'placeholder' => $col->placeholder,
                 'description' => '',
                 'stateUrl' => '',
                 'minDate' => '',
@@ -70,8 +70,23 @@ class Table extends Component
                 'labelPosition' => 'right',
                 'name' => $col->name,
                 'checked' => $value ? true : false,
-                'placeholder' => '',
+                'placeholder' => $col->placeholder,
                 'description' => '',
+            ])->render();
+        }
+        else if ($col->type == 'button-outline') {
+            return view('ui::components.button', [
+                'attributes' => new ComponentAttributeBag(),
+                'variant' => 'outline',
+                'as' => $col->as,
+                'link' => $col->link,
+                'model' => $row,
+                'menu' => '',
+                /**
+                 * TODO kā dabūt button label no table col
+                 */
+                'slot' => 'Edit'
+
             ])->render();
         }
         else {
