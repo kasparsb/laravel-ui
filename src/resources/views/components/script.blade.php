@@ -1,1 +1,1 @@
-<script src="{{ asset('/vendor/ui/dist/app.min-0.0.7.js') }}"></script>
+<script src="{{ asset('/vendor/ui/dist/app.min-0.0.9.js') }}"></script>
