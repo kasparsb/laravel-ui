@@ -1,12 +1,13 @@
-import request from 'dom-helpers/src/http/request';
+import post from 'dom-helpers/src/http/post';
 import clickp from 'dom-helpers/src/event/clickp';
 
 export default {
     init() {
-        clickp('[data-buttondelete]', (ev, el) => {
+        clickp('[data-buttonpost]', (ev, el) => {
+            console.log('asdad post', el.dataset.url);
             ev.preventDefault();
             if (el.dataset.url) {
-                request('DELETE', el.dataset.url)
+                post(el.dataset.url)
                     .then(r => {
                         if (el.dataset.redirect) {
                             window.location.href = el.dataset.redirect
@@ -16,10 +17,10 @@ export default {
         })
     },
     /**
-     * Pārbauda vai padotais el ir delete button
+     * Pārbauda vai padotais el ir post button
      */
-    isButtonDelete(el) {
-        if ('buttondelete' in el.dataset) {
+    isButtonPost(el) {
+        if ('buttonpost' in el.dataset) {
             return true;
         }
         return false;

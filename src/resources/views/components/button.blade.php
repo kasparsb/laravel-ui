@@ -21,11 +21,11 @@
     href="{{ $link }}"
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</a>
-@elseif ($as == 'delete')
+@elseif (in_array($as, ['delete', 'post',]))
 <button
     data-url="{{ $link }}"
     data-redirect="{{ $redirect }}"
-    data-buttondelete
+    data-button{{ $as }}
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</button>
 @else
