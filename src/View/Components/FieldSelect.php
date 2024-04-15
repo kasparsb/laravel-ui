@@ -17,6 +17,7 @@ class FieldSelect extends Component
         // vai rādīt tukšo option elementu
         public $empty=true,
         public $model=null,
+        public $disabled=false,
     )
     {
         if ($this->model) {

@@ -17,6 +17,7 @@
         @if ($maxDate)
         data-max-date="{{ $maxDate }}"
         @endif
+        @disabled($disabled)
         />
     @if ($description)
     <p>{{ $description }}</p>

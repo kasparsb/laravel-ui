@@ -7,7 +7,10 @@
         <svg>
             <use xlink:href="#select-trigger"></use>
         </svg>
-        <select name="{{ $name }}">
+        <select
+            name="{{ $name }}"
+            @disabled($disabled)
+            >
 
             @if ($empty)
             <option value="" @selected(!$value)>{{ is_bool($empty) ? '' : $empty }}</option>

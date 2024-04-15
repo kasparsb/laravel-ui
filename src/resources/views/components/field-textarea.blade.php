@@ -5,6 +5,7 @@
     <textarea
         name="{{ $name }}"
         placeholder="{{ $placeholder }}"
+        @disabled($disabled)
         >{{ $value }}</textarea>
     @if ($description)
     <p>{{ $description }}</p>

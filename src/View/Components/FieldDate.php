@@ -20,6 +20,7 @@ class FieldDate extends Component
         public $maxDate='',
         public $state='',
         public $defaultDateState='',
+        public $disabled=false,
     )
     {
         if ($this->model) {

@@ -6,7 +6,9 @@
         type="{{ $type }}"
         name="{{ $name }}"
         value="{{ $value }}"
-        placeholder="{{ $placeholder }}" />
+        placeholder="{{ $placeholder }}"
+        @disabled($disabled)
+        />
     @if ($description)
     <p>{{ $description }}</p>
     @endif

@@ -15,6 +15,7 @@ class FieldTextarea extends Component
         public $description='',
         public $placeholder='',
         public $model=null,
+        public $disabled=false,
     )
     {
         if ($this->model) {
