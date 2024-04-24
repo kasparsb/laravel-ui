@@ -308,79 +308,29 @@ body {
     margin-bottom: @size040;
 }
 
+.mt-1\.5 { margin-top: @size015 }
+.mt-2    { margin-top: @size020 }
+.mt-3    { margin-top: @size030 }
+.mt-3\.5 { margin-top: @size035 }
+.mt-4    { margin-top: @size040 }
+.mt-5    { margin-top: @size050 }
+.mt-6    { margin-top: @size060 }
+.mt-7    { margin-top: @size070 }
+.mt-8    { margin-top: @size080 }
+.mt-9    { margin-top: @size090 }
+.mt-10   { margin-top: @size100 }
 
-.mt-1\.5{
-    margin-top: @size015;
-}
-.mt-2 {
-    margin-top: @size020;
-}
-.mt-3 {
-    margin-top: @size030;
-}
-.mt-3\.5 {
-    margin-top: @size035;
-}
-.mt-4 {
-    margin-top: @size040;
-}
-.mt-5 {
-    margin-top: @size050;
-}
-.mt-6 {
-    margin-top: @size060;
-}
-.mt-7 {
-    margin-top: @size070;
-}
-.mt-8 {
-    margin-top: @size080;
-}
-.mt-9 {
-    margin-top: @size090;
-}
-.mt-10 {
-    margin-top: @size100;
-}
-
-
-.mb-1\.5{
-    margin-bottom: @size015;
-}
-.mb-2 {
-    margin-bottom: @size020;
-}
-.mb-3 {
-    margin-bottom: @size030;
-}
-.mb-3\.5 {
-    margin-bottom: @size035;
-}
-.mb-4 {
-    margin-bottom: @size040;
-}
-.mb-5 {
-    margin-bottom: @size050;
-}
-.mb-6 {
-    margin-bottom: @size060;
-}
-.mb-7 {
-    margin-bottom: @size070;
-}
-.mb-8 {
-    margin-bottom: @size080;
-}
-.mb-9 {
-    margin-bottom: @size090;
-}
-.mb-10 {
-    margin-bottom: @size100;
-}
-
-
-
-
+.mb-1\.5{ margin-bottom: @size015 }
+.mb-2 { margin-bottom: @size020 }
+.mb-3 { margin-bottom: @size030 }
+.mb-3\.5 { margin-bottom: @size035 }
+.mb-4 { margin-bottom: @size040 }
+.mb-5 { margin-bottom: @size050 }
+.mb-6 { margin-bottom: @size060 }
+.mb-7 { margin-bottom: @size070 }
+.mb-8 { margin-bottom: @size080 }
+.mb-9 { margin-bottom: @size090 }
+.mb-10 { margin-bottom: @size100 }
 
 .py-4 {
     padding-top: @size040;
@@ -391,75 +341,29 @@ body {
     padding-bottom: @size040;
 }
 
-.w-2 {
-    width: @size020;
-}
-.w-2\.5 {
-    width: @size025;
-}
-.w-4 {
-    width: @size040;
-}
-.w-8 {
-    width: @size080;
-}
-.w-10 {
-    width: @size100;
-}
-.w-11 {
-    width: @size110;
-}
-.w-12 {
-    width: @size120;
-}
-.w-14 {
-    width: @size140;
-}
-.w-16 {
-    width: @size160;
-}
-.w-20 {
-    width: @size200;
-}
-.w-24 {
-    width: @size240;
-}
-.w-28 {
-    width: @size280;
-}
-.w-32 {
-    width: @size320;
-}
-.w-36 {
-    width: @size360;
-}
-.w-40 {
-    width: @size400;
-}
-.w-44 {
-    width: @size440;
-}
-.w-48 {
-    width: @size480;
-}
-.w-52 {
-    width: @size520;
-}
-.w-56 {
-    width: @size560;
-}
-.w-60 {
-    width: @size600;
-}
-.w-64 {
-    width: @size640;
-}
-.w-72 {
-    width: @size720;
-}
-.w-80 {
-    width: @size800;
-}
+.w-2 { width: @size020 }
+.w-2\.5 { width: @size025 }
+.w-4 { width: @size040 }
+.w-8 { width: @size080 }
+.w-10 { width: @size100 }
+.w-11 { width: @size110 }
+.w-12 { width: @size120 }
+.w-14 { width: @size140 }
+.w-16 { width: @size160 }
+.w-20 { width: @size200 }
+.w-24 { width: @size240 }
+.w-28 { width: @size280 }
+.w-32 { width: @size320 }
+.w-36 { width: @size360 }
+.w-40 { width: @size400 }
+.w-44 { width: @size440 }
+.w-48 { width: @size480 }
+.w-52 { width: @size520 }
+.w-56 { width: @size560 }
+.w-60 { width: @size600 }
+.w-64 { width: @size640 }
+.w-72 { width: @size720 }
+.w-80 { width: @size800 }
 
 
 .w-96 {
@@ -471,6 +375,10 @@ body {
 
 .h-full {
     height: 100%;
+}
+
+.color-muted {
+    color: hsl(var(--color-500));
 }
 
 .text-size-2\.5,
@@ -613,6 +521,56 @@ body {
     &.ta-right {
         justify-content: flex-end;
     }
+
+    // Colors
+    &.color-blue-950 { color: hsl(var(--color-blue-950)) }
+    &.color-blue-900 { color: hsl(var(--color-blue-900)) }
+    &.color-blue-800 { color: hsl(var(--color-blue-800)) }
+    &.color-blue-700 { color: hsl(var(--color-blue-700)) }
+    &.color-blue-600 { color: hsl(var(--color-blue-600)) }
+    &.color-blue-500 { color: hsl(var(--color-blue-500)) }
+    &.color-blue-400 { color: hsl(var(--color-blue-400)) }
+    &.color-blue-300 { color: hsl(var(--color-blue-300)) }
+    &.color-blue-200 { color: hsl(var(--color-blue-200)) }
+    &.color-blue-100 { color: hsl(var(--color-blue-100)) }
+    &.color-blue-50  { color: hsl(var(--color-blue-50)) }
+
+    &.color-red-950 { color: hsl(var(--color-red-950)) }
+    &.color-red-900 { color: hsl(var(--color-red-900)) }
+    &.color-red-800 { color: hsl(var(--color-red-800)) }
+    &.color-red-700 { color: hsl(var(--color-red-700)) }
+    &.color-red-600 { color: hsl(var(--color-red-600)) }
+    &.color-red-500 { color: hsl(var(--color-red-500)) }
+    &.color-red-400 { color: hsl(var(--color-red-400)) }
+    &.color-red-300 { color: hsl(var(--color-red-300)) }
+    &.color-red-200 { color: hsl(var(--color-red-200)) }
+    &.color-red-100 { color: hsl(var(--color-red-100)) }
+    &.color-red-50  { color: hsl(var(--color-red-50)) }
+
+    &.color-green-950 { color: hsl(var(--color-green-950)) }
+    &.color-green-900 { color: hsl(var(--color-green-900)) }
+    &.color-green-800 { color: hsl(var(--color-green-800)) }
+    &.color-green-700 { color: hsl(var(--color-green-700)) }
+    &.color-green-600 { color: hsl(var(--color-green-600)) }
+    &.color-green-500 { color: hsl(var(--color-green-500)) }
+    &.color-green-400 { color: hsl(var(--color-green-400)) }
+    &.color-green-300 { color: hsl(var(--color-green-300)) }
+    &.color-green-200 { color: hsl(var(--color-green-200)) }
+    &.color-green-100 { color: hsl(var(--color-green-100)) }
+    &.color-green-50  { color: hsl(var(--color-green-50)) }
+
+    &.color-yellow-950 { color: hsl(var(--color-yellow-950)) }
+    &.color-yellow-900 { color: hsl(var(--color-yellow-900)) }
+    &.color-yellow-800 { color: hsl(var(--color-yellow-800)) }
+    &.color-yellow-700 { color: hsl(var(--color-yellow-700)) }
+    &.color-yellow-600 { color: hsl(var(--color-yellow-600)) }
+    &.color-yellow-500 { color: hsl(var(--color-yellow-500)) }
+    &.color-yellow-400 { color: hsl(var(--color-yellow-400)) }
+    &.color-yellow-300 { color: hsl(var(--color-yellow-300)) }
+    &.color-yellow-200 { color: hsl(var(--color-yellow-200)) }
+    &.color-yellow-100 { color: hsl(var(--color-yellow-100)) }
+    &.color-yellow-50  { color: hsl(var(--color-yellow-50)) }
+
 
     height: @size090;
     padding-left: @size040;
@@ -760,7 +718,7 @@ body {
     // Description text
     >p {
         font-size: @size035;
-        color: hsl(var(--color-500));
+        .color-muted();
     }
 }
 
