@@ -59,6 +59,7 @@ class Table extends Component
                 'value' => $value,
                 'placeholder' => $col->placeholder,
                 'description' => '',
+                'disabled' => false,
             ])->render();
         }
         else if ($col->type == 'field-date') {
@@ -73,7 +74,8 @@ class Table extends Component
                 'minDate' => '',
                 'maxDate' => '',
                 'defaultDateState' => '',
-                'state' => ''
+                'state' => '',
+                'disabled' => false,
             ])->render();
         }
         else if ($col->type == 'toggle-switch') {
