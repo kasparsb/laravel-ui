@@ -8,8 +8,9 @@ import navPrevFormatter from './calendar/navPrevFormatter';
 import navNextFormatter from './calendar/navNextFormatter';
 import monthDayFormatter from './calendar/monthDayFormatter';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
+import Listeners from './helpers/Listeners';
 
-function Calendar(containerEl) {
+function CalendarWrapper(containerEl) {
 
     this.containerEl = containerEl;
 
@@ -79,11 +80,25 @@ function Calendar(containerEl) {
     }
 
     if (containerEl.dataset.minDate) {
-        calendarProps.minDate = containerEl.dataset.minDate;
+        if (containerEl.dataset.minDate.startsWith('calendar:')) {
+            calendarProps.minDate = watchDateFromCalendarByName(containerEl.dataset.minDate.substring(9), (minDate) => {
+                this.calendar.setMinDate(minDate);
+            })
+        }
+        else {
+            calendarProps.minDate = containerEl.dataset.minDate;
+        }
     }
 
     if (containerEl.dataset.maxDate) {
-        calendarProps.maxDate = containerEl.dataset.maxDate;
+        if (containerEl.dataset.maxDate.startsWith('calendar:')) {
+            calendarProps.maxDate = watchDateFromCalendarByName(containerEl.dataset.maxDate.substring(9), (maxDate) => {
+                this.calendar.setMaxDate(maxDate);
+            })
+        }
+        else {
+            calendarProps.maxDate = containerEl.dataset.maxDate;
+        }
     }
 
     this.calendar = new BaseCalendar.dom(firstDate, calendarProps);
@@ -132,23 +147,70 @@ function Calendar(containerEl) {
     append(this.containerEl, this.calendar.getEl());
 }
 
+/**
+ * Nolasām un klausāmies datumu no kalendāra pēc tā vārda
+ */
+function watchDateFromCalendarByName(watchCalendarName, cb) {
+    onChangeListeners.listen((calendarName, date) => {
+        if (watchCalendarName != calendarName) {
+            return;
+        }
+
+        cb(date);
+    })
+
+    let calendar = findCalendarByName(watchCalendarName);
+    if (calendar) {
+        return calendar.getDate();
+    }
+    else {
+        /**
+         * kalendārs vēl nav reģistrēts
+         * klausāmies uz event, kad tas tiks piereģistrēts
+         */
+        onCreateListeners.listen((calendarName, calendar) => {
+            if (watchCalendarName != calendarName) {
+                return;
+            }
+
+            cb(calendar.getDate())
+        })
+    }
+}
+
+
+
+
+function findCalendarByName(calendarName) {
+    let instance = instances.find(instance => instance.name == calendarName);
+    return instance ? instance.calendarWrapper.calendar : null;
+}
 
 let instances = [];
+
+let onCreateListeners = new Listeners();
+let onChangeListeners = new Listeners();
 
 export default {
     init() {
         [...qa('.calendar')].forEach(calendarEl => {
+            let calendarWrapper = new CalendarWrapper(calendarEl);
             let newLength = instances.push({
                 name: calendarEl.dataset.name,
-                calendar: new Calendar(calendarEl)
+                calendarWrapper: calendarWrapper
             });
             calendarEl.dataset.calid = newLength - 1;
+
+            calendarWrapper.calendar.on('dateclick', date => {
+                onChangeListeners.trigger([calendarEl.dataset.name, date])
+            })
+
+            onCreateListeners.trigger([calendarEl.dataset.name, calendarWrapper.calendar])
         })
 
         // Register method to get calendar instance by name
         window.uiGetCalendarByName = function(name){
-            let instance = instances.find(instance => instance.name == name);
-            return instance ? instance.calendar.calendar : null;
+            return findCalendarByName(name)
         }
     }
 };
