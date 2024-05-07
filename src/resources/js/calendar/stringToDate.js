@@ -1,5 +1,9 @@
 function stringToDate(dateString) {
 
+    if (dateString instanceof Date) {
+        return new Date(dateString.getTime());
+    }
+
     // Sadalam pa datumu un laiku
     var dp = dateString.split(' ');
 
