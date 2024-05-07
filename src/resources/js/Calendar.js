@@ -9,6 +9,8 @@ import navNextFormatter from './calendar/navNextFormatter';
 import monthDayFormatter from './calendar/monthDayFormatter';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
 import Listeners from './helpers/Listeners';
+import getDateFromReference from './calendar/getDateFromReference';
+import clampDate from './calendar/clampDate';
 
 function CalendarWrapper(containerEl) {
 
@@ -79,27 +81,17 @@ function CalendarWrapper(containerEl) {
         calendarProps.stateUrl = containerEl.dataset.stateUrl;
     }
 
-    if (containerEl.dataset.minDate) {
-        if (containerEl.dataset.minDate.startsWith('calendar:')) {
-            calendarProps.minDate = watchDateFromCalendarByName(containerEl.dataset.minDate.substring(9), (minDate) => {
-                this.calendar.setMinDate(minDate);
-            })
-        }
-        else {
-            calendarProps.minDate = containerEl.dataset.minDate;
-        }
-    }
+    calendarProps.minDate = getDateFromReference(containerEl.dataset.minDate, minDate => {
+        this.calendar.setMinDate(minDate);
 
-    if (containerEl.dataset.maxDate) {
-        if (containerEl.dataset.maxDate.startsWith('calendar:')) {
-            calendarProps.maxDate = watchDateFromCalendarByName(containerEl.dataset.maxDate.substring(9), (maxDate) => {
-                this.calendar.setMaxDate(maxDate);
-            })
-        }
-        else {
-            calendarProps.maxDate = containerEl.dataset.maxDate;
-        }
-    }
+        validateSelectedDate(this);
+    })
+
+    calendarProps.maxDate = getDateFromReference(containerEl.dataset.maxDate, maxDate => {
+        this.calendar.setMaxDate(maxDate);
+
+        validateSelectedDate(this);
+    })
 
     this.calendar = new BaseCalendar.dom(firstDate, calendarProps);
 
@@ -119,6 +111,10 @@ function CalendarWrapper(containerEl) {
 
     // Ja ir date input field, tad uz dateclick ieliksim to datumu laukā
     if (this.dateInputField) {
+        /**
+         * TODO pārtiasīt uz onchange eventu
+         * * kad datums mainās nevis lietotājs taisa click
+         */
         this.calendar.on('dateclick', date => {
             this.dateInputField.value = formatDate.ymd(date)
 
@@ -147,6 +143,22 @@ function CalendarWrapper(containerEl) {
     append(this.containerEl, this.calendar.getEl());
 }
 
+
+function validateSelectedDate(calendarWrapper) {
+    if (!calendarWrapper.calendar.getSelectedDate()) {
+        return;
+    }
+
+    let clampedDate = clampDate(
+        calendarWrapper.calendar.getSelectedDate(),
+        calendarWrapper.calendar.getMinDate(),
+        calendarWrapper.calendar.getMaxDate()
+    )
+    if (!formatDate.sameYmd(clampedDate, calendarWrapper.calendar.getSelectedDate())) {
+        calendarWrapper.calendar.setSelectedDate(clampedDate);
+    }
+}
+
 /**
  * Nolasām un klausāmies datumu no kalendāra pēc tā vārda
  */
@@ -163,19 +175,6 @@ function watchDateFromCalendarByName(watchCalendarName, cb) {
     if (calendar) {
         return calendar.getDate();
     }
-    else {
-        /**
-         * kalendārs vēl nav reģistrēts
-         * klausāmies uz event, kad tas tiks piereģistrēts
-         */
-        onCreateListeners.listen((calendarName, calendar) => {
-            if (watchCalendarName != calendarName) {
-                return;
-            }
-
-            cb(calendar.getDate())
-        })
-    }
 }
 
 
@@ -188,7 +187,6 @@ function findCalendarByName(calendarName) {
 
 let instances = [];
 
-let onCreateListeners = new Listeners();
 let onChangeListeners = new Listeners();
 
 export default {
@@ -205,12 +203,18 @@ export default {
                 onChangeListeners.trigger([calendarEl.dataset.name, date])
             })
 
-            onCreateListeners.trigger([calendarEl.dataset.name, calendarWrapper.calendar])
+            onChangeListeners.trigger([calendarEl.dataset.name, calendarWrapper.calendar.getDate()])
         })
 
         // Register method to get calendar instance by name
         window.uiGetCalendarByName = function(name){
             return findCalendarByName(name)
         }
+    },
+    getByName(calendarName) {
+        return findCalendarByName(calendarName)
+    },
+    onDateChange(cb) {
+        onChangeListeners.listen(cb)
     }
 };

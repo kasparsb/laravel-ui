@@ -15,6 +15,8 @@
     @if ($onDateSelect)
     data-on-date-select="{{ $onDateSelect }}"
     @endif
+
+    data-is-calendar
 >
     <input
         type="hidden"

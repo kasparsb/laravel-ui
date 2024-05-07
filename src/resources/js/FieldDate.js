@@ -1,11 +1,14 @@
-import {jsx, q, parent, addStyle, append, replaceContent, getOffset, isChild, click} from 'dom-helpers';
+import {jsx, q, qa, parent, addStyle, append, replaceContent, getOffset, isChild, click} from 'dom-helpers';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
 import navPrevFormatter from './calendar/navPrevFormatter';
 import navNextFormatter from './calendar/navNextFormatter';
 import monthDayFormatter from './calendar/monthDayFormatter';
+import getDateFromReference from './calendar/getDateFromReference';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
+import clampDate from './calendar/clampDate';
+import formatDate from './calendar/formatDate';
 
 function sp(s) {
     s = s+'';
@@ -125,19 +128,20 @@ function open(field) {
         calendar.setState(getJsonFromHtml(parent(activeField, '.field-date'), 'state'));
 
         // State url
-        calendar.setStateUrl(field.dataset.stateUrl ? field.dataset.stateUrl : '')
+        calendar.setStateUrl(field.dataset.stateUrl ? field.dataset.stateUrl : '');
+
         // Min max date
-        calendar.setMinDate(field.dataset.minDate ? field.dataset.minDate : '')
-        calendar.setMaxDate(field.dataset.maxDate ? field.dataset.maxDate : '')
+        calendar.setMinDate(field.dataset.minDate);
+        calendar.setMaxDate(field.dataset.maxDate);
 
         // Current date
         calendar.setSelectedDate(activeField.value);
 
         // Show
-        //setTimeout(() => {
+        setTimeout(() => {
             container.dataset.visible = 'yes';
             isOpen = true;
-        //}, 10)
+        }, 10)
     }, 10)
 
     // Pozicionē container pret input lauku
@@ -146,6 +150,15 @@ function open(field) {
         top: (p.top+40)+'px',
         left: p.left+'px',
     })
+}
+
+function validateFieldValue(inputFieldEl) {
+    let clampedValue = formatDate.ymd(clampDate(inputFieldEl.value, inputFieldEl.dataset.minDate, inputFieldEl.dataset.maxDate));
+    if (clampedValue != inputFieldEl.value) {
+        inputFieldEl.value = clampedValue;
+
+        triggerEvent(inputFieldEl, 'change')
+    }
 }
 
 export default {
@@ -162,6 +175,31 @@ export default {
 
         click('.field-date input', (ev, el) => {
             open(el)
+        })
+
+        /**
+         * Visiem field-date uzstādām min|max date no
+         * reference lauka. Klausāmies uz reference lauka izmaiņām,
+         * lai uzsetotu atjaunoto min|max date
+         * Validējam, lai lauka vērtība atbilstu min|max date
+         *
+         * Kad tiek atvērts kalendārs, tad min|max vērtības tiek
+         * ņemtas no input lauka
+         */
+        qa('.field-date').forEach(fieldDateEl => {
+            let inputEl = q(fieldDateEl, 'input');
+
+            // Liekam data atribūtu min|max Date. Nolasām no related lauka
+            inputEl.dataset.minDate = getDateFromReference(inputEl.dataset.minDate, minDate => {
+                inputEl.dataset.minDate = minDate
+
+                validateFieldValue(inputEl);
+            })
+            inputEl.dataset.maxDate = getDateFromReference(inputEl.dataset.maxDate, maxDate => {
+                inputEl.dataset.maxDate = maxDate
+
+                validateFieldValue(inputEl);
+            })
         })
     }
 }
