@@ -18,4 +18,16 @@
     <symbol id="angle-left" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"></polyline>
     </symbol>
+
+    <symbol id="chevrons-left" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M11 7l-5 5l5 5" />
+        <path d="M17 7l-5 5l5 5" />
+    </symbol>
+
+    <symbol id="chevrons-right" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M7 7l5 5l-5 5" />
+        <path d="M13 7l5 5l-5 5" />
+    </symbol>
 </svg>
