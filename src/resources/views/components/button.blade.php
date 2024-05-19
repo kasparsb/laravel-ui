@@ -20,6 +20,9 @@
 <a
     href="{{ $link }}"
     {{ $attributes->class(['button-'.$variant]) }}
+    @if ($disabled)
+    disabled="disabled"
+    @endif
     >{{ $slot }}</a>
 @elseif (in_array($as, ['delete', 'post',]))
 <button
@@ -27,12 +30,18 @@
     data-redirect="{{ $redirect }}"
     data-button{{ $as }}
     {{ $attributes->class(['button-'.$variant]) }}
+    @if ($disabled)
+    disabled="disabled"
+    @endif
     >{{ $slot }}</button>
 @else
 <button
     @if ($menu)
     data-dropdown-menu="{{ $menu }}"
     type="button"
+    @endif
+    @if ($disabled)
+    disabled="disabled"
     @endif
     {{ $attributes->class(['button-'.$variant]) }}
     >{{ $slot }}</button>

@@ -587,6 +587,23 @@ body {
 
     cursor: pointer;
 
+    /**
+     * neizmantoju &:enabled un &:disabled, jo tas nedarbojas uz linkiem
+     */
+
+    &[disabled] {
+        cursor: default;
+    }
+
+    // disabled link
+    &:is(a[disabled]) {
+        pointer-events: none;
+    }
+
+    &[disabled] {
+        opacity: .6;
+    }
+
     svg {
         margin-right: @size015;
         width: @size040;
@@ -607,7 +624,7 @@ body {
     .shadow();
     color: hsl(var(--color-100));
     background-color: hsl(var(--color-950));
-    &:hover {
+    &:not([disabled]):hover {
         background-color: hsl(var(--color-950) / .9);
     }
 }
@@ -616,7 +633,7 @@ body {
     .shadow();
     color: hsl(var(--color-900));
     background-color: hsl(var(--color-100));
-    &:hover {
+    &:not([disabled]):hover {
         background-color: hsl(var(--color-100) / .8);
     }
 }
@@ -625,7 +642,7 @@ body {
     .shadow();
     color: hsl(var(--color-100));
     background-color: hsl(var(--color-danger));
-    &:hover {
+    &:not([disabled]):hover {
         background-color: hsl(var(--color-danger) / .9);
     }
 }
@@ -634,7 +651,7 @@ body {
     color: var(--color-950);
     background-color: hsl(var(--color-background));
     border: 1px solid hsl(var(--input));
-    &:hover {
+    &:not([disabled]):hover {
         background-color: hsl(var(--color-100));
     }
 }
@@ -642,7 +659,7 @@ body {
     .button-base();
     color: var(--color-950);
     background-color: hsl(var(--color-background));
-    &:hover {
+    &:not([disabled]):hover {
         background-color: hsl(var(--color-100));
         .shadow();
     }
@@ -652,7 +669,7 @@ body {
     color: var(--color-950);
     background-color: hsl(var(--color-background));
     text-underline-offset: 4px;
-    &:hover {
+    &:not([disabled]):hover {
         text-decoration-line: underline;
     }
 }

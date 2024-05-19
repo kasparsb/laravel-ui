@@ -18,6 +18,7 @@ class ButtonGhost extends Component
         public $redirect = '', // redirect url after delete
         public $menu = '',
         public ?Model $model = null,
+        public $disabled = false,
     )
     {
         //
