@@ -70,17 +70,18 @@ class Pagination extends Component
             $this->nextPageUrl = $this->pageLink($this->currentPage + 1);
         }
 
-
-
-
-
-
         /**
          * Saliekam redzamās lapas
          */
+        $pages = $this->collectPages();
+        $this->elements = $this->dividePagesInGroups($pages);
+    }
 
-
-
+    /**
+     * Savācam visas lapas, kuras ir jārāda pagination
+     */
+    private function collectPages() {
+        $pages = [];
         // Sākuma lapas
         for ($pageNumber = 1; $pageNumber <= $this->onEdges; $pageNumber++) {
             $pages[$pageNumber] = $this->pageLink($pageNumber);
@@ -100,27 +101,36 @@ class Pagination extends Component
             $pages[$pageNumber] = $this->pageLink($pageNumber);
         }
 
+        return $pages;
+    }
 
-        /**
-         * Saliekm atdalītājus starp lapām, kuras nav secīgas
-         * 1 2 3 4 5   10 11 12
-         *          ...
-         * 1 2   5 6 7   10 11 12
-         *    ...     ...
-         */
+    /**
+     * Sagalam visas lapas, kuras nav secīgas pa grupām un
+     * grupas atdalām ar delimiter
+     *
+     *
+     * Saliekm atdalītājus starp lapām, kuras nav secīgas
+     * 1 2 3 4 5   10 11 12
+     *          ...
+     * 1 2   5 6 7   10 11 12
+     *    ...     ...
+     */
+    private function dividePagesInGroups($pages) {
+        $groups = [];
+
         $prevPageNumber = null;
         $portion = [];
         foreach ($pages as $pageNumber => $link) {
             // Starpā ir vairāk kā viena lapa
             if ($prevPageNumber && $pageNumber - $prevPageNumber > 2) {
-                $this->elements[] = $portion;
-                $this->elements[] = '...';
+                $groups[] = $portion;
+                $groups[] = '...';
                 $portion = [];
             }
             // starpā ir viena lapa, tāpēc liekam to lapu nevis delimiter
             else if ($prevPageNumber && $pageNumber - $prevPageNumber > 1) {
                 $portion[$pageNumber - 1] = $this->pageLink($pageNumber - 1);
-                $this->elements[] = $portion;
+                $groups[] = $portion;
                 $portion = [];
             }
 
@@ -129,8 +139,10 @@ class Pagination extends Component
             $prevPageNumber = $pageNumber;
         }
         if ($portion) {
-            $this->elements[] = $portion;
+            $groups[] = $portion;
         }
+
+        return $groups;
     }
 
     private function pageLink($pageNumber) {
