@@ -4,13 +4,13 @@
     @if ($onFirstPage)
         <x-ui::button-ghost as="link" class="icon" disabled="true">
             <svg width="24" height="24" viewBox="0 0 24 24">
-                <use xlink:href="#chevrons-left"></use>
+                <use xlink:href="#angle-left"></use>
             </svg>
         </x-ui::button-ghost>
     @else
         <x-ui::button-ghost as="link" class="icon" :link="$previousPageUrl">
             <svg width="24" height="24" viewBox="0 0 24 24">
-                <use xlink:href="#chevrons-left"></use>
+                <use xlink:href="#angle-left"></use>
             </svg>
         </x-ui::button-ghost>
     @endif
@@ -40,13 +40,13 @@
     @if ($hasMorePages)
         <x-ui::button-ghost as="link" class="icon" :link="$nextPageUrl">
             <svg width="24" height="24" viewBox="0 0 24 24">
-                <use xlink:href="#chevrons-right"></use>
+                <use xlink:href="#angle-right"></use>
             </svg>
         </x-ui::button-ghost>
     @else
         <x-ui::button-ghost as="link" class="icon" disabled="true">
             <svg width="24" height="24" viewBox="0 0 24 24">
-                <use xlink:href="#chevrons-right"></use>
+                <use xlink:href="#angle-right"></use>
             </svg>
         </x-ui::button-ghost>
     @endif
