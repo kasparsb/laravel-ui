@@ -18,8 +18,9 @@
     /**
      * Loading var būt vairāki state
      * onsubmit - būs loading, kad notiks formas submit
+     * onpost - būs loading, kad notiks post uz pogas link
+     * ondelete - būs loading, kad notiks delete uz pogas
      * onclick - kad click, tad loading
-     * toggleclick - toggle loading state uz click
      */
 
     // Ja ir loading state, tad ir disabled

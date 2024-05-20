@@ -23,17 +23,33 @@ function idle(el) {
     delete el.dataset.pd;
 }
 
+function toggle(el) {
+    if (el.dataset.loading == 'loading') {
+        idle(el);
+    }
+    else {
+        loading(el);
+    }
+}
+
 export default {
     init() {
         click('button[data-loading="onclick"],a[data-loading="onclick"]', (ev, el) => {
-            console.log(el);
             loading(el);
         })
+    },
+    toggle(el) {
+        toggle(el)
     },
     loading(el) {
         loading(el)
     },
     idle(el) {
         idle(el)
+    },
+    maybeLoading(el, eventName) {
+        if (el.dataset.loading == 'on'+eventName) {
+            loading(el);
+        }
     }
 }
