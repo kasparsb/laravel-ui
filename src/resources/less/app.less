@@ -1806,3 +1806,26 @@ body {
         }
     }
 }
+
+.pagination {
+    .row-items();
+
+    gap: 0;
+
+    button,
+    a {
+        min-width: @size070;
+    }
+
+    [data-role=currentpage] {
+        margin-left: 2px;
+        margin-right: 2px;
+    }
+
+    // trīs punktu lapu aizvietotājs
+    [data-role=placeholder] {
+        padding-left: 0;
+        padding-right: 0;
+        min-width: @size050;
+    }
+}

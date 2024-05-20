@@ -22,14 +22,14 @@
     @foreach ($elements as $element)
     {{-- "Three Dots" Separator --}}
     @if (is_string($element))
-        <x-ui::button-ghost class="icon" :disabled="true">{{ $element }}</x-ui::button-ghost>
+        <x-ui::button-ghost class="icon" data-role="placeholder" :disabled="true">{{ $element }}</x-ui::button-ghost>
     @endif
 
     {{-- Array Of Links --}}
     @if (is_array($element))
         @foreach ($element as $page => $url)
             @if ($page == $currentPage)
-                <x-ui::button-outline class="icon">{{ $page }}</x-ui::button-outline>
+                <x-ui::button-outline class="icon" data-role="currentpage">{{ $page }}</x-ui::button-outline>
             @else
                 <x-ui::button-ghost class="icon" as="link" :link="$url">{{ $page }}</x-ui::button-ghost>
             @endif
