@@ -35,5 +35,11 @@ class UiServiceProvider extends ServiceProvider
             'public'
         );
 
+
+
+        $packageJson = json_decode(file_get_contents(__DIR__.'/../package.json'));
+
+        view()->share('ui_dist_css', asset('/vendor/ui/dist/app.min-'.$packageJson->version.'.css'));
+        view()->share('ui_dist_js', asset('/vendor/ui/dist/app.min-'.$packageJson->version.'.js'));
     }
 }

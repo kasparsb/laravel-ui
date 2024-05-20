@@ -2,4 +2,4 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap" rel="stylesheet">
 
-<link href="{{ asset('/vendor/ui/dist/app.min-0.0.11.css') }}" rel="stylesheet">
+<link href="{{ $ui_dist_css }}" rel="stylesheet">
