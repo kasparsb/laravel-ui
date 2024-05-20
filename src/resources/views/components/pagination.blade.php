@@ -20,7 +20,7 @@
     @foreach ($elements as $element)
     {{-- "Three Dots" Separator --}}
     @if (is_string($element))
-        <x-ui::button-ghost class="icon">{{ $element }}</x-ui::button-ghost>
+        <x-ui::button-ghost class="icon" :disabled="true">{{ $element }}</x-ui::button-ghost>
     @endif
 
     {{-- Array Of Links --}}
