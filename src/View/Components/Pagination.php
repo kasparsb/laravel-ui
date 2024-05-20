@@ -36,8 +36,18 @@ class Pagination extends Component
 
         // Link template #page# tas ir page number, kas tiks replaced
         public $link = '',
+
+        public $hideNav = false,
+        public $hideNavPrev = false,
+        public $hideNavNext = false,
     )
     {
+
+        if ($this->hideNav) {
+            $this->hideNavPrev = true;
+            $this->hideNavNext = true;
+        }
+
         /**
          * Sākuma vērtības atkarībā no tā vai ir pieejams paginator vai nav
          */
