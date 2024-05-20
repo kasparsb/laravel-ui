@@ -83,6 +83,10 @@ function maybeCreateContainerAndCalendar() {
 
     if (!calendar) {
         calendar = createCalendar(new Date());
+        /**
+         * Tieši, kad lietotājs izvēlējies datumu
+         * tāpēc te nav change, bet ir dateclick
+         */
         calendar.on('dateclick', dateSelected)
 
         replaceContent(q(container, '[data-calendarcontainer]'), calendar.getEl());
@@ -120,7 +124,7 @@ function open(field) {
 
     activeField = field;
 
-    // Calendar props specific to current input field
+    // timeout vajadzīgs, jo kalendārs vēl nav paspējis pilnībā izveidoties un setStateUrl būs error
     setTimeout(() => {
         // Default date state
         calendar.setDefaultDateState(getJsonFromHtml(parent(activeField, '.field-date'), 'default-date-state'));
@@ -130,6 +134,8 @@ function open(field) {
         // State url
         calendar.setStateUrl(field.dataset.stateUrl ? field.dataset.stateUrl : '');
 
+        calendar.setDate(new Date());
+
         // Min max date
         calendar.setMinDate(field.dataset.minDate);
         calendar.setMaxDate(field.dataset.maxDate);
@@ -137,11 +143,12 @@ function open(field) {
         // Current date
         calendar.setSelectedDate(activeField.value);
 
+        calendar.scrollFirstAvailableDateIntoViewport();
+
+
         // Show
-        setTimeout(() => {
-            container.dataset.visible = 'yes';
-            isOpen = true;
-        }, 10)
+        container.dataset.visible = 'yes';
+        isOpen = true;
     }, 10)
 
     // Pozicionē container pret input lauku
@@ -153,6 +160,11 @@ function open(field) {
 }
 
 function validateFieldValue(inputFieldEl) {
+    // ja nav vērtības ko validēt, tad bail
+    if (!inputFieldEl.value) {
+        return
+    }
+
     let clampedValue = formatDate.ymd(clampDate(inputFieldEl.value, inputFieldEl.dataset.minDate, inputFieldEl.dataset.maxDate));
     if (clampedValue != inputFieldEl.value) {
         inputFieldEl.value = clampedValue;

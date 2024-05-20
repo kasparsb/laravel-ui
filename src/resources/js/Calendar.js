@@ -112,10 +112,10 @@ function CalendarWrapper(containerEl) {
     // Ja ir date input field, tad uz dateclick ieliksim to datumu laukā
     if (this.dateInputField) {
         /**
-         * TODO pārtiasīt uz onchange eventu
-         * * kad datums mainās nevis lietotājs taisa click
+         * kad datums mainās nevis lietotājs taisa click
+         * jo datums var izmainīties arī bez lietotāja click
          */
-        this.calendar.on('dateclick', date => {
+        this.calendar.on('change', date => {
             this.dateInputField.value = formatDate.ymd(date)
 
             if (this.actionOnDateSelect == 'submit') {
