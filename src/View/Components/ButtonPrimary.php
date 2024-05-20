@@ -19,6 +19,7 @@ class ButtonPrimary extends Component
         public $menu = '',
         public ?Model $model = null,
         public $disabled = false,
+        public $loading = false,
     )
     {
         //

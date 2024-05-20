@@ -1,3 +1,4 @@
+import ButtonLoading from './ButtonLoading';
 import ButtonDelete from './ButtonDelete';
 import ButtonPost from './ButtonPost';
 import DropdownMenu from './DropdownMenu';
@@ -6,6 +7,7 @@ import FieldDate from './FieldDate';
 import Calendar from './Calendar';
 import Table from './Table';
 
+ButtonLoading.init();
 ButtonDelete.init();
 ButtonPost.init();
 DropdownMenu.init();

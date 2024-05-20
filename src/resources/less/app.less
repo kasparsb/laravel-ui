@@ -506,10 +506,6 @@ body {
 .button-base {
     .remove-tap-highlite();
 
-    &:is(a) {
-        text-decoration: none;
-    }
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -587,6 +583,10 @@ body {
 
     cursor: pointer;
 
+    &:is(a) {
+        text-decoration: none;
+    }
+
     /**
      * neizmantoju &:enabled un &:disabled, jo tas nedarbojas uz linkiem
      */
@@ -604,12 +604,35 @@ body {
         opacity: .6;
     }
 
+    svg.spinner {
+        display: none;
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        animation: spin .75s infinite linear;
+    }
     svg {
         margin-right: @size015;
         width: @size040;
         height: @size040;
     }
-    // Tikai ikona, bet label
+
+    // Loading state
+    &:is([data-loading="loading"]) {
+        svg {
+            display: none;
+            &.spinner {
+                display: block;
+            }
+        }
+
+    }
+
+    // Tikai ikona, bez label
     &.icon {
         padding-left: @size020;
         padding-right: @size020;
