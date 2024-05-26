@@ -1829,3 +1829,180 @@ body {
         min-width: @size050;
     }
 }
+
+.aspect-ratio-container {
+    position: relative;
+    >div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+
+.file-upload {
+    [data-r="singleFileTemplate"] {
+        display: none;
+    }
+
+    &[data-state="empty"] {
+        [data-r="files"] {
+            display: none;
+        }
+    }
+
+    // Upload state, ja nav multiple, tad slēpjam file picker
+    &.has-single-file[data-state="uploading"] {
+        [data-r="file-picker"] {
+            display: none;
+        }
+    }
+}
+
+
+.file-upload-single-file {
+    .shadow();
+
+    .border-lg();
+    border: 1px solid #e5e7eb;
+
+    padding: @size050;
+    padding-bottom: @size040;
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    gap: 8px;
+
+    >div {
+        // Icon
+        &:nth-child(1) {
+            svg {
+                width: @size090;
+                height: @size090;
+            }
+        }
+        // Vidējā daļa. File name, progress bar
+        &:nth-child(2) {
+            flex: 1;
+
+            position: relative;
+        }
+    }
+
+
+
+    /**
+     * File type icons
+     */
+    svg[data-type="document"],
+    svg[data-type="image"],
+    svg[data-type="video"],
+    svg[data-type="audio"] {
+        display: none;
+        color: hsl(var(--color-600))
+    }
+
+    // File type ikonas pēc noklusējuma hidden
+    // pēc data-file-type atribūta rādām ikonu
+    &[data-file-type="document"] svg[data-type="document"] {
+        display: inline;
+    }
+    &[data-file-type="image"] svg[data-type="image"] {
+        display: inline;
+    }
+    &[data-file-type="video"] svg[data-type="video"] {
+        display: inline;
+    }
+    &[data-file-type="audio"] svg[data-type="audio"] {
+        display: inline;
+    }
+
+
+    /**
+     * Failed message
+     */
+    .failed-message {
+        .t-3\.5();
+        margin-top: @size005;
+        color: hsl(var(--color-red-500));
+    }
+
+
+    /**
+     * States
+     */
+    &[data-state=ready] {
+        [data-r=failedMessage],
+        [data-r=progressBar] {
+            display: none;
+        }
+    }
+    &[data-state=uploading] {
+        [data-r=failedMessage] {
+            display: none;
+        }
+    }
+    &[data-state=failed] {
+        [data-r=progressBar] {
+            display: none;
+        }
+    }
+    &[data-state=completed] {
+        [data-r=failedMessage] {
+            display: none;
+        }
+    }
+}
+
+.file-picker {
+    .shadow();
+
+    .border-lg();
+    border: 1px solid #e5e7eb;
+
+    padding: @size050;
+
+    position: relative;
+
+    [type="file"] {
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+}
+
+.progress-bar {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 8px;
+
+    // Indicator
+    >div:nth-child(1) {
+        flex: 1;
+
+        height: 5px;
+        overflow: hidden;
+        border-radius: var(--radius);
+        background-color: hsl(var(--color-200));
+        span {
+            display: block;
+            background-color: hsl(var(--color-blue-500));
+            border-radius: var(--radius);
+            height: 100%;
+        }
+    }
+    // Precentage labal
+    >div:nth-child(2) {
+        .t-3();
+        width: @size090;
+    }
+}
