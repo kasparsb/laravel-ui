@@ -26,6 +26,8 @@ class FileUpload extends Component
         // Vai var pievienot vairākus failus
         public $multiple=false,
 
+        public $filePickerLabel='Select file to upload',
+
         public $fileType='document',
         public $progress=0,
         public $fileName=null,

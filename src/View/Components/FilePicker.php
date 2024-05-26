@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class FilePicker extends Component
 {
     public function __construct(
+        public $label,
         public $multiple=false,
     )
     {

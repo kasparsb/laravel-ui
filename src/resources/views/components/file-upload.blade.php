@@ -13,7 +13,7 @@
     >
 
     <div class="col-items">
-        <x-ui::file-picker data-r="file-picker" :multiple="$multiple" />
+        <x-ui::file-picker data-r="file-picker" :multiple="$multiple" :label="$filePickerLabel" />
         <div class="col-items" data-r="files"></div>
     </div>
 
