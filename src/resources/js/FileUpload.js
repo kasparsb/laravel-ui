@@ -22,7 +22,7 @@ function setFile(el) {
 
         append(rel.files, fileEl);
 
-        startUpload(fileEl, file);
+        startUpload(fileEl, file, el.dataset.link);
     }
 
     rel.inputFile.value = '';
@@ -41,11 +41,11 @@ function removeFile(el) {
     }
 }
 
-function startUpload(el, file) {
+function startUpload(el, file, uploadLink) {
     let rel = r(el);
     el.dataset.state = 'uploading';
 
-    upload('/fileupload', file, {filename: file.name}, progress => {
+    upload(uploadLink, file, {filename: file.name}, progress => {
         rel.indicator.style.width = progress+'%';
         rel.progress.innerHTML = progress+'%';
     })

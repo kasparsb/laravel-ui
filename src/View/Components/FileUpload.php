@@ -9,10 +9,15 @@ use Illuminate\View\Component;
 class FileUpload extends Component
 {
     public function __construct(
-        // Storage disk, kurā upload file
-        public $disk,
         // Field name, kurā tiks ielikts uploaded file name
         public $name,
+        /**
+         * Link uz kuru sūtīt failu
+         * Pašam jāsaglabā fails
+         * līdzi tiek sūtīts url param filename
+         * files ir viss post body content
+         */
+        public $link,
         /**
          * empty - faili nav pievienoti
          * uploading - faili pievienoti
@@ -28,7 +33,11 @@ class FileUpload extends Component
         public $error=null,
     )
     {
-        //
+        if ($multiple) {
+            if (substr($this->name, -2) != '[]') {
+                $this->name .= '[]';
+            }
+        }
     }
 
     public function render(): View|Closure|string

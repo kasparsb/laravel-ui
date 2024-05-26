@@ -4,6 +4,7 @@
         'has-single-file' => !$multiple,
         'has-multiple-files' => $multiple,
     ]) }}
+    data-link="{{ $link }}"
     data-state="{{ $state }}"
     data-container="file-upload"
     @if ($multiple)
