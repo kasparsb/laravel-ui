@@ -6,6 +6,58 @@ function humanFileSize(size) {
     return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
+function getFileType(file) {
+    let p = file.name.split('.');
+    let extension = p[p.length-1];
+
+    switch (extension) {
+        case 'jpg':
+        case 'jpeg':
+        case 'gif':
+        case 'bmp':
+        case 'png':
+        case 'svg':
+        case 'tif':
+        case 'tiff':
+            return 'image';
+        case 'zip':
+        case 'bzip':
+        case 'rar':
+        case '7z':
+        case 'gz':
+        case 'tar':
+        case 'bz2':
+        case 'lz':
+        case 'lz4':
+            return 'archive';
+        case 'pdf':
+        case 'doc':
+        case 'docx':
+        case 'xls':
+        case 'xlsx':
+        case 'odt':
+        case 'ods':
+        case 'ots':
+        case 'fods':
+        case 'htm':
+        case 'html':
+            return 'document';
+        case 'mp3':
+        case 'm4a':
+        case 'wav':
+        case 'falc':
+            return 'audio';
+        case 'mp4':
+        case 'avi':
+        case 'mov':
+        case 'flv':
+        case 'avchd':
+            return 'audio';
+        default:
+            return 'document';
+    }
+}
+
 function setFile(el) {
     let rel = r(el);
 
@@ -16,6 +68,8 @@ function setFile(el) {
         delete fileEl.dataset.r;
         let rfileEl = r(fileEl);
 
+
+        fileEl.dataset.fileType = getFileType(file);
         fileEl.dataset.state = 'ready';
         rfileEl.fileName.innerHTML = file.name
         rfileEl.fileDescription.innerHTML = humanFileSize(file.size)

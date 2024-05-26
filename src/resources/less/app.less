@@ -1900,7 +1900,8 @@ body {
     svg[data-type="document"],
     svg[data-type="image"],
     svg[data-type="video"],
-    svg[data-type="audio"] {
+    svg[data-type="audio"],
+    svg[data-type="archive"] {
         display: none;
         color: hsl(var(--color-600))
     }
@@ -1919,6 +1920,10 @@ body {
     &[data-file-type="audio"] svg[data-type="audio"] {
         display: inline;
     }
+    &[data-file-type="archive"] svg[data-type="archive"] {
+        display: inline;
+    }
+
 
 
     /**

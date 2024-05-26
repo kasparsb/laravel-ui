@@ -15,7 +15,10 @@
             <use xlink:href="#ui-icon-video"></use>
         </svg>
         <svg data-type="audio" width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#ui-icon-music"></use>
+            <use xlink:href="#ui-icon-audio"></use>
+        </svg>
+        <svg data-type="archive" width="24" height="24" viewBox="0 0 24 24">
+            <use xlink:href="#ui-icon-archive"></use>
         </svg>
     </div>
     <div>
