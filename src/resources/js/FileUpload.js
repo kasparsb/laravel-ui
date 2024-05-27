@@ -1,8 +1,8 @@
-import {r, parent, change, click, upload, append, remove, clone} from 'dom-helpers';
+import {qa, r, parent, change, click, upload, append, remove, clone} from 'dom-helpers';
 
 
 function humanFileSize(size) {
-    var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+    let i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
     return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
@@ -58,59 +58,65 @@ function getFileType(file) {
     }
 }
 
-function setFile(el) {
-    let rel = r(el);
+function setFile(fileUploadEl) {
+    fileUploadEl = r(fileUploadEl);
 
-    for (let i = 0; i < rel.inputFile.files.length; i++) {
+    for (let i = 0; i < fileUploadEl.inputFile.files.length; i++) {
 
-        let file = rel.inputFile.files[i];
-        let fileEl = clone(rel.singleFileTemplate);
+        let file = fileUploadEl.inputFile.files[i];
+
+        let fileEl = r(clone(fileUploadEl.singleFileTemplate));
         delete fileEl.dataset.r;
-        let rfileEl = r(fileEl);
-
+        // Enable filename field, lai tas postējas
+        fileEl.input.disabled = false;
 
         fileEl.dataset.fileType = getFileType(file);
         fileEl.dataset.state = 'ready';
-        rfileEl.fileName.innerHTML = file.name
-        rfileEl.fileDescription.innerHTML = humanFileSize(file.size)
+        fileEl.fileName.innerHTML = file.name
+        fileEl.fileDescription.innerHTML = humanFileSize(file.size)
 
-        append(rel.files, fileEl);
+        append(fileUploadEl.files, fileEl);
 
-        startUpload(fileEl, file, el.dataset.link);
+        startFileUpload(fileEl, file, fileUploadEl.dataset.link);
     }
 
-    rel.inputFile.value = '';
-
-    el.dataset.state = 'uploading';
+    fileUploadEl.inputFile.value = '';
+    fileUploadEl.dataset.state = 'uploading';
 }
 
-function removeFile(el) {
-    let upload = parent(el, '[data-container="file-upload"]');
+function removeFile(fileEl) {
+    let fileUploadEl = r(parent(fileEl, '[data-container="file-upload"]'));
+
     // Novācam file el
-    remove(el);
+    remove(fileEl);
 
     // Pārbaudām vai ir palikuši faili
-    if (!r(upload).files.hasChildNodes()) {
-        upload.dataset.state = 'empty';
+    if (!fileUploadEl.files.hasChildNodes()) {
+        fileUploadEl.dataset.state = 'empty';
     }
 }
 
-function startUpload(el, file, uploadLink) {
-    let rel = r(el);
-    el.dataset.state = 'uploading';
+function startFileUpload(fileEl, file, uploadLink) {
+    fileEl = r(fileEl);
+    fileEl.dataset.state = 'uploading';
 
-    upload(uploadLink, file, {filename: file.name}, progress => {
-        rel.indicator.style.width = progress+'%';
-        rel.progress.innerHTML = progress+'%';
-    })
+    upload(
+        uploadLink,
+        file,
+        {},
+        // Progress callback
+        progress => {
+            fileEl.indicator.style.width = progress+'%';
+            fileEl.progress.innerHTML = progress+'%';
+        }
+    )
         .then(response => {
-            rel.input.value = response.filename;
-            el.dataset.state = 'completed';
+            fileEl.input.value = response.filename;
+            fileEl.dataset.state = 'completed';
         })
         .catch(response => {
-            el.dataset.state = 'failed';
-            rel.failedMessage.innerHTML = response.message;
-            // console.log(response);
+            fileEl.dataset.state = 'failed';
+            fileEl.failedMessage.innerHTML = response.message;
         });
 }
 
@@ -121,6 +127,12 @@ export default {
         })
         click('.file-upload [data-r="button-remove"]', (ev, el) => {
             removeFile(parent(el, '[data-container]'));
+        })
+
+        // Single file template input file disable. So they do not post
+        qa('.file-upload').forEach(el => {
+            // šajā laukā glabāsies uploaded filename
+            r(r(el).singleFileTemplate).input.disabled = true;
         })
     },
 
