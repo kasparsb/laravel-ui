@@ -3,6 +3,7 @@
 namespace Kasparsb\Ui\View\Components;
 
 use Closure;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
@@ -12,6 +13,7 @@ class FieldDate extends Component
         public $label = '',
         public $name = '',
         public $value = '',
+        public $defaultValue = '',
         public $description = '',
         public $placeholder = '',
         public $model = null,
@@ -24,7 +26,30 @@ class FieldDate extends Component
     )
     {
         if ($this->model) {
-            $this->value = $this->model->{$this->name};
+            if ($this->model->exists) {
+                $this->value = $this->model->{$this->name};
+            }
+            else {
+                // Ja model vēl nav izveidots
+                // pārbaudām vai ir value
+                if ($this->model->{$this->name}) {
+                    $this->value = $this->model->{$this->name};
+                }
+                // value nav, izmantojam defaultValue
+                else {
+                    $this->value = $this->defaultValue;
+                }
+            }
+        }
+        else {
+            /**
+             * * default value izmanto tikai model gadījumā
+             */
+        }
+
+        // Ja value ir Carbon Date objekts
+        if ($this->value instanceof Carbon) {
+            $this->value = $this->value->format('Y-m-d');
         }
     }
 
