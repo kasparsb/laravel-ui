@@ -567,6 +567,11 @@ body {
     &.color-yellow-100 { color: hsl(var(--color-yellow-100)) }
     &.color-yellow-50  { color: hsl(var(--color-yellow-50)) }
 
+    .text-size-3\.5();
+    font-weight: 500;
+    .border-md();
+    .transition-color();
+    cursor: pointer;
 
     height: @size090;
     padding-left: @size040;
@@ -574,14 +579,18 @@ body {
     padding-top: @size020;
     padding-bottom: @size020;
 
-    .text-size-3\.5();
-    font-weight: 500;
-
-    .border-md();
-
-    .transition-color();
-
-    cursor: pointer;
+    // Tikai ikona, bez label
+    &.icon {
+        padding-left: @size020;
+        padding-right: @size020;
+        svg {
+            margin-right: 0;
+        }
+    }
+    &.compact {
+        padding-left: @size020;
+        padding-right: @size020;
+    }
 
     &:is(a) {
         text-decoration: none;
@@ -630,15 +639,6 @@ body {
             }
         }
 
-    }
-
-    // Tikai ikona, bez label
-    &.icon {
-        padding-left: @size020;
-        padding-right: @size020;
-        svg {
-            margin-right: 0;
-        }
     }
 }
 
@@ -793,6 +793,19 @@ body {
         }
     }
 }
+
+.row-items {
+    display: flex;
+    flex-flow: row wrap;
+    gap: @size020;
+
+    &.items-center {
+        align-items: center
+    }
+    &.items-flex-end {
+        justify-content: flex-end;
+    }
+}
 .row-items-space-between {
     display: flex;
     flex-flow: row wrap;
@@ -801,6 +814,17 @@ body {
 
     &.items-center {
         align-items: center
+    }
+}
+.row-items-nogap {
+    display: flex;
+    flex-flow: row wrap;
+
+    &.items-center {
+        align-items: center
+    }
+    &.items-flex-end {
+        justify-content: flex-end;
     }
 }
 .row-items-condensed {
@@ -812,6 +836,16 @@ body {
     >.button-ghost,
     >.button-outline {
         border-radius: 0;
+        &:first-child {
+            border-top-left-radius: var(--radius);
+            border-bottom-left-radius: var(--radius);
+        }
+        &:last-child {
+            border-top-right-radius: var(--radius);
+            border-bottom-right-radius: var(--radius);
+        }
+    }
+    >.button-outline {
         border-left: 0;
         &:first-child {
             border-top-left-radius: var(--radius);
@@ -825,18 +859,6 @@ body {
     }
     &.items-center {
         align-items: center
-    }
-}
-.row-items {
-    display: flex;
-    flex-flow: row wrap;
-    gap: @size020;
-
-    &.items-center {
-        align-items: center
-    }
-    &.items-flex-end {
-        justify-content: flex-end;
     }
 }
 
