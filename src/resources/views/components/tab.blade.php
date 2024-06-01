@@ -3,10 +3,13 @@
     href="{{ $link }}"
     {{ $attributes->class([ 'tab', ]) }}
     data-role="tab"
+    data-tab-name="{{ $name }}"
     @if ($selected)
     data-selected
     @endif
-    data-tab-name="{{ $name }}"
+    @if ($disabled)
+    disabled="disabled"
+    @endif
     >
     {{ $slot }}
 </a>
@@ -15,10 +18,13 @@
     type="button"
     {{ $attributes->class([ 'tab', ]) }}
     data-role="tab"
+    data-tab-name="{{ $name }}"
     @if ($selected)
     data-selected
     @endif
-    data-tab-name="{{ $name }}"
+    @if ($disabled)
+    disabled="disabled"
+    @endif
     >
     {{ $slot }}
 </button>

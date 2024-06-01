@@ -13,6 +13,7 @@ class Tab extends Component
         public $selected = null,
         public $as = '',
         public $link = '',
+        public $disabled=false,
     )
     {
         if (is_null($this->selected)) {
