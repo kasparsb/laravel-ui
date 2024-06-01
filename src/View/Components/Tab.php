@@ -36,7 +36,7 @@ class Tab extends Component
             // Ja nav padots name, tad neliekam selected
             // tas ir gadījumam, kad ne Tabs ne Tab nav uzlikta aktīvais tab
             if (!is_null($this->name)) {
-                $this->selected = $this->name == view()->getConsumableComponentData('item');
+                $this->selected = $this->name == view()->getConsumableComponentData('selected');
             }
         }
     }

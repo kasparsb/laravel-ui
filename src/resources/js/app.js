@@ -7,6 +7,7 @@ import FieldDate from './FieldDate';
 import Calendar from './Calendar';
 import Table from './Table';
 import FileUpload from './FileUpload';
+import Tabs from './Tabs';
 
 ButtonLoading.init();
 ButtonDelete.init();
@@ -17,3 +18,4 @@ FieldDate.init();
 Calendar.init();
 Table.init();
 FileUpload.init();
+Tabs.init();
