@@ -132,7 +132,7 @@ export default {
         // Single file template input file disable. So they do not post
         qa('.file-upload').forEach(el => {
             // šajā laukā glabāsies uploaded filename
-            r(r(el).singleFileTemplate).input.disabled = true;
+            r(el).singleFileTemplate.input.disabled = true;
         })
     },
 
