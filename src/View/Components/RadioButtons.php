@@ -13,6 +13,8 @@ class RadioButtons extends Component
         public $label='',
         public $description='',
         public $value='',
+        public $error='',
+        public $hasError=false,
     )
     {
 

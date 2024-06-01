@@ -1,4 +1,7 @@
-<div {{ $attributes->class(['form-field field-date']) }}>
+<div
+    {{ $attributes->class(['form-field field-date']) }}
+    data-state="{{ $hasError ? 'error' : '' }}"
+    >
     @if ($label)
         <label>{{ $label }}</label>
     @endif
@@ -19,9 +22,8 @@
         @endif
         @disabled($disabled)
         />
-    @if ($description)
-    <p>{{ $description }}</p>
-    @endif
+    <p data-role="description">{{ $description }}</p>
+    <p data-role="error">{{ $error }}</p>
 
     @if ($defaultDateState)
     <script data-role="default-date-state" type="application/json">@json($defaultDateState)</script>

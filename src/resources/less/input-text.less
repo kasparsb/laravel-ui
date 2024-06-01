@@ -1,6 +1,5 @@
-.input-text {
-    box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
-
+.input-text,
+.input-text-error {
     .text-size-3\.5();
 
     height: @size090;
@@ -13,8 +12,16 @@
 
     border-width: 1px;
     border-style: solid;
-    border-color: hsl(var(--color-200));
+
     border-radius: calc(var(--radius) - 2px);
 
     outline: none;
+}
+.input-text {
+    box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
+    border-color: hsl(var(--color-200));
+}
+.input-text-error {
+    box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
+    border-color: hsl(var(--color-red-200));
 }

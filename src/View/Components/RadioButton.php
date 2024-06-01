@@ -39,8 +39,9 @@ class RadioButton extends Component
             if (!is_null($this->value)) {
                 $this->selected = $this->value == view()->getConsumableComponentData('value');
             }
-            $this->name = view()->getConsumableComponentData('name');
         }
+
+        $this->name = view()->getConsumableComponentData('name');
     }
 
     public function render(): View|Closure|string

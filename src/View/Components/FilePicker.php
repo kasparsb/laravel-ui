@@ -11,6 +11,9 @@ class FilePicker extends Component
     public function __construct(
         public $label,
         public $multiple=false,
+        // šie ies uz file picker
+        public $error='',
+        public $hasError=false,
     )
     {
 

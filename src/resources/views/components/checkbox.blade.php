@@ -1,4 +1,7 @@
-<label {{ $attributes->class(['checkbox']) }}>
+<label
+    {{ $attributes->class(['checkbox']) }}
+    data-state="{{ $hasError ? 'error' : '' }}"
+    >
     <span>
         <input type="checkbox" name="{{ $name }}" @checked($checked) value="1" />
         <svg>

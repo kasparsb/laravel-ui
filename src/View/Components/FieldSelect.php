@@ -18,6 +18,8 @@ class FieldSelect extends Component
         public $empty=true,
         public $model=null,
         public $disabled=false,
+        public $error='',
+        public $hasError=false,
     )
     {
         if ($this->model) {

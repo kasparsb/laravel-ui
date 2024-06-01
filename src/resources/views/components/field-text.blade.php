@@ -1,4 +1,7 @@
-<div {{ $attributes->class(['form-field field-text']) }}>
+<div
+    {{ $attributes->class(['form-field field-text']) }}
+    data-state="{{ $hasError ? 'error' : '' }}"
+    >
     @if ($label)
         <label>{{ $label }}</label>
     @endif
@@ -8,7 +11,6 @@
         value="{{ $value }}"
         placeholder="{{ $placeholder }}"
         @disabled($disabled) />
-    @if ($description)
-    <p>{{ $description }}</p>
-    @endif
+    <p data-role="description">{{ $description }}</p>
+    <p data-role="error">{{ $error }}</p>
 </div>

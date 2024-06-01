@@ -60,6 +60,8 @@ class Table extends Component
                 'placeholder' => $col->placeholder,
                 'description' => '',
                 'disabled' => false,
+                'error' => '',
+                'hasError' => false,
             ])->render();
         }
         else if ($col->type == 'field-date') {
@@ -76,6 +78,8 @@ class Table extends Component
                 'defaultDateState' => '',
                 'state' => '',
                 'disabled' => false,
+                'error' => '',
+                'hasError' => false,
             ])->render();
         }
         else if ($col->type == 'toggle-switch') {

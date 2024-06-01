@@ -13,6 +13,8 @@ class Checkbox extends Component
         public $name='',
         public $checked='',
         public $model=null,
+        public $error='',
+        public $hasError=false,
     )
     {
         if ($this->model) {

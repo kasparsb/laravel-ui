@@ -23,6 +23,8 @@ class FieldDate extends Component
         public $state='',
         public $defaultDateState='',
         public $disabled=false,
+        public $error='',
+        public $hasError=false,
     )
     {
         if ($this->model) {

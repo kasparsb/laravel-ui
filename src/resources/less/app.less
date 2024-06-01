@@ -164,6 +164,10 @@ body {
     --color-yellow-800-hsl: hsl(32, 81%, 29%);
     --color-yellow-900-hsl: hsl(28, 73%, 26%);
     --color-yellow-950-hsl: hsl(26, 83%, 14%);
+
+    --color-muted: var(--color-500);
+    --color-error: var(--color-red-500);
+    --color-error-muted: var(--color-red-400);
 }
 
 .font-sans {
@@ -378,10 +382,6 @@ body {
     height: 100%;
 }
 
-.color-muted {
-    color: hsl(var(--color-500));
-}
-
 .text-size-2\.5,
 .t-2\.5 {
     font-size: @size025;
@@ -502,6 +502,12 @@ body {
     font-weight: var(--font-weight-medium);
     .text-size-3\.5();
     line-height: 1;
+}
+.input-label-error {
+    font-weight: var(--font-weight-medium);
+    .text-size-3\.5();
+    line-height: 1;
+    color: hsl(var(--color-error));
 }
 
 .button-base {
@@ -751,17 +757,37 @@ body {
     display: grid;
     gap: @size020;
 
-    >label {
-        .input-label();
+    &:not(:is([data-state="error"])) {
+        >label {
+            .input-label();
+        }
     }
-    >[type=text],
-    >[type=email],
-    >[type=password],
-    >[type=date],
-    >textarea,
-    >.select-placeholder {
-        .input-text();
-        width: 100%;
+    &[data-state="error"] {
+        >label {
+            .input-label-error();
+        }
+    }
+    &:not(:is([data-state="error"])) {
+        >[type=text],
+        >[type=email],
+        >[type=password],
+        >[type=date],
+        >textarea,
+        >.select-placeholder {
+            .input-text();
+            width: 100%;
+        }
+    }
+    &[data-state="error"] {
+        >[type=text],
+        >[type=email],
+        >[type=password],
+        >[type=date],
+        >textarea,
+        >.select-placeholder {
+            .input-text-error();
+            width: 100%;
+        }
     }
     >.select-placeholder {
         display: flex;
@@ -790,9 +816,30 @@ body {
         min-height: @size200;
     }
     // Description text
-    >p {
+    [data-role="description"],
+    [data-role="error"] {
         font-size: @size035;
-        .color-muted();
+        &:empty {
+            display: none;
+        }
+    }
+    [data-role="description"] {
+        color: hsl(var(--color-muted));
+    }
+    [data-role="error"] {
+        color: hsl(var(--color-error));
+    }
+
+    // Error state
+    &[data-state="error"] {
+        [data-role="description"] {
+            display: none;
+        }
+    }
+    &:not(:is([data-state="error"])) {
+        [data-role="error"] {
+            display: none;
+        }
     }
 }
 
@@ -935,7 +982,9 @@ body {
 
 .card {
     .border-lg();
-    border: 1px solid #e5e7eb;
+    border-width: 1px;
+    border-style: solid;
+    border-color: hsl(var(--color-200));
 
     padding: @size060;
 
@@ -1066,7 +1115,9 @@ body {
 
 .empty-state {
     .border-lg();
-    border: 1px solid #e5e7eb;
+    border-width: 1px;
+    border-style: solid;
+    border-color: hsl(var(--color-200));
 
     padding: @size120 @size060;
 
@@ -1175,7 +1226,10 @@ body {
 
 .toggle-switch-card {
     .border-lg();
-    border: 1px solid #e5e7eb;
+    border-width: 1px;
+    border-style: solid;
+    border-color: hsl(var(--color-200));
+
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
@@ -1207,8 +1261,6 @@ body {
     align-items: center;
     gap: @size020;
 
-    .input-label();
-
     span {
         display: flex;
         justify-content: center;
@@ -1217,7 +1269,6 @@ body {
         width: @size040;
         height: @size040;
 
-        border: 1px solid hsl(var(--color-900));
         .border-sm();
 
         color: #fff;
@@ -1232,8 +1283,6 @@ body {
         }
 
         &:has(input:checked) {
-            background-color: hsl(var(--color-900));
-
             svg {
                 opacity: 1;
             }
@@ -1241,6 +1290,25 @@ body {
 
         input {
             display: none;
+        }
+    }
+    &:not(:is([data-state="error"])) {
+        .input-label();
+        span {
+            border: 1px solid hsl(var(--color-900));
+
+            &:has(input:checked) {
+                background-color: hsl(var(--color-900));
+            }
+        }
+    }
+    &[data-state="error"] {
+        .input-label-error();
+        span {
+            border: 1px solid hsl(var(--color-error));
+            &:has(input:checked) {
+                background-color: hsl(var(--color-error));
+            }
         }
     }
 }
@@ -1933,7 +2001,9 @@ body {
     .shadow();
 
     .border-lg();
-    border: 1px solid #e5e7eb;
+    border-width: 1px;
+    border-style: solid;
+    border-color: hsl(var(--color-200));
 
     padding: @size050;
     padding-bottom: @size040;
@@ -2033,7 +2103,15 @@ body {
     .shadow();
 
     .border-lg();
-    border: 1px solid #e5e7eb;
+    border-width: 1px;
+    border-style: solid;
+
+    &:not(:has([data-state="error"])) {
+        border-color: hsl(var(--color-200));
+    }
+    &[data-state="error"] {
+        border-color: hsl(var(--color-red-200));
+    }
 
     padding: @size050;
 
@@ -2083,14 +2161,23 @@ body {
     display: grid;
     gap: @size020;
 
-    >label {
-        .input-label();
+    &:not(:is([data-state="error"])) {
+        >label {
+            .input-label();
+        }
+    }
+    &[data-state="error"] {
+        >label {
+            .input-label-error();
+        }
     }
 
     >div {
         .shadow();
         .border-lg();
-        border: 1px solid #e5e7eb;
+        border-width: 1px;
+        border-style: solid;
+        border-color: hsl(var(--color-200));
 
         padding: var(--size-010);
 
@@ -2105,9 +2192,30 @@ body {
     }
 
     // Description text
-    >p {
+    [data-role="description"],
+    [data-role="error"] {
         font-size: @size035;
-        .color-muted();
+        &:empty {
+            display: none;
+        }
+    }
+    [data-role="description"] {
+        color: hsl(var(--color-muted));
+    }
+    [data-role="error"] {
+        color: hsl(var(--color-error));
+    }
+
+    // Error state
+    &[data-state="error"] {
+        [data-role="description"] {
+            display: none;
+        }
+    }
+    &:not(:is([data-state="error"])) {
+        [data-role="error"] {
+            display: none;
+        }
     }
 
     button {
