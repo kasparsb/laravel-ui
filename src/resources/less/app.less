@@ -247,6 +247,7 @@ body {
 @size120: 3rem;
 @size140: 3.5rem;
 @size160: 4rem;
+@size180: 4.5rem;
 @size200: 5rem;
 @size240: 6rem;
 @size280: 7rem;
@@ -507,6 +508,7 @@ body {
     .remove-tap-highlite();
 
     display: inline-flex;
+    flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
@@ -621,7 +623,6 @@ body {
                 transform: rotate(360deg)
             }
         }
-
         animation: spin .75s infinite linear;
     }
     svg {
@@ -634,6 +635,29 @@ body {
         svg {
             fill: currentColor;
         }
+    }
+
+    // Liela ikona, teksts jaunā rindā
+    &.icon-large {
+        .text-size-3();
+        font-weight: 500;
+
+        padding-top: @size010;
+        padding-bottom: @size010;
+
+        height: @size160;
+        flex-flow: column nowrap;
+        svg {
+            margin-right: 0;
+            margin-bottom: @size010;
+            width: @size080;
+            height: @size080;
+        }
+        // svg.spinner {
+        //     margin-right: 0;
+        //     margin-top: @size025;
+        //     margin-bottom: @size025;
+        // }
     }
 
     // Loading state
