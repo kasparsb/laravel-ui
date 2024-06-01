@@ -585,9 +585,6 @@ body {
     &.icon {
         padding-left: @size020;
         padding-right: @size020;
-        svg {
-            margin-right: 0;
-        }
     }
     &.compact {
         padding-left: @size020;
@@ -653,11 +650,17 @@ body {
             width: @size080;
             height: @size080;
         }
-        // svg.spinner {
-        //     margin-right: 0;
-        //     margin-top: @size025;
-        //     margin-bottom: @size025;
-        // }
+    }
+
+    &.icon {
+        svg {
+            margin-right: 0;
+        }
+    }
+    &.icon.icon-large {
+        svg {
+            margin-bottom: 0;
+        }
     }
 
     // Loading state
