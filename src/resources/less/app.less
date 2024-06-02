@@ -675,7 +675,8 @@ body {
     display: flex;
     flex-flow: column nowrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    //align-items: flex-start;
+    align-items: stretch;
 
     gap: @size040;
     .gaps-sizes();
@@ -712,6 +713,18 @@ body {
     }
     &.h-right {
         align-items: flex-end;
+    }
+
+
+    // Direct child, var pats sevi nopozicionēt uz cross axis
+    >.h-center {
+        align-self: center;
+    }
+    >.h-left {
+        align-self: flex-start;
+    }
+    >.h-right {
+        align-self: flex-end;
     }
 
 
@@ -773,6 +786,17 @@ body {
     }
     &.h-left {
         justify-content: flex-start;
+    }
+
+    // Direct child, var pats sevi nopozicionēt uz cross axis
+    >.v-center {
+        align-self: center;
+    }
+    >.v-top {
+        align-self: flex-start;
+    }
+    >.v-bottom {
+        align-self: flex-end;
     }
 
     &.condensed {
