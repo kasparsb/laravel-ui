@@ -76,11 +76,7 @@ body {
     --color-green-700: 142 72% 29%;
     --color-green-800: 143 64% 24%;
     --color-green-900: 144 61% 20%;
-    --color-green-950: 145 80% 10%;
-
-    --color-green-50-hsl: hsl(138 76% 97%);
-    --color-green-100-hsl: hsl(141 84% 93%);
-    --color-green-200-hsl: hsl(141 79% 85%);
+    --color-green-950: 145 80% 10%;avatar card
     --color-green-300-hsl: hsl(142 77% 73%);
     --color-green-400-hsl: hsl(142 69% 58%);
     --color-green-500-hsl: hsl(142 71% 45%);
@@ -346,15 +342,25 @@ body {
     padding-bottom: @size040;
 }
 
+.w-0\.5 { width: @size005 }
+.w-1 { width: @size010 }
+.w-1\.5 { width: @size015 }
 .w-2 { width: @size020 }
 .w-2\.5 { width: @size025 }
+.w-3 { width: @size030 }
+.w-3\.5 { width: @size035 }
 .w-4 { width: @size040 }
+.w-5 { width: @size050 }
+.w-6 { width: @size060 }
+.w-7 { width: @size070 }
 .w-8 { width: @size080 }
+.w-9 { width: @size090 }
 .w-10 { width: @size100 }
 .w-11 { width: @size110 }
 .w-12 { width: @size120 }
 .w-14 { width: @size140 }
 .w-16 { width: @size160 }
+.w-18 { width: @size180 }
 .w-20 { width: @size200 }
 .w-24 { width: @size240 }
 .w-28 { width: @size280 }
@@ -369,14 +375,8 @@ body {
 .w-64 { width: @size640 }
 .w-72 { width: @size720 }
 .w-80 { width: @size800 }
-
-
-.w-96 {
-    width: @size960;
-}
-.w-full {
-    width: 100%;
-}
+.w-96 { width: @size960 }
+.w-full { width: 100% }
 
 .h-full {
     height: 100%;
@@ -995,8 +995,7 @@ body {
     }
 
     &.compact {
-        padding-top: @size040;
-        padding-bottom: @size040;
+        padding: @size040;
     }
     &.hover {
         cursor: pointer;
@@ -2234,5 +2233,44 @@ body {
 
     button:has([type=radio]:checked) {
         .button-secondary();
+    }
+}
+
+.avatar {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: @size020;
+
+    .avatar-image {
+        // Default image izmērs
+        flex: 0 0 @size080;
+        width: @size080;
+
+        [data-role="image-wrap"] {
+            overflow: hidden;
+            border-radius: 50%;
+
+            background-color: hsl(var(--color-200));
+
+            img {
+                object-fit: fill;
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+    @import './avatar-image-sizes';
+
+    .avatar-content {
+        flex: 1; // visa brīvā vieta
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+    }
+
+    .avatar-actions {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
     }
 }
