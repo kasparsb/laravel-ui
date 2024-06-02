@@ -13,8 +13,6 @@
 
 @import 'text-size';
 
-@desktopWidth: 950px;
-
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: button;
     background-color: transparent;
@@ -179,18 +177,6 @@ body {
     --color-error-muted: var(--color-red-400);
 }
 
-.font-sans {
-    font-family: var(--font-family-sans);
-}
-
-.font-inter {
-    font-family: Inter,ui-sans-serif,system-ui,sans-serif;
-}
-
-.remove-tap-highlite {
-    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
-}
-
 body {
     .color-zinc();
     .font-inter();
@@ -200,9 +186,8 @@ body {
 
     --desktop-width: @desktopWidth;
     --layout-aside-width: 200px;
-}
 
-body {
+
     --size-005: @size005;
     --size-010: @size010;
     --size-015: @size015;
@@ -236,16 +221,22 @@ body {
     --size-720: @size720;
     --size-800: @size800;
     --size-960: @size960;
+    --size-1112: @size1112;
+    --size-1128: @size1128;
+    --size-1144: @size1144;
+    --size-1160: @size1160;
 }
 
-
-.py-4 {
-    padding-top: @size040;
-    padding-bottom: @size040;
+.font-sans {
+    font-family: var(--font-family-sans);
 }
-.pt-4 {
-    padding-top: @size040;
-    padding-bottom: @size040;
+
+.font-inter {
+    font-family: Inter,ui-sans-serif,system-ui,sans-serif;
+}
+
+.remove-tap-highlite {
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
 &.fw-b {
