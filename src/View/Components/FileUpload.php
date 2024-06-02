@@ -27,10 +27,6 @@ class FileUpload extends Component
         public $multiple=false,
 
         public $filePickerLabel='Select file to upload',
-
-        // šie ies uz file picker
-        public $error='',
-        public $hasError=false,
     )
     {
         if ($multiple) {

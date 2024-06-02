@@ -23,7 +23,7 @@
         @disabled($disabled)
         />
     <p data-role="description">{{ $description }}</p>
-    <p data-role="error">{{ $error }}</p>
+    <p data-role="error">{{ $errorMessage }}</p>
 
     @if ($defaultDateState)
     <script data-role="default-date-state" type="application/json">@json($defaultDateState)</script>

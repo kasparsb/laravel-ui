@@ -11,5 +11,5 @@
         @disabled($disabled)
         >{{ $value }}</textarea>
     <p data-role="description">{{ $description }}</p>
-    <p data-role="error">{{ $error }}</p>
+    <p data-role="error">{{ $errorMessage }}</p>
 </div>

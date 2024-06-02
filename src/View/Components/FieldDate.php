@@ -6,6 +6,8 @@ use Closure;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Support\ViewErrorBag;
+use Illuminate\Http\Request;
 
 class FieldDate extends Component
 {
@@ -23,8 +25,14 @@ class FieldDate extends Component
         public $state='',
         public $defaultDateState='',
         public $disabled=false,
-        public $error='',
+
+        public $errorMessage='',
         public $hasError=false,
+        // Laravel errors
+        public ?ViewErrorBag $errors=null,
+
+        // No šī ņems vērtību, kura tika iepostēta
+        public ?Request $request=null,
     )
     {
         if ($this->model) {
@@ -49,9 +57,22 @@ class FieldDate extends Component
              */
         }
 
+        if ($this->request) {
+            if (!is_null($oldValue = $this->request->old($this->name))) {
+                $this->value = $oldValue;
+            }
+        }
+
         // Ja value ir Carbon Date objekts
         if ($this->value instanceof Carbon) {
             $this->value = $this->value->format('Y-m-d');
+        }
+
+        if ($this->errors) {
+            if ($this->errors->has($this->name)) {
+                $this->errorMessage = $this->errors->first($this->name);
+                $this->hasError = true;
+            }
         }
     }
 

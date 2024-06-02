@@ -17,8 +17,6 @@
             data-r="file-picker"
             :multiple="$multiple"
             :label="$filePickerLabel"
-            :error="$error"
-            :hasError="$hasError"
             />
         <div class="col-items" data-r="files"></div>
     </div>

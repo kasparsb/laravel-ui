@@ -7,7 +7,8 @@ function loading(el) {
 
     // previous disabled state
     el.dataset.pd = el.disabled ? 'disabled' : '';
-    el.disabled = true;
+    // Ja nav timeout, tad submit nenotiek, jo acīmredzot disabled pogas nesubmitējas, ja arī bija not disabled
+    setTimeout(() => el.disabled = true, 1);
 }
 
 function idle(el) {
