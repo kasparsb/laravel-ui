@@ -1,6 +1,17 @@
 @import '../../../node_modules/calendar/less/calendar.less';
+@import 'variables';
 @import 'resets';
 @import 'input-text';
+@import 'gaps';
+
+@import 'margin-top';
+@import 'margin-bottom';
+@import 'margin-y';
+
+@import 'width';
+@import 'height';
+
+@import 'text-size';
 
 @desktopWidth: 950px;
 
@@ -178,10 +189,6 @@ body {
     -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
-
-
-
-
 body {
     .color-zinc();
     .font-inter();
@@ -192,77 +199,6 @@ body {
     --desktop-width: @desktopWidth;
     --layout-aside-width: 200px;
 }
-
-/*
-0.5:   0.125rem;
-1:     0.25rem;
-1.5:   0.375rem;
-2:     0.5rem;
-2.5:   0.625rem;
-3:     0.75rem;
-3.5:   0.875rem;
-4:     1rem;
-5:     1.25rem;
-6:     1.5rem;
-7:     1.75rem;
-8:     2rem;
-9:     2.25rem;
-10:    2.5rem;
-11:    2.75rem;
-12:    3rem;
-14:    3.5rem;
-16:    4rem;
-20:    5rem;
-24:    6rem;
-28:    7rem;
-32:    8rem;
-36:    9rem;
-40:    10rem;
-44:    11rem;
-48:    12rem;
-52:    13rem;
-56:    14rem;
-60:    15rem;
-64:    16rem;
-72:    18rem;
-80:    20rem;
-96:    24rem;
-*/
-
-@size005: 0.125rem;
-@size010: 0.25rem;
-@size015: 0.375rem;
-@size020: 0.5rem;
-@size025: 0.625rem;
-@size030: 0.75rem;
-@size035: 0.875rem;
-@size040: 1rem;
-@size050: 1.25rem;
-@size060: 1.5rem;
-@size070: 1.75rem;
-@size080: 2rem;
-@size090: 2.25rem;
-@size100: 2.5rem;
-@size110: 2.75rem;
-@size120: 3rem;
-@size140: 3.5rem;
-@size160: 4rem;
-@size180: 4.5rem;
-@size200: 5rem;
-@size240: 6rem;
-@size280: 7rem;
-@size320: 8rem;
-@size360: 9rem;
-@size400: 10rem;
-@size440: 11rem;
-@size480: 12rem;
-@size520: 13rem;
-@size560: 14rem;
-@size600: 15rem;
-@size640: 16rem;
-@size720: 18rem;
-@size800: 20rem;
-@size960: 24rem;
 
 body {
     --size-005: @size005;
@@ -300,38 +236,6 @@ body {
     --size-960: @size960;
 }
 
-.my-0\.5 {
-    margin-top: @size005;
-    margin-bottom: @size005;
-}
-.my-4 {
-    margin-top: @size040;
-    margin-bottom: @size040;
-}
-
-.mt-1\.5 { margin-top: @size015 }
-.mt-2    { margin-top: @size020 }
-.mt-3    { margin-top: @size030 }
-.mt-3\.5 { margin-top: @size035 }
-.mt-4    { margin-top: @size040 }
-.mt-5    { margin-top: @size050 }
-.mt-6    { margin-top: @size060 }
-.mt-7    { margin-top: @size070 }
-.mt-8    { margin-top: @size080 }
-.mt-9    { margin-top: @size090 }
-.mt-10   { margin-top: @size100 }
-
-.mb-1\.5{ margin-bottom: @size015 }
-.mb-2 { margin-bottom: @size020 }
-.mb-3 { margin-bottom: @size030 }
-.mb-3\.5 { margin-bottom: @size035 }
-.mb-4 { margin-bottom: @size040 }
-.mb-5 { margin-bottom: @size050 }
-.mb-6 { margin-bottom: @size060 }
-.mb-7 { margin-bottom: @size070 }
-.mb-8 { margin-bottom: @size080 }
-.mb-9 { margin-bottom: @size090 }
-.mb-10 { margin-bottom: @size100 }
 
 .py-4 {
     padding-top: @size040;
@@ -340,91 +244,6 @@ body {
 .pt-4 {
     padding-top: @size040;
     padding-bottom: @size040;
-}
-
-.w-0\.5 { width: @size005 }
-.w-1 { width: @size010 }
-.w-1\.5 { width: @size015 }
-.w-2 { width: @size020 }
-.w-2\.5 { width: @size025 }
-.w-3 { width: @size030 }
-.w-3\.5 { width: @size035 }
-.w-4 { width: @size040 }
-.w-5 { width: @size050 }
-.w-6 { width: @size060 }
-.w-7 { width: @size070 }
-.w-8 { width: @size080 }
-.w-9 { width: @size090 }
-.w-10 { width: @size100 }
-.w-11 { width: @size110 }
-.w-12 { width: @size120 }
-.w-14 { width: @size140 }
-.w-16 { width: @size160 }
-.w-18 { width: @size180 }
-.w-20 { width: @size200 }
-.w-24 { width: @size240 }
-.w-28 { width: @size280 }
-.w-32 { width: @size320 }
-.w-36 { width: @size360 }
-.w-40 { width: @size400 }
-.w-44 { width: @size440 }
-.w-48 { width: @size480 }
-.w-52 { width: @size520 }
-.w-56 { width: @size560 }
-.w-60 { width: @size600 }
-.w-64 { width: @size640 }
-.w-72 { width: @size720 }
-.w-80 { width: @size800 }
-.w-96 { width: @size960 }
-.w-full { width: 100% }
-
-.h-full {
-    height: 100%;
-}
-
-.text-size-2\.5,
-.t-2\.5 {
-    font-size: @size025;
-    line-height: @size035;
-}
-.text-size-3,
-.t-3 {
-    font-size: @size030;
-    line-height: @size040;
-}
-.text-size-3\.5,
-.t-3\.5 {
-    font-size: @size035;
-    line-height: @size050;
-}
-.text-size-4,
-.t-4 {
-    font-size: @size040;
-    line-height: @size060;
-}
-.text-size-5,
-.t-5 {
-    font-size: @size050;
-    line-height: @size070;
-}
-.text-size-6,
-.t-6 {
-    font-size: @size060;
-    line-height: @size080;
-}
-.t-7 {
-    font-size: @size070;
-    line-height: @size090;
-}
-.t-8 {
-    font-size: @size080;
-    line-height: @size100;
-}
-
-.label-3\.5 {
-    font-size: @size035;
-    line-height: @size050;
-    font-weight: var(--font-weight-medium);
 }
 
 .ta-left {
@@ -444,7 +263,7 @@ body {
     align-items: center;
     gap: @size010;
 
-    .text-size-3();
+    .t-3();
 
     padding-top: @size005;
     padding-bottom: @size005;
@@ -500,12 +319,12 @@ body {
 
 .input-label {
     font-weight: var(--font-weight-medium);
-    .text-size-3\.5();
+    .t-3\.5();
     line-height: 1;
 }
 .input-label-error {
     font-weight: var(--font-weight-medium);
-    .text-size-3\.5();
+    .t-3\.5();
     line-height: 1;
     color: hsl(var(--color-error));
 }
@@ -575,7 +394,7 @@ body {
     &.color-yellow-100 { color: hsl(var(--color-yellow-100)) }
     &.color-yellow-50  { color: hsl(var(--color-yellow-50)) }
 
-    .text-size-3\.5();
+    .t-3\.5();
     font-weight: 500;
     .border-md();
     .transition-color();
@@ -642,7 +461,7 @@ body {
 
     // Liela ikona, teksts jaunā rindā
     &.icon-large {
-        .text-size-3();
+        .t-3();
         font-weight: 500;
 
         padding-top: @size010;
@@ -755,6 +574,8 @@ body {
 
 .form-field {
     display: grid;
+    // ja parent ir augstāks par content, tad visas rindas ir augšā savā augstumā
+    grid-auto-rows: min-content;
     gap: @size020;
 
     &:not(:is([data-state="error"])) {
@@ -843,110 +664,146 @@ body {
     }
 }
 
+/**
+ * Flexbox
+ * main axis: justify-content
+ * cross axis: align-items
+ */
 
-.form-vertical {
-    display: grid;
-    gap: @size040;
-
-    grid-auto-rows: min-content;
-}
 
 .col-items {
-    display: grid;
-    gap: @size040;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
 
-    grid-auto-rows: min-content;
-}
-.col-items-condensed {
-    // Cards saspiežam ar bottom malām kopā
-    >.card {
-        border-radius: 0;
-        border-top: 0;
-        &:first-child {
-            border-top-left-radius: var(--radius);
-            border-top-right-radius: var(--radius);
-            border-top: 1px solid #e5e7eb;
-        }
-        &:last-child {
-            border-bottom-left-radius: var(--radius);
-            border-bottom-right-radius: var(--radius);
+    gap: @size040;
+    .gaps-sizes();
+
+
+
+    &.v-space-between {
+        justify-content: space-between;
+    }
+    &.v-space-around {
+        justify-content: space-around;
+    }
+    &.v-space-evenly {
+        justify-content: space-evenly;
+    }
+    &.v-center {
+        justify-content: center;
+    }
+    &.v-top {
+        justify-content: flex-start;
+    }
+    &.v-bottom {
+        justify-content: flex-end;
+    }
+
+    &.h-center {
+        align-items: center;
+    }
+    &.h-stretch {
+        align-items: stretch;
+    }
+    &.h-left {
+        align-items: flex-start;
+    }
+    &.h-right {
+        align-items: flex-end;
+    }
+
+
+    &.condensed {
+        // Cards saspiežam ar bottom malām kopā
+        >.card {
+            border-radius: 0;
+            border-top: 0;
+            &:first-child {
+                border-top-left-radius: var(--radius);
+                border-top-right-radius: var(--radius);
+                border-top: 1px solid #e5e7eb;
+            }
+            &:last-child {
+                border-bottom-left-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
         }
     }
 }
+
 
 .row-items {
     display: flex;
     flex-flow: row wrap;
-    gap: @size020;
+    justify-content: flex-start;
+    align-items: flex-start;
 
-    &.items-center {
-        align-items: center
+    gap: @size020;
+    .gaps-sizes();
+
+    &.v-center {
+        align-items: center;
     }
-    &.items-flex-end {
+    &.v-stretch {
+        align-items: stretch;
+    }
+    &.v-top {
+        align-items: flex-start;
+    }
+    &.v-bottom {
+        align-items: flex-end;
+    }
+
+    &.h-space-between {
+        justify-content: space-between;
+    }
+    &.h-space-around {
+        justify-content: space-around;
+    }
+    &.h-space-evenly {
+        justify-content: space-evenly;
+    }
+    &.h-center {
+        justify-content: center;
+    }
+    &.h-right {
         justify-content: flex-end;
     }
-}
-.row-items-space-between {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    gap: @size020;
+    &.h-left {
+        justify-content: flex-start;
+    }
 
-    &.items-center {
-        align-items: center
-    }
-}
-.row-items-nogap {
-    display: flex;
-    flex-flow: row wrap;
-
-    &.items-center {
-        align-items: center
-    }
-    &.items-flex-end {
-        justify-content: flex-end;
-    }
-}
-.row-items-condensed {
-    display: flex;
-    flex-flow: row wrap;
-    >.button-primary,
-    >.button-secondary,
-    >.button-danger,
-    >.button-ghost,
-    >.button-outline {
-        border-radius: 0;
-        &:first-child {
-            border-top-left-radius: var(--radius);
-            border-bottom-left-radius: var(--radius);
+    &.condensed {
+        >.button-primary,
+        >.button-secondary,
+        >.button-danger,
+        >.button-ghost,
+        >.button-outline {
+            border-radius: 0;
+            &:first-child {
+                border-top-left-radius: var(--radius);
+                border-bottom-left-radius: var(--radius);
+            }
+            &:last-child {
+                border-top-right-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
         }
-        &:last-child {
-            border-top-right-radius: var(--radius);
-            border-bottom-right-radius: var(--radius);
+        >.button-outline {
+            border-left: 0;
+            &:first-child {
+                border-top-left-radius: var(--radius);
+                border-bottom-left-radius: var(--radius);
+                border-left: 1px solid #e5e7eb;
+            }
+            &:last-child {
+                border-top-right-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
         }
     }
-    >.button-outline {
-        border-left: 0;
-        &:first-child {
-            border-top-left-radius: var(--radius);
-            border-bottom-left-radius: var(--radius);
-            border-left: 1px solid #e5e7eb;
-        }
-        &:last-child {
-            border-top-right-radius: var(--radius);
-            border-bottom-right-radius: var(--radius);
-        }
-    }
-    &.items-center {
-        align-items: center
-    }
-}
-
-.justify-space-between {
-    justify-content: space-between;
-}
-.justify-space-evenly {
-    justify-content: space-evenly;
 }
 
 .title {
@@ -969,8 +826,8 @@ body {
     }
 }
 .title-description {
-    .text-size-3\.5();
-    color: hsl(var(--color-500));
+    .t-3\.5();
+    color: hsl(var(--color-muted));
 
     margin-top: @size015;
 
@@ -1077,7 +934,7 @@ body {
             text-decoration: none;
         }
         color: hsl(var(--color-950));
-        .text-size-3\.5();
+        .t-3\.5();
         font-weight: 500;
 
         padding-left: @size015;
@@ -1162,7 +1019,7 @@ body {
 
     // Label
     span:not(:has(input)) {
-        .text-size-3\.5();
+        .t-3\.5();
         line-height: 1;
         font-weight: 500;
     }
@@ -1245,10 +1102,10 @@ body {
         }
         p {
             // @todo šito kā atsevišķu klasi, lai var reuse iekš form-field
-            font-size: 0.8rem;
-            color: hsl(var(--color-500));
-
-            margin-top: @size020;
+            //font-size: 0.8rem;
+            .t-3\.5();
+            color: hsl(var(--color-muted));
+            margin-top: @size015;
         }
     }
 }
@@ -1321,7 +1178,7 @@ body {
         }
         th {
             >div {
-                .text-size-3\.5();
+                .t-3\.5();
                 line-height: 1;
 
                 display: flex;
@@ -1332,7 +1189,7 @@ body {
                 padding-left: @size020;
                 padding-right: @size020;
             }
-            color: hsl(var(--color-500));
+            color: hsl(var(--color-muted));
 
             svg {
                 margin-right: @size015;
@@ -1362,7 +1219,7 @@ body {
             // nav input lauka
             &:not(:has(.form-field)) {
                 padding: @size020;
-                .text-size-3\.5();
+                .t-3\.5();
             }
             // ir input lauks
             &:has(.form-field) {
@@ -1413,7 +1270,7 @@ body {
         padding-left: @size020;
     }
 
-    .text-size-3\.5();
+    .t-3\.5();
     white-space: nowrap;
     font-weight: 500;
     color: hsl(var(--color-900));
@@ -1474,7 +1331,7 @@ body {
         padding-top: var(--size-010);
         padding-bottom: var(--size-010);
 
-        color: hsl(var(--color-500));
+        color: hsl(var(--color-muted));
 
         .transition-color();
 
@@ -1666,7 +1523,7 @@ body {
     flex: 1 1 100%;
 }
 .wbcalendar-datecaption {
-    .text-size-3\.5();
+    .t-3\.5();
     .month {
         font-weight: var(--font-weight-bold);
         margin-right: @size010;
@@ -1676,7 +1533,7 @@ body {
     }
 }
 .wbcalendar-weekday {
-    .text-size-2\.5();
+    .t-2\.5();
     font-weight: 500;
     color: hsl(var(--color-600));
     text-transform: uppercase;
@@ -1713,7 +1570,7 @@ body {
 
         /** 1. Date base formatting */
         border-radius: var(--border-radius-date);
-        .text-size-3\.5();
+        .t-3\.5();
         font-weight: 500;
         color: hsl(var(--text-color-date-default));
 
@@ -2158,6 +2015,7 @@ body {
 
 .radio-buttons {
     display: grid;
+    grid-auto-rows: min-content;
     gap: @size020;
 
     &:not(:is([data-state="error"])) {
@@ -2182,7 +2040,8 @@ body {
 
         display: flex;
         flex-flow: row nowrap;
-        .justify-space-evenly();
+        justify-content: space-evenly;
+
         gap: @size010;
 
         >button {
