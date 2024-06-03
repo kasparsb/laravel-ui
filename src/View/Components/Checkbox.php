@@ -7,9 +7,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\Http\Request;
+use Kasparsb\Ui\ComponentWithError;
+use Kasparsb\Ui\ComponentWithRequestOldValue;
 
 class Checkbox extends Component
 {
+    use ComponentWithError;
+    use ComponentWithRequestOldValue;
+
     public function __construct(
         public $label='',
         public $name='',
@@ -25,22 +30,13 @@ class Checkbox extends Component
         public ?Request $request=null,
     )
     {
-        if ($this->model) {
-            $this->checked = $this->model->{$this->name} ? true : false;
-        }
-
-        if ($this->request) {
-            if (!is_null($oldValue = $this->request->old($this->name))) {
-                $this->checked = $oldValue ? true : false;
+        if (!$this->setOldValueCheckbox()) {
+            if ($this->model) {
+                $this->checked = $this->model->{$this->name} ? true : false;
             }
         }
 
-        if ($this->errors) {
-            if ($this->errors->has($this->name)) {
-                $this->errorMessage = $this->errors->first($this->name);
-                $this->hasError = true;
-            }
-        }
+        $this->setError();
     }
 
     public function render(): View|Closure|string
