@@ -3,7 +3,7 @@
     data-state="{{ $hasError ? 'error' : '' }}"
     >
     <div>
-        <h4>{{ $title }}</h4>
+        <h4>{{ $label }}</h4>
         <p data-role="description">{{ $description }}</p>
         <p data-role="error">{{ $errorMessage }}</p>
     </div>

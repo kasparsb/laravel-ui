@@ -17,7 +17,7 @@ class FieldToggleSwitch extends Component
 
     public function __construct(
         public $name='',
-        public $title='',
+        public $label='',
         public $labelPosition='right',
         public $description='',
         public $checked=false,
