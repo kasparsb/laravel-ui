@@ -2,6 +2,7 @@
 @import 'variables';
 @import 'resets';
 @import 'input-text';
+@import 'form-field-description-error';
 @import 'gaps';
 
 @import 'margin-top';
@@ -639,32 +640,9 @@ body {
     >textarea {
         min-height: @size200;
     }
-    // Description text
-    [data-role="description"],
-    [data-role="error"] {
-        font-size: @size035;
-        &:empty {
-            display: none;
-        }
-    }
-    [data-role="description"] {
-        color: hsl(var(--color-muted));
-    }
-    [data-role="error"] {
-        color: hsl(var(--color-error));
-    }
 
-    // Error state
-    &[data-state="error"] {
-        [data-role="description"] {
-            display: none;
-        }
-    }
-    &:not(:is([data-state="error"])) {
-        [data-role="error"] {
-            display: none;
-        }
-    }
+    // Description and error text
+    .form-field-description-error()
 }
 
 /**
@@ -1102,12 +1080,7 @@ body {
     }
 }
 
-.toggle-switch-card {
-    .border-lg();
-    border-width: 1px;
-    border-style: solid;
-    border-color: hsl(var(--color-200));
-
+.field-toggle-switch {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
@@ -1118,17 +1091,29 @@ body {
 
     .shadow();
 
-    >div {
+    .border-lg();
+    border-width: 1px;
+    border-style: solid;
+
+    &:not(:is([data-state="error"])) {
+        border-color: hsl(var(--color-200));
         h4 {
             .input-label();
         }
-        p {
-            // @todo šito kā atsevišķu klasi, lai var reuse iekš form-field
-            //font-size: 0.8rem;
-            .t-3\.5();
-            color: hsl(var(--color-muted));
-            margin-top: @size015;
+    }
+    &[data-state="error"] {
+        border-color: hsl(var(--color-red-200));
+        h4 {
+            .input-label-error();
         }
+    }
+
+    // Description and error text
+    .form-field-description-error();
+
+    [data-role="description"],
+    [data-role="error"] {
+        margin-top: @size015;
     }
 }
 
@@ -1206,32 +1191,8 @@ body {
         }
     }
 
-    // Description text
-    [data-role="description"],
-    [data-role="error"] {
-        font-size: @size035;
-        &:empty {
-            display: none;
-        }
-    }
-    [data-role="description"] {
-        color: hsl(var(--color-muted));
-    }
-    [data-role="error"] {
-        color: hsl(var(--color-error));
-    }
-
-    // Error state
-    &[data-state="error"] {
-        [data-role="description"] {
-            display: none;
-        }
-    }
-    &:not(:is([data-state="error"])) {
-        [data-role="error"] {
-            display: none;
-        }
-    }
+    // Description and error text
+    .form-field-description-error();
 }
 
 .table {
@@ -2114,33 +2075,6 @@ body {
         }
     }
 
-    // Description text
-    [data-role="description"],
-    [data-role="error"] {
-        font-size: @size035;
-        &:empty {
-            display: none;
-        }
-    }
-    [data-role="description"] {
-        color: hsl(var(--color-muted));
-    }
-    [data-role="error"] {
-        color: hsl(var(--color-error));
-    }
-
-    // Error state
-    &[data-state="error"] {
-        [data-role="description"] {
-            display: none;
-        }
-    }
-    &:not(:is([data-state="error"])) {
-        [data-role="error"] {
-            display: none;
-        }
-    }
-
     button {
         cursor: pointer;
         position: relative;
@@ -2158,6 +2092,9 @@ body {
     button:has([type=radio]:checked) {
         .button-secondary();
     }
+
+    // Description and error text
+    .form-field-description-error()
 }
 
 .avatar {
