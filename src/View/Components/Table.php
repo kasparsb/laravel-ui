@@ -91,6 +91,9 @@ class Table extends Component
                 'checked' => $value ? true : false,
                 'placeholder' => $col->placeholder,
                 'description' => '',
+                'disabled' => false,
+                'errorMessage' => '',
+                'hasError' => false,
             ])->render();
         }
         else {
