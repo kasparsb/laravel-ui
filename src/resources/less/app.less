@@ -682,6 +682,12 @@ body {
     &.v-bottom {
         justify-content: flex-end;
     }
+    // Custom case, lai childs izplešas vienādi pa visu platumu
+    &.v-stretch {
+        >* {
+            flex: 1;
+        }
+    }
 
     &.h-center {
         align-items: center;
@@ -730,6 +736,11 @@ body {
             }
         }
     }
+
+    // Child, lai aizņem visu pieejamo brīvo vietu
+    .flex-1 {
+        flex: 1;
+    }
 }
 
 
@@ -773,6 +784,12 @@ body {
     &.h-left {
         justify-content: flex-start;
     }
+    // Custom case, lai childs izplešas vienādi pa visu platumu
+    &.h-stretch {
+        >* {
+            flex: 1;
+        }
+    }
 
     // Direct child, var pats sevi nopozicionēt uz cross axis
     >.v-center {
@@ -813,6 +830,11 @@ body {
                 border-bottom-right-radius: var(--radius);
             }
         }
+    }
+
+    // Child, lai aizņem visu pieejamo brīvo vietu
+    .flex-1 {
+        flex: 1;
     }
 }
 
@@ -2070,20 +2092,24 @@ body {
         }
     }
 
+    // Buttons container
     >div {
         .shadow();
         .border-lg();
         border-width: 1px;
         border-style: solid;
         border-color: hsl(var(--color-200));
-
         padding: var(--size-010);
+    }
 
+    // Buttons container, ja tajā nav h-stack vai v-stack
+    // tad taisām flex row
+    >div:not(:has(.row-items)):not(:has(.col-items)) {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-evenly;
 
-        gap: @size010;
+        gap: @size020;
 
         >button {
             flex: 1;
