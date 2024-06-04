@@ -999,29 +999,41 @@ body {
 }
 
 .toggle-switch {
-    .remove-tap-highlite();
-
+    // Grid nevar izmanto, jo tad label izstiepjas pa visu platumu
+    // checkbox vēlams, lai label ir teksta platumā
+    // un lai nenostrādā click ārpus label teksta
     display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: @size020;
 
-    cursor: pointer;
+    label {
+        .remove-tap-highlite();
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
 
+        gap: @size020;
 
-    /* The rule below is not implemented in browsers yet */
-    -o-user-select: none;
-    /* The rule below is implemented in most browsers by now */
-    user-select: none;
+        cursor: pointer;
 
-
+        /* The rule below is not implemented in browsers yet */
+        -o-user-select: none;
+        /* The rule below is implemented in most browsers by now */
+        user-select: none;
+    }
 
     // Label
-    span:not(:has(input)) {
-        .t-3\.5();
-        line-height: 1;
-        font-weight: 500;
+    &:not(:is([data-state="error"])) {
+        span:not(:has(input)) {
+            .input-label()
+        }
+    }
+    &[data-state="error"] {
+        span {
+            .input-label-error();
+        }
     }
 
     // Switch
@@ -1078,6 +1090,9 @@ body {
 
         background-color: hsl(var(--color-200));
     }
+
+    // Description and error text
+    .form-field-description-error()
 }
 
 .field-toggle-switch {
