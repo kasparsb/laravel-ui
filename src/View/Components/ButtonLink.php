@@ -17,6 +17,7 @@ class ButtonLink extends Component
         public $link = '', // link: priekš href, delete, dinamiskais, ja sākas ar "model:"
         public $redirect = '', // redirect url after delete
         public $menu = '',
+        public $menuShow = 'onclick', // onhover
         public ?Model $model = null,
         public $disabled = false,
         public $loading = false,

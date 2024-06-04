@@ -3,7 +3,7 @@ import {
     addStyle, addClass, removeClass,
     append, replaceContent,
     getOffset, getOuterDimensions, getWindowDimensions, getWindowScrollLeft,
-    isChild, click} from 'dom-helpers';
+    isChild, click, on} from 'dom-helpers';
 import ButtonDelete from './ButtonDelete';
 
 let container;
@@ -157,7 +157,7 @@ export default {
         })
 
         // Click triggeri, kuri atvērs menu
-        click('[data-dropdown-menu]', (ev, clickTriggerEl) => {
+        click('[data-dropdown-menu][data-dropdown-menu-show="onclick"]', (ev, clickTriggerEl) => {
             if (clickTriggerEl.dataset.dropdownMenu) {
                 let menuEl = findDropdownMenu(clickTriggerEl.dataset.dropdownMenu);
                 if (menuEl) {
@@ -173,5 +173,37 @@ export default {
                 }
             }
         })
+
+        /**
+         * TODO Kā uztaisīt hover un unhover???
+         */
+        on('mouseover', '[data-dropdown-menu][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
+            if (hoverTriggerEl.dataset.dropdownMenu) {
+                let menuEl = findDropdownMenu(hoverTriggerEl.dataset.dropdownMenu);
+                if (menuEl) {
+                    if (isOpen) {
+                        //close();
+                    }
+                    else {
+
+                        setOverrideFromClickTriggerEl(hoverTriggerEl, menuEl);
+
+                        open(hoverTriggerEl, menuEl);
+                    }
+                }
+            }
+        })
+
+        on('mouseout', '[data-dropdown-menu][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
+            if (hoverTriggerEl.dataset.dropdownMenu) {
+                let menuEl = findDropdownMenu(hoverTriggerEl.dataset.dropdownMenu);
+
+                if (menuEl) {
+                    if (isOpen) {
+                        close();
+                    }
+                }
+            }
+        });
     }
 }

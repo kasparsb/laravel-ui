@@ -67,6 +67,7 @@
 <button
     @if ($menu)
     data-dropdown-menu="{{ $menu }}"
+    data-dropdown-menu-show="{{ $menuShow }}"
     type="button"
     @endif
     @if ($disabled)
