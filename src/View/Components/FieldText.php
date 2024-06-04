@@ -7,9 +7,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\Http\Request;
+use Kasparsb\Ui\ComponentWithError;
+use Kasparsb\Ui\ComponentWithRequestOldValue;
 
 class FieldText extends Component
 {
+    use ComponentWithError;
+    use ComponentWithRequestOldValue;
+
     public function __construct(
         public $label='',
         public $name='',
@@ -28,22 +33,13 @@ class FieldText extends Component
         public ?Request $request=null,
     )
     {
-        if ($this->model) {
-            $this->value = $this->model->{$this->name};
-        }
-
-        if ($this->request) {
-            if (!is_null($oldValue = $this->request->old($this->name))) {
-                $this->value = $oldValue;
+        if (!$this->setOldValue()) {
+            if ($this->model) {
+                $this->value = $this->model->{$this->name};
             }
         }
 
-        if ($this->errors) {
-            if ($this->errors->has($this->name)) {
-                $this->errorMessage = $this->errors->first($this->name);
-                $this->hasError = true;
-            }
-        }
+        $this->setError();
     }
 
     public function render(): View|Closure|string
