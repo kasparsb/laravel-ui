@@ -1,12 +1,16 @@
-<label
+<div
     {{ $attributes->class(['checkbox']) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     >
-    <span>
-        <input type="checkbox" name="{{ $name }}" @checked($checked) value="1" />
-        <svg>
-            <use xlink:href="#checkbox-checked"></use>
-        </svg>
-    </span>
-    {{ $label }}
-</label>
+    <label>
+        <span>
+            <input type="checkbox" name="{{ $name }}" @checked($checked) value="1" />
+            <svg>
+                <use xlink:href="#checkbox-checked"></use>
+            </svg>
+        </span>
+        {{ $label }}
+    </label>
+    <p data-role="description">{{ $description }}</p>
+    <p data-role="error">{{ $errorMessage }}</p>
+</div>

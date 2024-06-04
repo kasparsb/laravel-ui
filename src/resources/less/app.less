@@ -1134,10 +1134,22 @@ body {
 
 
 .checkbox {
+    // Grid nevar izmanto, jo tad label izstiepjas pa visu platumu
+    // checkbox vēlams, lai label ir teksta platumā
+    // un lai nenostrādā click ārpus label teksta
     display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: @size020;
+
+    // Te ir label teksts un vizuālais checkbox
+    label {
+        display: inline-flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: @size020;
+    }
 
     span {
         display: flex;
@@ -1171,7 +1183,9 @@ body {
         }
     }
     &:not(:is([data-state="error"])) {
-        .input-label();
+        label {
+            .input-label();
+        }
         span {
             border: 1px solid hsl(var(--color-900));
 
@@ -1181,12 +1195,41 @@ body {
         }
     }
     &[data-state="error"] {
-        .input-label-error();
+        label {
+            .input-label-error();
+        }
         span {
             border: 1px solid hsl(var(--color-error));
             &:has(input:checked) {
                 background-color: hsl(var(--color-error));
             }
+        }
+    }
+
+    // Description text
+    [data-role="description"],
+    [data-role="error"] {
+        font-size: @size035;
+        &:empty {
+            display: none;
+        }
+    }
+    [data-role="description"] {
+        color: hsl(var(--color-muted));
+    }
+    [data-role="error"] {
+        color: hsl(var(--color-error));
+    }
+
+    // Error state
+    &[data-state="error"] {
+        [data-role="description"] {
+            display: none;
+        }
+    }
+    &:not(:is([data-state="error"])) {
+        [data-role="error"] {
+            display: none;
         }
     }
 }

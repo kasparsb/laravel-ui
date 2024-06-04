@@ -20,6 +20,7 @@ class Checkbox extends Component
         public $name='',
         public $checked='',
         public $model=null,
+        public $description='',
 
         public $errorMessage='',
         public $hasError=false,
