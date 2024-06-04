@@ -732,8 +732,13 @@ body {
 
 
     &.condensed {
+
+        gap: 0;
+        .shadow();
+
         // Cards saspiežam ar bottom malām kopā
         >.card {
+            box-shadow: none;
             border-radius: 0;
             border-top: 0;
             &:first-child {
@@ -754,7 +759,7 @@ body {
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
 
     gap: @size020;
     .gaps-sizes();
