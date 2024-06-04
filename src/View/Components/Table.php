@@ -60,7 +60,7 @@ class Table extends Component
                 'placeholder' => $col->placeholder,
                 'description' => '',
                 'disabled' => false,
-                'error' => '',
+                'errorMessage' => '',
                 'hasError' => false,
             ])->render();
         }
@@ -78,7 +78,7 @@ class Table extends Component
                 'defaultDateState' => '',
                 'state' => '',
                 'disabled' => false,
-                'error' => '',
+                'errorMessage' => '',
                 'hasError' => false,
             ])->render();
         }
