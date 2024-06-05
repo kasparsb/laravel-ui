@@ -40,6 +40,10 @@ class FieldDate extends Component
         public ?Request $request=null,
     )
     {
+        /**
+         * * default value izmanto tikai model gadījumā
+         */
+
         if (!$this->setOldValue()) {
             if ($this->model) {
                 if ($this->model->exists) {
@@ -56,11 +60,6 @@ class FieldDate extends Component
                         $this->value = $this->defaultValue;
                     }
                 }
-            }
-            else {
-                /**
-                 * * default value izmanto tikai model gadījumā
-                 */
             }
 
             // Ja value ir Carbon Date objekts
