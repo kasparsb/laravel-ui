@@ -16,7 +16,7 @@ class TabContent extends Component
     )
     {
         if (is_null($this->selected)) {
-            $this->selected = $this->selectedTab == $this->tabName;
+            $this->selected = $this->tabName == view()->getConsumableComponentData('selected');
         }
     }
 
