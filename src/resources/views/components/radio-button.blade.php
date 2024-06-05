@@ -1,9 +1,15 @@
 <button
     data-role="radio-button"
+    @if ($buttonClass == $buttonClassSelected)
     {{ $attributes->class([
-        $buttonClass => !$selected,
-        $buttonClassSelected => $selected,
+        $buttonClass,
     ]) }}
+    @else
+    {{ $attributes->class([
+        $buttonClassSelected => $selected,
+        $buttonClass => !$selected,
+    ]) }}
+    @endif
 
     data-class="{{ $buttonClass }}"
     data-class-selected="{{ $buttonClassSelected }}"

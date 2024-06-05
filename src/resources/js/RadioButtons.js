@@ -9,14 +9,13 @@ function handleRadioButtonClick(radioButtonEl) {
 
     // saliekam css klases pēc button state
     qa(radioButtonsEl, '[data-role="radio-button"]').forEach(el => {
-        console.log(el, isButtonSelected(el));
         if (isButtonSelected(el)) {
-            addClass(el, el.dataset.classSelected)
             removeClass(el, el.dataset.class)
+            addClass(el, el.dataset.classSelected)
         }
         else {
-            addClass(el, el.dataset.class)
             removeClass(el, el.dataset.classSelected)
+            addClass(el, el.dataset.class)
         }
     })
 }
