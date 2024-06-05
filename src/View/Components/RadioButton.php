@@ -44,12 +44,24 @@ class RadioButton extends Component
             }
         }
 
-        if (is_null($this->buttonClass)) {
-            $this->buttonClass = view()->getConsumableComponentData('buttonClass');
-        }
+        /**
+         * buttonClass un buttonClassSelected nolasām šādā secībā
+         *     1. pašai pogai uzstadīts
+         *     2. skatamies vai RadioButtons komponentei uzstādīts
+         *     3. izmantojam default vērtības
+         */
+        foreach (
+            [
+                'buttonClass' => 'button-ghost',
+                'buttonClassSelected' => 'button-secondary',
+            ] as $var => $defaultClassName) {
 
-        if (is_null($this->buttonClassSelected)) {
-            $this->buttonClassSelected = view()->getConsumableComponentData('buttonClassSelected');
+            if (is_null($this->{$var})) {
+                $this->{$var} = view()->getConsumableComponentData($var);
+                if (is_null($this->{$var})) {
+                    $this->{$var} = $defaultClassName;
+                }
+            }
         }
 
         $this->name = view()->getConsumableComponentData('name');

@@ -2117,25 +2117,31 @@ body {
     grid-auto-rows: min-content;
     gap: @size020;
 
-    &:not(:is([data-state="error"])) {
-        >label {
-            .input-label();
-        }
-    }
-    &[data-state="error"] {
-        >label {
-            .input-label-error();
-        }
-    }
-
     // Buttons container
-    >div {
+    >.radio-buttons {
         .shadow();
         .border-lg();
         border-width: 1px;
         border-style: solid;
         border-color: hsl(var(--color-200));
         padding: var(--size-010);
+    }
+
+    &:not(:is([data-state="error"])) {
+        >label {
+            .input-label();
+        }
+        >.radio-buttons {
+            border-color: hsl(var(--color-200));
+        }
+    }
+    &[data-state="error"] {
+        >label {
+            .input-label-error();
+        }
+        >.radio-buttons {
+            border-color: hsl(var(--color-red-200));
+        }
     }
 
     // Description and error text

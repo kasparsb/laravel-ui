@@ -12,8 +12,11 @@ class RadioButtons extends Component
         public $name,
         public $value='',
 
-        public $buttonClass="button-ghost",
-        public $buttonClassSelected="button-secondary",
+        /**
+         * Default vērtības skatīties RadioButton komponentē
+         */
+        public $buttonClass=null,
+        public $buttonClassSelected=null,
     )
     {
 
