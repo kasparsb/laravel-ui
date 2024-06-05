@@ -32,4 +32,26 @@ class Helpers
 
         return route($namespace.'.'.$routeName);
     }
+
+    /**
+     * No padotā classes string meklējam vai kāda no klasēm
+     * ir mt-{number} klases
+     * Ja ir atrasta, tad atgriež true
+     */
+    public function hasAnyMarginTopClass($classesString) {
+        if (!$classesString) {
+            return false;
+        }
+
+        $classesString = explode(' ', $classesString);
+        foreach ($classesString as $class) {
+            preg_match('/^mt-(\d+(\.\d+)?)$/', $class, $matches);
+
+            if (count($matches) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
