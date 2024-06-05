@@ -14,6 +14,9 @@ class RadioButton extends Component
         public $selected = null,
         public $value = null,
         public $disabled = false,
+
+        public $buttonClass=null,
+        public $buttonClassSelected=null,
     )
     {
         if (is_null($this->selected)) {
@@ -39,6 +42,14 @@ class RadioButton extends Component
             if (!is_null($this->value)) {
                 $this->selected = $this->value == view()->getConsumableComponentData('value');
             }
+        }
+
+        if (is_null($this->buttonClass)) {
+            $this->buttonClass = view()->getConsumableComponentData('buttonClass');
+        }
+
+        if (is_null($this->buttonClassSelected)) {
+            $this->buttonClassSelected = view()->getConsumableComponentData('buttonClassSelected');
         }
 
         $this->name = view()->getConsumableComponentData('name');

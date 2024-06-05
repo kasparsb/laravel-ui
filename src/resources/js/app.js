@@ -8,6 +8,7 @@ import Calendar from './Calendar';
 import Table from './Table';
 import FileUpload from './FileUpload';
 import Tabs from './Tabs';
+import RadioButtons from './RadioButtons';
 
 ButtonLoading.init();
 ButtonDelete.init();
@@ -19,3 +20,4 @@ Calendar.init();
 Table.init();
 FileUpload.init();
 Tabs.init();
+RadioButtons.init();

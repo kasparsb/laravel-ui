@@ -2076,7 +2076,41 @@ body {
     }
 }
 
+/**
+ * Radio buttons are only buttons. Without label, description and error state
+ */
 .radio-buttons {
+    // Buttons container, ja tajā nav h-stack vai v-stack
+    // tad taisām flex row
+    &:not(:has(.row-items)):not(:has(.col-items)) {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-evenly;
+
+        gap: @size020;
+
+        >* {
+            flex: 1;
+        }
+    }
+
+    [data-role="radio-button"] {
+        cursor: pointer;
+        position: relative;
+
+        input {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+    }
+}
+
+.field-radio-buttons {
     display: grid;
     grid-auto-rows: min-content;
     gap: @size020;
@@ -2100,38 +2134,6 @@ body {
         border-style: solid;
         border-color: hsl(var(--color-200));
         padding: var(--size-010);
-    }
-
-    // Buttons container, ja tajā nav h-stack vai v-stack
-    // tad taisām flex row
-    >div:not(:has(.row-items)):not(:has(.col-items)) {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-evenly;
-
-        gap: @size020;
-
-        >button {
-            flex: 1;
-        }
-    }
-
-    button {
-        cursor: pointer;
-        position: relative;
-        input {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
-    }
-
-    button:has([type=radio]:checked) {
-        .button-secondary();
     }
 
     // Description and error text

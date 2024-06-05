@@ -1,13 +1,6 @@
 <div
     {{ $attributes->class(['radio-buttons']) }}
-    data-state="{{ $hasError ? 'error' : '' }}"
+    data-container
     >
-    @if ($label)
-        <label>{{ $label }}</label>
-    @endif
-    <div>
-        {{ $slot }}
-    </div>
-    <p data-role="description">{{ $description }}</p>
-    <p data-role="error">{{ $error }}</p>
+    {{ $slot }}
 </div>

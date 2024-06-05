@@ -10,11 +10,10 @@ class RadioButtons extends Component
 {
     public function __construct(
         public $name,
-        public $label='',
-        public $description='',
         public $value='',
-        public $error='',
-        public $hasError=false,
+
+        public $buttonClass="button-ghost",
+        public $buttonClassSelected="button-secondary",
     )
     {
 
