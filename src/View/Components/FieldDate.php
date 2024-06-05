@@ -6,7 +6,6 @@ use Closure;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Illuminate\Support\ViewErrorBag;
 use Illuminate\Http\Request;
 use Kasparsb\Ui\ComponentWithError;
 use Kasparsb\Ui\ComponentWithRequestOldValue;
@@ -33,13 +32,14 @@ class FieldDate extends Component
 
         public $errorMessage='',
         public $hasError=false,
-        // Laravel errors
-        public ?ViewErrorBag $errors=null,
+        // Laravel errors, nevar likt tipu, jo tad tas tiks izvilkts no container un būs tukšs
+        public $errors=null,
 
         // No šī ņems vērtību, kura tika iepostēta
         public ?Request $request=null,
     )
     {
+
         /**
          * * default value izmanto tikai model gadījumā
          */
