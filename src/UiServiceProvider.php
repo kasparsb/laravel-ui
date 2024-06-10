@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 
 use Kasparsb\Ui\Helpers;
 use Kasparsb\Ui\View\TableComponentsManager;
+use Kasparsb\Ui\Console\Commands\CreateFileFromUrlCommand;
 
 class UiServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,9 @@ class UiServiceProvider extends ServiceProvider
         $this->app->singleton('Kasparsb\Ui\View\TableComponentsManager', function($app) {
             return new TableComponentsManager();
         });
+        $this->app->singleton('Kasparsb\Ui\FilesManager', function($app) {
+            return new FilesManager();
+        });
         $this->app->singleton('Kasparsb\Ui\Helpers', function($app) {
             return new Helpers();
         });
@@ -23,7 +27,15 @@ class UiServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->publishes([
+            __DIR__.'/config/ui.php' => config_path('ui.php'),
+        ]);
+
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+
         $this->loadViewsFrom(__DIR__.'/resources/views', 'ui');
+
+        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
 
         Blade::componentNamespace('Kasparsb\\Ui\\View\\Components', 'ui');
 
@@ -35,6 +47,11 @@ class UiServiceProvider extends ServiceProvider
             'public'
         );
 
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CreateFileFromUrlCommand::class,
+            ]);
+        }
 
 
         $packageJson = json_decode(file_get_contents(__DIR__.'/../package.json'));
