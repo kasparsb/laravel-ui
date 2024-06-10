@@ -1965,7 +1965,7 @@ body {
     padding-bottom: @size040;
 
     // Ja nav data-preview-image, tad slēpjam preview bloku
-    &:not(:is([data-preview-image])) {
+    &:not(:is([data-preview-image="ready"])) {
         >[data-r="preview"] {
             display: none;
         }
@@ -2001,9 +2001,6 @@ body {
         }
     }
 
-
-
-
     /**
      * File type icons
      */
@@ -2036,7 +2033,8 @@ body {
 
 
     // Ja ir preview image, tad ikonu nerādām
-    &[data-preview-image] {
+    // tikai, ja fails tiešām ir image. Js uzstāda ready
+    &[data-preview-image="ready"] {
         [data-r="controls"] {
             >.icon {
                 display: none;

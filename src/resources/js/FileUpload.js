@@ -93,6 +93,10 @@ function setFile(fileUploadEl) {
 function removeFile(fileEl) {
     let fileUploadEl = r(parent(fileEl, '[data-container="file-upload"]'));
 
+    if ('previewImage' in fileEl.dataset) {
+        fileEl.dataset.previewImage = '';
+    }
+
     // Novācam file el
     remove(fileEl);
 
@@ -104,6 +108,19 @@ function removeFile(fileEl) {
 
 function startFileUpload(fileEl, file, uploadLink) {
     let previewImage = 'previewImage' in fileEl.dataset;
+
+    if (previewImage) {
+        // make sure its image
+        if (file.type.substring(0, 6) !== 'image/') {
+            previewImage = false;
+        }
+    }
+
+    // liekam pazīmi, ka previewImage tiešām būs
+    if (previewImage) {
+        fileEl.dataset.previewImage = 'ready';
+    }
+
     /**
      * Image preview
      */
@@ -153,6 +170,9 @@ function startFileUpload(fileEl, file, uploadLink) {
             }
         })
         .catch(response => {
+
+            console.log(response);
+
             fileEl.dataset.state = 'failed';
             fileEl.failedMessage.innerHTML = response.message;
         });
