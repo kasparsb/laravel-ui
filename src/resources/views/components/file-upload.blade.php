@@ -7,6 +7,9 @@
     data-link="{{ $link }}"
     data-state="{{ $state }}"
     data-container="file-upload"
+    @if ($previewImage)
+    data-preview-image
+    @endif
     @if ($multiple)
     data-multiple
     @endif
@@ -21,5 +24,8 @@
         <div class="col-items" data-r="files"></div>
     </div>
 
-    <x-ui::file-upload-single-file :name="$name" data-r="singleFileTemplate" />
+    <x-ui::file-upload-single-file
+        :name="$name"
+        :previewImage="$previewImage"
+        data-r="singleFileTemplate" />
 </div>

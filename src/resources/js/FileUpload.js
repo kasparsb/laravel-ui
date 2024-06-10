@@ -1,4 +1,9 @@
-import {qa, r, parent, change, click, upload, append, remove, clone} from 'dom-helpers';
+import {
+    qa, r, parent, change, click, upload, append, remove, clone, replaceContent
+} from 'dom-helpers';
+import getImageDimensionsFromFile from './getImageDimensionsFromFile';
+import createImageFromFile from './createImageFromFile';
+import AspectRatio from './AspectRatio';
 
 
 function humanFileSize(size) {
@@ -19,6 +24,7 @@ function getFileType(file) {
         case 'svg':
         case 'tif':
         case 'tiff':
+        case 'webp':
             return 'image';
         case 'zip':
         case 'bzip':
@@ -97,13 +103,41 @@ function removeFile(fileEl) {
 }
 
 function startFileUpload(fileEl, file, uploadLink) {
+    let previewImage = 'previewImage' in fileEl.dataset;
+    /**
+     * Image preview
+     */
+    if (previewImage) {
+        // Ielādējam image dimensions
+        getImageDimensionsFromFile(file)
+            .then(imageDimensions => {
+                // uzliek atbilstošo aspect ratio
+                AspectRatio.setRatioFromDimensions(fileEl.preview, imageDimensions)
+
+                // ieliekam preview no local bildes
+                replaceContent(fileEl.preview.content, createImageFromFile(file, {
+                    data: {
+                        r: 'image'
+                    }
+                }));
+            });
+    }
+
+    /**
+     * Upload
+     */
     fileEl = r(fileEl);
     fileEl.dataset.state = 'uploading';
+
+    let params = {};
+    if (previewImage) {
+        params.return_url = true;
+    }
 
     upload(
         uploadLink,
         file,
-        {},
+        params,
         // Progress callback
         progress => {
             fileEl.indicator.style.width = progress+'%';
@@ -111,8 +145,12 @@ function startFileUpload(fileEl, file, uploadLink) {
         }
     )
         .then(response => {
-            fileEl.input.value = response.filename;
+            fileEl.input.value = response.value;
             fileEl.dataset.state = 'completed';
+
+            if (previewImage) {
+                fileEl.preview.image.src = response.url;
+            }
         })
         .catch(response => {
             fileEl.dataset.state = 'failed';
@@ -135,5 +173,4 @@ export default {
             r(el).singleFileTemplate.input.disabled = true;
         })
     },
-
 }

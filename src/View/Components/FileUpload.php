@@ -27,6 +27,8 @@ class FileUpload extends Component
         public $multiple=false,
 
         public $filePickerLabel='Select file to upload',
+        // Should uploaded image be previewed
+        public $previewImage=false,
     )
     {
         if ($multiple) {

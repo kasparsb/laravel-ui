@@ -21,7 +21,9 @@ class FileUploadSingleFile extends Component
          * failed - notika kļūda
          * completed upload pabeigts
          */
-        public $state='ready'
+        public $state='ready',
+        // Should uploaded image be previewed
+        public $previewImage=false,
     )
     {
         //
