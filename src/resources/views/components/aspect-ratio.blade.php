@@ -1,5 +1,5 @@
 <div {{ $attributes->class(['aspect-ratio-container']) }} style="padding-bottom:{{ $paddingBottom }}">
-    <div>
+    <div data-r="content">
         {{ $slot }}
     </div>
 </div>
