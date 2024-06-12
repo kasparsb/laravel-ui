@@ -9,6 +9,7 @@ import ButtonDelete from './ButtonDelete';
 let container;
 let activeClickTriggerEl;
 let isOpen = false;
+let dropDownMenuHideTimeout = 0;
 
 /**
  * Ja nav izveidoti container un calendar, tad tos izveido
@@ -25,6 +26,7 @@ function maybeCreateContainerAndCalendar(menuEl) {
     // previous menu izņemam ārā un ieliek body, lai nepazūd
     let previousMenuEl = q(container, '[data-dropdown-menu-name]');
     if (previousMenuEl) {
+        addClass(previousMenuEl, 'hidden');
         append(q('body'), previousMenuEl);
     }
 
@@ -48,6 +50,9 @@ function close() {
 }
 
 function open(clickTriggerEl, menuEl) {
+
+    // Notīrām hide timeout
+    clearTimeout(dropDownMenuHideTimeout);
 
     activeClickTriggerEl = clickTriggerEl;
 
@@ -165,7 +170,6 @@ export default {
                         close();
                     }
                     else {
-
                         setOverrideFromClickTriggerEl(clickTriggerEl, menuEl);
 
                         open(clickTriggerEl, menuEl);
@@ -181,29 +185,28 @@ export default {
             if (hoverTriggerEl.dataset.dropdownMenu) {
                 let menuEl = findDropdownMenu(hoverTriggerEl.dataset.dropdownMenu);
                 if (menuEl) {
-                    if (isOpen) {
-                        //close();
-                    }
-                    else {
+                    setOverrideFromClickTriggerEl(hoverTriggerEl, menuEl);
 
-                        setOverrideFromClickTriggerEl(hoverTriggerEl, menuEl);
-
-                        open(hoverTriggerEl, menuEl);
-                    }
+                    open(hoverTriggerEl, menuEl);
                 }
             }
         })
-
         on('mouseout', '[data-dropdown-menu][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
             if (hoverTriggerEl.dataset.dropdownMenu) {
-                let menuEl = findDropdownMenu(hoverTriggerEl.dataset.dropdownMenu);
-
-                if (menuEl) {
-                    if (isOpen) {
-                        close();
-                    }
+                if (isOpen) {
+                    // uzliek hide timeout, kur notīra, ja vajag parādīt citu menu
+                    dropDownMenuHideTimeout = setTimeout(() => close(), 50000)
                 }
             }
+        });
+
+        // mouse over uz dropdown menu
+        on('mouseover', '[data-dropdown-menu-name]', (ev, menuEl) => {
+            clearTimeout(dropDownMenuHideTimeout);
+        });
+        // always hide menu whene mouse out from menu
+        on('mouseout', '[data-dropdown-menu-name]', (ev, menuEl) => {
+            dropDownMenuHideTimeout = setTimeout(() => close(), 500)
         });
     }
 }
