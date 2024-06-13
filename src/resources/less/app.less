@@ -711,6 +711,12 @@ body {
     >.h-right {
         align-self: flex-end;
     }
+    // Custom case, lai childs izplešas vienādi pa visu augstumu
+    &.v-stretch {
+        >* {
+            flex: 1;
+        }
+    }
 
 
     &.condensed {
@@ -798,6 +804,10 @@ body {
     }
     >.v-bottom {
         align-self: flex-end;
+    }
+    // child aizņem visu pieejamo vietu
+    >.h-stretch {
+        flex: 1;
     }
 
     &.condensed {
