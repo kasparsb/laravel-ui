@@ -8,7 +8,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\ComponentAttributeBag;
 use Illuminate\Support\Facades\View as FacadeView;
 
+use Kasparsb\Ui\View\Components\Button;
+use Kasparsb\Ui\View\Components\FieldDate;
+use Kasparsb\Ui\View\Components\FieldText;
+use Kasparsb\Ui\View\Components\FieldSelect;
+use Kasparsb\Ui\View\Components\FieldToggleSwitch;
+
 use Kasparsb\Ui\View\TableComponentsManager;
+
 
 class Table extends Component
 {
@@ -51,50 +58,53 @@ class Table extends Component
             ])->render();
         }
 
+        /**
+         * Field type
+         */
         if ($col->type == 'field-text') {
-            return view('ui::components.field-text', [
-                'attributes' => new ComponentAttributeBag(),
-                'label' => '',
-                'name' => $col->name,
-                'value' => $value,
-                'placeholder' => $col->placeholder,
-                'description' => '',
-                'disabled' => false,
-                'errorMessage' => '',
-                'hasError' => false,
-            ])->render();
+            return view(
+                'ui::components.field-text',
+                $this->getClassConstructorParameters(FieldText::class, [
+                    'attributes' => new ComponentAttributeBag(),
+                    'name' => $col->name,
+                    'value' => $value,
+                    'placeholder' => $col->placeholder,
+                ])
+            )->render();
         }
         else if ($col->type == 'field-date') {
-            return view('ui::components.field-date', [
-                'attributes' => new ComponentAttributeBag(),
-                'label' => '',
-                'name' => $col->name,
-                'value' => $value,
-                'placeholder' => $col->placeholder,
-                'description' => '',
-                'stateUrl' => '',
-                'minDate' => '',
-                'maxDate' => '',
-                'defaultDateState' => '',
-                'state' => '',
-                'disabled' => false,
-                'errorMessage' => '',
-                'hasError' => false,
-            ])->render();
+            return view(
+                'ui::components.field-date',
+                $this->getClassConstructorParameters(FieldDate::class, [
+                    'attributes' => new ComponentAttributeBag(),
+                    'name' => $col->name,
+                    'value' => $value,
+                    'placeholder' => $col->placeholder,
+                ])
+            )->render();
+        }
+        else if ($col->type == 'field-select') {
+            return view(
+                'ui::components.field-select',
+                $this->getClassConstructorParameters(FieldSelect::class, [
+                    'attributes' => new ComponentAttributeBag(),
+                    'name' => $col->name,
+                    'value' => $value,
+                    'options' => $col->selectOptions,
+                ])
+            )->render();
         }
         else if ($col->type == 'toggle-switch') {
-            return view('ui::components.toggle-switch', [
-                'attributes' => new ComponentAttributeBag(),
-                'label' => '',
-                'labelPosition' => 'right',
-                'name' => $col->name,
-                'checked' => $value ? true : false,
-                'placeholder' => $col->placeholder,
-                'description' => '',
-                'disabled' => false,
-                'errorMessage' => '',
-                'hasError' => false,
-            ])->render();
+            return view(
+                'ui::components.toggle-switch',
+                $this->getClassConstructorParameters(FieldToggleSwitch::class, [
+                    'attributes' => new ComponentAttributeBag(),
+                    'labelPosition' => 'right',
+                    'name' => $col->name,
+                    'checked' => $value ? true : false,
+                    'placeholder' => $col->placeholder,
+                ])
+            )->render();
         }
         else {
             $methodName = 'col'.ucfirst($col->name);
@@ -112,6 +122,24 @@ class Table extends Component
 
         // Vērtība bez formatēšanas
         return $value;
+    }
+
+    public function getClassConstructorParameters($className, $append=null) {
+        $class = new \ReflectionClass($className);
+        $constructor = $class->getConstructor();
+        $params = collect($constructor->getParameters())
+            ->mapWithKeys(function($parameter){
+                return [$parameter->getName() => $parameter->getDefaultValue()];
+            })
+            ->all();
+
+        if ($append) {
+            foreach ($append as $name => $value) {
+                $params[$name] = $value;
+            }
+        }
+
+        return $params;
     }
 
     public function render(): View|Closure|string

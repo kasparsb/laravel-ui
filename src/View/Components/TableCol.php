@@ -22,6 +22,7 @@ class TableCol extends Component
         public ?Model $model = null,
         // Field specific attributes
         public $placeholder = '',
+        public $selectOptions = [],
     )
     {
         $this->manager = app(TableComponentsManager::class);
