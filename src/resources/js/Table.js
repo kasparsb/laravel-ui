@@ -1,4 +1,29 @@
-import {parent, on, getFormData, post} from 'dom-helpers';
+import {
+    q, qa, append, parent, on, getFormData, post, clone,
+    clearFormData
+} from 'dom-helpers';
+
+function addRow(tableEl) {
+    // Klonējam pēdējo row
+    let newRow = clone(q(tableEl, 'tbody tr:last-child'));
+
+    // clean up values in input fields
+    clearFormData(newRow);
+
+    /**
+     * Clear select field placeholders
+     * TODO kaut kā vajag, lai automātiski notīrās
+     */
+    qa(newRow, '.select-placeholder span').forEach(selectPlaceholderEl => selectPlaceholderEl.innerHTML = '');
+
+    newRow = append(q(tableEl, 'tbody'), newRow);
+
+    // focus first field
+    let firstInputField = q(newRow, 'input, select');
+    if (firstInputField) {
+        firstInputField.focus()
+    }
+}
 
 export default {
     init() {
@@ -25,5 +50,12 @@ export default {
             }
         })
 
+    },
+
+    /**
+     * Add new row to table
+     */
+    addRow(tableEl) {
+        addRow(tableEl);
     }
 }
