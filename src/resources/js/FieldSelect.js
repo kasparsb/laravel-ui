@@ -1,11 +1,8 @@
-import {qa, q, parent, on} from 'dom-helpers';
+import {q, qa, r, parent, on} from 'dom-helpers';
 
 let FieldSelect = {
     onChangeValue(selectEl) {
-        let container = parent(selectEl, '[data-is-container]');
-        if (container) {
-            q(container, '[data-value-text]').innerHTML = q(selectEl, 'option:checked').innerHTML
-        }
+        r(parent(selectEl, '[data-is-container]')).placeholder.innerHTML = q(selectEl, 'option:checked').innerHTML;
     },
     setEvents() {
         on('change', '.field-select select', (ev, selectEl) => {

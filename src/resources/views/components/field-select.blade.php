@@ -6,7 +6,7 @@
         <label>{{ $label }}</label>
     @endif
     <div class="select-placeholder" data-is-container="">
-        <span data-value-text=""></span>
+        <span data-r="placeholder"></span>
         <svg>
             <use xlink:href="#select-trigger"></use>
         </svg>
@@ -19,7 +19,7 @@
             <option value="" @selected(!$value)>{{ is_bool($empty) ? '' : $empty }}</option>
             @endif
 
-            @if (!$slot->isEmpty())
+            @if (isset($slot) && !$slot->isEmpty())
             {{ $slot }}
             @elseif (is_iterable($options))
                 @foreach ($options as $optionValue => $html)
