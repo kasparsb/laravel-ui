@@ -1290,6 +1290,8 @@ body {
             }
         }
         td {
+            // šo vajag obligāti, pretējā gadījumā div un input elementi ir dažādās vietās viens top otrs bottom
+            vertical-align: top;
 
             // nav input lauka
             &:not(:has(.form-field)) {
