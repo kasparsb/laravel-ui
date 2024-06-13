@@ -33,6 +33,8 @@ class TableComponentsManager
         $tableIndex = count($this->tablesStack) - 1;
 
         $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
+            'isCheckboxCol' => false,
+            'isActionsCol' => false,
             'name' => $colName,
             // šis būs tekstuālais kolonnas nosaukums
             'slot' => $colName,
@@ -44,6 +46,45 @@ class TableComponentsManager
         return (object)[
             'table' => $tableIndex,
             'col' => $colsCount - 1,
+            //'attributes'
+        ];
+    }
+
+    public function registerColCheckbox($colName) {
+        $tableIndex = count($this->tablesStack) - 1;
+
+        $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
+            'isCheckboxCol' => true,
+            'isActionsCol' => false,
+            'name' => $colName,
+            'attributes' => null,
+        ]);
+
+        return (object)[
+            'table' => $tableIndex,
+            'col' => $colsCount - 1,
+            //'attributes'
+        ];
+    }
+
+    /**
+     * Actions button uz kura nospiešanas atveras actions menu
+     * DropDown menu ir jāreģistrē pašam. Jāpadod menu name
+     */
+    public function registerColActions($menu, $menuShow) {
+        $tableIndex = count($this->tablesStack) - 1;
+
+        $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
+            'isCheckboxCol' => false,
+            'isActionsCol' => true,
+            'attributes' => null,
+        ]);
+
+        return (object)[
+            'table' => $tableIndex,
+            'col' => $colsCount - 1,
+            'menu' => $menu,
+            'menuShow' => $menuShow,
             //'attributes'
         ];
     }

@@ -9,6 +9,7 @@ use Illuminate\View\ComponentAttributeBag;
 use Illuminate\Support\Facades\View as FacadeView;
 
 use Kasparsb\Ui\View\Components\Button;
+use Kasparsb\Ui\View\Components\Checkbox;
 use Kasparsb\Ui\View\Components\FieldDate;
 use Kasparsb\Ui\View\Components\FieldText;
 use Kasparsb\Ui\View\Components\FieldSelect;
@@ -47,6 +48,29 @@ class Table extends Component
      * Generate cell content for current row
      */
     public function cellContent($col, $row) {
+
+        if ($col->isCheckboxCol) {
+            return view(
+                'ui::components.checkbox',
+                $this->getClassConstructorParameters(Checkbox::class, [
+                    'attributes' => new ComponentAttributeBag([
+                        'data-table-checkrow' => '',
+                    ]),
+                    'name' => $col->name,
+                    'checked' => false,
+                ])
+            )->render();
+        }
+        else if ($col->isActionsCol) {
+            return view(
+                'ui::components.table-col-actions',
+                [
+                    'menu' => $col->menu,
+                    'menuShow' => $col->menuShow,
+                ]
+            )->render();
+        }
+
         $value = data_get($row, $col->name);
 
         // Custom view
@@ -122,6 +146,19 @@ class Table extends Component
 
         // Vērtība bez formatēšanas
         return $value;
+    }
+
+    public function cellContentCheckbox($col) {
+        return view(
+            'ui::components.checkbox',
+            $this->getClassConstructorParameters(Checkbox::class, [
+                'attributes' => new ComponentAttributeBag([
+                    'data-table-checkallrows' => '',
+                ]),
+                'name' => $col->name,
+                'checked' => false,
+            ])
+        )->render();
     }
 
     public function getClassConstructorParameters($className, $append=null) {

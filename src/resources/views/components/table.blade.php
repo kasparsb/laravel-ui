@@ -1,15 +1,19 @@
+@inject('helpers', 'Kasparsb\Ui\Helpers')
 @php
-// app('router')->getRoutes()->getByName($routeUpdate)->uri
+    $isAnyWidthClassPassed = $helpers->hasAnyWidthClass($attributes->get('class'))
 @endphp
 <table
-    {{ $attributes->class(['table']) }}
+    {{ $attributes->class([
+        'table' => true,
+        'w-full' => !$isAnyWidthClassPassed,
+    ]) }}
     @if ($submitable)
     data-submitable
     @if ($routeCreate)
-    data-link-create={{ $routeCreate }}
+    data-route-create={{ $routeCreate }}
     @endif
     @if ($routeUpdate)
-    data-link-update={{ $routeUpdate }}
+    data-route-update={{ $routeUpdate }}
     @endif
     @endif
     >
@@ -17,7 +21,11 @@
     <tr>
         @foreach ($cols() as $col)
         <th {{ $col->attributes }}>
+            @if ($col->isCheckboxCol)
+            {!! $cellContentCheckbox($col) !!}
+            @else
             <div>{{ $col->slot }}</div>
+            @endif
         </th>
         @endforeach
     </tr>

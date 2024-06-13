@@ -54,4 +54,25 @@ class Helpers
 
         return false;
     }
+
+    public function hasAnyWidthClass($classesString) {
+        if (!$classesString) {
+            return false;
+        }
+
+        $classesString = explode(' ', $classesString);
+        foreach ($classesString as $class) {
+            if ($class == 'w-full') {
+                return true;
+            }
+
+            preg_match('/^w-(\d+(\.\d+)?)$/', $class, $matches);
+
+            if (count($matches) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
