@@ -417,6 +417,14 @@ body {
         padding-left: @size020;
         padding-right: @size020;
     }
+    &.small {
+        .t-3();
+        height: @size070;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: @size020;
+        padding-right: @size020;
+    }
 
     &:is(a) {
         text-decoration: none;
@@ -542,7 +550,8 @@ body {
 .button-ghost {
     .button-base();
     color: var(--color-950);
-    background-color: hsl(var(--color-background));
+    //background-color: hsl(var(--color-background));
+    background-color: transparent;
     &:not([disabled]):hover {
         background-color: hsl(var(--color-100));
         .shadow();
@@ -991,6 +1000,13 @@ body {
                 margin-right: 0;
             }
         }
+
+        &.danger {
+            color: hsl(var(--color-danger));
+            &:hover {
+                background-color: hsl(var(--color-red-50));
+            }
+        }
     }
 
     // Visiem menu items tiek pieņemts, ka ir icon, ja nav, tad tiek atbrīvota vieta
@@ -1252,6 +1268,9 @@ body {
             border-bottom: 1px solid #e5e7eb;
         }
         th {
+
+            vertical-align: middle;
+
             >div {
                 .t-3\.5();
                 line-height: 1;
@@ -1263,19 +1282,20 @@ body {
                 height: @size100;
                 padding-left: @size020;
                 padding-right: @size020;
+
+                >svg {
+                    margin-right: @size015;
+                    width: @size040;
+                    height: @size040;
+                }
             }
             color: hsl(var(--color-muted));
 
-            svg {
-                margin-right: @size015;
-                width: @size040;
-                height: @size040;
-            }
-            // Tikai ikona, bet label
+            // Tikai ikona, bez label
             &.icon {
                 padding-left: @size020;
                 padding-right: @size020;
-                svg {
+                >svg {
                     margin-right: 0;
                 }
             }
@@ -1291,10 +1311,10 @@ body {
         }
         td {
             // šo vajag obligāti, pretējā gadījumā div un input elementi ir dažādās vietās viens top otrs bottom
-            vertical-align: top;
+            vertical-align: middle;
 
             // nav input lauka
-            &:not(:has(.form-field)) {
+            &:not(:has(.form-field)):not(:has(button)) {
                 padding: @size020;
                 .t-3\.5();
             }
