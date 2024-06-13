@@ -13,7 +13,7 @@ class MenuItem extends Component
         public $link = '',
         public $redirect = '', // redirect link pēc delete
         public $selected = null,
-        public $as='', // link, delet
+        public $as='', // link, delete, delete.tableRow
         public $linkSource = '', // data-{attribute name} lai varētu link ielasīt no click trigger el
         public $redirectSource = '', // data-{attribute name} lai varētu link ielasīt no click trigger el
     )

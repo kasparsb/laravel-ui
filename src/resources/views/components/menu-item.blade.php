@@ -8,6 +8,8 @@
     data-url="{{ $link }}"
     data-redirect="{{ $redirect }}"
     data-buttondelete=""
+    @elseif ($as == 'delete.tableRow')
+    data-buttondelete="tableRow"
     @endif
     @if ($redirectSource)
     data-redirect-source="{{ $redirectSource }}"

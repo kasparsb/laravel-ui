@@ -208,5 +208,23 @@ export default {
         on('mouseout', '[data-dropdown-menu-name]', (ev, menuEl) => {
             dropDownMenuHideTimeout = setTimeout(() => close(), 500)
         });
+    },
+
+    /**
+     * Aizveram redzamo DropdownMenu
+     */
+    close() {
+        if (isOpen) {
+            close();
+        }
+    },
+
+    /**
+     * Tagad vienkārši atgriež pēdējo aktīvo click trigger
+     * TODO jāsaprot vai tik brīvi var darīt? Pēc idejas, ja ir DropdownMenu redzams, tad pēdējas click trigger
+     * arī būs īstais. Nevar tā būt, ka notiek click un neredzama menuitem
+     */
+    findClickTrigger() {
+        return activeClickTriggerEl;
     }
 }
