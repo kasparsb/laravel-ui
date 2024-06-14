@@ -25,6 +25,8 @@ function addRow(tableEl) {
     }
 
     syncCheckAllRowsCheckbox(tableEl)
+
+    return newRow;
 }
 
 function deleteRow(trEl) {
@@ -55,7 +57,7 @@ function syncCheckAllRowsCheckbox(tableEl) {
     checkAllRowsCheckbox.checked = allChecked;
 }
 
-function updateRowData(trEl) {
+function postSingleRowDataToSever(trEl) {
     let tableEl = parent(trEl, '.table');
 
     let data = getFormData(trEl);
@@ -80,13 +82,78 @@ function updateRowData(trEl) {
     }
 }
 
+function isLastInputElementInTable(el) {
+    let tableEl = parent(el, 'tbody');
+    if (!tableEl) {
+        return false;
+    }
+
+    let trEl = parent(el, 'tr');
+    if (tableEl.rows[tableEl.rows.length-1] !== trEl) {
+        return false;
+    }
+
+    let tdEl = parent(el, 'td');
+
+    // Atrodam pēdējo input el rindā
+    let inputs = qa(trEl, 'input, select, button');
+
+    let lastTdEl = parent(inputs[inputs.length-1], 'td');
+
+    if (tdEl === lastTdEl) {
+        return true;
+    }
+
+    return false;
+}
+
+function focusFirstInput(trEl) {
+    let inputEls = qa(trEl, 'input, select, button');
+
+    for (let i = 0; i < inputEls.length; i++) {
+        // Skip row select checkbox
+        if (parent(inputEls[i], '[data-table-checkrow]', 'td')) {
+            continue;
+        }
+
+        // focus first input
+        inputEls[i].focus();
+        return;
+    }
+}
+
+let lastAction;
+
 export default {
     init() {
 
+        /**
+         * If last input element is being focused out, then add new row
+         * and focus first input element in row
+         */
+        on('focusout', 'input, select, button', (ev, el) => {
+            if (lastAction == 'tab') {
+                if (isLastInputElementInTable(el)) {
+                    focusFirstInput(addRow(parent(el, 'table')));
+                }
+            }
+        })
+        on('keydown', (ev) => {
+            if (ev.keyCode == 9) {
+                lastAction = 'tab';
+            }
+        })
+        on('click', (ev) => {
+            lastAction = 'click';
+        })
+
+        /**
+         * Mode when every single row is posted to server indivudalu
+         */
         on('focusout', 'input, select', (ev, el) => {
             let trEl = parent(el, 'tr');
             if (trEl) {
-                updateRowData(trEl)
+                postSingleRowDataToSever(trEl)
             }
         })
 
