@@ -1,19 +1,35 @@
 import {q, qa, r, parent, on} from 'dom-helpers';
 
 let FieldSelect = {
-    onChangeValue(selectEl) {
-        r(parent(selectEl, '[data-is-container]')).placeholder.innerHTML = q(selectEl, 'option:checked').innerHTML;
-    },
-    setEvents() {
-        on('change', '.field-select select', (ev, selectEl) => {
-            this.onChangeValue(selectEl)
-        })
+    onChangeValue(fieldSelectEl) {
+        let isEmpty = true;
+
+        let placeholderHTML = fieldSelectEl.dataset.placeholder;
+
+        let selectedOption = q(fieldSelectEl, 'option:checked');
+        if (selectedOption) {
+            if (selectedOption.value) {
+                placeholderHTML = selectedOption.innerHTML;
+                isEmpty = false;
+            }
+        }
+
+        if (isEmpty) {
+            fieldSelectEl.dataset.isEmpty = '';
+        }
+        else {
+            delete fieldSelectEl.dataset.isEmpty
+        }
+
+        r(fieldSelectEl).placeholder.innerHTML = placeholderHTML ? placeholderHTML : '';
     },
     init() {
         // Select
-        qa('.field-select').forEach(el => FieldSelect.onChangeValue(q(el, 'select')));
+        qa('.field-select').forEach(fieldSelectEl => FieldSelect.onChangeValue(fieldSelectEl));
 
-        this.setEvents();
+        on('change', '.field-select select', (ev, selectEl) => {
+            this.onChangeValue(parent(selectEl, '[data-is-container]'))
+        })
     }
 }
 

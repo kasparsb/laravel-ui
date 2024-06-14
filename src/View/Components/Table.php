@@ -115,6 +115,7 @@ class Table extends Component
                     'name' => $col->name,
                     'value' => $value,
                     'options' => $col->selectOptions,
+                    'placeholder' => $col->placeholder,
                 ])
             )->render();
         }

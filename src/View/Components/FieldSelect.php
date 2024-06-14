@@ -19,6 +19,7 @@ class FieldSelect extends Component
         public $name='',
         public $value='',
         public $description='',
+        public $placeholder='',
         public $options=false,
         // vai rādīt tukšo option elementu
         public $empty=true,

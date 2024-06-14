@@ -604,12 +604,8 @@ body {
         >[type=email],
         >[type=password],
         >[type=date],
-        >textarea,
-        >.select-placeholder {
+        >textarea {
             .input-text();
-            &:has(select:focus) {
-                .input-text-focused();
-            }
             width: 100%;
         }
     }
@@ -618,16 +614,23 @@ body {
         >[type=email],
         >[type=password],
         >[type=date],
-        >textarea,
-        >.select-placeholder {
+        >textarea {
             .input-text-error();
-            &:has(select:focus) {
-                .input-text-error-focused();
-            }
             width: 100%;
         }
     }
-    >.select-placeholder {
+
+    >textarea {
+        min-height: @size200;
+    }
+
+    // Description and error text
+    .form-field-description-error()
+}
+
+.field-select {
+    .select-placeholder {
+        width: 100%;
 
         display: flex;
         flex-flow: row nowrap;
@@ -650,13 +653,51 @@ body {
             width: @size040;
             height: @size040;
         }
-    }
-    >textarea {
-        min-height: @size200;
+
+        >div {
+            flex: 1;
+            position: relative;
+
+            // text size t-3.5 line-height un min-height
+            min-height: @size050;
+            line-height: @size050;
+
+            [data-r="placeholder"] {
+                position: absolute;
+                display: block;
+                left: 0;
+                top: 0;
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
     }
 
-    // Description and error text
-    .form-field-description-error()
+    &[data-is-empty] {
+        [data-r="placeholder"] {
+            color: hsl(var(--color-400))
+        }
+    }
+
+    &:not(:is([data-state="error"])) {
+        .select-placeholder {
+            .input-text();
+            &:has(select:focus) {
+                .input-text-focused();
+            }
+
+        }
+    }
+
+    &[data-state="error"] {
+        .select-placeholder {
+            .input-text-error();
+            &:has(select:focus) {
+                .input-text-error-focused();
+            }
+        }
+    }
 }
 
 /**
@@ -1378,8 +1419,15 @@ body {
 
             }
 
+            .toggle-switch {
+                span:has(input:focus-visible) {
+                    outline-color: hsl(var(--color-blue-400));
+                }
+            }
+
             .form-field {
                 border: 2px solid transparent;
+                .border-lg();
 
                 &:has(input:focus),
                 &:has(textarea:focus),
