@@ -1100,7 +1100,6 @@ body {
         display: inline-flex;
         align-items: center;
         border-radius: 9999px;
-        border: 2px solid #e5e7eb;
 
         width: @size110;
         height: @size060;
@@ -1145,7 +1144,16 @@ body {
             cursor: inherit;
         }
 
+        border: 2px solid hsl(var(--color-200));
         background-color: hsl(var(--color-200));
+
+        // focus outline
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+    }
+    // focus outline. Tikai kad ar keyboard fokusē. Ja ar peli, tad nav
+    span:has(input:focus-visible) {
+        outline-color: hsl(var(--color-400));
     }
 
     // Description and error text
