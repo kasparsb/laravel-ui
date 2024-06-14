@@ -1,4 +1,4 @@
-import {jsx, q, qa, parent, addStyle, append, replaceContent, getOffset, isChild, click} from 'dom-helpers';
+import {jsx, q, qa, parent, addStyle, append, replaceContent, getOffset, isChild, on} from 'dom-helpers';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
@@ -101,6 +101,12 @@ function dateSelected(date) {
     activeField.value = ymd(date);
 
     /**
+     * Šo tālāk pārbaudīt focusin, lai atkārtoti nerādītu kalendāru
+     */
+    wasSetDateInInputFromCalendar = true;
+    activeField.focus();
+
+    /**
      * @todo šo vēl vajag kārtīgi pārbaudīt
      * tieši event trigerošanu, lai nostrādā visi
      * citi change eventi
@@ -173,21 +179,91 @@ function validateFieldValue(inputFieldEl) {
     }
 }
 
+let closeTimeout = 0;
+let wasMouseDown = false;
+let wasSetDateInInputFromCalendar = false;
+
 export default {
     init() {
-        click('html', (ev, el) => {
-            if (isOpen) {
+
+
+        /**
+         * TODO Šitā visa mega loģika, lai kalendārs atvērtos gan uz click gan uz focus
+         * TODO kā arī lai aizvērtos uz focusout, esc, out of element click
+         * TODO bet lai nevērtos ciet, ja pašā kalendārā sāk klikšķināt
+         */
+
+        on('click', 'html', (ev, el) => {
+            // Ja ir .field-data input, tad skip
+            if (parent(ev.target, '.field-date')) {
+                clearTimeout(closeTimeout);
+            }
+            else {
+                if (isChild(ev.target, container)) {
+                    clearTimeout(closeTimeout);
+                }
                 // Ja el nav date pickerī, tad aizveram kalendāru
-                if (!isChild(ev.target, container)) {
-                    close();
+                else {
+                    if (isOpen) {
+                        closeTimeout = setTimeout(() => close(), 50);
+                    }
                 }
             }
-
         })
 
-        click('.field-date input', (ev, el) => {
+        on('mousedown', ev => {
+            if (isChild(ev.target, container)) {
+                wasMouseDown = true;
+            }
+        })
+
+        // close on esc
+        on('keydown', '.field-date input', (ev, el) => {
+            // esc
+            if (ev.keyCode == 27) {
+                if (isOpen) {
+                    closeTimeout = setTimeout(() => close(), 50);
+                }
+            }
+            // tab
+            else if (ev.keyCode == 9) {
+            }
+            else {
+                if (!isOpen) {
+                    open(el)
+                }
+            }
+        })
+
+        on('focusout', '.field-date input', (ev) => {
+            if (isOpen) {
+                if (!wasMouseDown) {
+                    if (!isChild(ev.target, container)) {
+                        closeTimeout = setTimeout(() => close(), 50);
+                    }
+                }
+            }
+            wasMouseDown = false;
+        })
+
+        on('click', '.field-date input', (ev, el) => {
+            clearTimeout(closeTimeout);
             open(el)
         })
+
+        on('focusin', '.field-date input', (ev, el) => {
+            if (!wasSetDateInInputFromCalendar) {
+                clearTimeout(closeTimeout);
+                open(el)
+            }
+            wasSetDateInInputFromCalendar = false;
+        })
+
+
+
+
+
+
 
         /**
          * Visiem field-date uzstādām min|max date no
