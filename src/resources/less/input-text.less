@@ -17,11 +17,26 @@
 
     outline: none;
 }
+
+.input-text-focused {
+    border-color: hsl(var(--color-400));
+}
+.input-text-error-focused {
+    border-color: hsl(var(--color-red-400));
+}
 .input-text {
     box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
     border-color: hsl(var(--color-200));
+
+    &:focus {
+        .input-text-focused();
+    }
 }
 .input-text-error {
     box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
     border-color: hsl(var(--color-red-200));
+
+    &:focus {
+        .input-text-error-focused();
+    }
 }

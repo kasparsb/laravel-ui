@@ -607,6 +607,9 @@ body {
         >textarea,
         >.select-placeholder {
             .input-text();
+            &:has(select:focus) {
+                .input-text-focused();
+            }
             width: 100%;
         }
     }
@@ -618,10 +621,14 @@ body {
         >textarea,
         >.select-placeholder {
             .input-text-error();
+            &:has(select:focus) {
+                .input-text-error-focused();
+            }
             width: 100%;
         }
     }
     >.select-placeholder {
+
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
@@ -1199,6 +1206,8 @@ body {
         flex-flow: row nowrap;
         align-items: center;
         gap: @size020;
+
+        position: relative;
     }
 
     span {
@@ -1206,10 +1215,25 @@ body {
         justify-content: center;
         align-items: center;
 
+        position: relative;
+
         width: @size040;
         height: @size040;
 
-        .border-sm();
+        // border elements. Lai var mainīt width un tas neiteikmē svg (checkmark) platumu
+        &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            .border-sm();
+
+            z-index: 1;
+        }
 
         color: #fff;
 
@@ -1220,6 +1244,8 @@ body {
             height: @size040;
 
             display: block;
+
+            z-index: 2;
         }
 
         &:has(input:checked) {
@@ -1229,7 +1255,10 @@ body {
         }
 
         input {
-            display: none;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     }
     &:not(:is([data-state="error"])) {
@@ -1237,10 +1266,19 @@ body {
             .input-label();
         }
         span {
-            border: 1px solid hsl(var(--color-900));
+            &:before {
+                border: 1px solid hsl(var(--color-900));
+            }
+            &:has(input:focus) {
+                &:before {
+                    border: 2px solid hsl(var(--color-900));
+                }
+            }
 
             &:has(input:checked) {
-                background-color: hsl(var(--color-900));
+                &:before {
+                    background-color: hsl(var(--color-900));
+                }
             }
         }
     }
@@ -1249,9 +1287,18 @@ body {
             .input-label-error();
         }
         span {
-            border: 1px solid hsl(var(--color-error));
+            &:before {
+                border: 1px solid hsl(var(--color-error));
+            }
+            &:has(input:focus) {
+                &:before {
+                    border: 2px solid hsl(var(--color-error));
+                }
+            }
             &:has(input:checked) {
-                background-color: hsl(var(--color-error));
+                &:before {
+                    background-color: hsl(var(--color-error));
+                }
             }
         }
     }
