@@ -19,6 +19,8 @@
                 <div>
                 @if ($col->isCheckboxCol)
                 {!! $cellContentCheckbox($col) !!}
+                @elseif ($col->isHidden)
+
                 @else
                 {{ $col->slot }}
                 @endif
@@ -28,15 +30,25 @@
         </tr>
     </thead>
     <tbody>
+        @if (!count($rows))
+        <tr hidden data-table-blank-row>
+            @foreach ($cols() as $col)
+            <td {{ $col->attributes->merge(['data-name' => $col->name,]) }}>
+                <div>{!! $cellContent($col, null, 0) !!}</div>
+            </td>
+            @endforeach
+        </tr>
+        @else
         @foreach ($rows as $row)
         <tr>
             @foreach ($cols() as $col)
-            <td {{ $col->attributes }}>
-                <div>{!! $cellContent($col, $row) !!}</div>
+            <td {{ $col->attributes->merge(['data-name' => $col->name]) }}>
+                <div>{!! $cellContent($col, $row, $loop->parent->index) !!}</div>
             </td>
             @endforeach
         </tr>
         @endforeach
+        @endif
     </tbody>
     </table>
 </div>

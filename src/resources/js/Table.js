@@ -4,8 +4,18 @@ import {
 } from 'dom-helpers';
 
 function addRow(tableEl) {
+
     // Klonējam pēdējo row
     let lastTrEl = q(tableEl, 'tbody tr:last-child');
+
+    // Ja tabulā nav datu, tad nebūs nevienas īstās row ko klonēt
+    // tāpēc tukšā tabulā vienmēr būs hidden tukša rinda, to tad šajā
+    // mirklī padaram redzamu
+    if ('tableBlankRow' in lastTrEl.dataset) {
+        lastTrEl.hidden = false;
+        delete lastTrEl.dataset.tableBlankRow;
+        return lastTrEl;
+    }
 
     let newRow = clone(lastTrEl);
 
@@ -20,13 +30,42 @@ function addRow(tableEl) {
 
     newRow = append(q(tableEl, 'tbody'), newRow);
 
+    setRowInputFieldsNames(tableEl, newRow);
+
     syncCheckAllRowsCheckbox(tableEl)
 
     return newRow;
 }
 
+/**
+ * Rindas input elementiem uzstāda atbilstošo name, lai tiktu
+ * ņemts vērā tabla name un sectionRowIndex
+ *
+ * šāda struktūra name
+ * tablename[sectionRowIndex][columnname]
+ *
+ * doma tāda, lai postējot servera pusē var nolasīt lauku pēc
+ * table name un serera pusē būtu masīvs ar visām tabulas rindām
+ */
+function setRowInputFieldsNames(tableEl, trEl) {
+    // sectionRowIndex jo tas ir relatīvs pret tbody
+    let rowIndex = trEl.sectionRowIndex;
+
+    qa(trEl, 'td').forEach(tdEl => {
+        let inputEl = q(tdEl, 'input, select, textarea');
+        if (inputEl) {
+            inputEl.name = tableEl.dataset.name + '['+rowIndex+']['+tdEl.dataset.name+']';
+        }
+    })
+}
+
 function deleteRow(trEl) {
+    let tableEl = parent(trEl, '.table');
+
     remove(trEl);
+
+    // dzēšot row vajag visām rindā atjaunot input names, lai ir secīgi pēc ar rindu index
+    qa('tbody tr').forEach(trEl => setRowInputFieldsNames(tableEl, trEl));
 }
 
 function setRowsChecked(tableEl, checked) {
@@ -60,6 +99,12 @@ function focusFirstInput(trEl) {
     let inputEls = qa(trEl, 'input, select, button');
 
     for (let i = 0; i < inputEls.length; i++) {
+        if (inputEls[i].hidden) {
+            continue;
+        }
+        if (inputEls[i].type == 'hidden') {
+            continue;
+        }
         // Skip row select checkbox
         if (parent(inputEls[i], '[data-r="tableRowCheck"]', 'td')) {
             continue;

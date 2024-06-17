@@ -2,6 +2,8 @@
 
 namespace Kasparsb\Ui\View;
 
+use Illuminate\View\ComponentAttributeBag;
+
 /**
  * Ārējais state priekš component Table
  * Lai table var piereģistrēt kādas TableCol komponentes ir
@@ -36,6 +38,7 @@ class TableComponentsManager
             'isCheckboxCol' => false,
             'isActionsCol' => false,
             'isDeleteCol' => false,
+            'isHidden' => false,
             'name' => $colName,
             // šis būs tekstuālais kolonnas nosaukums
             'slot' => $colName,
@@ -58,6 +61,7 @@ class TableComponentsManager
             'isCheckboxCol' => true,
             'isActionsCol' => false,
             'isDeleteCol' => false,
+            'isHidden' => false,
             'name' => $colName,
             'attributes' => null,
         ]);
@@ -80,6 +84,8 @@ class TableComponentsManager
             'isCheckboxCol' => false,
             'isActionsCol' => true,
             'isDeleteCol' => false,
+            'isHidden' => false,
+            'name' => '',
             'attributes' => null,
         ]);
 
@@ -102,6 +108,8 @@ class TableComponentsManager
             'isCheckboxCol' => false,
             'isActionsCol' => false,
             'isDeleteCol' => true,
+            'isHidden' => false,
+            'name' => '',
             'attributes' => null,
         ]);
 
@@ -113,7 +121,26 @@ class TableComponentsManager
     }
 
     public function getCols($tableIndex) {
-        return $this->tablesStack[$tableIndex]->cols;
+        $cols = $this->tablesStack[$tableIndex]->cols;
+
+        // Ja table ir editable, tad make sure, ka ir id kolonna
+        // ja nav, tad uztaisa hidden kolonnu
+        $hasIdCol = collect($cols)->firstWhere('name', 'id');
+
+        if (!$hasIdCol) {
+            array_unshift($cols, (object)[
+                'isCheckboxCol' => false,
+                'isActionsCol' => false,
+                'isDeleteCol' => false,
+                'isHidden' => true,
+                'name' => 'id',
+                'attributes' => new ComponentAttributeBag([
+                    'hidden' => true,
+                ]),
+            ]);
+        }
+
+        return $cols;
     }
 
     /**

@@ -45,7 +45,8 @@ class Table extends Component
     /**
      * Generate cell content for current row
      */
-    public function cellContent($col, $row) {
+    public function cellContent($col, $row, $rowIndex) {
+        $value = data_get($row, $col->name);
 
         if ($col->isCheckboxCol) {
             return $this->cellContentCheckbox($col);
@@ -64,8 +65,11 @@ class Table extends Component
                 'ui::components.table-col-delete'
             )->render();
         }
+        else if ($col->isHidden) {
+            return '<input type="hidden" name="'.$this->fieldName($col->name, $rowIndex).'" value="'.$value.'" />';
+        }
 
-        $value = data_get($row, $col->name);
+
 
         // Custom view
         if ($col->v && FacadeView::exists($col->v)) {
@@ -84,7 +88,7 @@ class Table extends Component
                 'ui::components.field-text',
                 $this->getClassConstructorParameters(FieldText::class, [
                     'attributes' => new ComponentAttributeBag(),
-                    'name' => $col->name,
+                    'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'placeholder' => $col->placeholder,
                 ])
@@ -95,7 +99,7 @@ class Table extends Component
                 'ui::components.field-date',
                 $this->getClassConstructorParameters(FieldDate::class, [
                     'attributes' => new ComponentAttributeBag(),
-                    'name' => $col->name,
+                    'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'placeholder' => $col->placeholder,
                 ])
@@ -106,7 +110,7 @@ class Table extends Component
                 'ui::components.field-select',
                 $this->getClassConstructorParameters(FieldSelect::class, [
                     'attributes' => new ComponentAttributeBag(),
-                    'name' => $col->name,
+                    'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'options' => $col->selectOptions,
                     'placeholder' => $col->placeholder,
@@ -119,7 +123,7 @@ class Table extends Component
                 $this->getClassConstructorParameters(FieldToggleSwitch::class, [
                     'attributes' => new ComponentAttributeBag(),
                     'labelPosition' => 'right',
-                    'name' => $col->name,
+                    'name' => $this->fieldName($col->name, $rowIndex),
                     'checked' => $value ? true : false,
                     'placeholder' => $col->placeholder,
                 ])
@@ -172,6 +176,10 @@ class Table extends Component
         }
 
         return $params;
+    }
+
+    public function fieldName($fieldName, $rowIndex) {
+        return $this->name.'['.$rowIndex.']['.$fieldName.']';
     }
 
     public function render(): View|Closure|string
