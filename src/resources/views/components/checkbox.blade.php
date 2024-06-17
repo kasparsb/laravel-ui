@@ -4,7 +4,7 @@
     >
     <label>
         <span>
-            <input type="checkbox" name="{{ $name }}" @checked($checked) value="1" />
+            <input type="checkbox" name="{{ $name }}" @checked($checked) value="{{ $value }}" />
             <svg>
                 <use xlink:href="#checkbox-checked"></use>
             </svg>
