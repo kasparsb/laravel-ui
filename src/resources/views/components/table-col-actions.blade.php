@@ -1,5 +1,6 @@
 <x-ui::button-ghost
     class="icon small"
+    data-r="tableRowActions"
     :menu="$menu"
     :menuShow="$menuShow"
     >

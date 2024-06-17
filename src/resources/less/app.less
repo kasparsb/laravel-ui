@@ -258,6 +258,27 @@ body {
     text-align: center;
 }
 
+/**
+ * Button or link disabled base state
+ */
+.button-link-disabled-base-state {
+    /**
+     * neizmantoju &:enabled un &:disabled, jo tas nedarbojas uz linkiem
+     */
+    &[disabled] {
+        cursor: default;
+    }
+
+    // disabled link
+    &:is(a[disabled]) {
+        pointer-events: none;
+    }
+
+    &[disabled] {
+        opacity: .6;
+    }
+}
+
 .badge {
     display: inline-flex;
     flex-flow: row nowrap;
@@ -430,22 +451,7 @@ body {
         text-decoration: none;
     }
 
-    /**
-     * neizmantoju &:enabled un &:disabled, jo tas nedarbojas uz linkiem
-     */
-
-    &[disabled] {
-        cursor: default;
-    }
-
-    // disabled link
-    &:is(a[disabled]) {
-        pointer-events: none;
-    }
-
-    &[disabled] {
-        opacity: .6;
-    }
+    .button-link-disabled-base-state();
 
     svg.spinner {
         display: none;
@@ -636,6 +642,8 @@ body {
         flex-flow: row nowrap;
         align-items: center;
         justify-content: space-between;
+
+        gap: @size015;
 
         position: relative;
 
@@ -1010,6 +1018,8 @@ body {
     >.menu-item {
         .remove-tap-highlite();
 
+        .button-link-disabled-base-state();
+
         display: inline-flex;
         justify-content: flex-start;
         align-items: center;
@@ -1357,16 +1367,31 @@ body {
 }
 
 .table {
-    border-collapse: collapse;
+
+    border: 1px solid hsl(var(--color-200));
+    .border-md();
+    .shadow();
+
+    table {
+        border-collapse: collapse;
+        .w-full();
+    }
+
+    th, td {
+        // šo vajag obligāti, pretējā gadījumā div un input elementi ir dažādās vietās viens top otrs bottom
+        vertical-align: middle;
+    }
 
     thead {
         tr {
-            border-bottom: 1px solid #e5e7eb;
+            border-top: 1px solid hsl(var(--color-200));
+
+            &:nth-child(1) {
+                border-top: 0;
+            }
         }
+
         th {
-
-            vertical-align: middle;
-
             >div {
                 .t-3\.5();
                 line-height: 1;
@@ -1375,9 +1400,9 @@ body {
                 flex-direction: row;
                 align-items: center;
                 justify-content: flex-start;
-                height: @size100;
-                padding-left: @size020;
-                padding-right: @size020;
+                text-align: left;
+                height: @size120;
+                padding: @size020;
 
                 >svg {
                     margin-right: @size015;
@@ -1385,6 +1410,7 @@ body {
                     height: @size040;
                 }
             }
+
             color: hsl(var(--color-muted));
 
             // Tikai ikona, bez label
@@ -1400,23 +1426,39 @@ body {
 
     tbody {
         tr {
-            border-bottom: 1px solid #e5e7eb;
+            border-top: 1px solid hsl(var(--color-200));
+
             &:hover {
                 background-color: hsl(var(--color-100)/.5);
             }
+            &:has([data-table-checkrow] input:checked) {
+                background-color: hsl(var(--color-200)/.5);
+            }
         }
         td {
-            // šo vajag obligāti, pretējā gadījumā div un input elementi ir dažādās vietās viens top otrs bottom
-            vertical-align: middle;
-
-            // nav input lauka
-            &:not(:has(.form-field)):not(:has(button)) {
-                padding: @size020;
+            >div {
                 .t-3\.5();
-            }
-            // ir input lauks
-            &:has(.form-field) {
+                line-height: 1;
 
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                text-align: left;
+
+                height: @size120;
+                padding: @size020;
+
+                // ir input lauks
+                &:has(.form-field) {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+
+                // form field liekam aizņemt visu platumu
+                >.form-field {
+                    flex: 1;
+                }
             }
 
             .toggle-switch {
@@ -1446,6 +1488,58 @@ body {
                     padding-left: @size020;
                     padding-right: @size020;
                 }
+            }
+        }
+    }
+
+    th, td {
+        &:has([data-r="tableRowCheck"]) {
+            width: @size100;
+            >div {
+                justify-content: center
+            }
+        }
+        &:has([data-r="tableRowActions"]) {
+            width: @size160;
+            >div {
+                justify-content: center
+            }
+        }
+
+
+        // additional alignment
+        &.h-left {
+            >div {
+                justify-content: flex-start;
+                text-align: left;
+            }
+        }
+        &.h-right {
+            >div {
+                justify-content: flex-end;
+                text-align: right;
+            }
+        }
+        &.h-center {
+            >div {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        &.v-top {
+            >div {
+                align-items: flex-start;
+            }
+        }
+        &.v-bottom {
+            >div {
+                align-items: flex-end;
+            }
+        }
+        &.v-center {
+            >div {
+                align-items: center;
             }
         }
     }

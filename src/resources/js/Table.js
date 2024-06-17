@@ -1,11 +1,13 @@
 import {
-    q, qa, append, remove, parent, on, getFormData, post, clone,
-    clearFormData, change
+    q, r, qa, append, remove, parent, on, getFormData, post, clone,
+    clearFormData, change, ce
 } from 'dom-helpers';
 
 function addRow(tableEl) {
     // Klonējam pēdējo row
-    let newRow = clone(q(tableEl, 'tbody tr:last-child'));
+    let lastTrEl = q(tableEl, 'tbody tr:last-child');
+
+    let newRow = clone(lastTrEl);
 
     // clean up values in input fields
     clearFormData(newRow);
@@ -18,12 +20,6 @@ function addRow(tableEl) {
 
     newRow = append(q(tableEl, 'tbody'), newRow);
 
-    // focus first field
-    let firstInputField = q(newRow, 'input, select');
-    if (firstInputField) {
-        firstInputField.focus()
-    }
-
     syncCheckAllRowsCheckbox(tableEl)
 
     return newRow;
@@ -34,77 +30,30 @@ function deleteRow(trEl) {
 }
 
 function setRowsChecked(tableEl, checked) {
-    qa(tableEl, '[data-table-checkrow] input').forEach(checkboxEl => {
+    qa(tableEl, '[data-r="tableRowCheck"] input').forEach(checkboxEl => {
         checkboxEl.checked = checked
     });
 }
 
 function syncCheckAllRowsCheckbox(tableEl) {
-    let checkAllRowsCheckbox = q(tableEl, 'thead [data-table-checkallrows] input');
+    let checkAllRowsCheckbox = q(tableEl, 'thead [data-r="tableRowCheck"] input');
     if (!checkAllRowsCheckbox) {
         return;
     }
 
-    let allChecked = true;
-    let rowCheckboxes = qa(tableEl, '[data-table-checkrow] input');
-    for (let i = 0; i < rowCheckboxes.length; i++) {
-        if (!rowCheckboxes[i].checked) {
-            allChecked = false
-            break;
+    let allChecked = false;
+    let rowCheckboxes = qa(tableEl, 'tbody [data-r="tableRowCheck"] input');
+    if (rowCheckboxes.length > 0) {
+        allChecked = true;
+        for (let i = 0; i < rowCheckboxes.length; i++) {
+            if (!rowCheckboxes[i].checked) {
+                allChecked = false
+                break;
+            }
         }
     }
 
     checkAllRowsCheckbox.checked = allChecked;
-}
-
-function postSingleRowDataToSever(trEl) {
-    let tableEl = parent(trEl, '.table');
-
-    let data = getFormData(trEl);
-    let link = '';
-    if (data.id) {
-        link = tableEl.dataset.linkUpdate;
-
-        /**
-         * TODO vajag kaut kā dabūt link, lai te nekas nav jārepleico
-         */
-        if (link) {
-            link = link.replace('#id#', data.id);
-        }
-    }
-    else {
-        link = tableEl.dataset.linkCreate;
-    }
-
-    if (link) {
-        post(link, data)
-            .then(r => console.log(r));
-    }
-}
-
-function isLastInputElementInTable(el) {
-    let tableEl = parent(el, 'tbody');
-    if (!tableEl) {
-        return false;
-    }
-
-    let trEl = parent(el, 'tr');
-    if (tableEl.rows[tableEl.rows.length-1] !== trEl) {
-        return false;
-    }
-
-    let tdEl = parent(el, 'td');
-
-    // Atrodam pēdējo input el rindā
-    let inputs = qa(trEl, 'input, select, button');
-
-    let lastTdEl = parent(inputs[inputs.length-1], 'td');
-
-    if (tdEl === lastTdEl) {
-        return true;
-    }
-
-    return false;
 }
 
 function focusFirstInput(trEl) {
@@ -112,17 +61,40 @@ function focusFirstInput(trEl) {
 
     for (let i = 0; i < inputEls.length; i++) {
         // Skip row select checkbox
-        if (parent(inputEls[i], '[data-table-checkrow]', 'td')) {
+        if (parent(inputEls[i], '[data-r="tableRowCheck"]', 'td')) {
             continue;
         }
 
         // focus first input
-        inputEls[i].focus();
+        inputEls[i].focus()
+
         return;
     }
 }
 
-let lastAction;
+function createLastFocusinEl() {
+    return ce('div', {
+        data: {
+            r: 'lastfocusouttrapdiv'
+        },
+        style: {
+            width: '0px',
+            height: '0px',
+            overflow: 'hidden'
+        }
+    }, [
+        ce('input', {
+            data: {
+                r: 'lastfocusouttrap'
+            }
+        })
+    ])
+}
+
+function addLastFocusinTrap(tableEl) {
+    append(tableEl, createLastFocusinEl());
+
+}
 
 export default {
     init() {
@@ -130,54 +102,50 @@ export default {
         /**
          * If last input element is being focused out, then add new row
          * and focus first input element in row
+         *
+         * * focusout eventā ir par vēlu likt jauno rindu un meģināt to fokusēt,
+         * * jo ja table rindā tas ir pēdējais elements lapā, tad uz focusout
+         * * fokuss aiziet kaut kur ārpus lapas un pēc tam vairs nevar dabūt
+         * * fokusu atpakaļ uz jaunizveidoto rindu
+         * * jauno rindu vajag ielikt laicīgi un noslēpt
+         *
+         * * taisam focusin trap input lauku, kurš kaut kā jāpadara neredzams un tam
+         * * ir jābūt pašam pēdējām tabulā
+         * * tikko, tas dabūt focusin, tā taisam jaunu rindu un foksuēja pirmo input
+         *
          */
-        on('focusout', 'input, select, button', (ev, el) => {
-            if (lastAction == 'tab') {
-                if (isLastInputElementInTable(el)) {
-                    focusFirstInput(addRow(parent(el, 'table')));
-                }
-            }
-        })
-        on('keydown', (ev) => {
-            if (ev.keyCode == 9) {
-                lastAction = 'tab';
-            }
-        })
-        on('click', (ev) => {
-            lastAction = 'click';
-        })
-
-        /**
-         * Mode when every single row is posted to server indivudalu
-         */
-        on('focusout', 'input, select', (ev, el) => {
-            let trEl = parent(el, 'tr');
-            if (trEl) {
-                postSingleRowDataToSever(trEl)
-            }
+        on('focusin', '.table [data-r="lastfocusouttrap"]', (ev, el) => {
+            focusFirstInput(addRow(parent(el, '.table')));
         })
 
         // Checkbox check/uncheck all table rows
-        change('.table thead [data-table-checkallrows] input', (ev, el) => {
+        change('.table thead [data-r="tableRowCheck"] input', (ev, el) => {
             let tableEl = parent(el, 'table');
             if (tableEl) {
                 setRowsChecked(tableEl, el.checked)
             }
         })
 
-        change('.table tbody [data-table-checkrow] input', (ev, el) => {
-            let tableEl = parent(el, 'table');
+        change('.table tbody [data-r="tableRowCheck"] input', (ev, el) => {
+            let tableEl = parent(el, '.table');
             if (tableEl) {
                 syncCheckAllRowsCheckbox(tableEl);
             }
         })
+
+
+
+        qa('.table').forEach(tableEl => addLastFocusinTrap(tableEl));
     },
 
     /**
      * Add new row to table
      */
-    addRow(tableEl) {
-        addRow(tableEl);
+    addRow(tableNameOrEl) {
+        if (typeof tableNameOrEl == 'string') {
+            tableNameOrEl = q(`.table[data-name="${tableNameOrEl}"]`)
+        }
+        addRow(tableNameOrEl);
     },
 
     deleteRow(trEl) {

@@ -26,9 +26,7 @@ class Table extends Component
         // Data
         public $rows = [],
         public $formatter = null,
-        public $submitable = false,
-        public $routeCreate = '',
-        public $routeUpdate = '',
+        public $name = '',
     )
     {
         // Klases, kura nodrošinās cell vērtību formatēšanu
@@ -50,16 +48,7 @@ class Table extends Component
     public function cellContent($col, $row) {
 
         if ($col->isCheckboxCol) {
-            return view(
-                'ui::components.checkbox',
-                $this->getClassConstructorParameters(Checkbox::class, [
-                    'attributes' => new ComponentAttributeBag([
-                        'data-table-checkrow' => '',
-                    ]),
-                    'name' => $col->name,
-                    'checked' => false,
-                ])
-            )->render();
+            return $this->cellContentCheckbox($col);
         }
         else if ($col->isActionsCol) {
             return view(
@@ -154,7 +143,7 @@ class Table extends Component
             'ui::components.checkbox',
             $this->getClassConstructorParameters(Checkbox::class, [
                 'attributes' => new ComponentAttributeBag([
-                    'data-table-checkallrows' => '',
+                    'data-r' => 'tableRowCheck',
                 ]),
                 'name' => $col->name,
                 'checked' => false,
