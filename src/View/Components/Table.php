@@ -59,6 +59,11 @@ class Table extends Component
                 ]
             )->render();
         }
+        else if ($col->isDeleteCol) {
+            return view(
+                'ui::components.table-col-delete'
+            )->render();
+        }
 
         $value = data_get($row, $col->name);
 

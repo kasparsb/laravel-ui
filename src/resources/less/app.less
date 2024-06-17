@@ -1500,12 +1500,17 @@ body {
             }
         }
         &:has([data-r="tableRowActions"]) {
-            width: @size160;
+            width: @size140;
             >div {
                 justify-content: center
             }
         }
-
+        &:has([data-r="tableRowDelete"]) {
+            width: @size140;
+            >div {
+                justify-content: center
+            }
+        }
 
         // additional alignment
         &.h-left {

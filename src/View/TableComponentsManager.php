@@ -35,6 +35,7 @@ class TableComponentsManager
         $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
             'isCheckboxCol' => false,
             'isActionsCol' => false,
+            'isDeleteCol' => false,
             'name' => $colName,
             // šis būs tekstuālais kolonnas nosaukums
             'slot' => $colName,
@@ -56,6 +57,7 @@ class TableComponentsManager
         $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
             'isCheckboxCol' => true,
             'isActionsCol' => false,
+            'isDeleteCol' => false,
             'name' => $colName,
             'attributes' => null,
         ]);
@@ -77,6 +79,7 @@ class TableComponentsManager
         $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
             'isCheckboxCol' => false,
             'isActionsCol' => true,
+            'isDeleteCol' => false,
             'attributes' => null,
         ]);
 
@@ -85,6 +88,26 @@ class TableComponentsManager
             'col' => $colsCount - 1,
             'menu' => $menu,
             'menuShow' => $menuShow,
+            //'attributes'
+        ];
+    }
+
+    /**
+     * Table row delete poga
+     */
+    public function registerColDelete() {
+        $tableIndex = count($this->tablesStack) - 1;
+
+        $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
+            'isCheckboxCol' => false,
+            'isActionsCol' => false,
+            'isDeleteCol' => true,
+            'attributes' => null,
+        ]);
+
+        return (object)[
+            'table' => $tableIndex,
+            'col' => $colsCount - 1,
             //'attributes'
         ];
     }
