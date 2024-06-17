@@ -27,6 +27,12 @@ class Table extends Component
         public $rows = [],
         public $formatter = null,
         public $name = '',
+        /**
+         * Ja true, tad dzēstiem tabulas ieraksti tik saglabāti tabulā, kā hidden
+         * ierakstam tiks pielikts hidden input lauks _deleted
+         * Pēc šī lauka servera pusē zinās, ka šo ierakstu vajag dzēst
+         */
+        public $trackDeleted = false,
     )
     {
         // Klases, kura nodrošinās cell vērtību formatēšanu
@@ -34,12 +40,14 @@ class Table extends Component
             $this->formatter = new $this->formatter();
         }
 
+        if ($this->trackDeleted) {
+            if (is_bool($this->trackDeleted)) {
+                $this->trackDeleted = '_deleted';
+            }
+        }
+
         $this->manager = app(TableComponentsManager::class);
         $this->index = $this->manager->registerTable($this->formatter);
-    }
-
-    public function cols() {
-        return $this->manager->getCols($this->index);
     }
 
     /**
@@ -49,7 +57,7 @@ class Table extends Component
         $value = data_get($row, $col->name);
 
         if ($col->isCheckboxCol) {
-            return $this->cellContentCheckbox($col);
+            return $this->cellContentCheckbox($col, $rowIndex, $value);
         }
         else if ($col->isActionsCol) {
             return view(
@@ -147,15 +155,16 @@ class Table extends Component
         return $value;
     }
 
-    public function cellContentCheckbox($col) {
+    public function cellContentCheckbox($col, $rowIndex=null, $value=null) {
         return view(
             'ui::components.checkbox',
             $this->getClassConstructorParameters(Checkbox::class, [
                 'attributes' => new ComponentAttributeBag([
                     'data-r' => 'tableRowCheck',
                 ]),
-                'name' => $col->name,
+                'name' => $this->fieldName($col->name, $rowIndex),
                 'checked' => false,
+                'value' => $value,
             ])
         )->render();
     }
@@ -178,8 +187,18 @@ class Table extends Component
         return $params;
     }
 
-    public function fieldName($fieldName, $rowIndex) {
+    public function fieldName($fieldName, $rowIndex=null) {
+        if (!$fieldName) {
+            return '';
+        }
+        if (is_null($rowIndex)) {
+            return '';
+        }
         return $this->name.'['.$rowIndex.']['.$fieldName.']';
+    }
+
+    public function cols() {
+        return $this->manager->getCols($this->index);
     }
 
     public function render(): View|Closure|string

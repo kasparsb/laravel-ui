@@ -1,5 +1,5 @@
 import {
-    q, r, qa, append, remove, parent, on, getFormData, post, clone,
+    q, qa, append, remove, parent, on, value, clone,
     clearFormData, change, ce
 } from 'dom-helpers';
 
@@ -52,17 +52,45 @@ function setRowInputFieldsNames(tableEl, trEl) {
     let rowIndex = trEl.sectionRowIndex;
 
     qa(trEl, 'td').forEach(tdEl => {
-        let inputEl = q(tdEl, 'input, select, textarea');
-        if (inputEl) {
-            inputEl.name = tableEl.dataset.name + '['+rowIndex+']['+tdEl.dataset.name+']';
-        }
+        // Dēļ trackDeleted vienā td var būt vairāki input elementi
+        qa(tdEl, 'input, select, textarea').forEach(inputEl => {
+            // Speciāls gadījums. Deleted rows tracking field
+            if ('trackDeleted' in inputEl.dataset) {
+                // tam kā name izmanotjam inputEl.dataset.trackDeleted
+                inputEl.name = tableEl.dataset.name + '['+rowIndex+']['+inputEl.dataset.trackDeleted+']';
+            }
+            else {
+                inputEl.name = tableEl.dataset.name + '['+rowIndex+']['+tdEl.dataset.name+']';
+            }
+        });
     })
 }
 
 function deleteRow(trEl) {
     let tableEl = parent(trEl, '.table');
 
-    remove(trEl);
+    let idFieldName = tableEl.dataset.name + '['+trEl.sectionRowIndex+'][id]';
+
+    // Track deleted darbojas tikai kopā ar id
+    if (('trackDeleted' in tableEl.dataset) && value(trEl, idFieldName)) {
+        trEl.hidden = true;
+        append(
+            // Liekam id kolonnā, jo tā vienmēr tiks ielikta
+            // ja automātiski, tad tā būs hidden
+            q(trEl, 'td[data-name=id]'),
+            ce('input', {
+                type: 'hidden',
+                // hvz vai vajag value, jo null vērtība arī submitojas. Varbūt vienkāršāk servera pusē būs pārbaudīt
+                value: tableEl.dataset.trackDeleted,
+                data: {
+                    trackDeleted: tableEl.dataset.trackDeleted
+                }
+            })
+        );
+    }
+    else {
+        remove(trEl);
+    }
 
     // dzēšot row vajag visām rindā atjaunot input names, lai ir secīgi pēc ar rindu index
     qa('tbody tr').forEach(trEl => setRowInputFieldsNames(tableEl, trEl));

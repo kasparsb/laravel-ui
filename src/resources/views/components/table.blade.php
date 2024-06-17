@@ -10,6 +10,9 @@
     @if ($name)
     data-name="{{ $name }}"
     @endif
+    @if ($trackDeleted)
+    data-track-deleted="{{ $trackDeleted }}"
+    @endif
     >
     <table>
     <thead>
