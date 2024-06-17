@@ -178,9 +178,7 @@ export default {
             }
         })
 
-        /**
-         * TODO Kā uztaisīt hover un unhover???
-         */
+
         on('mouseover', '[data-dropdown-menu][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
             if (hoverTriggerEl.dataset.dropdownMenu) {
                 let menuEl = findDropdownMenu(hoverTriggerEl.dataset.dropdownMenu);
@@ -207,6 +205,10 @@ export default {
         // always hide menu whene mouse out from menu
         on('mouseout', '[data-dropdown-menu-name]', (ev, menuEl) => {
             dropDownMenuHideTimeout = setTimeout(() => close(), 500)
+        });
+        // on menu item click
+        on('click', '.menu-item', (ev, menuEl) => {
+            dropDownMenuHideTimeout = setTimeout(() => close(), 100)
         });
     },
 

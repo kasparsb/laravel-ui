@@ -1,11 +1,9 @@
-import post from 'dom-helpers/src/http/post';
-import clickp from 'dom-helpers/src/event/clickp';
+import { post, clickp } from 'dom-helpers';
 import ButtonLoading from './ButtonLoading';
 
 export default {
     init() {
-        clickp('[data-buttonpost]', (ev, el) => {
-            ev.preventDefault();
+        clickp('[data-button-post]', (ev, el) => {
             if (el.dataset.url) {
 
                 ButtonLoading.maybeLoading(el, 'post');
@@ -26,7 +24,7 @@ export default {
      * Pārbauda vai padotais el ir post button
      */
     isButtonPost(el) {
-        if ('buttonpost' in el.dataset) {
+        if ('buttonPost' in el.dataset) {
             return true;
         }
         return false;

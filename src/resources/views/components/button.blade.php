@@ -27,60 +27,57 @@
     if ($loading === true) {
         $disabled = true;
     }
+
+    $p = explode('.', $as);
+    $as = $p[0];
+    $subAction = count($p) > 1 ? $p[1] : '';
+
+    $tag = $as == 'link' ? 'a' : 'button';
+
 @endphp
 
-@if ($as == 'link')
-<a
+<{{ $tag }}
+    @if ($as == 'link')
     href="{{ $link }}"
-    {{ $attributes->class(['button-'.$variant,]) }}
-    @if ($disabled)
-    disabled="disabled"
+    @else
+        @if ($link)
+        data-url="{{ $link }}"
+        @endif
     @endif
-    @if ($loading)
-    data-loading="{{ $loading === true ? 'loading' : $loading }}"
-    @endif
-    >
-    <svg class="spinner" width="24" height="24" viewBox="0 0 24 24">
-        <use xlink:href="#loading"></use>
-    </svg>
-    {{ $slot }}
-</a>
-@elseif (in_array($as, ['delete', 'post',]))
-<button
-    data-url="{{ $link }}"
+
+    @if ($redirect)
     data-redirect="{{ $redirect }}"
-    data-button{{ $as }}
-    {{ $attributes->class(['button-'.$variant]) }}
+    @endif
+
+    @if ($as)
+    data-button-{{ $as }}="{{ $subAction }}"
+    @endif
+
     @if ($disabled)
     disabled="disabled"
     @endif
-    @if ($loading)
-    data-loading="{{ $loading === true ? 'loading' : $loading }}"
-    @endif
-    >
-    <svg class="spinner" width="24" height="24" viewBox="0 0 24 24">
-        <use xlink:href="#loading"></use>
-    </svg>
-    {{ $slot }}
-</button>
-@else
-<button
+
     @if ($menu)
     data-dropdown-menu="{{ $menu }}"
     data-dropdown-menu-show="{{ $menuShow }}"
-    type="button"
     @endif
-    @if ($disabled)
-    disabled="disabled"
+
+    @if ($table)
+    data-table="{{ $table }}"
     @endif
+
     @if ($loading)
     data-loading="{{ $loading === true ? 'loading' : $loading }}"
     @endif
-    {{ $attributes->class(['button-'.$variant]) }}
+
+    {{
+        $attributes
+            ->class(['button-'.$variant])
+            ->merge(['type' => 'button'])
+    }}
     >
     <svg class="spinner" width="24" height="24" viewBox="0 0 24 24">
         <use xlink:href="#loading"></use>
     </svg>
     {{ $slot }}
-</button>
-@endif
+</{{ $tag }}>

@@ -1,18 +1,48 @@
+@php
+    $p = explode('.', $as);
+    $as = $p[0];
+    $subAction = count($p) > 1 ? $p[1] : '';
+@endphp
 <a
     {{ $attributes->class(['menu-item', $selected ? 'selected' : '']) }}
     data-role="menuitem"
+
     @if ($linkSource)
     data-link-source="{{ $linkSource }}"
     @endif
-    @if ($as == 'delete')
-    data-url="{{ $link }}"
-    data-redirect="{{ $redirect }}"
-    data-buttondelete=""
-    @elseif ($as == 'delete.tableRow')
-    data-buttondelete="tableRow"
-    @endif
+
     @if ($redirectSource)
     data-redirect-source="{{ $redirectSource }}"
     @endif
+
+
+    @if ($as == 'link')
     href="{{ $link }}"
-    >{{ $slot->isEmpty() ? $label : $slot }}</a>
+    @else
+        @if ($link)
+        data-url="{{ $link }}"
+        @endif
+    @endif
+
+    @if ($redirect)
+    data-redirect="{{ $redirect }}"
+    @endif
+
+    @if ($as)
+    data-button-{{ $as }}="{{ $subAction }}"
+    @endif
+
+    @if ($table)
+    data-table="{{ $table }}"
+    @endif
+
+    @if ($loading)
+    data-loading="{{ $loading === true ? 'loading' : $loading }}"
+    @endif
+
+    @if ($disabled)
+    disabled="disabled"
+    @endif
+    >
+    {{ $slot->isEmpty() ? $label : $slot }}
+</a>

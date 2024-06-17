@@ -1,15 +1,15 @@
-import {parent, request, clickp} from 'dom-helpers'
+import {parent, del, clickp} from 'dom-helpers'
 import ButtonLoading from './ButtonLoading';
 import Table from './Table';
 import DropdownMenu from './DropdownMenu';
 
 export default {
     init() {
-        clickp('[data-buttondelete]', (ev, el) => {
+        clickp('[data-button-delete]', (ev, el) => {
             ev.preventDefault();
 
             // Tabulas rindas dzēšana
-            if (el.dataset.buttondelete == 'tableRow') {
+            if (el.dataset.buttonDelete == 'tableRow') {
                 if (el.dataset.role == 'menuitem') {
                     // Jāatrod click trigger
                     Table.deleteRow(parent(DropdownMenu.findClickTrigger(), 'tr'));
@@ -23,7 +23,7 @@ export default {
             else if (el.dataset.url) {
                 ButtonLoading.maybeLoading(el, 'delete');
 
-                request('DELETE', el.dataset.url)
+                del(el.dataset.url)
                     .then(r => {
                         if (el.dataset.redirect) {
                             window.location.href = el.dataset.redirect
@@ -39,7 +39,7 @@ export default {
      * Pārbauda vai padotais el ir delete button
      */
     isButtonDelete(el) {
-        if ('buttondelete' in el.dataset) {
+        if ('buttonDelete' in el.dataset) {
             return true;
         }
         return false;

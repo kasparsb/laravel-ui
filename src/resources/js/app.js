@@ -1,7 +1,7 @@
 import ButtonLoading from './ButtonLoading';
 import ButtonDelete from './ButtonDelete';
 import ButtonPost from './ButtonPost';
-import ButtonAddTableRow from './ButtonAddTableRow';
+import ButtonAdd from './ButtonAdd';
 import DropdownMenu from './DropdownMenu';
 import FieldSelect from './FieldSelect';
 import FieldDate from './FieldDate';
@@ -14,7 +14,7 @@ import RadioButtons from './RadioButtons';
 ButtonLoading.init();
 ButtonDelete.init();
 ButtonPost.init();
-ButtonAddTableRow.init();
+ButtonAdd.init();
 DropdownMenu.init();
 FieldSelect.init();
 FieldDate.init();
