@@ -566,7 +566,7 @@ body {
 .button-link {
     .button-base();
     color: var(--color-950);
-    background-color: hsl(var(--color-background));
+    background-color: transparent;
     text-underline-offset: 4px;
     &:not([disabled]):hover {
         text-decoration-line: underline;
@@ -920,6 +920,15 @@ body {
 
     &.t-3\.5 {
         letter-spacing: -.025em;
+    }
+
+    svg {
+        position: relative;
+        top: .125em;
+        height: 1em;
+        width: 1em;
+        margin-left: -.125em;
+        margin-right: -.125em;
     }
 }
 .title-description {
