@@ -11,6 +11,7 @@
  @import 'margin-top';
  @import 'margin-bottom';
  @import 'margin-y';
+ @import 'colors';
 
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: button;
@@ -931,6 +932,7 @@ body {
         margin-right: -.125em;
     }
 }
+
 .title-description {
     .t-3\.5();
     color: hsl(var(--color-muted));
@@ -941,6 +943,21 @@ body {
     align-items: center;
 
     gap: @size010;
+}
+
+.text {
+    &.t-3\.5 {
+        letter-spacing: -.025em;
+    }
+
+    svg {
+        position: relative;
+        top: .125em;
+        height: 1em;
+        width: 1em;
+        margin-left: -.125em;
+        margin-right: -.125em;
+    }
 }
 
 .card {
