@@ -12,6 +12,8 @@
  @import 'margin-top';
  @import 'margin-bottom';
  @import 'margin-y';
+ @import 'background-colors';
+ @import 'border-colors';
  @import 'colors';
 
 [type=button], [type=reset], [type=submit], button {
@@ -19,7 +21,6 @@
     background-color: transparent;
     background-image: none;
 }
-
 
 // Variables
 *,:after,:before {
@@ -966,7 +967,9 @@ body {
     .border-lg();
     border-width: 1px;
     border-style: solid;
-    border-color: hsl(var(--color-200));
+
+    // krāsu uzliks ar css klasēm c-200, lai to var override
+    //border-color: hsl(var(--color-200));
 
     padding: @size060;
 

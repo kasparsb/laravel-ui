@@ -1,7 +1,11 @@
+@inject('helpers', 'Kasparsb\Ui\Helpers')
 @props([
     'title',
 ])
-<div {{ $attributes->class(['card']) }} >
+<div {{ $attributes->class([
+    'card' => true,
+    'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class'))
+]) }} >
     @if (isset($header) || isset($title) || isset($titleDescription) || isset($headerAside))
     <div class="card-header">
         @if (isset($header))
