@@ -18,7 +18,7 @@ function disableTabContent(tabContentEl) {
 
 function setInputsDisabled(tabContentEl, isDisabled) {
     if ('disableInputs' in tabContentEl.dataset) {
-        qa(tabContentEl, 'input').forEach(inputEl => {
+        qa(tabContentEl, 'input, select, textarea').forEach(inputEl => {
             if (isDisabled) {
                 inputEl.disabled = true
             }
