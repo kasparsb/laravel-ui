@@ -6,6 +6,7 @@
 
  @import 'gaps';
  @import 'width';
+ @import 'max-width';
  @import 'height';
  @import 'text-size';
  @import 'margin-top';
@@ -239,7 +240,7 @@ body {
     -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 
-&.fw-b {
+.fw-b {
     font-weight: var(--font-weight-bold);
 }
 .fw-m {
@@ -923,7 +924,8 @@ body {
         letter-spacing: -.025em;
     }
 
-    svg {
+    // tikai uz direct svg. Ja vienkārši visiem svg, tad pogām sačakarējas svg novietojums un izmērs
+    >svg {
         position: relative;
         top: .125em;
         height: 1em;
@@ -2485,6 +2487,20 @@ body {
     flex-flow: row nowrap;
     gap: @size020;
 
+    &.border {
+        .border-lg();
+        border-width: 1px;
+        border-style: solid;
+        border-color: hsl(var(--color-200));
+        .shadow();
+
+        padding: @size060;
+
+        &.compact {
+            padding: @size040;
+        }
+    }
+
     .avatar-image {
         // Default image izmērs
         flex: 0 0 @size080;
@@ -2503,6 +2519,15 @@ body {
             }
         }
     }
+    // ja ir image, tad noņemam background
+    &[data-image] {
+        .avatar-image {
+            [data-role="image-wrap"] {
+                background-color: transparent;
+            }
+        }
+    }
+
     @import './avatar-image-sizes';
 
     .avatar-content {
@@ -2510,6 +2535,21 @@ body {
         display: flex;
         flex-flow: column nowrap;
         justify-content: center;
+    }
+    &.v-top {
+        .avatar-content {
+            justify-content: flex-start;
+        }
+    }
+    &.v-bottom {
+        .avatar-content {
+            justify-content: flex-end;
+        }
+    }
+    &.v-center {
+        .avatar-content {
+            justify-content: center;
+        }
     }
 
     .avatar-actions {

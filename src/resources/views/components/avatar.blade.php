@@ -1,5 +1,8 @@
 <div
-    {{ $attributes->class([ 'avatar', ]) }}
+    {{ $attributes->class(['avatar',]) }}
+    @if ($src)
+    data-image
+    @endif
     >
     <div class="avatar-image">
         <x-ui::aspect-ratio ratio="1:1" data-role="image-wrap">
