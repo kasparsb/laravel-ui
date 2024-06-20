@@ -92,4 +92,21 @@ class Helpers
 
         return false;
     }
+
+    public function hasAnyBorderColorClass($classesString) {
+        if (!$classesString) {
+            return false;
+        }
+
+        $classesString = explode(' ', $classesString);
+        foreach ($classesString as $class) {
+            preg_match('/^b-c([^0-9]*)-(\d+(\.\d+)?)$/', $class, $matches);
+
+            if (count($matches) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
