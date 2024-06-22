@@ -17,6 +17,13 @@ class Page extends Component
         public $action='',
         // Redirect link after form submit
         public $redirect='',
+        /**
+         * Routes veidojas pēc namig convention
+         * Bet, ja vajag, lai route vārdam priekšā
+         * ir prefix, tad izmantot šo
+         * {prefix}.{modelNamespace}.{action}
+         */
+        public $redirectRoutePrefix='',
         public ?Model $model=null,
     )
     {
