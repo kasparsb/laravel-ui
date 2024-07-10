@@ -31,7 +31,7 @@ function getBrowserify(entry) {
         cache: {},
         packageCache: {}
 
-        //,standalone: '{enter_namespace}'
+        ,standalone: 'webit.ui'
     })
 }
 
