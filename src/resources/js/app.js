@@ -23,3 +23,33 @@ Table.init();
 FileUpload.init();
 Tabs.init();
 RadioButtons.init();
+
+export {
+    ButtonLoading,
+    ButtonDelete,
+    ButtonPost,
+    ButtonAdd,
+    DropdownMenu,
+    FieldSelect,
+    FieldDate,
+    Calendar,
+    Table,
+    FileUpload,
+    Tabs,
+    RadioButtons,
+}
+
+export default {
+    ButtonLoading,
+    ButtonDelete,
+    ButtonPost,
+    ButtonAdd,
+    DropdownMenu,
+    FieldSelect,
+    FieldDate,
+    Calendar,
+    Table,
+    FileUpload,
+    Tabs,
+    RadioButtons,
+}
