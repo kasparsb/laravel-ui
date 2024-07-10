@@ -1,6 +1,31 @@
 @inject('helpers', 'Kasparsb\Ui\Helpers')
 
 @php
+    // Ja ir menu open trigger
+    if ($menu) {
+        if (!in_array($menuHide, ['onclick.outside', 'onmouseout',])) {
+            $menuHide = 'onmouseout';
+        }
+
+        if (!in_array($menuShow, ['onclick', 'onhover',])) {
+            $menuShow = 'onhover';
+        }
+    }
+    else {
+        // menu hide bez menu trigger, tas nozīme, ka poga varēs aizvērt menu by name
+        if (!is_null($menuHide)) {
+            if (is_bool($menuHide)) {
+                if ($menuHide) {
+                    // pēc noklusējuma aizver container menu
+                    $menuHide = '_container';
+                }
+            }
+            else {
+                $menuHide = $menuHide ? $menuHide : '_container';
+            }
+        }
+    }
+
     if (substr($link, 0, 6) == 'model:' && $model) {
         $link = $helpers->getModelRoute($model, substr($link, 6));
     }
@@ -58,8 +83,15 @@
     @endif
 
     @if ($menu)
-    data-dropdown-menu="{{ $menu }}"
+    data-dropdown-menu-trigger="{{ $menu }}"
     data-dropdown-menu-show="{{ $menuShow }}"
+        @if ($menuResetForm)
+        data-dropdown-menu-reset-form
+        @endif
+    @endif
+
+    @if ($menuHide)
+    data-dropdown-menu-hide="{{ $menuHide }}"
     @endif
 
     @if ($table)

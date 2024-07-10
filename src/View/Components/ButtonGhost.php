@@ -18,7 +18,9 @@ class ButtonGhost extends Component
         public $redirect = '', // redirect url after delete
 
         public $menu = '',
-        public $menuShow = 'onclick', // onhover
+        public $menuShow = '',
+        public $menuHide = null, // null nozīmē, ka nav uzsetots. Var padot arī empty string vai boolean
+        public $menuResetForm = false,
 
         public $table = '', // table name, kurai veikt add, delete darbības
 

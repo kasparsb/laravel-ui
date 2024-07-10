@@ -2,14 +2,17 @@ import {
     jsx, q, qa, parent,
     addStyle, addClass, removeClass,
     append, replaceContent,
-    getOffset, getOuterDimensions, getWindowDimensions, getWindowScrollLeft,
-    isChild, click, on} from 'dom-helpers';
+    getOffset, getOuterDimensions, getWindowDimensions,
+    isChild, click, on,
+    clearFormData} from 'dom-helpers';
 import ButtonDelete from './ButtonDelete';
 
 let container;
 let activeClickTriggerEl;
 let isOpen = false;
 let dropDownMenuHideTimeout = 0;
+// default event, kad slēpt menu
+let menuHideOn;
 
 /**
  * Ja nav izveidoti container un calendar, tad tos izveido
@@ -33,8 +36,19 @@ function maybeCreateContainerAndCalendar(menuEl) {
     replaceContent(container, menuEl);
 }
 
-function findDropdownMenu(name) {
+function findDropdownMenuByName(name) {
     return q('[data-dropdown-menu-name="'+name+'"]');
+}
+
+function findDropdownMenuByChild(childEl) {
+    return parent(childEl, '[data-dropdown-menu-name]');
+}
+
+/**
+ * Vai padotais dropdown menu ir atvērts
+ */
+function isDropdownMenuOpen(dropdownMenuEl) {
+    return dropdownMenuEl === q(container, '[data-dropdown-menu-name]');
 }
 
 function close() {
@@ -50,6 +64,11 @@ function close() {
 }
 
 function open(clickTriggerEl, menuEl) {
+
+    // Vai vajag reset form
+    if ('dropdownMenuResetForm' in clickTriggerEl.dataset) {
+        clearFormData(menuEl);
+    }
 
     // Notīrām hide timeout
     clearTimeout(dropDownMenuHideTimeout);
@@ -124,18 +143,23 @@ function open(clickTriggerEl, menuEl) {
     container.dataset.visible = 'yes';
 }
 
-function setOverrideFromClickTriggerEl(clickTriggerEl, menuEl) {
+function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
+
+    // Menu hide events (onclick.outside vai onmouseout)
+    menuHideOn = openTriggerEl.dataset.dropdownMenuHide;
+
+    // Attributes
     qa(menuEl, '[data-role="menuitem"]').forEach(menuItemEl => {
 
         if (menuItemEl.dataset.linkSource) {
-            menuItemEl.setAttribute('href', clickTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
+            menuItemEl.setAttribute('href', openTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
             if (ButtonDelete.isButtonDelete(menuItemEl)) {
-                menuItemEl.setAttribute('data-url', clickTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
+                menuItemEl.setAttribute('data-url', openTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
             }
         }
 
         if (menuItemEl.dataset.redirectSource) {
-            menuItemEl.setAttribute('data-redirect', clickTriggerEl.getAttribute(menuItemEl.dataset.redirectSource))
+            menuItemEl.setAttribute('data-redirect', openTriggerEl.getAttribute(menuItemEl.dataset.redirectSource))
         }
 
     })
@@ -143,15 +167,109 @@ function setOverrideFromClickTriggerEl(clickTriggerEl, menuEl) {
 
 export default {
     init() {
-        click('html', (ev, el) => {
+        // Click triggeri, kuri atvērs menu
+        click('[data-dropdown-menu-trigger][data-dropdown-menu-show="onclick"]', (ev, clickTriggerEl) => {
+            if (clickTriggerEl.dataset.dropdownMenuTrigger) {
+                let menuEl = findDropdownMenuByName(clickTriggerEl.dataset.dropdownMenuTrigger);
+                if (menuEl) {
+                    if (isOpen) {
+                        close();
+                    }
+                    else {
+                        setOverrideFromOpenTriggerEl(clickTriggerEl, menuEl);
+
+                        open(clickTriggerEl, menuEl);
+                    }
+                }
+            }
+        })
+
+        /**
+         * Menu hide trigger
+         * Šis ir domāts, lai varētu aizvērt menu uz click
+         * piemēram, poga pašā menu, kuru nospiežot menu aizveras
+         * varētu būt arī poga ārpus menu
+         *
+         * ! data-dropdown-menu-hide tiek arī izmantots, lai noteiktu
+         * kā aizvērt dropdown menu no open trigger
+         * tāpēc šeit click skatamies tikai uz tiek elementiem,
+         * kuriem nav norādīts, ka ir open trigger
+         */
+        click('[data-dropdown-menu-hide]', (ev, clickTriggerEl) => {
+            // Ja ir dropdownMenuTrigger, tad ignorējam click
+            if (clickTriggerEl.dataset.dropdownMenuTrigger) {
+
+            }
+            else {
+                // Atrodam menu kuru aizvērt
+                let dropdownMenuToClose;
+                switch (clickTriggerEl.dataset.dropdownMenuHide) {
+                    case '_container':
+                        dropdownMenuToClose = findDropdownMenuByChild(clickTriggerEl);
+                        break;
+                    default:
+                        dropdownMenuToClose = findDropdownMenuByName(clickTriggerEl.dataset.dropdownMenuHide);
+                }
+
+                // Ja menu ir atvērtais menu, tad close
+                if (isDropdownMenuOpen(dropdownMenuToClose)) {
+                    close();
+                }
+            }
+        });
+
+
+        on('mouseover', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
+            if (hoverTriggerEl.dataset.dropdownMenuTrigger) {
+                let menuEl = findDropdownMenuByName(hoverTriggerEl.dataset.dropdownMenuTrigger);
+                if (menuEl) {
+                    setOverrideFromOpenTriggerEl(hoverTriggerEl, menuEl);
+
+                    open(hoverTriggerEl, menuEl);
+                }
+            }
+        })
+
+        // mousout no click trigger, kuram ir onhover
+        on('mouseout', '[data-dropdown-menu-trigger]', (ev, hoverTriggerEl) => {
+            if (hoverTriggerEl.dataset.dropdownMenuTrigger) {
+                if (isOpen) {
+                    if (menuHideOn == 'onmouseout') {
+                        // uzliek hide timeout, kur notīra, ja vajag parādīt citu menu
+                        dropDownMenuHideTimeout = setTimeout(() => close(), 200)
+                    }
+                }
+            }
+        });
+
+
+        // mouse over uz dropdown menu
+        on('mouseover', '[data-dropdown-menu-name]', (ev, menuEl) => {
+            clearTimeout(dropDownMenuHideTimeout);
+        });
+
+        // mouse out from menu
+        on('mouseout', '[data-dropdown-menu-name]', (ev, menuEl) => {
+            if (menuHideOn == 'onmouseout') {
+                dropDownMenuHideTimeout = setTimeout(() => close(), 500)
+            }
+        });
+
+        // on menu item click
+        on('click', '.menu-item', (ev, menuEl) => {
+            dropDownMenuHideTimeout = setTimeout(() => close(), 100)
+        });
+
+        // Click outside dropdown menu
+        click('html', ev => {
             if (isOpen) {
-                let clickTriggerEl = parent(ev.target, '[data-dropdown-menu]');
+                let clickTriggerEl = parent(ev.target, '[data-dropdown-menu-trigger]');
 
                 // Ja nospiests jau uz nospiestā click trigger
                 if (clickTriggerEl && (activeClickTriggerEl === clickTriggerEl)) {
 
                 }
-                // Ja el nav container, tad aizveram container
+                // Ja nospiests uz elementu, kurš ir atvērtajā dropdown menu
                 else if (isChild(ev.target, container)) {
 
                 }
@@ -160,73 +278,45 @@ export default {
                 }
             }
         })
-
-        // Click triggeri, kuri atvērs menu
-        click('[data-dropdown-menu][data-dropdown-menu-show="onclick"]', (ev, clickTriggerEl) => {
-            if (clickTriggerEl.dataset.dropdownMenu) {
-                let menuEl = findDropdownMenu(clickTriggerEl.dataset.dropdownMenu);
-                if (menuEl) {
-                    if (isOpen) {
-                        close();
-                    }
-                    else {
-                        setOverrideFromClickTriggerEl(clickTriggerEl, menuEl);
-
-                        open(clickTriggerEl, menuEl);
-                    }
-                }
-            }
-        })
-
-
-        on('mouseover', '[data-dropdown-menu][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
-            if (hoverTriggerEl.dataset.dropdownMenu) {
-                let menuEl = findDropdownMenu(hoverTriggerEl.dataset.dropdownMenu);
-                if (menuEl) {
-                    setOverrideFromClickTriggerEl(hoverTriggerEl, menuEl);
-
-                    open(hoverTriggerEl, menuEl);
-                }
-            }
-        })
-        on('mouseout', '[data-dropdown-menu][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
-            if (hoverTriggerEl.dataset.dropdownMenu) {
-                if (isOpen) {
-                    // uzliek hide timeout, kur notīra, ja vajag parādīt citu menu
-                    dropDownMenuHideTimeout = setTimeout(() => close(), 50000)
-                }
-            }
-        });
-
-        // mouse over uz dropdown menu
-        on('mouseover', '[data-dropdown-menu-name]', (ev, menuEl) => {
-            clearTimeout(dropDownMenuHideTimeout);
-        });
-        // always hide menu whene mouse out from menu
-        on('mouseout', '[data-dropdown-menu-name]', (ev, menuEl) => {
-            dropDownMenuHideTimeout = setTimeout(() => close(), 500)
-        });
-        // on menu item click
-        on('click', '.menu-item', (ev, menuEl) => {
-            dropDownMenuHideTimeout = setTimeout(() => close(), 100)
-        });
     },
 
     /**
      * Aizveram redzamo DropdownMenu
      */
-    close() {
-        if (isOpen) {
-            close();
+    close(dropdownMenuToClose) {
+        if (dropdownMenuToClose) {
+            if (isDropdownMenuOpen(dropdownMenuToClose)) {
+                close();
+            }
+        }
+        else {
+            if (isOpen) {
+                close();
+            }
         }
     },
 
     /**
-     * Tagad vienkārši atgriež pēdējo aktīvo click trigger
-     * TODO jāsaprot vai tik brīvi var darīt? Pēc idejas, ja ir DropdownMenu redzams, tad pēdējas click trigger
-     * arī būs īstais. Nevar tā būt, ka notiek click un neredzama menuitem
+     * Pēc padotā element atrodam dropdown menu, kurā tas atrodas
      */
-    findClickTrigger() {
-        return activeClickTriggerEl;
+    getByChild(childEl) {
+        return findDropdownMenuByChild(childEl)
+    },
+
+    getByName(name) {
+        return findDropdownMenuByName(name)
+    },
+
+    getOpenTrigger(dropdownMenuEl) {
+        if (isDropdownMenuOpen(dropdownMenuEl)) {
+            return activeClickTriggerEl;
+        }
+    },
+
+    getOpenTriggerByChild(childEl) {
+        let dropdownMenuEl = findDropdownMenuByChild(childEl);
+        if (dropdownMenuEl && isDropdownMenuOpen(dropdownMenuEl)) {
+            return activeClickTriggerEl;
+        }
     }
 }

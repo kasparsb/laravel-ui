@@ -1069,10 +1069,7 @@ body {
         .t-3\.5();
         font-weight: 500;
 
-        padding-left: @size015;
-        padding-right: @size015;
-        padding-top: @size015;
-        padding-bottom: @size015;
+        padding: @size015;
 
         &:hover {
             background-color: hsl(var(--color-100));
@@ -1096,6 +1093,10 @@ body {
                 background-color: hsl(var(--color-red-50));
             }
         }
+    }
+
+    >.menu-content {
+        padding: @size015;
     }
 
     // Visiem menu items tiek pieņemts, ka ir icon, ja nav, tad tiek atbrīvota vieta
@@ -1298,6 +1299,8 @@ body {
         gap: @size020;
 
         position: relative;
+
+        cursor: pointer;
     }
 
     span {
