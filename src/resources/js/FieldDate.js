@@ -9,6 +9,7 @@ import getDateFromReference from './calendar/getDateFromReference';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
 import clampDate from './calendar/clampDate';
 import formatDate from './calendar/formatDate';
+import SingletonPanel from './SingletonPanel';
 
 function sp(s) {
     s = s+'';
@@ -67,14 +68,10 @@ function triggerEvent(el, eventName) {
 function maybeCreateContainerAndCalendar() {
     if (!container) {
         container = (
-            <div class="overlay-container">
-
-                <div class="card is-overlay compact b-c-200">
-                    <div class="card-content">
-                        <div class="calendar size-8" data-calendarcontainer="yes"></div>
-                    </div>
+            <div class="card is-overlay compact b-c-200">
+                <div class="card-content">
+                    <div class="calendar size-8" data-calendarcontainer="yes"></div>
                 </div>
-
             </div>
         )
 
@@ -120,12 +117,16 @@ function dateSelected(date) {
 function close() {
     activeField = null;
 
-    container.dataset.visible = '';
+    SingletonPanel.close()
 
     isOpen = false;
+
+    // ja aizvērts ar esc, bet lauks vēl fokusā, tad ļaujam uz click tomēr nostrādāt
+    wasFocusin = false;
 }
 
 function open(field) {
+
     maybeCreateContainerAndCalendar()
 
     activeField = field;
@@ -153,16 +154,19 @@ function open(field) {
 
 
         // Show
-        container.dataset.visible = 'yes';
+        SingletonPanel.show(container, {
+            onContentElRemove(prevContainerEl) {
+                // šeit neko nedarām, jo container tiek izņemts no Panel
+                // bet reference paliek, tāpec to varēs ielikt atpakaļ panelī
+            },
+            positionEl: field,
+            side: 'bottom',
+            align: 'left',
+        });
+
+
         isOpen = true;
     }, 10)
-
-    // Pozicionē container pret input lauku
-    let p = getOffset(field)
-    addStyle(container, {
-        top: (p.top+40)+'px',
-        left: p.left+'px',
-    })
 }
 
 function validateFieldValue(inputFieldEl) {
@@ -182,6 +186,16 @@ function validateFieldValue(inputFieldEl) {
 let closeTimeout = 0;
 let wasMouseDown = false;
 let wasSetDateInInputFromCalendar = false;
+/**
+ * Vai bija focus in uz field date
+ * ja bija, tad click ignorēs
+ *
+ * vajadzīgs, ja laiks ir fokusā, bet kalendārs nav
+ * redzams, tad atkāŗtoti taisot click tomēr atvērs
+ * uz click nevar vērt vaļā, jo focus in nostrādā pirmais
+ * un sanāk, ka tiek atvērts divas reizes
+ */
+let wasFocusin = false;
 
 export default {
     init() {
@@ -199,7 +213,7 @@ export default {
                 clearTimeout(closeTimeout);
             }
             else {
-                if (isChild(ev.target, container)) {
+                if (isChild(ev.target, SingletonPanel.getEl())) {
                     clearTimeout(closeTimeout);
                 }
                 // Ja el nav date pickerī, tad aizveram kalendāru
@@ -212,7 +226,7 @@ export default {
         })
 
         on('mousedown', ev => {
-            if (isChild(ev.target, container)) {
+            if (isChild(ev.target, SingletonPanel.getEl())) {
                 wasMouseDown = true;
             }
         })
@@ -238,7 +252,7 @@ export default {
         on('focusout', '.field-date input', (ev) => {
             if (isOpen) {
                 if (!wasMouseDown) {
-                    if (!isChild(ev.target, container)) {
+                    if (!isChild(ev.target, SingletonPanel.getEl())) {
                         closeTimeout = setTimeout(() => close(), 50);
                     }
                 }
@@ -247,8 +261,11 @@ export default {
         })
 
         on('click', '.field-date input', (ev, el) => {
-            clearTimeout(closeTimeout);
-            open(el)
+            if (!wasFocusin) {
+                clearTimeout(closeTimeout);
+                open(el)
+            }
+            wasFocusin = false
         })
 
         on('focusin', '.field-date input', (ev, el) => {
@@ -257,12 +274,9 @@ export default {
                 open(el)
             }
             wasSetDateInInputFromCalendar = false;
+
+            wasFocusin = true;
         })
-
-
-
-
-
 
 
         /**

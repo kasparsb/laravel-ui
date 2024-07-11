@@ -3,26 +3,28 @@ import ButtonDelete from './ButtonDelete';
 import ButtonPost from './ButtonPost';
 import ButtonAdd from './ButtonAdd';
 import DropdownMenu from './DropdownMenu';
-import FieldSelect from './FieldSelect';
+//import FieldSelect from './FieldSelect';
 import FieldDate from './FieldDate';
 import Calendar from './Calendar';
 import Table from './Table';
 import FileUpload from './FileUpload';
 import Tabs from './Tabs';
 import RadioButtons from './RadioButtons';
+import ComboBox from './ComboBox';
 
 ButtonLoading.init();
 ButtonDelete.init();
 ButtonPost.init();
 ButtonAdd.init();
 DropdownMenu.init();
-FieldSelect.init();
+//FieldSelect.init();
 FieldDate.init();
 Calendar.init();
 Table.init();
 FileUpload.init();
 Tabs.init();
 RadioButtons.init();
+ComboBox.init();
 
 export {
     ButtonLoading,
@@ -30,13 +32,14 @@ export {
     ButtonPost,
     ButtonAdd,
     DropdownMenu,
-    FieldSelect,
+    //FieldSelect,
     FieldDate,
     Calendar,
     Table,
     FileUpload,
     Tabs,
     RadioButtons,
+    ComboBox,
 }
 
 export default {
@@ -45,11 +48,12 @@ export default {
     ButtonPost,
     ButtonAdd,
     DropdownMenu,
-    FieldSelect,
+    //FieldSelect,
     FieldDate,
     Calendar,
     Table,
     FileUpload,
     Tabs,
     RadioButtons,
+    ComboBox,
 }
