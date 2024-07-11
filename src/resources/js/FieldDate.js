@@ -69,7 +69,7 @@ function maybeCreateContainerAndCalendar() {
         container = (
             <div class="overlay-container">
 
-                <div class="card is-overlay compact">
+                <div class="card is-overlay compact b-c-200">
                     <div class="card-content">
                         <div class="calendar size-8" data-calendarcontainer="yes"></div>
                     </div>
