@@ -1,1 +1,9 @@
-<a {{ $attributes->class(['nav-menu-item', $selected ? 'selected' : '']) }} href="{{ $link }}" >{{ $slot->isEmpty() ? $label : $slot }}</a>
+<a
+    {{ $attributes->class([
+        'menu-item',
+        'selected' => $selected
+    ]) }}
+    href="{{ $link }}"
+    >
+    {{ $slot->isEmpty() ? $label : $slot }}
+</a>
