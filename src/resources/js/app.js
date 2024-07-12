@@ -10,8 +10,10 @@ import Table from './Table';
 import FileUpload from './FileUpload';
 import Tabs from './Tabs';
 import RadioButtons from './RadioButtons';
+import OptionsPanel from './OptionsPanel';
 import ComboBox from './ComboBox';
 
+OptionsPanel.init();
 ButtonLoading.init();
 ButtonDelete.init();
 ButtonPost.init();
@@ -27,6 +29,7 @@ RadioButtons.init();
 ComboBox.init();
 
 export {
+    OptionsPanel,
     ButtonLoading,
     ButtonDelete,
     ButtonPost,
@@ -43,6 +46,7 @@ export {
 }
 
 export default {
+    OptionsPanel,
     ButtonLoading,
     ButtonDelete,
     ButtonPost,

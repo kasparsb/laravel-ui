@@ -690,10 +690,6 @@ body {
         }
     }
 
-    .options {
-        display: none;
-    }
-
     &[data-is-empty] {
         [data-r="placeholder"] {
             color: hsl(var(--color-400))
@@ -1628,6 +1624,10 @@ body {
 
 .options {
 
+    &.hidden {
+        display: none;
+    }
+
     .border-md();
     border-width: 1px;
     border-style: solid;
@@ -1645,6 +1645,9 @@ body {
     padding: @size005;
 
     >.menu-item {
+        &.hidden {
+            display: none;
+        }
         &:empty {
             &:before {
                 // invisible character, lai ieņem pareizo augstumu tukšs elements

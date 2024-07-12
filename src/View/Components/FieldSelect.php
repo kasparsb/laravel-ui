@@ -9,10 +9,14 @@ use Illuminate\Http\Request;
 use Kasparsb\Ui\ComponentWithError;
 use Kasparsb\Ui\ComponentWithRequestOldValue;
 
+use Kasparsb\Ui\View\OptionsListManager;
+
 class FieldSelect extends Component
 {
     use ComponentWithError;
     use ComponentWithRequestOldValue;
+
+    public $optionsListId;
 
     public function __construct(
         public $label='',
@@ -25,6 +29,7 @@ class FieldSelect extends Component
         public $empty=true,
         public $model=null,
         public $disabled=false,
+        public $searchable=false,
 
         public $errorMessage='',
         public $hasError=false,
@@ -42,6 +47,8 @@ class FieldSelect extends Component
         }
 
         $this->setError();
+
+        $this->optionsListId = app(OptionsListManager::class)->getNextId();
     }
 
     public function render(): View|Closure|string
