@@ -175,7 +175,7 @@ export default {
         });
 
         // on menu item click
-        on('click', '.menu-item', (ev, menuEl) => {
+        on('click', '[data-dropdown-menu-name] .menu-item', (ev, menuEl) => {
             dropDownMenuHideTimeout = setTimeout(() => close(), 100)
         });
 
