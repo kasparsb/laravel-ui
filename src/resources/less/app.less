@@ -662,6 +662,7 @@ body {
 
         svg {
             pointer-events: none;
+            margin-right: @size015;
             width: @size040;
             height: @size040;
         }
@@ -675,13 +676,16 @@ body {
             line-height: @size050;
 
             [data-r="placeholder"] {
-                position: absolute;
-                display: block;
-                left: 0;
-                top: 0;
-                width: 100%;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
                 white-space: nowrap;
                 overflow: hidden;
+
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
             }
         }
     }

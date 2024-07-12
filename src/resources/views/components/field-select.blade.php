@@ -24,7 +24,7 @@
             type="text"
             name="{{ $name }}"
             data-r="fieldValue"
-            data-value="{{ $value }}"
+            value="{{ $value }}"
             @disabled($disabled)
             />
     </div>
@@ -35,8 +35,18 @@
         @if (isset($slot) && !$slot->isEmpty())
             {{ $slot }}
         @elseif (is_iterable($options))
+            @php
+                $isEmptyChecked = !$value;
+                // ja ir kāds no options, kurš atbilst vērtībai, tad empty checked būs false
+                foreach ($options as $optionValue => $html) {
+                    if ($value == $optionValue) {
+                        $isEmptyChecked = false;
+                        break;
+                    }
+                }
+            @endphp
             @if ($empty)
-                <x-ui::option value="" :checked="!$value">{{ is_bool($empty) ? '' : $empty }}</x-ui::option>
+                <x-ui::option value="" :checked="$isEmptyChecked">{{ is_bool($empty) ? '' : $empty }}</x-ui::option>
             @endif
             @foreach ($options as $optionValue => $html)
                 <x-ui::option :value="$optionValue" :checked="$value == $optionValue">{{ $html }}</x-ui::option>

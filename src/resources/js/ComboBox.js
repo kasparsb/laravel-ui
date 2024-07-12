@@ -217,5 +217,12 @@ export default {
                 }
             }
         })
+
+        // Select
+        qa('.field-select').forEach(fieldEl => {
+            let optionsEl = findOptionsEl(fieldEl);
+
+            setOption(fieldEl, getChecked(optionsEl))
+        });
     }
 }

@@ -10,10 +10,12 @@ class Option extends Component
 {
     public function __construct(
         public $value='',
-        public $checked=false,
+        public $checked=null,
     )
     {
-
+        if (is_null($this->checked)) {
+            $this->checked = $this->value == view()->getConsumableComponentData('value');
+        }
     }
 
     public function render(): View|Closure|string
