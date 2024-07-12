@@ -20,25 +20,38 @@
         <svg>
             <use xlink:href="#select-trigger"></use>
         </svg>
-        <select
+        <input
+            type="text"
             name="{{ $name }}"
+            data-r="fieldValue"
             data-value="{{ $value }}"
             @disabled($disabled)
-            >
-
-            @if ($empty)
-            <option value="" @selected(!$value)>{{ is_bool($empty) ? '' : $empty }}</option>
-            @endif
-
-            @if (isset($slot) && !$slot->isEmpty())
-            {{ $slot }}
-            @elseif (is_iterable($options))
-                @foreach ($options as $optionValue => $html)
-                <option value="{{ $optionValue }}" @selected($value == $optionValue)>{{ $html }}</option>
-                @endforeach
-            @endif
-        </select>
+            />
     </div>
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
+
+    <div class="options b-c-200" data-r="options">
+        @if ($empty)
+        <div
+            class="menu-item"
+            data-r="option"
+            data-value=""
+            {{ !$value ? 'data-checked' : '' }}
+            >{{ is_bool($empty) ? '' : $empty }}</div>
+        @endif
+
+        @if (isset($slot) && !$slot->isEmpty())
+        {{ $slot }}
+        @elseif (is_iterable($options))
+            @foreach ($options as $optionValue => $html)
+            <div
+                class="menu-item"
+                data-r="option"
+                data-value="{{ $optionValue }}"
+                {{ $value == $optionValue ? 'data-checked' : '' }}
+                >{{ $html }}</div>
+            @endforeach
+        @endif
+    </div>
 </div>

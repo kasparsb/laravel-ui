@@ -272,7 +272,7 @@ body {
         cursor: default;
     }
 
-    // disabled link
+    // For link special case to disable it
     &:is(a[disabled]) {
         pointer-events: none;
     }
@@ -650,13 +650,14 @@ body {
 
         position: relative;
 
-        select {
+        input {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             opacity: 0;
+            pointer-events: none;
         }
 
         svg {
@@ -685,6 +686,10 @@ body {
         }
     }
 
+    .options {
+        display: none;
+    }
+
     &[data-is-empty] {
         [data-r="placeholder"] {
             color: hsl(var(--color-400))
@@ -694,7 +699,7 @@ body {
     &:not(:is([data-state="error"])) {
         .select-placeholder {
             .input-text();
-            &:has(select:focus) {
+            &:has(input:focus) {
                 .input-text-focused();
             }
 
@@ -704,7 +709,7 @@ body {
     &[data-state="error"] {
         .select-placeholder {
             .input-text-error();
-            &:has(select:focus) {
+            &:has(input:focus) {
                 .input-text-error-focused();
             }
         }
@@ -968,7 +973,7 @@ body {
     border-width: 1px;
     border-style: solid;
 
-    // krāsu uzliks ar css klasēm c-200, lai to var override
+    // krāsu uzliks ar css klasēm b-c-200, lai to var override
     //border-color: hsl(var(--color-200));
 
     padding: @size060;
@@ -1012,98 +1017,6 @@ body {
             margin-top: @size040;
             &:first-child {
                 margin-top: 0;
-            }
-        }
-    }
-}
-
-.dropdown-menu {
-
-    &.floating {
-        position: absolute;
-        pointer-events: none;
-    }
-    &.hidden {
-        display: none;
-    }
-
-
-    .border-md();
-    border: 1px solid #e5e7eb;
-    background-color: hsl(var(--color-background));
-
-    padding: @size005;
-
-    .shadow-lg();
-
-    display: grid;
-    grid-auto-rows: min-content;
-
-    min-width: @size320;
-
-    >.delimiter-horizontal {
-        margin-left: -@size005;
-        margin-right: -@size005;
-    }
-
-    >.menu-item {
-        .remove-tap-highlite();
-
-        .button-link-disabled-base-state();
-
-        display: inline-flex;
-        justify-content: flex-start;
-        align-items: center;
-        white-space: nowrap;
-
-        .border-sm();
-
-        .transition-color();
-
-        cursor: pointer;
-
-        &:is(a) {
-            text-decoration: none;
-        }
-        color: hsl(var(--color-950));
-        .t-3\.5();
-        font-weight: 500;
-
-        padding: @size015;
-
-        &:hover {
-            background-color: hsl(var(--color-100));
-        }
-
-        svg {
-            margin-right: @size015;
-            width: @size040;
-            height: @size040;
-        }
-        // Tikai ikona, bet label
-        &.icon {
-            svg {
-                margin-right: 0;
-            }
-        }
-
-        &.danger {
-            color: hsl(var(--color-danger));
-            &:hover {
-                background-color: hsl(var(--color-red-50));
-            }
-        }
-    }
-
-    >.menu-content {
-        padding: @size015;
-    }
-
-    // Visiem menu items tiek pieņemts, ka ir icon, ja nav, tad tiek atbrīvota vieta
-    &.has-icons {
-        >.menu-item {
-            &:not(:has(svg)) {
-                padding-left: @size015 + @size040 + @size015;
             }
         }
     }
@@ -1584,52 +1497,105 @@ body {
     }
 }
 
-.nav-menu-item {
+.menu-item {
     .remove-tap-highlite();
 
+    .button-link-disabled-base-state();
+
     display: inline-flex;
-    align-items: center;
     justify-content: flex-start;
-
-
-    height: @size070;
-    padding-left: @size030;
-    padding-right: @size030;
-    padding-top: 10px;
-    padding-bottom: 10px;
-
-    // Ja ir ielikta ikona, tad left padding samazinām
-    &:has(svg) {
-        padding-left: @size020;
-    }
-
-    .t-3\.5();
+    align-items: center;
     white-space: nowrap;
-    font-weight: 500;
-    color: hsl(var(--color-900));
-    text-decoration: none;
 
-
-
-    .border-md();
+    .border-sm();
 
     .transition-color();
 
     cursor: pointer;
+
+    &:is(a) {
+        text-decoration: none;
+    }
+    color: hsl(var(--color-950));
+    .t-3\.5();
+    font-weight: 500;
+
+    padding: @size015;
+
+    &:hover,
+    &:active,
+    &:focus,
+    &[data-checked] {
+        background-color: hsl(var(--color-100));
+    }
 
     svg {
         margin-right: @size015;
         width: @size040;
         height: @size040;
     }
-
-    &:hover {
-        background-color: hsl(var(--color-100));
+    // Tikai ikona, bet label
+    &.icon {
+        svg {
+            margin-right: 0;
+        }
     }
-    &.selected {
-        background-color: hsl(var(--color-200));
+
+    &.danger {
+        color: hsl(var(--color-danger));
+        &:hover {
+            background-color: hsl(var(--color-red-50));
+        }
     }
 }
+
+.dropdown-menu {
+
+    &.floating {
+        position: absolute;
+        pointer-events: none;
+    }
+    &.hidden {
+        display: none;
+    }
+
+    .border-md();
+    border-width: 1px;
+    border-style: solid;
+
+    // krāsu uzliks ar css klasēm b-c-200, lai to var override
+    //border-color: hsl(var(--color-200));
+
+    background-color: hsl(var(--color-background));
+
+    padding: @size005;
+
+    .shadow-lg();
+
+    display: grid;
+    grid-auto-rows: min-content;
+
+    min-width: @size320;
+
+    >.delimiter-horizontal {
+        margin-left: -@size005;
+        margin-right: -@size005;
+    }
+
+    >.menu-content {
+        padding: @size015;
+    }
+
+    // Visiem menu items tiek pieņemts, ka ir icon, ja nav, tad tiek atbrīvota vieta
+    &.has-icons {
+        >.menu-item {
+            &:not(:has(svg)) {
+                padding-left: @size015 + @size040 + @size015;
+            }
+        }
+    }
+}
+
 .nav-menu {
     display: flex;
     flex-flow: column nowrap;
@@ -1640,6 +1606,52 @@ body {
         flex-flow: row nowrap;
         align-items: center;
         justify-content: flex-start;
+    }
+
+    >.menu-item {
+        white-space: nowrap;
+
+        color: hsl(var(--color-900));
+
+        padding-top: @size010;
+        padding-bottom: @size010;
+
+        &.selected {
+            background-color: hsl(var(--color-200));
+        }
+    }
+}
+
+.options {
+
+    .border-md();
+    border-width: 1px;
+    border-style: solid;
+
+    background-color: hsl(var(--color-background));
+
+    .shadow-lg();
+
+    // krāsu uzliks ar css klasēm b-c-200, lai to var override
+    //border-color: hsl(var(--color-200));
+
+    .col-items();
+    gap: 0;
+
+    padding: @size005;
+
+    >.menu-item {
+        &:empty {
+            &:before {
+                // invisible character, lai ieņem pareizo augstumu tukšs elements
+                content: '\00a0'
+            }
+        }
+    }
+
+    >.delimiter-horizontal {
+        margin-left: -@size005;
+        margin-right: -@size005;
     }
 }
 
@@ -2114,6 +2126,7 @@ body {
  * kādu citu ementu. Datepicker
  */
 .overlay-container {
+    z-index: 100;
     position: absolute;
     display: flex;
     flex-flow: row nowrap;
