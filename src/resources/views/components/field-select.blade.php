@@ -32,25 +32,14 @@
     <p data-role="error">{{ $errorMessage }}</p>
 
     <div class="options b-c-200" data-r="options">
-        @if ($empty)
-        <div
-            class="menu-item"
-            data-r="option"
-            data-value=""
-            {{ !$value ? 'data-checked' : '' }}
-            >{{ is_bool($empty) ? '' : $empty }}</div>
-        @endif
-
         @if (isset($slot) && !$slot->isEmpty())
-        {{ $slot }}
+            {{ $slot }}
         @elseif (is_iterable($options))
+            @if ($empty)
+                <x-ui::option value="" :checked="!$value">{{ is_bool($empty) ? '' : $empty }}</x-ui::option>
+            @endif
             @foreach ($options as $optionValue => $html)
-            <div
-                class="menu-item"
-                data-r="option"
-                data-value="{{ $optionValue }}"
-                {{ $value == $optionValue ? 'data-checked' : '' }}
-                >{{ $html }}</div>
+                <x-ui::option :value="$optionValue" :checked="$value == $optionValue">{{ $html }}</x-ui::option>
             @endforeach
         @endif
     </div>
