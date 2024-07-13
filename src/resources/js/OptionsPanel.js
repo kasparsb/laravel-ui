@@ -22,12 +22,14 @@ function check(el) {
     if (el) {
         el.dataset.checked = '';
     }
+    return el;
 }
 
 function uncheck(el) {
     if (el) {
         delete el.dataset.checked;
     }
+    return el;
 }
 
 function getChecked(optionsEl) {
@@ -44,12 +46,12 @@ function nextOption(optionsEl) {
         let nextEl = next(currentOptionEl, '[data-r="option"]');
         if (nextEl) {
             uncheck(currentOptionEl);
-            check(nextEl);
-            //setOption(fieldEl, nextEl);
+            return check(nextEl);
         }
+        return currentOptionEl;
     }
     else {
-        check(first(qa(optionsEl, '[data-r="option"]')), optionsEl);
+        return check(first(qa(optionsEl, '[data-r="option"]')), optionsEl);
     }
 }
 
@@ -59,12 +61,12 @@ function prevOption(optionsEl) {
         let prevEl = prev(currentOptionEl, '[data-r="option"]');
         if (prevEl) {
             uncheck(currentOptionEl);
-            check(prevEl);
-            //setOption(fieldEl, prevEl);
+            return check(prevEl);
         }
+        return currentOptionEl;
     }
     else {
-        check(last(qa(optionsEl, '[data-r="option"]')));
+        return check(last(qa(optionsEl, '[data-r="option"]')));
     }
 }
 
@@ -152,6 +154,13 @@ function filterOptionsByValue(optionsEl, value) {
             removeClass(optionEl, 'hidden')
         }
     })
+}
+
+function resolveOptionsEl(optionsElOrId) {
+    if (typeof optionsElOrId == 'string') {
+        return q(`#${optionsElOrId}`);
+    }
+    return optionsElOrId;
 }
 
 export default {
@@ -251,26 +260,28 @@ export default {
     },
 
     open(optionsElOrId, options = {}) {
-        if (typeof optionsElOrId == 'string') {
-            optionsElOrId = q(`#${optionsElOrId}`);
-        }
+        optionsElOrId = resolveOptionsEl(optionsElOrId);
 
         open(optionsElOrId, options);
     },
 
     close(optionsElOrId) {
-        if (typeof optionsElOrId == 'string') {
-            optionsElOrId = q(`#${optionsElOrId}`);
-        }
+        optionsElOrId = resolveOptionsEl(optionsElOrId);
 
         close(optionsElOrId);
     },
 
     findOptionByValue(optionsElOrId, value) {
-        if (typeof optionsElOrId == 'string') {
-            optionsElOrId = q(`#${optionsElOrId}`);
-        }
+        optionsElOrId = resolveOptionsEl(optionsElOrId);
 
         return findOptionByValue(optionsElOrId, value)
     },
+
+    nextOption(optionsElOrId) {
+        return nextOption(resolveOptionsEl(optionsElOrId));
+    },
+
+    prevOption(optionsElOrId) {
+        return prevOption(resolveOptionsEl(optionsElOrId));
+    }
 }

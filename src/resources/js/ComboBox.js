@@ -77,10 +77,17 @@ export default {
                 case 'Tab':
                     close(fieldEl)
                     break;
+                case 'ArrowDown':
+                case 'ArrowRight':
+                    setOption(fieldEl, OptionsPanel.nextOption(fieldEl.dataset.optionsListId));
+                    break;
+                case 'ArrowUp':
+                case 'ArrowLeft':
+                    setOption(fieldEl, OptionsPanel.prevOption(fieldEl.dataset.optionsListId));
             }
         });
 
-        // Select
+        // Field start values ielikšana
         qa('.field-select').forEach(fieldEl => {
             let checkedOptionEl = OptionsPanel.findOptionByValue(
                 fieldEl.dataset.optionsListId,
