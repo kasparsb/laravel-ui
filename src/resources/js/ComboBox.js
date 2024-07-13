@@ -1,10 +1,14 @@
-import {qa, r, on, clickp} from 'dom-helpers';
+import {qa, r, on, clickp, dispatchEvent} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
 
 /**
  * Field select uzliek izvēlēto options
  */
-function setOption(fieldEl, checkedOptionEl) {
+function setOption(fieldEl, checkedOptionEl, {event} = {}) {
+    if (typeof event == 'undefined') {
+        event = true;
+    }
+
     let isEmpty = true;
     let placeholderHTML = fieldEl.dataset.placeholder;
     let value = '';
@@ -26,6 +30,10 @@ function setOption(fieldEl, checkedOptionEl) {
 
     r(fieldEl).fieldValue.value = value;
     r(fieldEl).placeholder.innerHTML = placeholderHTML;
+
+    if (event) {
+        dispatchEvent(r(fieldEl).fieldValue, 'change');
+    }
 }
 
 function open(fieldEl) {
@@ -103,7 +111,9 @@ export default {
                 r(fieldEl).fieldValue.value
             )
 
-            setOption(fieldEl, checkedOptionEl)
+            setOption(fieldEl, checkedOptionEl, {
+                event: false
+            })
         });
     }
 }

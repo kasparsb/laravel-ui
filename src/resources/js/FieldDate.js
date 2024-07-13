@@ -1,4 +1,8 @@
-import {jsx, q, qa, parent, addStyle, append, replaceContent, getOffset, isChild, on} from 'dom-helpers';
+import {
+    jsx, q, qa, parent, isChild,
+    append, replaceContent,
+    on, dispatchEvent
+} from 'dom-helpers';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
@@ -55,13 +59,6 @@ function createCalendar(date) {
     })
 }
 
-function triggerEvent(el, eventName) {
-    var event = new Event(eventName, { bubbles: true });
-    // Dispatch it.
-    el.dispatchEvent(event);
-    return;
-}
-
 /**
  * Ja nav izveidoti container un calendar, tad tos izveido
  */
@@ -103,13 +100,7 @@ function dateSelected(date) {
     wasSetDateInInputFromCalendar = true;
     activeField.focus();
 
-    /**
-     * @todo šo vēl vajag kārtīgi pārbaudīt
-     * tieši event trigerošanu, lai nostrādā visi
-     * citi change eventi
-     */
-    triggerEvent(activeField, 'change')
-
+    dispatchEvent(activeField, 'change')
 
     close()
 }
@@ -179,7 +170,7 @@ function validateFieldValue(inputFieldEl) {
     if (clampedValue != inputFieldEl.value) {
         inputFieldEl.value = clampedValue;
 
-        triggerEvent(inputFieldEl, 'change')
+        dispatchEvent(inputFieldEl, 'change')
     }
 }
 
