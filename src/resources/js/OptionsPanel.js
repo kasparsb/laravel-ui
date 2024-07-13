@@ -167,16 +167,6 @@ function resolveOptionsEl(optionsElOrId) {
 export default {
     init() {
 
-        // Fokusējot options elementu, ja tajā ir search field, tad tas tiek fokusēts
-        // on('focusin', '.options', (ev, el) => {
-        //     // Reaģējam tikai, ja pats .options el dabū fokusu
-        //     if (is(ev.target, '.options')) {
-        //         if (r(el).fieldSearch) {
-        //             q(r(el).fieldSearch, 'input').focus();
-        //         }
-        //     }
-        // })
-
         on('keydown', '.options', (ev, optionsEl) => {
             switch (ev.key) {
                 case 'Enter':
