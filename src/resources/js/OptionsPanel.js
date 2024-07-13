@@ -87,11 +87,6 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
 
     setValue(optionsEl, value);
 
-    // Ir meklēšanas lauks
-    // if (r(fieldEl).fieldSearch) {
-
-    // }
-
     setTimeout(() => {
         SingletonPanel.show(optionsEl, {
             onContentElRemove(optionsEl) {
@@ -116,9 +111,15 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
         })
 
         /**
-         * TODO fokusēšana, jāskatās vai ir searchField
+         * Fokusēšana
+         * ja ir search field, tad foksuējam to
          */
-        optionsEl.focus();
+        if (r(optionsEl).fieldSearch) {
+            q(r(optionsEl).fieldSearch, 'input').focus();
+        }
+        else {
+            optionsEl.focus();
+        }
 
     }, 5)
 }
@@ -167,14 +168,14 @@ export default {
     init() {
 
         // Fokusējot options elementu, ja tajā ir search field, tad tas tiek fokusēts
-        on('focusin', '.options', (ev, el) => {
-            // Reaģējam tikai, ja pats .options el dabū fokusu
-            if (is(ev.target, '.options')) {
-                if (r(el).fieldSearch) {
-                    q(r(el).fieldSearch, 'input').focus();
-                }
-            }
-        })
+        // on('focusin', '.options', (ev, el) => {
+        //     // Reaģējam tikai, ja pats .options el dabū fokusu
+        //     if (is(ev.target, '.options')) {
+        //         if (r(el).fieldSearch) {
+        //             q(r(el).fieldSearch, 'input').focus();
+        //         }
+        //     }
+        // })
 
         on('keydown', '.options', (ev, optionsEl) => {
             switch (ev.key) {
@@ -254,6 +255,7 @@ export default {
         //     check(optionEl);
         // })
 
+        // Filtrēšana
         on('keyup', '.options [data-r="fieldSearch"]', (ev, el) => {
             filterOptionsByValue(parent(el, '[data-is-container]'), q(el, 'input').value)
         })

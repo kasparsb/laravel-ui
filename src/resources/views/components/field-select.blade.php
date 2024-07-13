@@ -37,7 +37,9 @@
     class="options b-c-200 hidden"
     data-is-container
     id="{{ $optionsListId }}"
-    tabindex="9999"
+    @if (!$searchable)
+    tabindex="0"
+    @endif
     >
     @if ($searchable)
     <x-ui::field-text placeholder="Search" data-r="fieldSearch" />
