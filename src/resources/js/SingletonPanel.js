@@ -14,7 +14,6 @@ let container;
 let onPrevContentElRemoveCb;
 
 function positionByEl(positionEl, side, align) {
-
     // Pozicionē container pret input lauku
     let p = getOffset(positionEl)
     let triggerDimensions = getOuterDimensions(positionEl);
@@ -37,8 +36,6 @@ function positionByEl(positionEl, side, align) {
          * ! css.right apzīmē kādas būs menu labās puses koordinātes
          * tas vajadzīgs, lai noteiktu, vai menu būs ārpus window robežām
          */
-
-
         if (align == 'left') {
             css.left = p.left;
             css.right = p.left + menuDimensions.width;
@@ -107,13 +104,15 @@ export default {
         removeContentEl();
         replaceContent(container, contentEl);
 
-        if (positionEl) {
-            positionByEl(positionEl, side, align);
-        }
-
         container.dataset.visible = 'yes';
 
         onPrevContentElRemoveCb = onContentElRemove;
+
+        if (positionEl) {
+            setTimeout(() => {
+                positionByEl(positionEl, side, align);
+            }, 5)
+        }
     },
 
     close() {
