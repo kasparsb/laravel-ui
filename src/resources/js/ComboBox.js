@@ -29,27 +29,33 @@ function setOption(fieldEl, checkedOptionEl) {
 }
 
 function open(fieldEl) {
-    if (!('isOptionOpen' in fieldEl.dataset)) {
-        OptionsPanel.open(fieldEl.dataset.optionsListId, {
-            value: r(fieldEl).fieldValue.value,
-            positionEl: fieldEl,
-            onSelectOption(optionEl) {
-                setOption(fieldEl, optionEl);
-            },
-            onClose() {
-                close(fieldEl);
-                r(fieldEl).fieldValue.focus();
-            }
-        })
+    // jau ir atvērts
+    if ('isOptionOpen' in fieldEl.dataset) {
+        return
     }
+
     fieldEl.dataset.isOptionOpen = '';
+    OptionsPanel.open(fieldEl.dataset.optionsListId, {
+        value: r(fieldEl).fieldValue.value,
+        positionEl: fieldEl,
+        onSelectOption(optionEl) {
+            setOption(fieldEl, optionEl);
+        },
+        onClose() {
+            close(fieldEl);
+            r(fieldEl).fieldValue.focus();
+        }
+    })
 }
 
 function close(fieldEl) {
-    if ('isOptionOpen' in fieldEl.dataset) {
-        OptionsPanel.close(fieldEl.dataset.optionsListId);
+    // Nav atvērts
+    if (!('isOptionOpen' in fieldEl.dataset)) {
+        return;
     }
+
     delete fieldEl.dataset.isOptionOpen;
+    OptionsPanel.close(fieldEl.dataset.optionsListId);
 }
 
 function toggleOpen(fieldEl) {
