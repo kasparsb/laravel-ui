@@ -41,9 +41,16 @@ function findOptionByValue(optionsEl, value) {
 }
 
 function nextOption(optionsEl) {
-    let currentOptionEl = getChecked(optionsEl);
+    let currentOptionEl = getChecked(optionsEl, {ignoreHiden: true});
+    // Ja ir izfiltrēts
+    if (is(currentOptionEl, '.hidden')) {
+        // uncheck
+        uncheck(currentOptionEl);
+        // un uzskatās, ka nav atrasts
+        currentOptionEl = null;
+    }
     if (currentOptionEl) {
-        let nextEl = next(currentOptionEl, '[data-r="option"]');
+        let nextEl = next(currentOptionEl, '[data-r="option"]:not(.hidden)');
         if (nextEl) {
             uncheck(currentOptionEl);
             return check(nextEl);
@@ -51,14 +58,21 @@ function nextOption(optionsEl) {
         return currentOptionEl;
     }
     else {
-        return check(first(qa(optionsEl, '[data-r="option"]')), optionsEl);
+        return check(first(qa(optionsEl, '[data-r="option"]:not(.hidden)')), optionsEl);
     }
 }
 
 function prevOption(optionsEl) {
-    let currentOptionEl = getChecked(optionsEl);
+    let currentOptionEl = getChecked(optionsEl, {ignoreHiden: true});
+    // Ja ir izfiltrēts
+    if (is(currentOptionEl, '.hidden')) {
+        // uncheck
+        uncheck(currentOptionEl);
+        // un uzskatās, ka nav atrasts
+        currentOptionEl = null;
+    }
     if (currentOptionEl) {
-        let prevEl = prev(currentOptionEl, '[data-r="option"]');
+        let prevEl = prev(currentOptionEl, '[data-r="option"]:not(.hidden)');
         if (prevEl) {
             uncheck(currentOptionEl);
             return check(prevEl);
@@ -66,7 +80,7 @@ function prevOption(optionsEl) {
         return currentOptionEl;
     }
     else {
-        return check(last(qa(optionsEl, '[data-r="option"]')));
+        return check(last(qa(optionsEl, '[data-r="option"]:not(.hidden)')));
     }
 }
 
