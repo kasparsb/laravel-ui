@@ -129,12 +129,17 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
          * ja ir search field, tad foksuējam to
          */
         if (r(optionsEl).fieldSearch) {
+            /**
+             * Interesants efekts, kad panel atver uz keydown, tad notiek
+             * šī lauka fokusēšana un šim pašam laukam atkal ir keyUp events
+             * un sanāk, ka pēc fokusēšanas tas dabū keyUp event, jo ir foksusā
+             */
+            optionsEl.dataset.ignoreFirstKeyup = '';
             q(r(optionsEl).fieldSearch, 'input').focus();
         }
         else {
             optionsEl.focus();
         }
-
     }, 5)
 }
 
@@ -142,6 +147,16 @@ function close(optionsEl) {
     // Ja panelī ir norādītais optionsEl, tad close
     if (optionsEl == SingletonPanel.getContentEl()) {
         SingletonPanel.close();
+
+        // Notīrām search query
+        if (r(optionsEl).fieldSearch) {
+            q(r(optionsEl).fieldSearch, 'input').value = '';
+        }
+
+        // Atslēpjam hidden options
+        qa(optionsEl, '[data-r="option"]').forEach(optionEl => {
+            removeClass(optionEl, 'hidden')
+        });
     }
 }
 
@@ -261,7 +276,13 @@ export default {
 
         // Filtrēšana
         on('keyup', '.options [data-r="fieldSearch"]', (ev, el) => {
-            filterOptionsByValue(parent(el, '[data-is-container]'), q(el, 'input').value)
+            let optionsEl = parent(el, '[data-is-container]');
+            if ('ignoreFirstKeyup' in optionsEl.dataset) {
+                delete optionsEl.dataset.ignoreFirstKeyup;
+            }
+            else {
+                filterOptionsByValue(optionsEl, q(el, 'input').value)
+            }
         })
     },
 
