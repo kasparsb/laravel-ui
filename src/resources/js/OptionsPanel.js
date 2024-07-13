@@ -55,7 +55,9 @@ function nextOption(optionsEl) {
             uncheck(currentOptionEl);
             return check(nextEl);
         }
-        return currentOptionEl;
+        else {
+            return currentOptionEl;
+        }
     }
     else {
         return check(first(qa(optionsEl, '[data-r="option"]:not(.hidden)')), optionsEl);
@@ -77,7 +79,9 @@ function prevOption(optionsEl) {
             uncheck(currentOptionEl);
             return check(prevEl);
         }
-        return currentOptionEl;
+        else {
+            return currentOptionEl;
+        }
     }
     else {
         return check(last(qa(optionsEl, '[data-r="option"]:not(.hidden)')));
@@ -143,8 +147,8 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
     }, 5)
 }
 
-function close(optionsEl) {
-    // Ja panelī ir norādītais optionsEl, tad close
+function close(optionsEl, {value} = null) {
+    // Ja norādītais optionsEl ir panelī, tad close
     if (optionsEl == SingletonPanel.getContentEl()) {
         SingletonPanel.close();
 
@@ -157,6 +161,11 @@ function close(optionsEl) {
         qa(optionsEl, '[data-r="option"]').forEach(optionEl => {
             removeClass(optionEl, 'hidden')
         });
+
+        // Reset options list value
+        if (value) {
+            setValue(optionsEl, value)
+        }
     }
 }
 
@@ -249,9 +258,14 @@ export default {
             uncheck(currentOptionEl);
             check(optionEl);
 
-
             if (selectOptionCb) {
                 selectOptionCb(optionEl);
+            }
+
+            if ('isInPanel' in optionsEl.dataset) {
+                if (closeCb) {
+                    closeCb();
+                }
             }
         })
 
@@ -265,14 +279,19 @@ export default {
             }
         });
 
-        // unchecked checked and set checked currently hovered
         /**
-         * TODO Sito laikam vajag tikai, ja ir FieldSelect režīms
+         * Šo laikam vajag tikai, ja ir FieldSelect režīms
+         * unchecked checked and set checked currently hovered
+         *
+         * šis imitē native select box behaviour
          */
-        // on('mouseover', '.options [data-r="option"]', (ev, optionEl) => {
-        //     uncheck(getChecked(parent(optionEl, '[data-is-container]')));
-        //     check(optionEl);
-        // })
+        on('mouseover', '.options [data-r="option"]', (ev, optionEl) => {
+            let optionsEl = parent(optionEl, '[data-is-container]');
+            if ('isInPanel' in optionsEl.dataset) {
+                uncheck(getChecked(optionsEl));
+                check(optionEl);
+            }
+        })
 
         // Filtrēšana
         on('keyup', '.options [data-r="fieldSearch"]', (ev, el) => {
@@ -292,10 +311,10 @@ export default {
         open(optionsElOrId, options);
     },
 
-    close(optionsElOrId) {
+    close(optionsElOrId, options = {}) {
         optionsElOrId = resolveOptionsEl(optionsElOrId);
 
-        close(optionsElOrId);
+        close(optionsElOrId, options);
     },
 
     findOptionByValue(optionsElOrId, value) {

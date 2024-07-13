@@ -55,7 +55,10 @@ function close(fieldEl) {
     }
 
     delete fieldEl.dataset.isOptionOpen;
-    OptionsPanel.close(fieldEl.dataset.optionsListId);
+    OptionsPanel.close(fieldEl.dataset.optionsListId, {
+        // value uz kādu reset options list
+        value: r(fieldEl).fieldValue.value,
+    });
 }
 
 function toggleOpen(fieldEl) {
