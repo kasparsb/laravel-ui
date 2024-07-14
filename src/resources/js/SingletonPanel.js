@@ -104,15 +104,15 @@ export default {
         removeContentEl();
         replaceContent(container, contentEl);
 
-        container.dataset.visible = 'yes';
-
         onPrevContentElRemoveCb = onContentElRemove;
 
-        if (positionEl) {
-            setTimeout(() => {
+        // Ja nav timeout, tad positionByEl nepaspēs nolasīt content el dimensions
+        setTimeout(() => {
+            container.dataset.visible = 'yes';
+            if (positionEl) {
                 positionByEl(positionEl, side, align);
-            }, 5)
-        }
+            }
+        }, 1)
     },
 
     close() {
