@@ -139,7 +139,7 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
              * un sanāk, ka pēc fokusēšanas tas dabū keyUp event, jo ir foksusā
              */
             optionsEl.dataset.ignoreFirstKeyup = '';
-            q(r(optionsEl).fieldSearch, 'input').focus();
+            r(optionsEl).fieldSearch.focus();
         }
         else {
             optionsEl.focus();
@@ -154,7 +154,7 @@ function close(optionsEl, {value} = null) {
 
         // Notīrām search query
         if (r(optionsEl).fieldSearch) {
-            q(r(optionsEl).fieldSearch, 'input').value = '';
+            r(optionsEl).fieldSearch.value = '';
         }
 
         // Atslēpjam hidden options
@@ -300,7 +300,7 @@ export default {
                 delete optionsEl.dataset.ignoreFirstKeyup;
             }
             else {
-                filterOptionsByValue(optionsEl, q(el, 'input').value)
+                filterOptionsByValue(optionsEl, el.value)
             }
         })
     },

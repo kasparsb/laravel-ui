@@ -56,7 +56,11 @@ function open(fieldEl) {
     fieldEl.dataset.isOptionOpen = '';
     OptionsPanel.open(fieldEl.dataset.optionsListId, {
         value: fieldValue(fieldEl).value,
-        positionEl: fieldEl,
+        /**
+         * Pozicionējam pret input lauku nevis container, jo container
+         * ir description, kas nobīdīs OptionsPanel par zemu
+         */
+        positionEl: q(fieldEl, 'input'),
         onSelectOption(optionEl) {
             setOption(fieldEl, optionEl);
         },
