@@ -1,5 +1,17 @@
+@php
+    // without data-* attributes
+    $attributesForContainer = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) != 'data-';
+    });
+    // only data-* attributes
+    $attributesForInputField = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) == 'data-';
+    });
+@endphp
 <div
-    {{ $attributes->class(['toggle-switch']) }}
+    {{ $attributesForContainer->class([
+        'toggle-switch',
+    ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     >
     <label>
@@ -9,7 +21,11 @@
             @endif
         @endif
         <span>
-            <input type="checkbox" name="{{ $name }}" @checked($checked) value="1" />
+            <input
+                {{ $attributesForInputField }}
+                type="checkbox"
+                name="{{ $name }}" @checked($checked)
+                value="1" />
         </span>
 
         @if ($labelPosition == 'right')

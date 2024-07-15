@@ -1,5 +1,15 @@
+@php
+    // without data-* attributes
+    $attributesForContainer = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) != 'data-';
+    });
+    // only data-* attributes
+    $attributesForInputField = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) == 'data-';
+    });
+@endphp
 <div
-    {{ $attributes->class([
+    {{ $attributesForContainer->class([
         'form-field' => true,
         'field-select' => true,
     ]) }}
@@ -22,9 +32,9 @@
             <use xlink:href="#select-trigger"></use>
         </svg>
         <input
+            {{ $attributesForInputField }}
             type="text"
             name="{{ $name }}"
-            data-r="fieldValue"
             value="{{ $value }}"
             @disabled($disabled)
             />

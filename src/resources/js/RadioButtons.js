@@ -1,7 +1,7 @@
-import {click, qa, r, parent, addClass, removeClass} from 'dom-helpers';
+import {click, qa, q, parent, addClass, removeClass} from 'dom-helpers';
 
 function isButtonSelected(radioButtonEl) {
-    return r(radioButtonEl).radio.checked;
+    return q(radioButtonEl, 'input').checked;
 }
 
 function handleRadioButtonClick(radioButtonEl) {

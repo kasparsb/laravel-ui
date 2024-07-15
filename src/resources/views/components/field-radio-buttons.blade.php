@@ -1,5 +1,7 @@
 <div
-    {{ $attributes->class(['field-radio-buttons']) }}
+    {{ $attributes->class([
+        'field-radio-buttons',
+    ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     >
     @if ($label)

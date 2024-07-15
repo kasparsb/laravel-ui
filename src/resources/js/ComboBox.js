@@ -1,5 +1,16 @@
-import {qa, r, on, clickp, dispatchEvent} from 'dom-helpers';
+import {qa, q, r, on, clickp, dispatchEvent} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
+
+/**
+ * ! Neizmantojam data-r uz input lauku r(fieldEl).fieldValue
+ * tas vajadzīgs, tāpēc, lai gala lietotājs varētu pats uzlikt
+ * savus data-* atribūtus uz input lauku. Šajā mirklī es pieciešu
+ * neertības, lai gala lietotājs var izmantot r() ērtības
+ */
+
+function fieldValue(fieldEl) {
+    return q(fieldEl, 'input');
+}
 
 /**
  * Field select uzliek izvēlēto options
@@ -28,11 +39,11 @@ function setOption(fieldEl, checkedOptionEl, {event} = {}) {
         delete fieldEl.dataset.isEmpty
     }
 
-    r(fieldEl).fieldValue.value = value;
+    fieldValue(fieldEl).value = value;
     r(fieldEl).placeholder.innerHTML = placeholderHTML;
 
     if (event) {
-        dispatchEvent(r(fieldEl).fieldValue, 'change');
+        dispatchEvent(fieldValue(fieldEl), 'change');
     }
 }
 
@@ -44,14 +55,14 @@ function open(fieldEl) {
 
     fieldEl.dataset.isOptionOpen = '';
     OptionsPanel.open(fieldEl.dataset.optionsListId, {
-        value: r(fieldEl).fieldValue.value,
+        value: fieldValue(fieldEl).value,
         positionEl: fieldEl,
         onSelectOption(optionEl) {
             setOption(fieldEl, optionEl);
         },
         onClose() {
             close(fieldEl);
-            r(fieldEl).fieldValue.focus();
+            fieldValue(fieldEl).focus();
         }
     })
 }
@@ -65,7 +76,7 @@ function close(fieldEl) {
     delete fieldEl.dataset.isOptionOpen;
     OptionsPanel.close(fieldEl.dataset.optionsListId, {
         // value uz kādu reset options list
-        value: r(fieldEl).fieldValue.value,
+        value: fieldValue(fieldEl).value,
     });
 }
 
@@ -108,7 +119,7 @@ export default {
         qa('.field-select').forEach(fieldEl => {
             let checkedOptionEl = OptionsPanel.findOptionByValue(
                 fieldEl.dataset.optionsListId,
-                r(fieldEl).fieldValue.value
+                fieldValue(fieldEl).value
             )
 
             setOption(fieldEl, checkedOptionEl, {

@@ -1,11 +1,24 @@
+@php
+    // without data-* attributes
+    $attributesForContainer = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) != 'data-';
+    });
+    // only data-* attributes
+    $attributesForInputField = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) == 'data-';
+    });
+@endphp
 <div
-    {{ $attributes->class(['form-field field-text']) }}
+    {{ $attributesForContainer->class([
+        'form-field field-text',
+    ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     >
     @if ($label)
         <label>{{ $label }}</label>
     @endif
     <input
+        {{ $attributesForInputField }}
         type="text"
         name="{{ $name }}"
         value="{{ $value }}"

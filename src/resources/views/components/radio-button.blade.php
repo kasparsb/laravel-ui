@@ -1,11 +1,21 @@
+@php
+    // without data-* attributes
+    $attributesForContainer = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) != 'data-';
+    });
+    // only data-* attributes
+    $attributesForInputField = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) == 'data-';
+    });
+@endphp
 <button
     data-role="radio-button"
     @if ($buttonClass == $buttonClassSelected)
-    {{ $attributes->class([
+    {{ $attributesForContainer->class([
         $buttonClass,
     ]) }}
     @else
-    {{ $attributes->class([
+    {{ $attributesForContainer->class([
         $buttonClassSelected => $selected,
         $buttonClass => !$selected,
     ]) }}
@@ -18,6 +28,7 @@
     >
     {{ $slot }}
     <input
+        {{ $attributesForInputField }}
         data-r="radio"
         type="radio"
         name="{{ $name }}"
