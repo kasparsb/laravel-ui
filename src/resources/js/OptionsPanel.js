@@ -128,22 +128,24 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
             width: getOuterDimensions(positionEl).width+'px',
         })
 
-        /**
-         * Fokusēšana
-         * ja ir search field, tad foksuējam to
-         */
-        if (r(optionsEl).fieldSearch) {
+        setTimeout(() => {
             /**
-             * Interesants efekts, kad panel atver uz keydown, tad notiek
-             * šī lauka fokusēšana un šim pašam laukam atkal ir keyUp events
-             * un sanāk, ka pēc fokusēšanas tas dabū keyUp event, jo ir foksusā
+             * Fokusēšana
+             * ja ir search field, tad foksuējam to
              */
-            optionsEl.dataset.ignoreFirstKeyup = '';
-            r(optionsEl).fieldSearch.focus();
-        }
-        else {
-            optionsEl.focus();
-        }
+            if (r(optionsEl).fieldSearch) {
+                /**
+                 * Interesants efekts, kad panel atver uz keydown, tad notiek
+                 * šī lauka fokusēšana un šim pašam laukam atkal ir keyUp events
+                 * un sanāk, ka pēc fokusēšanas tas dabū keyUp event, jo ir foksusā
+                 */
+                optionsEl.dataset.ignoreFirstKeyup = '';
+                r(optionsEl).fieldSearch.focus();
+            }
+            else {
+                optionsEl.focus();
+            }
+        }, 5)
     }, 5)
 }
 
