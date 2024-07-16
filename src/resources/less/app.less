@@ -344,13 +344,13 @@ body {
 }
 
 .input-label {
-    font-weight: var(--font-weight-medium);
     .t-3\.5();
+    .fw-m();
     line-height: 1;
 }
 .input-label-error {
-    font-weight: var(--font-weight-medium);
     .t-3\.5();
+    .fw-m();
     line-height: 1;
     color: hsl(var(--color-error));
 }
@@ -421,7 +421,7 @@ body {
     &.color-yellow-50  { color: hsl(var(--color-yellow-50)) }
 
     .t-3\.5();
-    font-weight: 500;
+    .fw-m();
     .border-md();
     .transition-color();
     cursor: pointer;
@@ -481,7 +481,7 @@ body {
     // Liela ikona, teksts jaunā rindā
     &.icon-large {
         .t-3();
-        font-weight: 500;
+        .fw-m();
 
         padding-top: @size010;
         padding-bottom: @size010;
@@ -922,7 +922,7 @@ body {
 }
 
 .title {
-    font-weight: var(--font-weight-bold);
+    .fw-b();
 
     line-height: 1;
 
@@ -1518,7 +1518,7 @@ body {
     }
     color: hsl(var(--color-950));
     .t-3\.5();
-    font-weight: 500;
+    .fw-m();
 
     padding: @size015;
 
@@ -1645,6 +1645,9 @@ body {
     padding: @size005;
 
     >.menu-item {
+
+        .fw-r();
+
         &.hidden {
             display: none;
         }
@@ -1661,9 +1664,9 @@ body {
         margin-right: -@size005;
     }
 
-    &:focus {
-        border-color: hsl(var(--color-400));
-    }
+    // &:focus {
+    //     border-color: hsl(var(--color-400));
+    // }
 }
 
 .tabs {
@@ -1894,7 +1897,7 @@ body {
 .wbcalendar-datecaption {
     .t-3\.5();
     .month {
-        font-weight: var(--font-weight-bold);
+        .fw-b();
         margin-right: @size010;
     }
     .year {
@@ -1903,7 +1906,7 @@ body {
 }
 .wbcalendar-weekday {
     .t-2\.5();
-    font-weight: 500;
+    .fw-m();
     color: hsl(var(--color-600));
     text-transform: uppercase;
 
@@ -1940,7 +1943,7 @@ body {
         /** 1. Date base formatting */
         border-radius: var(--border-radius-date);
         .t-3\.5();
-        font-weight: 500;
+        .fw-m();
         color: hsl(var(--text-color-date-default));
 
         cursor: pointer;
