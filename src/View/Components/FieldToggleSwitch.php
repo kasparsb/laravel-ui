@@ -16,6 +16,8 @@ class FieldToggleSwitch extends Component
 
     public function __construct(
         public $name='',
+        // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
+        public $nameModel='',
         public $label='',
         public $labelPosition='right',
         public $description='',
@@ -34,7 +36,7 @@ class FieldToggleSwitch extends Component
     {
         if (!$this->setOldValueCheckbox()) {
             if ($this->model) {
-                $this->checked = $this->model->{$this->name} ? true : false;
+                $this->checked = $this->model->{$this->nameModel ? $this->nameModel : $this->name} ? true : false;
             }
         }
 

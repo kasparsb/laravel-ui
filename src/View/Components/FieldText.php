@@ -17,6 +17,8 @@ class FieldText extends Component
     public function __construct(
         public $label='',
         public $name='',
+        // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
+        public $nameModel='',
         public $value='',
         public $description='',
         public $placeholder='',
@@ -34,7 +36,7 @@ class FieldText extends Component
     {
         if (!$this->setOldValue()) {
             if ($this->model) {
-                $this->value = $this->model->{$this->name};
+                $this->value = $this->model->{$this->nameModel ? $this->nameModel : $this->name};
             }
         }
 

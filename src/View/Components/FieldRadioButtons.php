@@ -17,6 +17,8 @@ class FieldRadioButtons extends Component
     public function __construct(
         public $label = '',
         public $name,
+        // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
+        public $nameModel='',
         public $value='',
         public $defaultValue = '',
         public $description = '',
@@ -41,13 +43,13 @@ class FieldRadioButtons extends Component
         if (!$this->setOldValue()) {
             if ($this->model) {
                 if ($this->model->exists) {
-                    $this->value = $this->model->{$this->name};
+                    $this->value = $this->model->{$this->nameModel ? $this->nameModel : $this->name};
                 }
                 else {
                     // Ja model vēl nav izveidots
                     // pārbaudām vai ir value
-                    if ($this->model->{$this->name}) {
-                        $this->value = $this->model->{$this->name};
+                    if ($this->model->{$this->nameModel ? $this->nameModel : $this->name}) {
+                        $this->value = $this->model->{$this->nameModel ? $this->nameModel : $this->name};
                     }
                     // value nav, izmantojam defaultValue
                     else {

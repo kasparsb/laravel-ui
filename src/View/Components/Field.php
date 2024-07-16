@@ -12,6 +12,8 @@ class Field extends Component
         public $type='text',
         public $label='',
         public $name='',
+        // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
+        public $nameModel='',
         public $value='',
         public $description='',
         public $placeholder='',
@@ -20,7 +22,7 @@ class Field extends Component
     )
     {
         if ($this->model) {
-            $this->value = $this->model->{$this->name};
+            $this->value = $this->model->{$this->nameModel ? $this->nameModel : $this->name};
         }
     }
 
