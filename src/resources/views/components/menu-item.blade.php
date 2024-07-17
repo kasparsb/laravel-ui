@@ -4,8 +4,16 @@
     $subAction = count($p) > 1 ? $p[1] : '';
 @endphp
 <a
-    {{ $attributes->class(['menu-item', $selected ? 'selected' : '']) }}
+    {{ $attributes->class([
+        'menu-item',
+        'selected' => $selected ? true : false,
+    ]) }}
+
     data-role="menuitem"
+
+    @if ($name)
+    name="{{ $name }}"
+    @endif
 
     @if ($linkSource)
     data-link-source="{{ $linkSource }}"
@@ -14,7 +22,6 @@
     @if ($redirectSource)
     data-redirect-source="{{ $redirectSource }}"
     @endif
-
 
     @if ($as == 'link')
     href="{{ $link }}"
