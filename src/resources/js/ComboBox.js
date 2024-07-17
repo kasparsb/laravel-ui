@@ -1,6 +1,8 @@
 import {qa, q, r, on, clickp, dispatchEvent} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
 
+let optionsListCounter = 0;
+
 /**
  * ! Neizmantojam data-r uz input lauku r(fieldEl).fieldValue
  * tas vajadzīgs, tāpēc, lai gala lietotājs varētu pats uzlikt
@@ -53,8 +55,10 @@ function open(fieldEl) {
         return
     }
 
+    checkOptionsListId(fieldEl);
+
     fieldEl.dataset.isOptionOpen = '';
-    OptionsPanel.open(fieldEl.dataset.optionsListId, {
+    OptionsPanel.open(getOptionsEl(fieldEl), {
         value: fieldValue(fieldEl).value,
         /**
          * Pozicionējam pret input lauku nevis container, jo container
@@ -78,7 +82,7 @@ function close(fieldEl) {
     }
 
     delete fieldEl.dataset.isOptionOpen;
-    OptionsPanel.close(fieldEl.dataset.optionsListId, {
+    OptionsPanel.close(getOptionsEl(fieldEl), {
         // value uz kādu reset options list
         value: fieldValue(fieldEl).value,
     });
@@ -93,6 +97,42 @@ function toggleOpen(fieldEl) {
     }
 }
 
+/**
+ * Pārbaudām vai OptionsList ir uzģenerēts unikāls id
+ * sākumā OptionsList stāv ielikts FieldSelect elementā,
+ * kad tas tiks parādīts, tas tiks izņemts no
+ * FieldSelect un ielikts body
+ * id būs reference uz OptionsList
+ *
+ * Sākumā OptionsList bija ārpus FieldSelect
+ * bet tad radās problēma ar FieldSelect lauka klonēšanu
+ * lauks noklonējās, bet reference uz OptionsList palika vecā
+ */
+function checkOptionsListId(fieldEl) {
+    if (fieldEl.dataset.optionsListId) {
+        return;
+    }
+
+    let optionsEl = q(fieldEl, '.options');
+    if (optionsEl) {
+        if (!optionsEl.id) {
+            optionsEl.id = 'options-list-'+(optionsListCounter++);
+            fieldEl.dataset.optionsListId = optionsEl.id;
+        }
+    }
+}
+
+/**
+ * Ja ir norādīts options list id, tad meklējam pēc list id
+ * ja nav, tad meklējam options elementu, kurš ir ielikts fieldEl
+ */
+function getOptionsEl(fieldEl) {
+    if (fieldEl.dataset.optionsListId) {
+        return q(`#${fieldEl.dataset.optionsListId}`);
+    }
+    return q(fieldEl, '.options');
+}
+
 export default {
     init() {
 
@@ -103,6 +143,8 @@ export default {
         on('keydown', '.field-select', (ev, fieldEl) => {
             switch (ev.key) {
                 case 'Enter':
+                    // ja formā, tad būs submit, tāpēc prevent
+                    ev.preventDefault();
                     toggleOpen(fieldEl);
                     break;
                 case 'Escape':
@@ -122,7 +164,7 @@ export default {
         // Field start values ielikšana
         qa('.field-select').forEach(fieldEl => {
             let checkedOptionEl = OptionsPanel.findOptionByValue(
-                fieldEl.dataset.optionsListId,
+                getOptionsEl(fieldEl),
                 fieldValue(fieldEl).value
             )
 

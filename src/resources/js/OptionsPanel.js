@@ -42,15 +42,16 @@ function findOptionByValue(optionsEl, value) {
 
 function nextOption(optionsEl) {
     let currentOptionEl = getChecked(optionsEl, {ignoreHiden: true});
+
     // Ja ir izfiltrēts
-    if (is(currentOptionEl, '.hidden')) {
+    if (currentOptionEl && currentOptionEl.hidden) {
         // uncheck
         uncheck(currentOptionEl);
         // un uzskatās, ka nav atrasts
         currentOptionEl = null;
     }
     if (currentOptionEl) {
-        let nextEl = next(currentOptionEl, '[data-r="option"]:not(.hidden)');
+        let nextEl = next(currentOptionEl, '[data-r="option"]:not([hidden])');
         if (nextEl) {
             uncheck(currentOptionEl);
             return check(nextEl);
@@ -60,21 +61,21 @@ function nextOption(optionsEl) {
         }
     }
     else {
-        return check(first(qa(optionsEl, '[data-r="option"]:not(.hidden)')), optionsEl);
+        return check(first(qa(optionsEl, '[data-r="option"]:not([hidden])')), optionsEl);
     }
 }
 
 function prevOption(optionsEl) {
     let currentOptionEl = getChecked(optionsEl, {ignoreHiden: true});
     // Ja ir izfiltrēts
-    if (is(currentOptionEl, '.hidden')) {
+    if (currentOptionEl && currentOptionEl.hidden) {
         // uncheck
         uncheck(currentOptionEl);
         // un uzskatās, ka nav atrasts
         currentOptionEl = null;
     }
     if (currentOptionEl) {
-        let prevEl = prev(currentOptionEl, '[data-r="option"]:not(.hidden)');
+        let prevEl = prev(currentOptionEl, '[data-r="option"]:not([hidden])');
         if (prevEl) {
             uncheck(currentOptionEl);
             return check(prevEl);
@@ -84,7 +85,7 @@ function prevOption(optionsEl) {
         }
     }
     else {
-        return check(last(qa(optionsEl, '[data-r="option"]:not(.hidden)')));
+        return check(last(qa(optionsEl, '[data-r="option"]:not([hidden])')));
     }
 }
 
@@ -113,7 +114,7 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
 
                 delete optionsEl.dataset.isInPanel;
 
-                addClass(optionsEl, 'hidden')
+                optionsEl.hidden = true;
                 // append back to body, jo var būt vairāki menu un tos meklēs body
                 append(q('body'), optionsEl);
             },
@@ -122,7 +123,7 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
             align: 'left',
         })
 
-        removeClass(optionsEl, 'hidden');
+        optionsEl.hidden = false;
 
         addStyle(optionsEl, {
             width: getOuterDimensions(positionEl).width+'px',
@@ -161,7 +162,7 @@ function close(optionsEl, {value} = null) {
 
         // Atslēpjam hidden options
         qa(optionsEl, '[data-r="option"]').forEach(optionEl => {
-            removeClass(optionEl, 'hidden')
+            optionEl.hidden = false;
         });
 
         // Reset options list value
@@ -185,23 +186,16 @@ function filterOptionsByValue(optionsEl, value) {
     qa(optionsEl, '[data-r="option"]').forEach(optionEl => {
         if (value) {
             if (fuzzysearch(value, optionEl.innerText.toLowerCase())) {
-                removeClass(optionEl, 'hidden')
+                optionEl.hidden = false;
             }
             else {
-                addClass(optionEl, 'hidden')
+                optionEl.hidden = true;
             }
         }
         else {
-            removeClass(optionEl, 'hidden')
+            optionEl.hidden = false;
         }
     })
-}
-
-function resolveOptionsEl(optionsElOrId) {
-    if (typeof optionsElOrId == 'string') {
-        return q(`#${optionsElOrId}`);
-    }
-    return optionsElOrId;
 }
 
 export default {
@@ -307,29 +301,23 @@ export default {
         })
     },
 
-    open(optionsElOrId, options = {}) {
-        optionsElOrId = resolveOptionsEl(optionsElOrId);
-
-        open(optionsElOrId, options);
+    open(optionsEl, options = {}) {
+        open(optionsEl, options);
     },
 
-    close(optionsElOrId, options = {}) {
-        optionsElOrId = resolveOptionsEl(optionsElOrId);
-
-        close(optionsElOrId, options);
+    close(optionsEl, options = {}) {
+        close(optionsEl, options);
     },
 
-    findOptionByValue(optionsElOrId, value) {
-        optionsElOrId = resolveOptionsEl(optionsElOrId);
-
-        return findOptionByValue(optionsElOrId, value)
+    findOptionByValue(optionsEl, value) {
+        return findOptionByValue(optionsEl, value)
     },
 
-    nextOption(optionsElOrId) {
-        return nextOption(resolveOptionsEl(optionsElOrId));
+    nextOption(optionsEl) {
+        return nextOption(optionsEl);
     },
 
-    prevOption(optionsElOrId) {
-        return prevOption(resolveOptionsEl(optionsElOrId));
+    prevOption(optionsEl) {
+        return prevOption(optionsEl);
     }
 }

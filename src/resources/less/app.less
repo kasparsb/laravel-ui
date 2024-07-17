@@ -618,6 +618,15 @@ body {
             width: 100%;
         }
     }
+    &.no-border:not(:is([data-state="error"])) {
+        >[type=text],
+        >[type=email],
+        >[type=password],
+        >[type=date],
+        >textarea {
+            border-color: transparent
+        }
+    }
     &[data-state="error"] {
         >[type=text],
         >[type=email],
@@ -626,6 +635,15 @@ body {
         >textarea {
             .input-text-error();
             width: 100%;
+        }
+    }
+    &.no-border[data-state="error"] {
+        >[type=text],
+        >[type=email],
+        >[type=password],
+        >[type=date],
+        >textarea {
+            border-color: transparent;
         }
     }
 
@@ -1506,6 +1524,9 @@ body {
     justify-content: flex-start;
     align-items: center;
     white-space: nowrap;
+    &[hidden] {
+        display: none;
+    }
 
     .border-sm();
 
@@ -1623,11 +1644,6 @@ body {
 }
 
 .options {
-
-    &.hidden {
-        display: none;
-    }
-
     .border-md();
     border-width: 1px;
     border-style: solid;
@@ -1636,13 +1652,34 @@ body {
 
     .shadow-lg();
 
-    // krāsu uzliks ar css klasēm b-c-200, lai to var override
-    //border-color: hsl(var(--color-200));
+    /**
+     * TODO šis jāņem ārā, pašlaik temp workaround
+     */
+    max-height: (8 * 2.05rem);
 
-    .col-items();
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    &[hidden] {
+        display: none;
+    }
+
     gap: 0;
 
-    padding: @size005;
+    >.search-field {
+        border-bottom: 1px solid hsl(var(--color-200));
+    }
+
+    // šeit ir options list
+    >[role="list"] {
+        .col-items();
+        gap: 0;
+        padding: @size005;
+        overflow-y: auto;
+
+        // Izplešas pa visu augstumu
+        flex: 1;
+    }
 
     >.menu-item {
 
@@ -1658,15 +1695,6 @@ body {
             }
         }
     }
-
-    >.delimiter-horizontal {
-        margin-left: -@size005;
-        margin-right: -@size005;
-    }
-
-    // &:focus {
-    //     border-color: hsl(var(--color-400));
-    // }
 }
 
 .tabs {
