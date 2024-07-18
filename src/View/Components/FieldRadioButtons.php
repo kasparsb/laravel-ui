@@ -15,8 +15,8 @@ class FieldRadioButtons extends Component
     use ComponentWithRequestOldValue;
 
     public function __construct(
-        public $label = '',
         public $name,
+        public $label = '',
         // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
         public $nameModel='',
         public $value='',
