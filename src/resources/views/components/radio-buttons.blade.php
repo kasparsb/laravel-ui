@@ -1,6 +1,6 @@
 <div
     {{ $attributes->class(['radio-buttons']) }}
-    data-container
+    data-is-container
     >
     {{ $slot }}
 </div>

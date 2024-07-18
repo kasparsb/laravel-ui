@@ -5,7 +5,7 @@ function isButtonSelected(radioButtonEl) {
 }
 
 function handleRadioButtonClick(radioButtonEl) {
-    let radioButtonsEl = parent(radioButtonEl, '[data-container]');
+    let radioButtonsEl = parent(radioButtonEl, '[data-is-container]');
 
     // saliekam css klases pēc button state
     qa(radioButtonsEl, '[data-role="radio-button"]').forEach(el => {
