@@ -12,6 +12,7 @@ import RadioButtons from './RadioButtons';
 import OptionsPanel from './OptionsPanel';
 import ComboBox from './ComboBox';
 import FieldIncrement from './FieldIncrement';
+import FieldHoursMinutes from './FieldHoursMinutes';
 
 OptionsPanel.init();
 ButtonLoading.init();
@@ -27,6 +28,7 @@ Tabs.init();
 RadioButtons.init();
 ComboBox.init();
 FieldIncrement.init();
+FieldHoursMinutes.init();
 
 export {
     OptionsPanel,
@@ -44,6 +46,7 @@ export {
     RadioButtons,
     ComboBox,
     FieldIncrement,
+    FieldHoursMinutes,
 }
 
 export default {
@@ -62,4 +65,5 @@ export default {
     RadioButtons,
     ComboBox,
     FieldIncrement,
+    FieldHoursMinutes,
 }
