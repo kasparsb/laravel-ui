@@ -24,6 +24,10 @@
     @if (!is_null($max))
     data-max="{{ $max }}"
     @endif
+    @if (!is_null($padLeft))
+    data-pad-left="{{ $padLeft }}"
+    data-pad-left-length="{{ $padLeftLength }}"
+    @endif
     >
     @if ($label)
         <label>{{ $label }}</label>

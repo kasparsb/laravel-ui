@@ -42,6 +42,8 @@ class FieldIncrement extends Component
         public $max = null,
         public $step = 1,
         public $format = 'number', // number, time
+        public $padLeft = null,
+        public $padLeftLength = null,
     )
     {
         if (!$this->setOldValue()) {

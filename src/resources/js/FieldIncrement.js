@@ -1,9 +1,10 @@
 import {q, clickp, on, parent} from 'dom-helpers';
 
-function sp(s) {
+function sp(s, padString='0', padLength=2) {
+
     s = s+'';
-    if (s.length == 1) {
-        s = '0'+s;
+    while (s.length < padLength) {
+        s = padString+s;
     }
     return s;
 }
@@ -55,6 +56,9 @@ function setValue(fieldEl, value) {
         q(fieldEl, 'input').value = toTimeString(value);
     }
     else {
+        if (c.padLeft) {
+            value = sp(value, c.padLeft, c.padLeftLength)
+        }
         q(fieldEl, 'input').value = value;
     }
 }
@@ -78,6 +82,8 @@ function getConfig(fieldEl) {
         min: '',
         max: '',
         step: parseInt(fieldEl.dataset.step, 10),
+        padLeft: 'padLeft' in fieldEl.dataset ? fieldEl.dataset.padLeft : false,
+        padLeftLength: 'padLeftLength' in fieldEl.dataset ? fieldEl.dataset.padLeftLength : false,
     }
 
     if (r.isMin) {
@@ -103,11 +109,32 @@ function getConfig(fieldEl) {
 
 export default {
     init() {
+        let it = 0;
         clickp('.field-increment [data-r="inc"]', (ev, el) => {
+            clearInterval(it);
             inc(parent(el, '[data-is-container]'))
         })
         clickp('.field-increment [data-r="dec"]', (ev, el) => {
+            clearInterval(it);
             dec(parent(el, '[data-is-container]'))
+        })
+
+        on('mousedown', '.field-increment [data-r="inc"]', (ev, el) => {
+            let fieldEl = parent(el, '[data-is-container]');
+            it = setTimeout(() => {
+                it = setInterval(() => {
+                    inc(fieldEl)
+                }, 100)
+            }, 450)
+        })
+
+        on('mousedown', '.field-increment [data-r="dec"]', (ev, el) => {
+            let fieldEl = parent(el, '[data-is-container]');
+            it = setTimeout(() => {
+                it = setInterval(() => {
+                    dec(fieldEl)
+                }, 100)
+            }, 450)
         })
 
         on('keydown', '.field-increment', (ev, el) => {
