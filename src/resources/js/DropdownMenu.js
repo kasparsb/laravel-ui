@@ -1,12 +1,15 @@
 import {q, qa, parent, addClass, removeClass, isChild, append, click, on, clearFormData} from 'dom-helpers';
 import ButtonDelete from './ButtonDelete';
 import SingletonPanel from './SingletonPanel';
+import Listeners from './helpers/Listeners';
 
 let activeClickTriggerEl;
 let isOpen = false;
 let dropDownMenuHideTimeout = 0;
 // default event, kad slēpt menu
 let menuHideOn;
+
+let onOpenListeners = {};
 
 function findDropdownMenuByName(name) {
     return q('[data-dropdown-menu-name="'+name+'"]');
@@ -60,6 +63,15 @@ function open(clickTriggerEl, menuEl) {
 
     // Novācam hidden klasi no dropdown menu
     removeClass(menuEl, 'hidden');
+
+    if (menuEl.dataset.dropdownMenuName) {
+        if (onOpenListeners[menuEl.dataset.dropdownMenuName]) {
+            onOpenListeners[menuEl.dataset.dropdownMenuName].trigger([
+                menuEl,
+                activeClickTriggerEl
+            ])
+        }
+    }
 }
 
 function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
@@ -198,6 +210,18 @@ export default {
             }
         })
 
+        on('keyup', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            if (!isOpen) {
+                return
+            }
+            console.log(ev.key);
+            switch (ev.key) {
+                case 'Escape':
+                    close();
+                    break;
+            }
+        });
+
 
         on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
             triggerEl.dataset.wasFocusIn = '';
@@ -277,5 +301,12 @@ export default {
         if (dropdownMenuEl && isDropdownMenuOpen(dropdownMenuEl)) {
             return activeClickTriggerEl;
         }
+    },
+
+    onOpen(menuName, cb) {
+        if (typeof onOpenListeners[menuName] == 'undefined') {
+            onOpenListeners[menuName] = new Listeners();
+        }
+        onOpenListeners[menuName].listen(cb);
     }
 }
