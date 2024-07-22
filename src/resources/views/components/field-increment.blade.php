@@ -34,7 +34,7 @@
     @endif
 
     <div>
-        <x-ui::button-ghost class="icon" data-r="dec">
+        <x-ui::button-ghost class="icon" data-r="dec" tabindex="-1">
             <x-tabler-minus />
         </x-ui::button-ghost>
         <input
@@ -58,7 +58,7 @@
             @endif
 
             />
-        <x-ui::button-ghost class="icon" data-r="inc">
+        <x-ui::button-ghost class="icon" data-r="inc" tabindex="-1">
             <x-tabler-plus />
         </x-ui::button-ghost>
     </div>

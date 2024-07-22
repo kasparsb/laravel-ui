@@ -703,7 +703,9 @@ body {
         }
     }
     &:has(input:focus) {
-        .input-text-focused();
+        >div {
+            .input-text-focused();
+        }
     }
 }
 
