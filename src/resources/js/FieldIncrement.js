@@ -1,4 +1,4 @@
-import {q, clickp, on, parent} from 'dom-helpers';
+import {q, clickp, on, parent, dispatchEvent} from 'dom-helpers';
 
 function sp(s, padString='0', padLength=2) {
 
@@ -61,6 +61,8 @@ function setValue(fieldEl, value) {
         }
         q(fieldEl, 'input').value = value;
     }
+
+    dispatchEvent(q(fieldEl, 'input'), 'change');
 }
 
 function getValue(fieldEl) {
