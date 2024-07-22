@@ -11,6 +11,7 @@ import Tabs from './Tabs';
 import RadioButtons from './RadioButtons';
 import OptionsPanel from './OptionsPanel';
 import ComboBox from './ComboBox';
+import FieldIncrement from './FieldIncrement';
 
 OptionsPanel.init();
 ButtonLoading.init();
@@ -25,6 +26,7 @@ FileUpload.init();
 Tabs.init();
 RadioButtons.init();
 ComboBox.init();
+FieldIncrement.init();
 
 export {
     OptionsPanel,
@@ -41,6 +43,7 @@ export {
     Tabs,
     RadioButtons,
     ComboBox,
+    FieldIncrement,
 }
 
 export default {
@@ -58,4 +61,5 @@ export default {
     Tabs,
     RadioButtons,
     ComboBox,
+    FieldIncrement,
 }

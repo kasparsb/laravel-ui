@@ -9,6 +9,7 @@
  @import 'max-width';
  @import 'height';
  @import 'text-size';
+ @import 'padding';
  @import 'margin-top';
  @import 'margin-bottom';
  @import 'margin-y';
@@ -615,6 +616,9 @@ body {
         >[type=date],
         >textarea {
             .input-text();
+            .input-text-border();
+            .input-text-border-color-shadow();
+            .input-text-focus();
             width: 100%;
         }
     }
@@ -634,6 +638,9 @@ body {
         >[type=date],
         >textarea {
             .input-text-error();
+            .input-text-border();
+            .input-text-error-border-color-shadow();
+            .input-text-error-focus();
             width: 100%;
         }
     }
@@ -653,6 +660,51 @@ body {
 
     // Description and error text
     .form-field-description-error()
+}
+
+.field-increment {
+
+    // te būs pogas un input
+    >div {
+        display: flex;
+        flex-flow: row nowrap;
+        // input lauks, izstiepjas pa visu platumu
+        >input {
+            flex: 1;
+            width: 100%;
+            .input-text();
+            text-align: center;
+        }
+
+        // pogām right un left borders
+        button {
+            &:first-child {
+                border-right: 1px solid hsl(var(--color-200));
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+            &:last-child {
+                border-left: 1px solid hsl(var(--color-200));
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+        }
+    }
+    &:not(:is([data-state="error"])) {
+        >div {
+            .input-text-border();
+            .input-text-border-color-shadow();
+        }
+    }
+    &[data-state="error"] {
+        >div {
+            .input-text-border();
+            .input-text-error-border-color-shadow();
+        }
+    }
+    &:has(input:focus) {
+        .input-text-focused();
+    }
 }
 
 .field-select {
@@ -717,6 +769,8 @@ body {
     &:not(:is([data-state="error"])) {
         .select-placeholder {
             .input-text();
+            .input-text-border();
+            .input-text-border-color-shadow();
             &:has(input:focus) {
                 .input-text-focused();
             }
@@ -727,6 +781,8 @@ body {
     &[data-state="error"] {
         .select-placeholder {
             .input-text-error();
+            .input-text-border();
+            .input-text-error-border-color-shadow();
             &:has(input:focus) {
                 .input-text-error-focused();
             }
@@ -908,7 +964,8 @@ body {
         >.button-secondary,
         >.button-danger,
         >.button-ghost,
-        >.button-outline {
+        >.button-outline,
+        >.form-field {
             border-radius: 0;
             &:first-child {
                 border-top-left-radius: var(--radius);
@@ -917,6 +974,25 @@ body {
             &:last-child {
                 border-top-right-radius: var(--radius);
                 border-bottom-right-radius: var(--radius);
+            }
+        }
+        >.form-field {
+            input {
+                border-radius: 0;
+                border-left: 0;
+            }
+            &:first-child {
+                input {
+                    border-top-left-radius: var(--radius);
+                    border-bottom-left-radius: var(--radius);
+                    border-left: 1px solid #e5e7eb;
+                }
+            }
+            &:last-child {
+                input {
+                    border-top-right-radius: var(--radius);
+                    border-bottom-right-radius: var(--radius);
+                }
             }
         }
         >.button-outline {
@@ -2620,4 +2696,15 @@ body {
         flex-flow: column nowrap;
         justify-content: flex-start;
     }
+}
+
+.grid {
+
+    .gaps-sizes();
+
+    display: grid;
+	grid-auto-flow: column;
+	grid-gap: 1px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(8, auto);
 }

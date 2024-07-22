@@ -1,3 +1,25 @@
+.input-text-border {
+    border-width: 1px;
+    border-style: solid;
+
+    border-radius: calc(var(--radius) - 2px);
+}
+.input-text-border-color-shadow {
+    box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
+    border-color: hsl(var(--color-200));
+}
+.input-text-error-border-color-shadow {
+    box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
+    border-color: hsl(var(--color-red-200));
+}
+
+.input-text-focused {
+    border-color: hsl(var(--color-400));
+}
+.input-text-error-focused {
+    border-color: hsl(var(--color-red-400));
+}
+
 .input-text,
 .input-text-error {
     .t-3\.5();
@@ -10,32 +32,16 @@
 
     background-color: transparent;
 
-    border-width: 1px;
-    border-style: solid;
-
-    border-radius: calc(var(--radius) - 2px);
-
     outline: none;
 }
 
-.input-text-focused {
-    border-color: hsl(var(--color-400));
-}
-.input-text-error-focused {
-    border-color: hsl(var(--color-red-400));
-}
-.input-text {
-    box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
-    border-color: hsl(var(--color-200));
 
+.input-text-focus {
     &:focus {
         .input-text-focused();
     }
 }
-.input-text-error {
-    box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
-    border-color: hsl(var(--color-red-200));
-
+.input-text-error-focus {
     &:focus {
         .input-text-error-focused();
     }
