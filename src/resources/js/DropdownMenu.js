@@ -197,6 +197,46 @@ export default {
                 }
             }
         })
+
+
+        on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            triggerEl.dataset.wasFocusIn = '';
+
+            if (triggerEl.dataset.dropdownMenuTrigger) {
+                let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+                if (menuEl) {
+                    if (isOpen) {
+                        close();
+                    }
+                    else {
+                        setOverrideFromOpenTriggerEl(triggerEl, menuEl);
+
+                        open(triggerEl, menuEl);
+                    }
+                }
+            }
+        })
+        // Ja ir iefokusēts, tad atkārtoti nevarēs atvērt, tāpēc ir vēl click
+        click('[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            if (('wasFocusIn' in triggerEl.dataset)) {
+                delete triggerEl.dataset.wasFocusIn;
+            }
+            else {
+                if (triggerEl.dataset.dropdownMenuTrigger) {
+                    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+                    if (menuEl) {
+                        if (isOpen) {
+                            close();
+                        }
+                        else {
+                            setOverrideFromOpenTriggerEl(triggerEl, menuEl);
+
+                            open(triggerEl, menuEl);
+                        }
+                    }
+                }
+            }
+        })
     },
 
     /**

@@ -23,7 +23,21 @@
         name="{{ $name }}"
         value="{{ $value }}"
         placeholder="{{ $placeholder }}"
-        @disabled($disabled) />
+        @disabled($disabled)
+
+        @if ($menu)
+        data-dropdown-menu-trigger="{{ $menu }}"
+        data-dropdown-menu-show="{{ $menuShow }}"
+            @if ($menuResetForm)
+            data-dropdown-menu-reset-form
+            @endif
+        @endif
+
+        @if ($menuHide)
+        data-dropdown-menu-hide="{{ $menuHide }}"
+        @endif
+
+        />
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
