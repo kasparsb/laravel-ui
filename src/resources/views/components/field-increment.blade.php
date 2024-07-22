@@ -40,7 +40,9 @@
         <input
             {{ $attributesForInputField }}
             type="text"
+            @if ($name)
             name="{{ $name }}"
+            @endif
             value="{{ $value }}"
             placeholder="{{ $placeholder }}"
             @disabled($disabled)
