@@ -14,7 +14,6 @@
         'field-hours-minutes',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
-    data-is-container
     >
     @if ($label)
         <label>{{ $label }}</label>
