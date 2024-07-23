@@ -19,7 +19,8 @@ function timeToInt(timeString) {
     if (p.length > 1) {
         return (parseInt(p[0], 10) * 60) + parseInt(p[1], 10)
     }
-    return parseInt(timeString, 10);
+    let r = parseInt(timeString, 10);
+    return isNaN(r) ? 0 : r;
 }
 
 function toTimeString(value) {
