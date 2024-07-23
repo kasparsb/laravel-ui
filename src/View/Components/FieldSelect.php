@@ -24,6 +24,7 @@ class FieldSelect extends Component
         // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
         public $nameModel='',
         public $value='',
+        public $defaultValue = '',
         public $description='',
         public $placeholder='',
         public $options=false,
@@ -42,9 +43,26 @@ class FieldSelect extends Component
         public ?Request $request=null,
     )
     {
+        /**
+         * * default value izmanto tikai model gadījumā
+         */
+
         if (!$this->setOldValue()) {
             if ($this->model) {
-                $this->value = $this->model->{$this->nameModel ? $this->nameModel : $this->name};
+                if ($this->model->exists) {
+                    $this->value = $this->model->{$this->nameModel ? $this->nameModel : $this->name};
+                }
+                else {
+                    // Ja model vēl nav izveidots
+                    // pārbaudām vai ir value
+                    if ($this->model->{$this->nameModel ? $this->nameModel : $this->name}) {
+                        $this->value = $this->model->{$this->nameModel ? $this->nameModel : $this->name};
+                    }
+                    // value nav, izmantojam defaultValue
+                    else {
+                        $this->value = $this->defaultValue;
+                    }
+                }
             }
         }
 
