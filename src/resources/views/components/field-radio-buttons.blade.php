@@ -1,5 +1,16 @@
+@php
+    // without data-* attributes
+    $attributesForContainer = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) != 'data-';
+    });
+    // only data-* attributes
+    $dataAttributes = $attributes->filter(function($value, $key){
+        return substr($key, 0, 5) == 'data-';
+    });
+@endphp
+
 <div
-    {{ $attributes->class([
+    {{ $attributesForContainer->class([
         'field-radio-buttons',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
@@ -9,6 +20,7 @@
     @endif
 
     <x-ui::radio-buttons
+        :dataAttributes="$dataAttributes"
         :name="$name"
         :value="$value"
         :buttonClass="$buttonClass"
