@@ -1,3 +1,5 @@
+@inject('stateManager', 'Kasparsb\Ui\View\StateManager')
+
 @php
     // without data-* attributes
     $attributesForContainer = $attributes->filter(function($value, $key){
@@ -27,6 +29,8 @@
             :defaultDateState="$defaultDateState"
             :state="$state"
             :disabled="$disabled"
+
+            :value="$valueDate"
             />
 
         <x-ui::field-increment
@@ -35,7 +39,7 @@
             min="00:00"
             max="24:00"
             step="60"
-            value="13:00"
+            :value="$valueTime"
             menu="timepicker"
             menuShow="onfocusin"
             menuPositionAt=".field-increment"
@@ -53,3 +57,35 @@
         @disabled($disabled)
         />
 </div>
+
+@if (!$stateManager->isTimePickerMenu())
+@php
+    $stateManager->setIsTimePickerMenu();
+@endphp
+<x-ui::dropdown-menu name="timepicker" data-timepicker-menu>
+
+    <x-ui::v-stack class="p-4">
+        <x-ui::title class="t-4">Select time</x-ui::title>
+
+        <x-ui::field-hours-minutes data-r="hoursMinutes" />
+
+        <x-ui::h-stack class="h-right">
+            <x-ui::button data-r="apply">Apply</x-ui::button>
+        </x-ui::h-stack>
+
+        <x-ui::delimiter dir="horizontal" />
+
+        <div class="grid gap-2">
+            @for ($hour = 0; $hour < 24; $hour++)
+            <x-ui::button-outline
+                class="compact"
+                data-r="predefinedhour"
+                data-hours="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}"
+                data-minutes="00"
+                data-value="{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00"
+                >{{ str_pad($hour, 2, '0', STR_PAD_LEFT) }}:00</x-ui::button-outline>
+            @endfor
+        </div>
+    </x-ui::v-stack>
+</x-ui::dropdown-menu>
+@endif

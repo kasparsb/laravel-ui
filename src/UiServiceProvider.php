@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 use Kasparsb\Ui\Helpers;
+use Kasparsb\Ui\View\StateManager;
 use Kasparsb\Ui\View\OptionsListManager;
 use Kasparsb\Ui\View\TableComponentsManager;
 use Kasparsb\Ui\Console\Commands\CreateFileFromUrlCommand;
@@ -15,6 +16,9 @@ class UiServiceProvider extends ServiceProvider
 
     public function register(): void
     {
+        $this->app->singleton('Kasparsb\Ui\View\StateManager', function($app) {
+            return new StateManager();
+        });
         $this->app->singleton('Kasparsb\Ui\View\OptionsListManager', function($app) {
             return new OptionsListManager();
         });
