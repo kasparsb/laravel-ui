@@ -1,4 +1,4 @@
-import {q, r, click, change, parent, dispatchEvent} from 'dom-helpers'
+import {qa, q, r, click, change, parent, dispatchEvent} from 'dom-helpers'
 import DropdownMenu from './DropdownMenu';
 import FieldHoursMinutes from './FieldHoursMinutes';
 
@@ -100,5 +100,13 @@ export default {
         let fieldEl = parent(fieldElOrInputEl, '.field-date-time');
         updateValue(fieldEl, value);
         displayValue(fieldEl);
+    },
+
+    /**
+     * Visiem date time laukiem atjaunojam display vērtības,
+     * jo ir mainījušās hidden lauka vērtība
+     */
+    updateAll() {
+        qa('.field-date-time').forEach(fieldEl => displayValue(fieldEl))
     }
 }
