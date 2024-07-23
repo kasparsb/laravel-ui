@@ -152,5 +152,16 @@ export default {
                     break;
             }
         })
+    },
+
+    getValue(fieldElOrInputEl) {
+        return q(parent(fieldElOrInputEl, '.field-increment'), 'input').value
+    },
+
+    setValue(fieldElOrInputEl, value) {
+        let fieldEl = parent(fieldElOrInputEl, '.field-increment');
+
+        q(fieldEl, 'input').value = value;
+
     }
 }
