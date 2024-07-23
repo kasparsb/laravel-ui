@@ -34,6 +34,8 @@ class FieldDateTime extends Component
         public $state='',
         public $defaultDateState='',
         public $disabled=false,
+        // Time, kuru izvadīt, ja sākumā izvēlas tikai datumu
+        public $defaultTime=null,
 
         public $errorMessage='',
         public $hasError=false,

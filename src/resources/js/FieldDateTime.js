@@ -23,6 +23,16 @@ function updateValue(fieldEl, value) {
         value = fieldDate(fieldEl).value;
 
         let timeValue = fieldTime(fieldEl).value;
+
+        if (!timeValue) {
+            if (fieldEl.dataset.defaultTime) {
+                timeValue = fieldEl.dataset.defaultTime;
+
+                // Update time value
+                fieldTime(fieldEl).value = timeValue;
+            }
+        }
+
         if (timeValue) {
             value += ' '+fieldTime(fieldEl).value+':00'
         }

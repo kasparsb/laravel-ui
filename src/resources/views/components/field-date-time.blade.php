@@ -16,6 +16,10 @@
         'field-date-time',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
+
+    @if ($defaultTime)
+    data-default-time="{{ $defaultTime }}"
+    @endif
     >
     @if ($label)
         <label>{{ $label }}</label>
