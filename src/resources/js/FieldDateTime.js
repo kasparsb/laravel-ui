@@ -28,7 +28,7 @@ function updateValue(fieldEl, value) {
         }
     }
 
-    fieldValue(fieldEl).value = value
+    fieldValue(fieldEl).value = value.trim();
 
     dispatchEvent(fieldValue(fieldEl), 'change');
 }
