@@ -58,7 +58,6 @@
             @if ($menuHide)
             data-dropdown-menu-hide="{{ $menuHide }}"
             @endif
-
             />
         <x-ui::button-ghost class="icon" data-r="inc" tabindex="-1">
             <x-tabler-plus />
