@@ -21,7 +21,9 @@
     {{ $attributesForInputField }}
         autocomplete="off"
         type="text"
+        @if ($name)
         name="{{ $name }}"
+        @endif
         value="{{ $value }}"
         placeholder="{{ $placeholder }}"
         @if ($stateUrl)
