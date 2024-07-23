@@ -20,10 +20,17 @@ function fieldValue(fieldEl) {
 
 function updateValue(fieldEl, value) {
     if (typeof value == 'undefined') {
-        value = fieldDate(fieldEl).value+ ' '+fieldTime(fieldEl).value+':00';
+        value = fieldDate(fieldEl).value;
+
+        let timeValue = fieldTime(fieldEl).value;
+        if (timeValue) {
+            value += ' '+fieldTime(fieldEl).value+':00'
+        }
     }
 
     fieldValue(fieldEl).value = value
+
+    dispatchEvent(fieldValue(fieldEl), 'change');
 }
 
 function displayValue(fieldEl) {
@@ -39,11 +46,13 @@ function displayValue(fieldEl) {
 
 export default {
     init() {
-        change('.field-date-time .field-increment input', (ev, el) => {
+
+        // Date change
+        change('.field-date-time .field-date input', (ev, el) => {
             updateValue(parent(el, '.field-date-time'));
         })
-
-        change('.field-date-time .field-date input', (ev, el) => {
+        // Time change
+        change('.field-date-time .field-increment input', (ev, el) => {
             updateValue(parent(el, '.field-date-time'));
         })
 
