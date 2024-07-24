@@ -65,11 +65,7 @@ function createCalendar(date) {
 function maybeCreateContainerAndCalendar() {
     if (!container) {
         container = (
-            <div class="card is-overlay compact b-c-200">
-                <div class="card-content">
-                    <div class="calendar size-8" data-calendarcontainer="yes"></div>
-                </div>
-            </div>
+            <div hidden class="calendar has-border b-c-200 size-8"></div>
         )
 
         append('body', container);
@@ -78,12 +74,12 @@ function maybeCreateContainerAndCalendar() {
     if (!calendar) {
         calendar = createCalendar(new Date());
         /**
-         * Tieši, kad lietotājs izvēlējies datumu
+         * Tieši, kad lietotājs izvēlējies datumuasd
          * tāpēc te nav change, bet ir dateclick
          */
         calendar.on('dateclick', dateSelected)
 
-        replaceContent(q(container, '[data-calendarcontainer]'), calendar.getEl());
+        replaceContent(container, calendar.getEl());
     }
 }
 
@@ -147,16 +143,16 @@ function open(field) {
         // Show
         SingletonPanel.show(container, {
             onContentElRemove(prevContainerEl) {
-                // šeit neko nedarām, jo container tiek izņemts no Panel
-                // bet reference paliek, tāpec to varēs ielikt atpakaļ panelī
+                prevContainerEl.hidden = true;
             },
             positionEl: field,
             side: 'bottom',
             align: 'left',
         });
 
-
         isOpen = true;
+
+        container.hidden = false;
     }, 10)
 }
 

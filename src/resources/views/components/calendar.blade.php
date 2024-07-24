@@ -1,5 +1,8 @@
 <div
-    {{ $attributes->class(['calendar', 'size-'.$size]) }}
+    {{ $attributes->class([
+        'calendar',
+        'size-'.$size,
+    ]) }}
     @if ($stateUrl)
     data-state-url="{{ $stateUrl }}"
     @endif

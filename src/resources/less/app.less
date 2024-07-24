@@ -1972,10 +1972,16 @@ body {
     --opacity-color-periodin: 0.8;
     --bg-color-periodin: var(--color-200);
 
-    &.bordered {
-        --grid-gap: 0;
-        --border-radius-date: 0;
-        --border-width: 1px;
+    &.has-border {
+        .border-md();
+        border-width: 1px;
+        border-style: solid;
+
+        padding: @size015;
+
+        background-color: hsl(var(--color-background));
+
+        .shadow-lg();
     }
 }
 .wbcalendar-grid {
