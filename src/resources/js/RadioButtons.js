@@ -4,10 +4,10 @@ function isButtonSelected(radioButtonEl) {
     return q(radioButtonEl, 'input').checked;
 }
 
-function handleRadioButtonClick(radioButtonEl) {
-    let radioButtonsEl = parent(radioButtonEl, '[data-is-container]');
-
-    // saliekam css klases pēc button state
+/**
+ * Saliekam css klases pēc button state
+ */
+function setCheckedAndUnchecked(radioButtonsEl) {
     qa(radioButtonsEl, '[data-role="radio-button"]').forEach(el => {
         if (isButtonSelected(el)) {
             removeClass(el, el.dataset.class)
@@ -23,7 +23,13 @@ function handleRadioButtonClick(radioButtonEl) {
 export default {
     init() {
         click('.radio-buttons [data-role="radio-button"]', (ev, radioButtonEl) => {
-            setTimeout(() => handleRadioButtonClick(radioButtonEl), 1);
+            setTimeout(() => {
+                setCheckedAndUnchecked(parent(radioButtonEl, '[data-is-container]'))
+            }, 1);
         })
+    },
+
+    update(inputRadioElOrRadioButtonsEl) {
+        setCheckedAndUnchecked(parent(inputRadioElOrRadioButtonsEl, '.radio-buttons'));
     }
 }
