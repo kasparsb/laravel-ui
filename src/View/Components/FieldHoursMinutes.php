@@ -19,6 +19,8 @@ class FieldHoursMinutes extends Component
 
     public function __construct(
         public $label='',
+        public $labelHours='',
+        public $labelMinutes='',
         public $name='',
         // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
         public $nameModel='',

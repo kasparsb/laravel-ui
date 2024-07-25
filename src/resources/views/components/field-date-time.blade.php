@@ -69,9 +69,11 @@
 <x-ui::dropdown-menu name="timepicker" data-timepicker-menu>
 
     <x-ui::v-stack class="p-4">
-        <x-ui::title class="t-4">Select time</x-ui::title>
-
-        <x-ui::field-hours-minutes data-r="hoursMinutes" />
+        <x-ui::field-hours-minutes
+            labelHours="Hours"
+            labelMinutes="Minutes"
+            data-r="hoursMinutes"
+            />
 
         <x-ui::h-stack class="h-right">
             <x-ui::button data-r="apply">Apply</x-ui::button>

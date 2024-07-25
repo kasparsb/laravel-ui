@@ -21,6 +21,7 @@
 
     <x-ui::h-stack>
         <x-ui::field-increment
+            :label="$labelHours"
             class="w-28"
             min="0"
             max="23"
@@ -29,6 +30,7 @@
             value="{{ $hours }}" />
         :
         <x-ui::field-increment
+            :label="$labelMinutes"
             class="w-28"
             min="0"
             max="59"
