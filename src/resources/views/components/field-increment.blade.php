@@ -50,6 +50,9 @@
             @if ($menu)
             data-dropdown-menu-trigger="{{ $menu }}"
             data-dropdown-menu-show="{{ $menuShow }}"
+                @if ($menuPositionAt)
+                data-dropdown-menu-position-at="{{ $menuPositionAt }}"
+                @endif
                 @if ($menuResetForm)
                 data-dropdown-menu-reset-form
                 @endif

@@ -64,7 +64,7 @@ function open(fieldEl) {
          * Pozicionējam pret input lauku nevis container, jo container
          * ir description, kas nobīdīs OptionsPanel par zemu
          */
-        positionEl: q(fieldEl, 'input'),
+        triggerEl: q(fieldEl, 'input'),
         onSelectOption(optionEl) {
             setOption(fieldEl, optionEl);
         },

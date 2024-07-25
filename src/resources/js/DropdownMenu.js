@@ -54,7 +54,7 @@ function open(clickTriggerEl, menuEl) {
             // append back to body, jo var būt vairāki menu un tos meklēs body
             append(q('body'), prevMenuEl);
         },
-        positionEl: clickTriggerEl,
+        triggerEl: clickTriggerEl,
         side: menuEl.dataset.side,
         align: menuEl.dataset.align,
     });

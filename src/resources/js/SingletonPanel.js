@@ -1,5 +1,5 @@
 import {
-    jsx, q, append, replaceContent,
+    jsx, parent, append, replaceContent,
     getOffset, getOuterDimensions, getWindowDimensions,
     addStyle,
 } from 'dom-helpers'
@@ -98,7 +98,7 @@ export default {
     /**
      * Show single instance panel
      */
-    show(contentEl, {onContentElRemove, positionEl, side, align} = {}) {
+    show(contentEl, {onContentElRemove, triggerEl, side, align} = {}) {
 
         createContainer();
         removeContentEl();
@@ -106,10 +106,20 @@ export default {
 
         onPrevContentElRemoveCb = onContentElRemove;
 
-        // Ja nav timeout, tad positionByEl nepaspēs nolasīt content el dimensions
+        // Ja nav timeout, tad triggerEl nepaspēs nolasīt content el dimensions
         setTimeout(() => {
             container.dataset.visible = 'yes';
-            if (positionEl) {
+            if (triggerEl) {
+
+                /**
+                 * Nolasām vai ir instrukcija par pozicionēšanu
+                 * Tas ir parent selector relatīvs pret triggerEl
+                 */
+                let positionEl = triggerEl;
+                if (positionEl.dataset.dropdownMenuPositionAt) {
+                    positionEl = parent(positionEl, positionEl.dataset.dropdownMenuPositionAt)
+                }
+
                 positionByEl(positionEl, side, align);
             }
         }, 1)

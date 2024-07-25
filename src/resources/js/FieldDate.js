@@ -145,7 +145,7 @@ function open(field) {
             onContentElRemove(prevContainerEl) {
                 prevContainerEl.hidden = true;
             },
-            positionEl: field,
+            triggerEl: field,
             side: 'bottom',
             align: 'left',
         });

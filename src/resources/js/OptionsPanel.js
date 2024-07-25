@@ -92,7 +92,7 @@ function prevOption(optionsEl) {
 /*
  * Atveram options list
  */
-function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
+function open(optionsEl, {triggerEl, value, onSelectOption, onClose} = {}) {
 
     clearTimeout(closeT);
 
@@ -118,7 +118,7 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
                 // append back to body, jo var būt vairāki menu un tos meklēs body
                 append(q('body'), optionsEl);
             },
-            positionEl: positionEl,
+            triggerEl: triggerEl,
             side: 'bottom',
             align: 'left',
         })
@@ -126,7 +126,7 @@ function open(optionsEl, {positionEl, value, onSelectOption, onClose} = {}) {
         optionsEl.hidden = false;
 
         addStyle(optionsEl, {
-            width: getOuterDimensions(positionEl).width+'px',
+            width: getOuterDimensions(triggerEl).width+'px',
         })
 
         setTimeout(() => {
