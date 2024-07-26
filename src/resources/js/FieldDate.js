@@ -15,22 +15,10 @@ import clampDate from './calendar/clampDate';
 import formatDate from './calendar/formatDate';
 import DropdownMenu from './DropdownMenu';
 
-function sp(s) {
-    s = s+'';
-    if (s.length == 1) {
-        s = '0'+s;
-    }
-    return s;
-}
-
-function ymd(date) {
-    return date.getFullYear()+'-'+sp(date.getMonth()+1)+'-'+sp(date.getDate());
-}
-
 let calendar;
 let container;
 let activeField;
-let isOpen = false;
+let activeMenu;
 
 function createCalendar(date) {
     return new BaseCalendar.dom(date, {
@@ -84,29 +72,17 @@ function dateSelected(date) {
         return;
     }
 
-    activeField.value = ymd(date);
-
-    /**
-     * Šo tālāk pārbaudīt focusin, lai atkārtoti nerādītu kalendāru
-     */
-    wasSetDateInInputFromCalendar = true;
-    activeField.focus();
-
+    activeField.value = formatDate.ymd(date);
     dispatchEvent(activeField, 'change')
 
-    activeField = null;
+    activeField.focus();
 
-    isOpen = false;
-
-    // ja aizvērts ar esc, bet lauks vēl fokusā, tad ļaujam uz click tomēr nostrādāt
-    wasFocusin = false;
+    DropdownMenu.close(activeMenu);
 }
 
 function setupCalendar(field) {
 
     maybeCreateContainerAndCalendar()
-
-    activeField = field;
 
     // timeout vajadzīgs, jo kalendārs vēl nav paspējis pilnībā izveidoties un setStateUrl būs error
     setTimeout(() => {
@@ -138,7 +114,14 @@ function validateFieldValue(inputFieldEl) {
         return
     }
 
-    let clampedValue = formatDate.ymd(clampDate(inputFieldEl.value, inputFieldEl.dataset.minDate, inputFieldEl.dataset.maxDate));
+    let clampedValue = formatDate.ymd(
+        clampDate(
+            inputFieldEl.value,
+            inputFieldEl.dataset.minDate,
+            inputFieldEl.dataset.maxDate
+        )
+    );
+
     if (clampedValue != inputFieldEl.value) {
         inputFieldEl.value = clampedValue;
 
@@ -146,16 +129,19 @@ function validateFieldValue(inputFieldEl) {
     }
 }
 
-let wasSetDateInInputFromCalendar = false;
-let wasFocusin = false;
-
 export default {
     init() {
 
         DropdownMenu.onOpen('field-date-calendar', (menuEl, triggerEl) => {
             setupCalendar(triggerEl)
+            activeField = triggerEl;
+            activeMenu = menuEl;
         })
 
+        DropdownMenu.onClose('field-date-calendar', (menuEl, triggerEl) => {
+            activeField = null;
+            activeMenu = null;
+        })
 
 
         /**

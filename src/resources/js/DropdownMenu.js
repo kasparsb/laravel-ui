@@ -9,6 +9,7 @@ let dropDownMenuHideTimeout = 0;
 let menuHideOn;
 
 let onOpenListeners = {};
+let onCloseListeners = {};
 
 /**
  * Menu sastaiste ar trigger elementu, kurš atvēra menu
@@ -24,13 +25,24 @@ function findDropdownMenuByChild(childEl) {
     return parent(childEl, '[data-dropdown-menu-name]');
 }
 
-function triggerMenuOpenListeners(menuEl) {
+function triggerMenuOpenListeners(menuEl, menuOpenTriggerEl) {
     let menuName = menuEl.dataset.dropdownMenuName;
 
     if (onOpenListeners[menuName]) {
         onOpenListeners[menuName].trigger([
             menuEl,
-            menuOpenTriggers[menuName]
+            menuOpenTriggerEl
+        ])
+    }
+}
+
+function triggerMenuCloseListeners(menuEl, menuOpenTriggerEl) {
+    let menuName = menuEl.dataset.dropdownMenuName;
+
+    if (onCloseListeners[menuName]) {
+        onCloseListeners[menuName].trigger([
+            menuEl,
+            menuOpenTriggerEl
         ])
     }
 }
@@ -65,21 +77,27 @@ function open(clickTriggerEl, menuEl, clickOutsideIgnoreEl) {
             // Menu name sasaiste ar open trigger
             menuOpenTriggers[menuEl.dataset.dropdownMenuName] = clickTriggerEl;
 
-            triggerMenuOpenListeners(menuEl);
+            triggerMenuOpenListeners(menuEl, clickTriggerEl);
         },
         onContentElRemove(menuEl) {
             menuEl.hidden = true;
 
             delete menuEl.dataset.dropdownMenuPanelIndex;
 
+            let menuOpenTriggerEl;
             // Atrodam click trigger un novācam pazīmi, ka menu ir atvērts
             if (typeof menuOpenTriggers[menuEl.dataset.dropdownMenuName] != 'undefined') {
+
+                menuOpenTriggerEl = menuOpenTriggers[menuEl.dataset.dropdownMenuName];
+
                 delete menuOpenTriggers[menuEl.dataset.dropdownMenuName].dataset.dropdownMenuOpen
                 delete menuOpenTriggers[menuEl.dataset.dropdownMenuName]
             }
 
             // append back to body, jo var būt vairāki menu un tos meklēs body
             append(q('body'), menuEl);
+
+            triggerMenuCloseListeners(menuEl, menuOpenTriggerEl);
         },
         triggerEl: clickTriggerEl,
         side: menuEl.dataset.side,
@@ -221,33 +239,38 @@ export default {
             }
         })
 
-        // Focusin
-        on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            triggerEl.dataset.wasFocusIn = '';
-            handleMenuOpenTrigger(triggerEl, true)
 
+        /**
+         * focusin un click abi izpildās
+         * Click izpildās lēnāk, atkarībā no tā cik ātri lietotājs kliksķina
+         * kamēŗ mousdown tikmēr click nenotiek, bet focusin jau notiek
+         * Problēma: vajag parādīt menu gan uz focusin, gan arī tad, ja lauks jau ir focusin, tad
+         * uz mouse click varī vajag parādīt
+         * Tā kā focusi un click notiek secīgi, tad notiek divas reizes parādīšana
+         * Tāpēc izmanotjam mousedown, lai noteiktu pēc iespējas ātrāk vai bija mouse click
+         *
+         * tiek pieņemts, ka mousedown notik pirms focusin
+         */
+        // Focusin
+        on('mousedown', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            triggerEl.dataset.dropdownMenuWasMousedown = '';
+
+        })
+        on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            if ('dropdownMenuWasMousedown' in triggerEl.dataset) {
+                delete triggerEl.dataset.dropdownMenuWasMousedown
+                return;
+            }
+            handleMenuOpenTrigger(triggerEl, true)
         })
         // Ja ir iefokusēts, tad atkārtoti nevarēs atvērt, tāpēc ir vēl click
         click('[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            if (('wasFocusIn' in triggerEl.dataset)) {
-                delete triggerEl.dataset.wasFocusIn;
-            }
-            else {
-                toggleOpenOnTriggerEl(triggerEl)
-            }
-        })
-        on('focusout', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            if (triggerEl.dataset.dropdownMenuHide == 'onclick.outside') {
-
-            }
-            else {
-                handleMenuCloseOnFocusOut(triggerEl)
-            }
+            toggleOpenOnTriggerEl(triggerEl)
         })
 
 
         // Escape close
-        on('keyup', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+        on('keydown', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
             let menuEl;
             switch (ev.key) {
                 case 'Escape':
@@ -256,6 +279,9 @@ export default {
                     break;
                 case 'Enter':
                     toggleOpenOnTriggerEl(triggerEl)
+                    break;
+                case 'Tab':
+                    handleMenuCloseOnFocusOut(triggerEl)
                     break;
             }
         });
@@ -269,6 +295,18 @@ export default {
         if (menuToClose) {
             if (isDropdownMenuOpen(menuToClose)) {
                 SingletonPanel.close(menuToClose.dataset.dropdownMenuPanelIndex);
+            }
+        }
+    },
+
+    closeByName(menuName) {
+        this.close(findDropdownMenuByName(menuName));
+    },
+
+    closeByOpenTrigger(triggerEl) {
+        for (let [menuName, openTriggerEl] of Object.entries(menuOpenTriggers)) {
+            if (openTriggerEl === triggerEl) {
+                this.close(findDropdownMenuByName(menuName));
             }
         }
     },
@@ -302,5 +340,12 @@ export default {
             onOpenListeners[menuName] = new Listeners();
         }
         onOpenListeners[menuName].listen(cb);
+    },
+
+    onClose(menuName, cb) {
+        if (typeof onCloseListeners[menuName] == 'undefined') {
+            onCloseListeners[menuName] = new Listeners();
+        }
+        onCloseListeners[menuName].listen(cb);
     }
 }
