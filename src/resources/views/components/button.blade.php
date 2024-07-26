@@ -3,7 +3,7 @@
 @php
     // Ja ir menu open trigger
     if ($menu) {
-        if (!in_array($menuHide, ['onclick.outside', 'onmouseout',])) {
+        if (!in_array($menuHide, ['onclick.outside', 'onmouseout', 'onfocusout',])) {
             $menuHide = 'onmouseout';
         }
 
