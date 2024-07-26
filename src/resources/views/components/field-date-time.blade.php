@@ -62,9 +62,9 @@
         />
 </div>
 
-@if (!$stateManager->isTimePickerMenu())
+@if (!$stateManager->isTimePickerMenu)
 @php
-    $stateManager->setIsTimePickerMenu();
+    $stateManager->isTimePickerMenu = true
 @endphp
 <x-ui::dropdown-menu name="timepicker" data-timepicker-menu>
 
