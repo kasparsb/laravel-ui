@@ -1,3 +1,5 @@
+@inject('stateManager', 'Kasparsb\Ui\View\StateManager')
+
 @php
     // without data-* attributes
     $attributesForContainer = $attributes->filter(function($value, $key){
@@ -36,6 +38,10 @@
         data-max-date="{{ $maxDate }}"
         @endif
         @disabled($disabled)
+
+        data-dropdown-menu-trigger="field-date-calendar"
+        data-dropdown-menu-show="onfocusin"
+        data-dropdown-menu-hide="onclick.outside"
         />
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
@@ -48,3 +54,14 @@
     <script data-role="state" type="application/json">@json($state)</script>
     @endif
 </div>
+
+@if (!$stateManager->isFieldDateCalendarMenu)
+@php
+    $stateManager->isFieldDateCalendarMenu = true;
+@endphp
+<x-ui::dropdown-menu name="field-date-calendar">
+    <div class="menu-content">
+        <div class="calendar size-8" data-field-date-calendar-container></div>
+    </div>
+</x-ui::dropdown-menu>
+@endif

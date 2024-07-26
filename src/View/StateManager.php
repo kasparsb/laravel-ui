@@ -14,13 +14,7 @@ class StateManager
      * šo vajag tikai vienu
      * Katrs time picker lauks pārbaudīs vai menu ir jau izvadīts
      */
-    private $timePickerMenu = false;
+    public $istimePickerMenu = false;
 
-    public function isTimePickerMenu() {
-        return $this->timePickerMenu;
-    }
-
-    public function setIsTimePickerMenu() {
-        $this->timePickerMenu = true;
-    }
+    public $isFieldDateCalendarMenu = false;
 }

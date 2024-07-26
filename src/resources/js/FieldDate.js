@@ -13,7 +13,7 @@ import getDateFromReference from './calendar/getDateFromReference';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
 import clampDate from './calendar/clampDate';
 import formatDate from './calendar/formatDate';
-import SingletonPanel from './SingletonPanel';
+import DropdownMenu from './DropdownMenu';
 
 function sp(s) {
     s = s+'';
@@ -64,17 +64,13 @@ function createCalendar(date) {
  */
 function maybeCreateContainerAndCalendar() {
     if (!container) {
-        container = (
-            <div hidden class="calendar has-border b-c-200 size-8"></div>
-        )
-
-        append('body', container);
+        container = q('[data-field-date-calendar-container]')
     }
 
     if (!calendar) {
         calendar = createCalendar(new Date());
         /**
-         * Tieši, kad lietotājs izvēlējies datumuasd
+         * Tieši, kad lietotājs izvēlējies datumu
          * tāpēc te nav change, bet ir dateclick
          */
         calendar.on('dateclick', dateSelected)
@@ -98,13 +94,7 @@ function dateSelected(date) {
 
     dispatchEvent(activeField, 'change')
 
-    close()
-}
-
-function close() {
     activeField = null;
-
-    SingletonPanel.close()
 
     isOpen = false;
 
@@ -112,7 +102,7 @@ function close() {
     wasFocusin = false;
 }
 
-function open(field) {
+function setupCalendar(field) {
 
     maybeCreateContainerAndCalendar()
 
@@ -139,20 +129,6 @@ function open(field) {
 
         calendar.scrollFirstAvailableDateIntoViewport();
 
-
-        // Show
-        SingletonPanel.show(container, {
-            onContentElRemove(prevContainerEl) {
-                prevContainerEl.hidden = true;
-            },
-            triggerEl: field,
-            side: 'bottom',
-            align: 'left',
-        });
-
-        isOpen = true;
-
-        container.hidden = false;
     }, 10)
 }
 
@@ -170,100 +146,16 @@ function validateFieldValue(inputFieldEl) {
     }
 }
 
-let closeTimeout = 0;
-let wasMouseDown = false;
 let wasSetDateInInputFromCalendar = false;
-/**
- * Vai bija focus in uz field date
- * ja bija, tad click ignorēs
- *
- * vajadzīgs, ja laiks ir fokusā, bet kalendārs nav
- * redzams, tad atkāŗtoti taisot click tomēr atvērs
- * uz click nevar vērt vaļā, jo focus in nostrādā pirmais
- * un sanāk, ka tiek atvērts divas reizes
- */
 let wasFocusin = false;
 
 export default {
     init() {
 
-
-        /**
-         * TODO Šitā visa mega loģika, lai kalendārs atvērtos gan uz click gan uz focus
-         * TODO kā arī lai aizvērtos uz focusout, esc, out of element click
-         * TODO bet lai nevērtos ciet, ja pašā kalendārā sāk klikšķināt
-         */
-
-        on('click', 'html', (ev, el) => {
-            // Ja ir .field-data input, tad skip
-            if (parent(ev.target, '.field-date')) {
-                clearTimeout(closeTimeout);
-            }
-            else {
-                if (isChild(ev.target, SingletonPanel.getEl())) {
-                    clearTimeout(closeTimeout);
-                }
-                // Ja el nav date pickerī, tad aizveram kalendāru
-                else {
-                    if (isOpen) {
-                        closeTimeout = setTimeout(() => close(), 50);
-                    }
-                }
-            }
+        DropdownMenu.onOpen('field-date-calendar', (menuEl, triggerEl) => {
+            setupCalendar(triggerEl)
         })
 
-        on('mousedown', ev => {
-            if (isChild(ev.target, SingletonPanel.getEl())) {
-                wasMouseDown = true;
-            }
-        })
-
-        // close on esc
-        on('keydown', '.field-date input', (ev, el) => {
-            // esc
-            if (ev.keyCode == 27) {
-                if (isOpen) {
-                    closeTimeout = setTimeout(() => close(), 50);
-                }
-            }
-            // tab
-            else if (ev.keyCode == 9) {
-            }
-            else {
-                if (!isOpen) {
-                    open(el)
-                }
-            }
-        })
-
-        on('focusout', '.field-date input', (ev) => {
-            if (isOpen) {
-                if (!wasMouseDown) {
-                    if (!isChild(ev.target, SingletonPanel.getEl())) {
-                        closeTimeout = setTimeout(() => close(), 50);
-                    }
-                }
-            }
-            wasMouseDown = false;
-        })
-
-        on('click', '.field-date input', (ev, el) => {
-            if (!wasFocusin) {
-                clearTimeout(closeTimeout);
-                open(el)
-            }
-            wasFocusin = false
-        })
-
-        on('focusin', '.field-date input', (ev, el) => {
-            if (!wasSetDateInInputFromCalendar) {
-                clearTimeout(closeTimeout);
-                open(el)
-            }
-            wasSetDateInInputFromCalendar = false;
-
-            wasFocusin = true;
-        })
 
 
         /**
