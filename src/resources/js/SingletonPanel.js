@@ -143,7 +143,7 @@ function isClickOutsideIgnoredEl(el) {
         if (panelsStack[i].clickOutsideIngoredEl === el) {
             return true;
         }
-        if (isChild(panelsStack[i].clickOutsideIngoredEl, el)) {
+        if (isChild(el, panelsStack[i].clickOutsideIngoredEl)) {
             return true;
         }
     }
