@@ -82,7 +82,6 @@ export default {
             let inputEl = DropdownMenu.getOpenTriggerByChild(buttonEl);
 
             inputEl.value = r(menuEl).hoursMinutes.value;
-
             dispatchEvent(inputEl, 'change');
 
             DropdownMenu.close(menuEl);
@@ -91,8 +90,14 @@ export default {
         // Click on predefined hours
         click('[data-timepicker-menu] [data-r="predefinedhour"]', (ev, predefinedHourEl) => {
             let menuEl = DropdownMenu.getByChild(predefinedHourEl);
+            // time field no kura tika atvērts panelis
+            let inputEl = DropdownMenu.getOpenTrigger(menuEl);
 
-            FieldHoursMinutes.setValue(r(menuEl).hoursMinutes, predefinedHourEl.dataset.value)
+            inputEl.value = predefinedHourEl.dataset.value;
+            dispatchEvent(inputEl, 'change');
+
+            DropdownMenu.close(menuEl);
+            //FieldHoursMinutes.setValue(r(menuEl).hoursMinutes, predefinedHourEl.dataset.value)
         });
     },
 
