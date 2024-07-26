@@ -14,7 +14,7 @@ class StateManager
      * šo vajag tikai vienu
      * Katrs time picker lauks pārbaudīs vai menu ir jau izvadīts
      */
-    public $istimePickerMenu = false;
+    public $isTimePickerMenu = false;
 
     public $isFieldDateCalendarMenu = false;
 }
