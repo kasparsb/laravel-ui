@@ -1,15 +1,20 @@
-import {q, qa, parent, addClass, removeClass, isChild, append, click, on, clearFormData} from 'dom-helpers';
+import {q, qa, parent, append, click, on, onMouseOverOut, clearFormData} from 'dom-helpers';
 import ButtonDelete from './ButtonDelete';
 import SingletonPanel from './SingletonPanel';
 import Listeners from './helpers/Listeners';
 
-let activeClickTriggerEl;
 let isOpen = false;
 let dropDownMenuHideTimeout = 0;
 // default event, kad slēpt menu
 let menuHideOn;
 
 let onOpenListeners = {};
+
+/**
+ * Menu sastaiste ar trigger elementu, kurš atvēra menu
+ * menu name -> triggerEl
+ */
+let menuOpenTriggers = {}
 
 function findDropdownMenuByName(name) {
     return q('[data-dropdown-menu-name="'+name+'"]');
@@ -19,58 +24,80 @@ function findDropdownMenuByChild(childEl) {
     return parent(childEl, '[data-dropdown-menu-name]');
 }
 
+function triggerMenuOpenListeners(menuEl) {
+    let menuName = menuEl.dataset.dropdownMenuName;
+
+    if (onOpenListeners[menuName]) {
+        onOpenListeners[menuName].trigger([
+            menuEl,
+            menuOpenTriggers[menuName]
+        ])
+    }
+}
+
 /**
  * Vai padotais dropdown menu ir atvērts
  */
-function isDropdownMenuOpen(dropdownMenuEl) {
-    return dropdownMenuEl === SingletonPanel.getContentEl();
-}
-
-function close() {
-
-    SingletonPanel.close();
-
-    isOpen = false;
-
-    activeClickTriggerEl = undefined;
-}
-
-function open(clickTriggerEl, menuEl) {
-
-    // Vai vajag reset form
-    if ('dropdownMenuResetForm' in clickTriggerEl.dataset) {
-        clearFormData(menuEl);
+function isDropdownMenuOpen(menuEl) {
+    if ('dropdownMenuPanelIndex' in menuEl.dataset) {
+        return true;
     }
+
+    return false
+}
+
+function open(clickTriggerEl, menuEl, clickOutsideIgnoreEl) {
 
     // Notīrām hide timeout
     clearTimeout(dropDownMenuHideTimeout);
 
-    activeClickTriggerEl = clickTriggerEl;
+    SingletonPanel.open(menuEl, {
+        onOpen(menuEl, panelIndex) {
+            menuEl.dataset.dropdownMenuPanelIndex = panelIndex;
 
-    SingletonPanel.show(menuEl, {
-        onContentElRemove(prevMenuEl) {
-            // uzliekam hidden klasi
-            addClass(prevMenuEl, 'hidden');
+            triggerMenuOpenListeners(menuEl);
+
+            menuEl.hidden = false;
+
+            /**
+             * Pazīmi, ka menu atvērts liekam uz triggerEl, jo
+             * dažādi trigger el var atvērt vienu un to pašu menu
+             */
+            clickTriggerEl.dataset.dropdownMenuOpen = '1';
+
+            // Menu name sasaiste ar open trigger
+            menuOpenTriggers[menuEl.dataset.dropdownMenuName] = clickTriggerEl;
+        },
+        onContentElRemove(menuEl) {
+            menuEl.hidden = true;
+
+            delete menuEl.dataset.dropdownMenuPanelIndex;
+
+            // Atrodam click trigger un novācam pazīmi, ka menu ir atvērts
+            if (typeof menuOpenTriggers[menuEl.dataset.dropdownMenuName] != 'undefined') {
+                delete menuOpenTriggers[menuEl.dataset.dropdownMenuName].dataset.dropdownMenuOpen
+                delete menuOpenTriggers[menuEl.dataset.dropdownMenuName]
+            }
+
             // append back to body, jo var būt vairāki menu un tos meklēs body
-            append(q('body'), prevMenuEl);
+            append(q('body'), menuEl);
         },
         triggerEl: clickTriggerEl,
         side: menuEl.dataset.side,
         align: menuEl.dataset.align,
+
+        // Kad aizvērt onclick.outside | onmouseout
+        closeWhen: clickTriggerEl.dataset.dropdownMenuHide,
+
+        clickOutsideIngoredEl: clickOutsideIgnoreEl,
     });
 
-    isOpen = true;
 
-    // Novācam hidden klasi no dropdown menu
-    removeClass(menuEl, 'hidden');
 
-    if (menuEl.dataset.dropdownMenuName) {
-        if (onOpenListeners[menuEl.dataset.dropdownMenuName]) {
-            onOpenListeners[menuEl.dataset.dropdownMenuName].trigger([
-                menuEl,
-                activeClickTriggerEl
-            ])
-        }
+
+    // Reset form
+    if ('dropdownMenuResetForm' in clickTriggerEl.dataset) {
+        clearFormData(menuEl);
     }
 }
 
@@ -96,149 +123,113 @@ function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
     })
 }
 
+function toggleOpenOnTriggerEl(triggerEl) {
+    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
+    if (isDropdownMenuOpen(menuEl)) {
+        SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
+    }
+    else {
+        handleMenuOpenTrigger(triggerEl)
+    }
+}
+
+/**
+ * Menu open trigger apstrādē (click vai hover)
+ */
+function handleMenuOpenTrigger(triggerEl, clickOutsideIgnoreEl) {
+    if (triggerEl.dataset.dropdownMenuOpen) {
+        return;
+    }
+
+    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    if (!menuEl) {
+        return
+    }
+
+    setOverrideFromOpenTriggerEl(triggerEl, menuEl);
+    open(triggerEl, menuEl, clickOutsideIgnoreEl ? triggerEl : null);
+}
+
+function handleMenuCloseOnMouseOut(triggerEl) {
+    if (!triggerEl.dataset.dropdownMenuOpen) {
+        return;
+    }
+
+    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    if (!menuEl) {
+        return
+    }
+
+    SingletonPanel.closeOnMouseOut(menuEl.dataset.dropdownMenuPanelIndex);
+}
+
+function handleMenuCloseOnFocusOut(triggerEl) {
+    if (!triggerEl.dataset.dropdownMenuOpen) {
+        return;
+    }
+
+    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    if (!menuEl) {
+        return
+    }
+
+    SingletonPanel.closeOnMouseFocusOut(menuEl.dataset.dropdownMenuPanelIndex);
+}
+
 export default {
     init() {
         // Click triggeri, kuri atvērs menu
         click('[data-dropdown-menu-trigger][data-dropdown-menu-show="onclick"]', (ev, clickTriggerEl) => {
-            if (clickTriggerEl.dataset.dropdownMenuTrigger) {
-                let menuEl = findDropdownMenuByName(clickTriggerEl.dataset.dropdownMenuTrigger);
-                if (menuEl) {
-                    if (isOpen) {
-                        close();
-                    }
-                    else {
-                        setOverrideFromOpenTriggerEl(clickTriggerEl, menuEl);
-
-                        open(clickTriggerEl, menuEl);
-                    }
-                }
-            }
+            handleMenuOpenTrigger(clickTriggerEl)
         })
 
-        /**
-         * Menu hide trigger
-         * Šis ir domāts, lai varētu aizvērt menu uz click
-         * piemēram, poga pašā menu, kuru nospiežot menu aizveras
-         * varētu būt arī poga ārpus menu
-         *
-         * ! data-dropdown-menu-hide tiek arī izmantots, lai noteiktu
-         * kā aizvērt dropdown menu no open trigger
-         * tāpēc šeit click skatamies tikai uz tiek elementiem,
-         * kuriem nav norādīts, ka ir open trigger
-         */
+        // Menu hide. Tikai tie, kuriem uzlikta iespēja tikai aizvērt menu
         click('[data-dropdown-menu-hide]', (ev, clickTriggerEl) => {
             // Ja ir dropdownMenuTrigger, tad ignorējam click
+            // ja šīs atver menu, tad nereaģējam
             if (clickTriggerEl.dataset.dropdownMenuTrigger) {
-
-            }
-            else {
-                // Atrodam menu kuru aizvērt
-                let dropdownMenuToClose;
-                switch (clickTriggerEl.dataset.dropdownMenuHide) {
-                    case '_container':
-                        dropdownMenuToClose = findDropdownMenuByChild(clickTriggerEl);
-                        break;
-                    default:
-                        dropdownMenuToClose = findDropdownMenuByName(clickTriggerEl.dataset.dropdownMenuHide);
-                }
-
-                // Ja menu ir atvērtais menu, tad close
-                if (isDropdownMenuOpen(dropdownMenuToClose)) {
-                    close();
-                }
-            }
-        });
-
-
-        on('mouseover', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onhover"]', (ev, hoverTriggerEl) => {
-            if (hoverTriggerEl.dataset.dropdownMenuTrigger) {
-                let menuEl = findDropdownMenuByName(hoverTriggerEl.dataset.dropdownMenuTrigger);
-                if (menuEl) {
-                    setOverrideFromOpenTriggerEl(hoverTriggerEl, menuEl);
-
-                    open(hoverTriggerEl, menuEl);
-                }
-            }
-        })
-
-        // mousout no click trigger, kuram ir onhover
-        on('mouseout', '[data-dropdown-menu-trigger]', (ev, hoverTriggerEl) => {
-            if (hoverTriggerEl.dataset.dropdownMenuTrigger) {
-                if (isOpen) {
-                    if (menuHideOn == 'onmouseout') {
-                        // uzliek hide timeout, kur notīra, ja vajag parādīt citu menu
-                        dropDownMenuHideTimeout = setTimeout(() => close(), 200)
-                    }
-                }
-            }
-        });
-
-
-        // mouse over uz dropdown menu
-        on('mouseover', '[data-dropdown-menu-name]', (ev, menuEl) => {
-            clearTimeout(dropDownMenuHideTimeout);
-        });
-
-        // mouse out from menu
-        on('mouseout', '[data-dropdown-menu-name]', (ev, menuEl) => {
-            if (menuHideOn == 'onmouseout') {
-                dropDownMenuHideTimeout = setTimeout(() => close(), 500)
-            }
-        });
-
-        // on menu item click
-        on('click', '[data-dropdown-menu-name] .menu-item', (ev, menuEl) => {
-            dropDownMenuHideTimeout = setTimeout(() => close(), 100)
-        });
-
-        // Click outside dropdown menu
-        click('html', ev => {
-            if (isOpen) {
-                let clickTriggerEl = parent(ev.target, '[data-dropdown-menu-trigger]');
-
-                // Ja nospiests jau uz nospiestā click trigger
-                if (clickTriggerEl && (activeClickTriggerEl === clickTriggerEl)) {
-
-                }
-                // Ja nospiests uz elementu, kurš ir atvērtajā dropdown menu
-                else if (isChild(ev.target, SingletonPanel.getEl())) {
-
-                }
-                else {
-                    close();
-                }
-            }
-        })
-
-        on('keyup', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            if (!isOpen) {
                 return
             }
-            console.log(ev.key);
-            switch (ev.key) {
-                case 'Escape':
-                    close();
+
+            // Atrodam menu kuru aizvērt
+            let menuToClose;
+            switch (clickTriggerEl.dataset.dropdownMenuHide) {
+                case '_container':
+                    menuToClose = findDropdownMenuByChild(clickTriggerEl);
                     break;
+                default:
+                    menuToClose = findDropdownMenuByName(clickTriggerEl.dataset.dropdownMenuHide);
             }
+
+            SingletonPanel.close(menuToClose.dataset.dropdownMenuPanelIndex);
+        })
+
+        // Menu item click
+        on('click', '[data-dropdown-menu-name] .menu-item', (ev, menuItemEl) => {
+            let menuToClose = findDropdownMenuByChild(menuItemEl)
+            SingletonPanel.close(menuToClose.dataset.dropdownMenuPanelIndex);
         });
 
-
-        on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            triggerEl.dataset.wasFocusIn = '';
-
-            if (triggerEl.dataset.dropdownMenuTrigger) {
-                let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
-                if (menuEl) {
-                    if (isOpen) {
-                        close();
-                    }
-                    else {
-                        setOverrideFromOpenTriggerEl(triggerEl, menuEl);
-
-                        open(triggerEl, menuEl);
-                    }
-                }
+        onMouseOverOut('[data-dropdown-menu-trigger][data-dropdown-menu-show="onhover"]', {
+            mouseover(ev, hoverTriggerEl) {
+                handleMenuOpenTrigger(hoverTriggerEl);
             }
+        })
+
+        onMouseOverOut('[data-dropdown-menu-trigger][data-dropdown-menu-hide="onmouseout"]', {
+            mouseout(ev, hoverTriggerEl) {
+                handleMenuCloseOnMouseOut(hoverTriggerEl)
+            }
+        })
+
+        // Focusin
+        on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+
+            console.time('focus');
+
+            triggerEl.dataset.wasFocusIn = '';
+            handleMenuOpenTrigger(triggerEl, true)
+
         })
         // Ja ir iefokusēts, tad atkārtoti nevarēs atvērt, tāpēc ir vēl click
         click('[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
@@ -246,35 +237,37 @@ export default {
                 delete triggerEl.dataset.wasFocusIn;
             }
             else {
-                if (triggerEl.dataset.dropdownMenuTrigger) {
-                    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
-                    if (menuEl) {
-                        if (isOpen) {
-                            close();
-                        }
-                        else {
-                            setOverrideFromOpenTriggerEl(triggerEl, menuEl);
-
-                            open(triggerEl, menuEl);
-                        }
-                    }
-                }
+                toggleOpenOnTriggerEl(triggerEl)
             }
         })
+        on('focusout', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            handleMenuCloseOnFocusOut(triggerEl)
+        })
+
+
+        // Escape close
+        on('keyup', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            let menuEl;
+            switch (ev.key) {
+                case 'Escape':
+                    menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
+                    SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
+                    break;
+                case 'Enter':
+                    toggleOpenOnTriggerEl(triggerEl)
+                    break;
+            }
+        });
+
     },
 
     /**
-     * Aizveram redzamo DropdownMenu
+     * Aizveram DropdownMenu
      */
-    close(dropdownMenuToClose) {
-        if (dropdownMenuToClose) {
-            if (isDropdownMenuOpen(dropdownMenuToClose)) {
-                close();
-            }
-        }
-        else {
-            if (isOpen) {
-                close();
+    close(menuToClose) {
+        if (menuToClose) {
+            if (isDropdownMenuOpen(menuToClose)) {
+                SingletonPanel.close(menuToClose.dataset.dropdownMenuPanelIndex);
             }
         }
     },
@@ -290,16 +283,16 @@ export default {
         return findDropdownMenuByName(name)
     },
 
-    getOpenTrigger(dropdownMenuEl) {
-        if (isDropdownMenuOpen(dropdownMenuEl)) {
-            return activeClickTriggerEl;
+    getOpenTrigger(menuEl) {
+        if (isDropdownMenuOpen(menuEl)) {
+            return menuOpenTriggers[menuEl.dataset.dropdownMenuName];
         }
     },
 
     getOpenTriggerByChild(childEl) {
         let dropdownMenuEl = findDropdownMenuByChild(childEl);
         if (dropdownMenuEl && isDropdownMenuOpen(dropdownMenuEl)) {
-            return activeClickTriggerEl;
+            return menuOpenTriggers[dropdownMenuEl.dataset.dropdownMenuName];
         }
     },
 
