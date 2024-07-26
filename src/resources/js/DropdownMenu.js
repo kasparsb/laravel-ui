@@ -54,9 +54,6 @@ function open(clickTriggerEl, menuEl, clickOutsideIgnoreEl) {
     SingletonPanel.open(menuEl, {
         onOpen(menuEl, panelIndex) {
             menuEl.dataset.dropdownMenuPanelIndex = panelIndex;
-
-            triggerMenuOpenListeners(menuEl);
-
             menuEl.hidden = false;
 
             /**
@@ -67,6 +64,8 @@ function open(clickTriggerEl, menuEl, clickOutsideIgnoreEl) {
 
             // Menu name sasaiste ar open trigger
             menuOpenTriggers[menuEl.dataset.dropdownMenuName] = clickTriggerEl;
+
+            triggerMenuOpenListeners(menuEl);
         },
         onContentElRemove(menuEl) {
             menuEl.hidden = true;
@@ -224,9 +223,6 @@ export default {
 
         // Focusin
         on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-
-            console.time('focus');
-
             triggerEl.dataset.wasFocusIn = '';
             handleMenuOpenTrigger(triggerEl, true)
 
@@ -241,7 +237,12 @@ export default {
             }
         })
         on('focusout', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            handleMenuCloseOnFocusOut(triggerEl)
+            if (triggerEl.dataset.dropdownMenuHide == 'onclick.outside') {
+
+            }
+            else {
+                handleMenuCloseOnFocusOut(triggerEl)
+            }
         })
 
 
