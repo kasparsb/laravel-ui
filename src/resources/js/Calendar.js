@@ -192,6 +192,12 @@ let onChangeListeners = new Listeners();
 export default {
     init() {
         [...qa('.calendar')].forEach(calendarEl => {
+
+            // Ja ir FieldData calendar elements
+            if ('fieldDateCalendarContainer' in calendarEl.dataset) {
+                return
+            }
+
             let calendarWrapper = new CalendarWrapper(calendarEl);
             let newLength = instances.push({
                 name: calendarEl.dataset.name,
