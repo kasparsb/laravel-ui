@@ -1,4 +1,4 @@
-import {q, qa, parent, append, click, on, onMouseOverOut, clearFormData} from 'dom-helpers';
+import {q, qa, parent, next, append, click, on, onMouseOverOut, clearFormData} from 'dom-helpers';
 import ButtonDelete from './ButtonDelete';
 import SingletonPanel from './SingletonPanel';
 import Listeners from './helpers/Listeners';
@@ -17,12 +17,30 @@ let onCloseListeners = {};
  */
 let menuOpenTriggers = {}
 
+let menuNameCounter = 0;
+
 function findDropdownMenuByName(name) {
     return q('[data-dropdown-menu-name="'+name+'"]');
 }
 
 function findDropdownMenuByChild(childEl) {
     return parent(childEl, '[data-dropdown-menu-name]');
+}
+
+function findDropdown(triggerEl) {
+    // nākošais sibling no triggerEl
+    if (triggerEl.dataset.dropdownMenuTrigger == 'dom.nextSibling') {
+        let menuEl = next(triggerEl, '.dropdown-menu');
+
+        // Ģenerējam unikālu name
+        menuEl.dataset.dropdownMenuName = 'dropdown-menu-'+(menuNameCounter++)
+        triggerEl.dataset.dropdownMenuTrigger = menuEl.dataset.dropdownMenuName;
+
+        return menuEl;
+    }
+    else {
+        return findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
+    }
 }
 
 function triggerMenuOpenListeners(menuEl, menuOpenTriggerEl) {
@@ -148,7 +166,7 @@ function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
 }
 
 function toggleOpenOnTriggerEl(triggerEl) {
-    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
+    let menuEl = findDropdownMenu(triggerEl)
     if (isDropdownMenuOpen(menuEl)) {
         SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
     }
@@ -165,10 +183,13 @@ function handleMenuOpenTrigger(triggerEl, clickOutsideIgnoreEl) {
         return;
     }
 
-    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    let menuEl = findDropdown(triggerEl);
     if (!menuEl) {
         return
     }
+
+    console.log(menuEl);
+
 
     setOverrideFromOpenTriggerEl(triggerEl, menuEl);
     open(triggerEl, menuEl, clickOutsideIgnoreEl ? triggerEl : null);
@@ -179,7 +200,7 @@ function handleMenuCloseOnMouseOut(triggerEl) {
         return;
     }
 
-    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    let menuEl = findDropdown(triggerEl);
     if (!menuEl) {
         return
     }
@@ -192,7 +213,7 @@ function handleMenuCloseOnFocusOut(triggerEl) {
         return;
     }
 
-    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    let menuEl = findDropdown(triggerEl);
     if (!menuEl) {
         return
     }
@@ -205,7 +226,7 @@ function handleMenuCloseOnFocusOutAndFocusFirst(ev, triggerEl) {
         return;
     }
 
-    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    let menuEl = findDropdown(triggerEl);
     if (!menuEl) {
         return
     }
@@ -244,7 +265,7 @@ export default {
                     menuToClose = findDropdownMenuByChild(clickTriggerEl);
                     break;
                 default:
-                    menuToClose = findDropdownMenuByName(clickTriggerEl.dataset.dropdownMenuHide);
+                    menuToClose = findDropdown(clickTriggerEl);
             }
 
             SingletonPanel.close(menuToClose.dataset.dropdownMenuPanelIndex);
@@ -328,7 +349,7 @@ export default {
             let menuEl;
             switch (ev.key) {
                 case 'Escape':
-                    menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
+                    menuEl = findDropdown(triggerEl)
                     // Ja triggerEl menu ir atvērts
                     if (isDropdownMenuOpen(menuEl)) {
                         clearTimeout(escapeOnDropdownTimeout);
