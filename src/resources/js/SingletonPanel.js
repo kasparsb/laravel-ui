@@ -1,8 +1,23 @@
 import {
-    jsx, parent, append, replaceContent,
+    jsx, qa, parent, append, replaceContent,
     getOffset, getOuterDimensions, getWindowDimensions, isChild,
     addStyle, click, on, onMouseOverOut
 } from 'dom-helpers'
+
+
+
+function findFirstFocusable(el) {
+    let candidates  = qa(el, 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+    for (let i = 0; i < candidates.length; i++) {
+        // Jāpārbauda vai tabindex ir -1
+        if (candidates[i].tabIndex < 0) {
+            continue;
+        }
+
+        return candidates[i];
+    }
+}
+
 
 /**
  * Vairāki containers pēc hierarhijas
@@ -173,8 +188,38 @@ function closeOnMouseOut(panelIndex) {
     closeDelayed(panelIndex, panelsStack[panelIndex].mouseoutCloseDelay)
 }
 
-function closeOnMouseFocusOut(panelIndex) {
+function closeOnFocusOut(panelIndex) {
     closeDelayed(panelIndex, panelsStack[panelIndex].focusoutCloseDelay)
+}
+
+/**
+ * No target input lauka notiek Tab ar kuru iet uz nākošo lauku
+ * ja ir panelis atvērts, tad vajag lai iefokusējas pirmais lauks
+ * ja tāda nav, tad aizver ciet
+ *
+ * Vēl ir jāpieglabā pazīme, ka šāds scenācijas bija un
+ * kad notiek focusout no paneļa, tad vajag iefokusēt nākošo
+ * elementu aiz target input elementa
+ *
+ * Līdzi nāk event, lai to varētu atcelt, ja it iefokusēts pirmais,
+ * pretējā gadījumā notiek iefokusēšana un nostrādā Tab līdz galam
+ * un pārlec uz nākošo elementu
+ */
+function closeOnFocusOutOrFocusFirst(panelIndex, callbacks) {
+    // Atrodam vai panelī ir focusable elements
+    let firstFocusable = findFirstFocusable(panelsStack[panelIndex].contentEl)
+    if (firstFocusable) {
+        firstFocusable.focus();
+        if (callbacks && callbacks.focusFirst) {
+            callbacks.focusFirst(firstFocusable);
+        }
+    }
+    else {
+        closeDelayed(panelIndex, panelsStack[panelIndex].focusoutCloseDelay)
+        if (callbacks && callbacks.close) {
+            callbacks.close(firstFocusable);
+        }
+    }
 }
 
 function handleMouseOver(contentEl) {
@@ -252,9 +297,20 @@ export default {
             handleClickOutside();
         })
 
+
+        let focusoutTImeout = 0;
+        // lokālais focusout kontrolēs, ka ir bijis focusout no kāda no elementiem
+        on('focusout', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
+            focusoutTImeout = setTimeout(() => {
+                handleClose(contentEl)
+            }, 5)
+        })
+        // lokālais focusin, atcelts aizvēršanas timeout
         on('focusin', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
+            clearTimeout(focusoutTImeout);
             handleFocusIn(contentEl)
         })
+
 
         // Escape close
         on('keyup', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
@@ -337,7 +393,11 @@ export default {
         closeOnMouseOut(panelIndex);
     },
 
-    closeOnMouseFocusOut(panelIndex) {
-        closeOnMouseFocusOut(panelIndex)
+    closeOnFocusOut(panelIndex) {
+        closeOnFocusOut(panelIndex)
     },
+
+    closeOnFocusOutOrFocusFirst(panelIndex, callbacks) {
+        closeOnFocusOutOrFocusFirst(panelIndex, callbacks)
+    }
 }

@@ -98,6 +98,13 @@ function open(clickTriggerEl, menuEl, clickOutsideIgnoreEl) {
             append(q('body'), menuEl);
 
             triggerMenuCloseListeners(menuEl, menuOpenTriggerEl);
+
+            // Ja bija focusin, tad iefokusējam atpakaļ
+            if ('dropdowMenuWasFocused' in menuOpenTriggerEl.dataset) {
+                // šis noignorēs focusin, lai atkāŗtoti menu neatveras uz focusin
+                menuOpenTriggerEl.dataset.dropdownMenuWasMousedown = ''
+                menuOpenTriggerEl.focus();
+            }
         },
         triggerEl: clickTriggerEl,
         side: menuEl.dataset.side,
@@ -190,7 +197,27 @@ function handleMenuCloseOnFocusOut(triggerEl) {
         return
     }
 
-    SingletonPanel.closeOnMouseFocusOut(menuEl.dataset.dropdownMenuPanelIndex);
+    SingletonPanel.closeOnFocusOut(menuEl.dataset.dropdownMenuPanelIndex);
+}
+
+function handleMenuCloseOnFocusOutAndFocusFirst(ev, triggerEl) {
+    if (!triggerEl.dataset.dropdownMenuOpen) {
+        return;
+    }
+
+    let menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger);
+    if (!menuEl) {
+        return
+    }
+
+    SingletonPanel.closeOnFocusOutOrFocusFirst(menuEl.dataset.dropdownMenuPanelIndex, {
+        focusFirst() {
+            ev.preventDefault();
+        },
+        close() {
+            console.log('closed');
+        }
+    });
 }
 
 export default {
@@ -261,10 +288,14 @@ export default {
                 delete triggerEl.dataset.dropdownMenuWasMousedown
                 return;
             }
+            // Pazīme, ka šis bija focusin
+            triggerEl.dataset.dropdowMenuWasFocused = '';
             handleMenuOpenTrigger(triggerEl, true)
         })
         // Ja ir iefokusēts, tad atkārtoti nevarēs atvērt, tāpēc ir vēl click
         click('[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+            // Pazīme, ka šis bija focusin
+            triggerEl.dataset.dropdowMenuWasFocused = '';
             toggleOpenOnTriggerEl(triggerEl)
         })
 
@@ -278,10 +309,17 @@ export default {
                     SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
                     break;
                 case 'Enter':
+                    // Atceļa, jo Enter trigero form submit
+                    ev.preventDefault();
                     toggleOpenOnTriggerEl(triggerEl)
                     break;
                 case 'Tab':
-                    handleMenuCloseOnFocusOut(triggerEl)
+                    if (ev.shiftKey) {
+                        handleMenuCloseOnFocusOut(triggerEl)
+                    }
+                    else {
+                        handleMenuCloseOnFocusOutAndFocusFirst(ev, triggerEl)
+                    }
                     break;
             }
         });
