@@ -99,10 +99,10 @@ function open(clickTriggerEl, menuEl, clickOutsideIgnoreEl) {
 
             triggerMenuCloseListeners(menuEl, menuOpenTriggerEl);
 
-            // Ja bija focusin, tad iefokusējam atpakaļ
-            if ('dropdowMenuWasFocused' in menuOpenTriggerEl.dataset) {
+            // Atrkārtoti iefokusējam triggerEl
+            if ('dropdownMenuRefocus' in menuOpenTriggerEl.dataset) {
                 // šis noignorēs focusin, lai atkāŗtoti menu neatveras uz focusin
-                menuOpenTriggerEl.dataset.dropdownMenuWasMousedown = ''
+                menuOpenTriggerEl.dataset.dropdownIgnoreFocusin = ''
                 menuOpenTriggerEl.focus();
             }
         },
@@ -213,9 +213,11 @@ function handleMenuCloseOnFocusOutAndFocusFirst(ev, triggerEl) {
     SingletonPanel.closeOnFocusOutOrFocusFirst(menuEl.dataset.dropdownMenuPanelIndex, {
         focusFirst() {
             ev.preventDefault();
+            // Kad menu tiks aizvērts, tad atkārtoti iefokusēt triggerEl
+            triggerEl.dataset.dropdownMenuRefocus = ''
         },
         close() {
-            console.log('closed');
+
         }
     });
 }
@@ -280,28 +282,27 @@ export default {
          */
         // Focusin
         on('mousedown', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            triggerEl.dataset.dropdownMenuWasMousedown = '';
-
+            triggerEl.dataset.dropdownIgnoreFocusin = '';
         })
         on('focusin', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
-            if ('dropdownMenuWasMousedown' in triggerEl.dataset) {
-                delete triggerEl.dataset.dropdownMenuWasMousedown
+            if ('dropdownIgnoreFocusin' in triggerEl.dataset) {
+                delete triggerEl.dataset.dropdownIgnoreFocusin
                 return;
             }
             // Pazīme, ka šis bija focusin
-            triggerEl.dataset.dropdowMenuWasFocused = '';
+            //triggerEl.dataset.dropdowMenuWasFocused = '';
             handleMenuOpenTrigger(triggerEl, true)
         })
         // Ja ir iefokusēts, tad atkārtoti nevarēs atvērt, tāpēc ir vēl click
         click('[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
             // Pazīme, ka šis bija focusin
-            triggerEl.dataset.dropdowMenuWasFocused = '';
+            //triggerEl.dataset.dropdowMenuWasFocused = '';
             toggleOpenOnTriggerEl(triggerEl)
         })
 
 
         // Escape close
-        on('keydown', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onfocusin"]', (ev, triggerEl) => {
+        on('keydown', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
             let menuEl;
             switch (ev.key) {
                 case 'Escape':
