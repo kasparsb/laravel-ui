@@ -301,13 +301,39 @@ export default {
         })
 
 
-        // Escape close
+
+        /**
+         * Situācija, kad panelī atvērts otrs panelis
+         * Ja ir Escape uz paneļa, tad to aizver ciet
+         * bet ja ir escape uz triggerEl, kurš ir panelī,
+         * tad vajag, lai nostrādā tikai triggerEl atvērtā paneļa aizvēršana
+         * Pirmo ķeram escape uz panel un lieka timeout
+         * ja ir bijis escape uz triggerEl, tad panel close timeout tiks atcelts
+         */
+        let escapeOnDropdownTimeout = 0;
+
+        // Escape in dropdownmenu
+        on('keydown', '[data-dropdown-menu-name]', (ev, menuEl) => {
+            switch (ev.key) {
+                case 'Escape':
+                    escapeOnDropdownTimeout = setTimeout(() => {
+                        SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
+                    }, 20)
+                    break;
+            }
+        });
+
+        // Escape on open trigger
         on('keydown', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
             let menuEl;
             switch (ev.key) {
                 case 'Escape':
                     menuEl = findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
-                    SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
+                    // Ja triggerEl menu ir atvērts
+                    if (isDropdownMenuOpen(menuEl)) {
+                        clearTimeout(escapeOnDropdownTimeout);
+                        SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
+                    }
                     break;
                 case 'Enter':
                     // Atceļa, jo Enter trigero form submit
@@ -324,7 +350,6 @@ export default {
                     break;
             }
         });
-
     },
 
     /**

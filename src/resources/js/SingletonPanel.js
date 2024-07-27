@@ -170,12 +170,21 @@ function close(panel) {
 }
 
 function closeByIndex(panelIndex) {
-    // visus sākot ar pirmo atrasto aizveram
-    panelsStack.slice(panelIndex).forEach(panel => {
-        close(panel)
-    })
-    // atstājam visus līdz pirmajam atrastajam
-    panelsStack.splice(0, panelIndex+1);
+    /**
+     * Liek timeout, lai izpildās nākošajā tick
+     * ja tiek aizvērts uz click, tad nepaspēs nostrādāt
+     * šeit uzliktais click.outside
+     * sanāks situācija, kad click.outside saņems ev.target
+     * kurš jau ir izņemts no panel
+     */
+    setTimeout(() => {
+        // visus sākot ar pirmo atrasto aizveram
+        panelsStack.slice(panelIndex).forEach(panel => {
+            close(panel)
+        })
+        // atstājam visus līdz pirmajam atrastajam
+        panelsStack.splice(panelIndex);
+    }, 1)
 }
 
 function closeDelayed(panelIndex, delay) {
@@ -258,6 +267,7 @@ function handleClickOutside() {
     // Atrodam pirmo panel, kura ir closeWhen onclick.outside
     // aizveram to un visus nākošos paneļus
     let panelIndex = panelsStack.findIndex(panel => panel.closeWhen == 'onclick.outside');
+
     if (panelIndex >= 0) {
         closeDelayed(panelIndex, 10)
     }
@@ -270,6 +280,20 @@ function handleClose(contentEl) {
     }
 
     closeByIndex(panel.panelIndex)
+}
+
+/**
+ * Aizver visus panels, kuri ir atvērti no šī panel
+ */
+function handleCloseAllChildPanels(contentEl) {
+    let panelInedx = panelsStack.findIndex(p => p.contentEl === contentEl);
+
+    // Aizveram visus child panels
+    if (panelInedx + 1 < panelsStack.length) {
+
+        closeByIndex(panelInedx + 1)
+    }
+
 }
 
 
@@ -287,22 +311,49 @@ export default {
 
         // Click outside panel
         click('html', (ev) => {
-            if (parent(ev.target, '[data-singletonpanel-content-el]')) {
+            if (isClickOutsideIgnoredEl(ev.target)) {
                 return
             }
-            if (isClickOutsideIgnoredEl(ev.target)) {
+
+            let contentEl = parent(ev.target, '[data-singletonpanel-content-el]');
+            if (contentEl) {
+
+
+                /**
+                 * TODO Šitas vēl jāpārdomā
+                 * ja tagad taisa ciet, tad ciet taisīšanas notiek arī uz
+                 * triggerEl
+                 * iespējams vajag skatīties vai ir open
+                 * es te nezinu vai tas uz kura noklišķināja atvērs citu paneli
+                 *
+                 * Varbūt šis ir speciāli jāpārnes uz DropDown menu un tur jāskatās
+                 * jo tur ir zināms, kurš atvērs jaunu paneli un kurš ir tikai kliks uz panel
+                 */
+
+                // Jāaizver visi panels virs ši panel, kurā notika click
+                //handleCloseAllChildPanels(contentEl);
+
+
                 return
             }
 
             handleClickOutside();
         })
 
+        on('mousedown', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
+            contentEl.dataset.singletonpanelWasMouseDown = '';
+        })
 
         let focusoutTImeout = 0;
         // lokālais focusout kontrolēs, ka ir bijis focusout no kāda no elementiem
         on('focusout', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
             focusoutTImeout = setTimeout(() => {
-                handleClose(contentEl)
+                if ('singletonpanelWasMouseDown' in contentEl.dataset) {
+                    delete contentEl.dataset.singletonpanelWasMouseDown
+                }
+                else {
+                    handleClose(contentEl)
+                }
             }, 5)
         })
         // lokālais focusin, atcelts aizvēršanas timeout
@@ -311,15 +362,6 @@ export default {
             handleFocusIn(contentEl)
         })
 
-
-        // Escape close
-        on('keyup', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
-            switch (ev.key) {
-                case 'Escape':
-                    handleClose(contentEl)
-                    break;
-            }
-        });
     },
 
     /**
@@ -327,13 +369,13 @@ export default {
      */
     open(contentEl, {onContentElRemove, onOpen, triggerEl, side, align, closeWhen, clickOutsideIngoredEl} = {}) {
 
-        if (isContentElInPanel(contentEl)) {
-            // Clear panel stack, close all previouse panels
-            for (let i = panelsStack.length-1; i >= 0; i--) {
-                close(panelsStack[i]);
-            }
-            panelsStack = [];
-        }
+        // if (isContentElInPanel(contentEl)) {
+        //     // Clear panel stack, close all previouse panels
+        //     for (let i = panelsStack.length-1; i >= 0; i--) {
+        //         close(panelsStack[i]);
+        //     }
+        //     panelsStack = [];
+        // }
 
         let panelIndex = panelsStack.push({
             contentEl: contentEl,
