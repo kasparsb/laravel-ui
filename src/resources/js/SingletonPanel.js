@@ -369,14 +369,6 @@ export default {
      */
     open(contentEl, {onContentElRemove, onOpen, triggerEl, side, align, closeWhen, clickOutsideIngoredEl} = {}) {
 
-        // if (isContentElInPanel(contentEl)) {
-        //     // Clear panel stack, close all previouse panels
-        //     for (let i = panelsStack.length-1; i >= 0; i--) {
-        //         close(panelsStack[i]);
-        //     }
-        //     panelsStack = [];
-        // }
-
         let panelIndex = panelsStack.push({
             contentEl: contentEl,
             onContentElRemoveCb: onContentElRemove,
