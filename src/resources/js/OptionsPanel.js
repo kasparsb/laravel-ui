@@ -136,11 +136,10 @@ export default {
 
             switch (ev.key) {
                 case 'Enter':
-                    /**
-                     * Aizvērt, bet vai vajag aizvērt, ja ir search field?
-                     */
-                    console.log('close on enter');
-                    console.log(ev.target);
+                    // Ja ir search field, tad neveram ciet
+                    if (!('fieldSelectSearchField' in ev.target.dataset)) {
+                        DropdownMenu.close(DropdownMenu.getByChild(optionsEl))
+                    }
 
                     break;
                 case 'ArrowDown':
