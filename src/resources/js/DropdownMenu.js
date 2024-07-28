@@ -227,7 +227,7 @@ function handleMenuCloseOnFocusOut(triggerEl) {
     SingletonPanel.closeOnFocusOut(menuEl.dataset.dropdownMenuPanelIndex);
 }
 
-function handleMenuCloseOnFocusOutAndFocusFirst(ev, triggerEl) {
+function handleMenuCloseOnFocusOutOrFocusFirst(ev, triggerEl) {
     if (!triggerEl.dataset.dropdownMenuOpen) {
         return;
     }
@@ -372,7 +372,7 @@ export default {
                         handleMenuCloseOnFocusOut(triggerEl)
                     }
                     else {
-                        handleMenuCloseOnFocusOutAndFocusFirst(ev, triggerEl)
+                        handleMenuCloseOnFocusOutOrFocusFirst(ev, triggerEl)
                     }
                     break;
             }
