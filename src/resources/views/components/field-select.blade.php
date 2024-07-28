@@ -41,7 +41,7 @@
             data-dropdown-menu-hide="onclick.outside"
             @disabled($disabled)
             />
-        <x-ui::dropdown-menu>
+        <x-ui::dropdown-menu data-field-select-options-menu>
             <div class="options">
                 @if ($searchable)
                 <x-ui::field-text placeholder="Search" data-field-select-search-field class="no-border search-field" />

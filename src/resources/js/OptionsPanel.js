@@ -119,6 +119,27 @@ function setFieldValue(optionsEl, selectedOptionEl) {
     dispatchEvent(fieldValue, 'change');
 }
 
+function getFieldValue(optionsEl) {
+    let fieldValue = findFieldValue(optionsEl);
+    return fieldValue.value
+}
+
+function cleanUp(optionsEl, fieldValue) {
+    let searchInputEl = q(optionsEl, '[data-field-select-search-field]');
+    if (searchInputEl) {
+        searchInputEl.value = '';
+        filterOptionsByValue(optionsEl, searchInputEl.value)
+    }
+
+    // Uncheck all
+    qa(optionsEl, '[data-options-list-option]').forEach(optionEl => {
+        uncheck(optionEl);
+    })
+
+    // check by field value
+    check(findOptionByValue(optionsEl, fieldValue.value));
+}
+
 export default {
     init() {
 
@@ -126,10 +147,17 @@ export default {
         /**
          * TODO Dropdown uz atvēršanu focus first input
          * tas lai search lauks tiktu uzreiz iefokusēts
-         *
-         * Uz aizvēršanu notīrīt search, parādīt hidden options
-         * uzlikt pareizo selected
          */
+
+        /**
+         * Klausāmies uz visiem dropdown menu close
+         * apstrādājam tikai Options menu
+         */
+        DropdownMenu.onCloseAny((menuEl, fieldValue) => {
+            if ('fieldSelectOptionsMenu' in menuEl.dataset) {
+                cleanUp(q(menuEl, '.options'), fieldValue)
+            }
+        })
 
 
         on('keydown', '.options', (ev, optionsEl) => {
