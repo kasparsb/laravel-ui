@@ -72,6 +72,13 @@ function triggerMenuCloseListeners(menuEl, menuOpenTriggerEl) {
             menuOpenTriggerEl
         ])
     }
+    // Any menus listener
+    if (onCloseListeners['__any__']) {
+        onCloseListeners['__any__'].trigger([
+            menuEl,
+            menuOpenTriggerEl
+        ])
+    }
 }
 
 /**
@@ -442,5 +449,12 @@ export default {
             onCloseListeners[menuName] = new Listeners();
         }
         onCloseListeners[menuName].listen(cb);
+    },
+
+    onCloseAny(cb) {
+        if (typeof onCloseListeners['__any__'] == 'undefined') {
+            onCloseListeners['__any__'] = new Listeners();
+        }
+        onCloseListeners['__any__'].listen(cb);
     }
 }
