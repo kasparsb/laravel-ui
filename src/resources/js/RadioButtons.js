@@ -1,4 +1,4 @@
-import {click, qa, q, parent, addClass, removeClass} from 'dom-helpers';
+import {click, change, qa, q, parent, addClass, removeClass} from 'dom-helpers';
 
 function isButtonSelected(radioButtonEl) {
     return q(radioButtonEl, 'input').checked;
@@ -22,10 +22,8 @@ function setCheckedAndUnchecked(radioButtonsEl) {
 
 export default {
     init() {
-        click('.radio-buttons [data-role="radio-button"]', (ev, radioButtonEl) => {
-            setTimeout(() => {
-                setCheckedAndUnchecked(parent(radioButtonEl, '[data-is-container]'))
-            }, 1);
+        change('.radio-buttons [type="radio"]', (ev, inputEl) => {
+            setCheckedAndUnchecked(parent(inputEl, '[data-is-container]'))
         })
     },
 
