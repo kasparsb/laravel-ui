@@ -19,6 +19,16 @@ let menuOpenTriggers = {}
 
 let menuNameCounter = 0;
 
+function findDropdownMenuEl(triggerEl) {
+    // nākošais sibling no triggerEl
+    if (triggerEl.dataset.dropdownMenuTrigger == 'dom.nextSibling') {
+        return next(triggerEl, '.dropdown-menu');
+    }
+    else {
+        return findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
+    }
+}
+
 function findDropdownMenuByName(name) {
     return q('[data-dropdown-menu-name="'+name+'"]');
 }
@@ -27,20 +37,19 @@ function findDropdownMenuByChild(childEl) {
     return parent(childEl, '[data-dropdown-menu-name]');
 }
 
+/**
+ * Šeit arī tiks pārbaudīts vai triggerEl ir izveidots menu name
+ */
 function findDropdown(triggerEl) {
-    // nākošais sibling no triggerEl
-    if (triggerEl.dataset.dropdownMenuTrigger == 'dom.nextSibling') {
-        let menuEl = next(triggerEl, '.dropdown-menu');
+    let menuEl = findDropdownMenuEl(triggerEl);
 
-        // Ģenerējam unikālu name
+    // Ģenerējam unikālu name
+    if (!menuEl.dataset.dropdownMenuName) {
         menuEl.dataset.dropdownMenuName = 'dropdown-menu-'+(menuNameCounter++)
         triggerEl.dataset.dropdownMenuTrigger = menuEl.dataset.dropdownMenuName;
+    }
 
-        return menuEl;
-    }
-    else {
-        return findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
-    }
+    return menuEl;
 }
 
 function triggerMenuOpenListeners(menuEl, menuOpenTriggerEl) {
@@ -166,7 +175,7 @@ function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
 }
 
 function toggleOpenOnTriggerEl(triggerEl) {
-    let menuEl = findDropdownMenu(triggerEl)
+    let menuEl = findDropdown(triggerEl)
     if (isDropdownMenuOpen(menuEl)) {
         SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex);
     }
@@ -187,9 +196,6 @@ function handleMenuOpenTrigger(triggerEl, clickOutsideIgnoreEl) {
     if (!menuEl) {
         return
     }
-
-    console.log(menuEl);
-
 
     setOverrideFromOpenTriggerEl(triggerEl, menuEl);
     open(triggerEl, menuEl, clickOutsideIgnoreEl ? triggerEl : null);
@@ -405,6 +411,10 @@ export default {
 
     getByName(name) {
         return findDropdownMenuByName(name)
+    },
+
+    getMenuEl(triggerEl) {
+        return findDropdownMenuEl(triggerEl);
     },
 
     getOpenTrigger(menuEl) {
