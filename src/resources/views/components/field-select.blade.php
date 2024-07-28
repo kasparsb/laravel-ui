@@ -25,12 +25,13 @@
     @endif
     <div class="select-placeholder">
         <div>
-            <span data-r="placeholder">{{ $value ? '' : $placeholder }}</span>
+            <span data-field-select-placeholder>{{ $value ? '' : $placeholder }}</span>
         </div>
         <svg>
             <use xlink:href="#select-trigger"></use>
         </svg>
         <input
+            autocomplete="off"
             {{ $attributesForInputField }}
             type="text"
             name="{{ $name }}"
@@ -43,7 +44,7 @@
         <x-ui::dropdown-menu>
             <div class="options">
                 @if ($searchable)
-                <x-ui::field-text placeholder="Search" data-r="fieldSearch" class="no-border search-field" />
+                <x-ui::field-text placeholder="Search" data-field-select-search-field class="no-border search-field" />
                 @endif
 
                 <div role="list">

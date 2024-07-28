@@ -1,27 +1,11 @@
-import {qa, q, r, on, clickp, dispatchEvent} from 'dom-helpers';
+import {qa, q, parent, on, dispatchEvent} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
-
-let optionsListCounter = 0;
-
-/**
- * ! Neizmantojam data-r uz input lauku r(fieldEl).fieldValue
- * tas vajadzīgs, tāpēc, lai gala lietotājs varētu pats uzlikt
- * savus data-* atribūtus uz input lauku. Šajā mirklī es pieciešu
- * neertības, lai gala lietotājs var izmantot r() ērtības
- */
-
-function fieldValue(fieldEl) {
-    return q(fieldEl, 'input');
-}
+import DropdownMenu from './DropdownMenu';
 
 /**
- * Field select uzliek izvēlēto options
+ * Field select uzliek izvēlēto option vizuālo vērtību
  */
-function setOption(fieldEl, checkedOptionEl, {event} = {}) {
-    if (typeof event == 'undefined') {
-        event = true;
-    }
-
+function setOption(fieldEl, checkedOptionEl) {
     let isEmpty = true;
     let placeholderHTML = fieldEl.dataset.placeholder;
     let value = '';
@@ -41,85 +25,7 @@ function setOption(fieldEl, checkedOptionEl, {event} = {}) {
         delete fieldEl.dataset.isEmpty
     }
 
-    fieldValue(fieldEl).value = value;
-    r(fieldEl).placeholder.innerHTML = placeholderHTML;
-
-    if (event) {
-        dispatchEvent(fieldValue(fieldEl), 'change');
-    }
-}
-
-function open(fieldEl) {
-    // jau ir atvērts
-    if ('isOptionOpen' in fieldEl.dataset) {
-        return
-    }
-
-    checkOptionsListId(fieldEl);
-
-    fieldEl.dataset.isOptionOpen = '';
-    OptionsPanel.open(getOptionsEl(fieldEl), {
-        value: fieldValue(fieldEl).value,
-        /**
-         * Pozicionējam pret input lauku nevis container, jo container
-         * ir description, kas nobīdīs OptionsPanel par zemu
-         */
-        triggerEl: q(fieldEl, 'input'),
-        onSelectOption(optionEl) {
-            setOption(fieldEl, optionEl);
-        },
-        onClose() {
-            close(fieldEl);
-            fieldValue(fieldEl).focus();
-        }
-    })
-}
-
-function close(fieldEl) {
-    // Nav atvērts
-    if (!('isOptionOpen' in fieldEl.dataset)) {
-        return;
-    }
-
-    delete fieldEl.dataset.isOptionOpen;
-    OptionsPanel.close(getOptionsEl(fieldEl), {
-        // value uz kādu reset options list
-        value: fieldValue(fieldEl).value,
-    });
-}
-
-function toggleOpen(fieldEl) {
-    if ('isOptionOpen' in fieldEl.dataset) {
-        close(fieldEl)
-    }
-    else {
-        open(fieldEl)
-    }
-}
-
-/**
- * Pārbaudām vai OptionsList ir uzģenerēts unikāls id
- * sākumā OptionsList stāv ielikts FieldSelect elementā,
- * kad tas tiks parādīts, tas tiks izņemts no
- * FieldSelect un ielikts body
- * id būs reference uz OptionsList
- *
- * Sākumā OptionsList bija ārpus FieldSelect
- * bet tad radās problēma ar FieldSelect lauka klonēšanu
- * lauks noklonējās, bet reference uz OptionsList palika vecā
- */
-function checkOptionsListId(fieldEl) {
-    if (fieldEl.dataset.optionsListId) {
-        return;
-    }
-
-    let optionsEl = q(fieldEl, '.options');
-    if (optionsEl) {
-        if (!optionsEl.id) {
-            optionsEl.id = 'options-list-'+(optionsListCounter++);
-            fieldEl.dataset.optionsListId = optionsEl.id;
-        }
-    }
+    q(fieldEl, '[data-field-select-placeholder]').innerHTML = placeholderHTML;
 }
 
 /**
@@ -127,50 +33,47 @@ function checkOptionsListId(fieldEl) {
  * ja nav, tad meklējam options elementu, kurš ir ielikts fieldEl
  */
 function getOptionsEl(fieldEl) {
-    if (fieldEl.dataset.optionsListId) {
-        return q(`#${fieldEl.dataset.optionsListId}`);
-    }
-    return q(fieldEl, '.options');
+    return q(DropdownMenu.getMenuEl(q(fieldEl, 'input')), '.options');
+}
+
+function handleFieldValueChange(fieldEl) {
+    let checkedOptionEl = OptionsPanel.findOptionByValue(
+        getOptionsEl(fieldEl),
+        q(fieldEl, 'input').value
+    )
+
+    setOption(fieldEl, checkedOptionEl, {
+        event: false
+    })
 }
 
 export default {
     init() {
 
-        clickp('.field-select', (ev, fieldEl) => {
-            toggleOpen(fieldEl);
+        // Kad nomainās input value, tad uzliekam atbilstošo vizuālo value
+        on('change', '.field-select input', (ev, inputEl) => {
+            handleFieldValueChange(parent(inputEl, '.field-select'));
         })
 
-        on('keydown', '.field-select', (ev, fieldEl) => {
+        on('keydown', '.field-select input', (ev, inputEl) => {
             switch (ev.key) {
-                case 'Enter':
-                    // ja formā, tad būs submit, tāpēc prevent
-                    ev.preventDefault();
-                    toggleOpen(fieldEl);
-                    break;
-                case 'Escape':
-                case 'Tab':
-                    close(fieldEl)
-                    break;
                 case 'ArrowDown':
                 case 'ArrowRight':
-                    setOption(fieldEl, OptionsPanel.nextOption(fieldEl.dataset.optionsListId));
+                    let nextOption = OptionsPanel.nextOption(getOptionsEl(parent(inputEl, '.field-select')));
+                    inputEl.value = nextOption ? nextOption.dataset.value : ''
+                    dispatchEvent(inputEl, 'change');
                     break;
                 case 'ArrowUp':
                 case 'ArrowLeft':
-                    setOption(fieldEl, OptionsPanel.prevOption(fieldEl.dataset.optionsListId));
+                    let prevOption = OptionsPanel.prevOption(getOptionsEl(parent(inputEl, '.field-select')));
+                    inputEl.value = prevOption ? prevOption.dataset.value : ''
+                    dispatchEvent(inputEl, 'change');
             }
         });
 
         // Field start values ielikšana
         qa('.field-select').forEach(fieldEl => {
-            let checkedOptionEl = OptionsPanel.findOptionByValue(
-                getOptionsEl(fieldEl),
-                fieldValue(fieldEl).value
-            )
-
-            setOption(fieldEl, checkedOptionEl, {
-                event: false
-            })
+            handleFieldValueChange(fieldEl);
         });
     }
 }
