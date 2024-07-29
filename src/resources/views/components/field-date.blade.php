@@ -19,30 +19,42 @@
     @if ($label)
         <label>{{ $label }}</label>
     @endif
-    <input
-    {{ $attributesForInputField }}
-        autocomplete="off"
-        type="text"
-        @if ($name)
-        name="{{ $name }}"
+    <div>
+        @if (isset($prefix) && !$prefix->isEmpty())
+            {{ $prefix }}
+        @else
+            <svg width="24" height="24" viewBox="0 0 24 24" data-defautl-calendar-icon>
+                <use xlink:href="#ui-icon-calendar"></use>
+            </svg>
         @endif
-        value="{{ $value }}"
-        placeholder="{{ $placeholder }}"
-        @if ($stateUrl)
-        data-state-url="{{ $stateUrl }}"
-        @endif
-        @if ($minDate)
-        data-min-date="{{ $minDate }}"
-        @endif
-        @if ($maxDate)
-        data-max-date="{{ $maxDate }}"
-        @endif
-        @disabled($disabled)
+        <input
+        {{ $attributesForInputField }}
+            autocomplete="off"
+            type="text"
+            @if ($name)
+            name="{{ $name }}"
+            @endif
+            value="{{ $value }}"
+            placeholder="{{ $placeholder }}"
+            @if ($stateUrl)
+            data-state-url="{{ $stateUrl }}"
+            @endif
+            @if ($minDate)
+            data-min-date="{{ $minDate }}"
+            @endif
+            @if ($maxDate)
+            data-max-date="{{ $maxDate }}"
+            @endif
+            @disabled($disabled)
 
-        data-dropdown-menu-trigger="field-date-calendar"
-        data-dropdown-menu-show="onfocusin"
-        data-dropdown-menu-hide="onclick.outside"
-        />
+            data-dropdown-menu-trigger="field-date-calendar"
+            data-dropdown-menu-show="onfocusin"
+            data-dropdown-menu-hide="onclick.outside"
+            />
+        @if (isset($sufix) && !$sufix->isEmpty())
+            {{ $sufix }}
+        @endif
+    </div>
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 

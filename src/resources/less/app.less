@@ -610,52 +610,80 @@ body {
         }
     }
     &:not(:is([data-state="error"])) {
-        >[type=text],
-        >[type=email],
-        >[type=password],
-        >[type=date],
-        >textarea {
-            .input-text();
+        >div {
             .input-text-border();
             .input-text-border-color-shadow();
             .input-text-focus();
-            width: 100%;
+            &:has(input:focus),
+            &:has(textarea:focus) {
+                .input-text-focused();
+            }
+            input,
+            textarea {
+                .input-text();
+                padding-left: 0;
+                padding-right: 0;
+            }
         }
     }
     &.no-border:not(:is([data-state="error"])) {
-        >[type=text],
-        >[type=email],
-        >[type=password],
-        >[type=date],
-        >textarea {
+        >div {
             border-color: transparent
         }
     }
     &[data-state="error"] {
-        >[type=text],
-        >[type=email],
-        >[type=password],
-        >[type=date],
-        >textarea {
-            .input-text-error();
+        >div {
             .input-text-border();
             .input-text-error-border-color-shadow();
             .input-text-error-focus();
-            width: 100%;
+            &:has(input:focus),
+            &:has(textarea:focus) {
+                .input-text-error-focused();
+            }
+            input,
+            textarea {
+                .input-text-error();
+                padding-left: 0;
+                padding-right: 0;
+            }
         }
     }
     &.no-border[data-state="error"] {
-        >[type=text],
-        >[type=email],
-        >[type=password],
-        >[type=date],
-        >textarea {
+        >div {
             border-color: transparent;
         }
     }
 
-    >textarea {
-        min-height: @size200;
+    // wrapper div for input and prefix and sufix
+    >div {
+
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+
+        gap: @size030;
+
+        padding-left: @size030;
+        padding-right: @size030;
+
+        width: 100%;
+
+        >input,
+        >textarea {
+            flex: 1;
+        }
+        >textarea {
+            min-height: @size200;
+        }
+
+        svg {
+            width: @size040;
+            height: @size040;
+            color: hsl(var(--color-muted));
+            &[data-defautl-calendar-icon] {
+                color: hsl(var(--color-800));
+            }
+        }
     }
 
     // Description and error text
@@ -788,7 +816,6 @@ body {
             &:has(input:focus) {
                 .input-text-focused();
             }
-
         }
     }
 
