@@ -33,6 +33,7 @@ class FieldSelect extends Component
         public $model=null,
         public $disabled=false,
         public $searchable=false,
+        public $searchPlaceholder='Search...',
 
         public $errorMessage='',
         public $hasError=false,

@@ -50,7 +50,10 @@
         <x-ui::dropdown-menu data-field-select-options-menu>
             <div class="options">
                 @if ($searchable)
-                <x-ui::field-text placeholder="Search" data-field-select-search-field class="no-border search-field">
+                <x-ui::field-text
+                    placeholder="{{ $searchPlaceholder }}"
+                    data-field-select-search-field
+                    class="no-border search-field">
                     <x-slot:prefix>
                         <svg width="24" height="24" viewBox="0 0 24 24">
                             <use xlink:href="#ui-icon-search"></use>
