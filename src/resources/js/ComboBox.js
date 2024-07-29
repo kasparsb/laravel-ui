@@ -18,6 +18,7 @@ function setOption(fieldEl, checkedOptionEl) {
         }
     }
 
+    // vajadzīgs priekš css, lai var nostilot tukšo vērtību (placeholder)
     if (isEmpty) {
         fieldEl.dataset.isEmpty = '';
     }
