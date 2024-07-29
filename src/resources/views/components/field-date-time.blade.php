@@ -45,6 +45,7 @@
             :value="$valueTime"
             menu="timepicker"
             menuShow="onfocusin"
+            menuHide="onclick.outside"
             menuPositionAt=".field-increment"
             />
     </x-ui::h-stack>
