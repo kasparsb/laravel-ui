@@ -51,7 +51,7 @@
             data-dropdown-menu-trigger="field-date-calendar"
             data-dropdown-menu-show="onfocusin"
             data-dropdown-menu-hide="onclick.outside"
-            data-dropdown-menu-position-at=".field-date"
+            data-dropdown-menu-position-at="div"
             />
         @if (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}
