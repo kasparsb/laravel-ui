@@ -37,6 +37,9 @@
         <x-ui::button-ghost class="icon" data-r="dec" tabindex="-1">
             <x-tabler-minus />
         </x-ui::button-ghost>
+        @if (isset($prefix) && !$prefix->isEmpty())
+            {{ $prefix }}
+        @endif
         <input
             {{ $attributesForInputField }}
             type="text"
@@ -62,6 +65,9 @@
             data-dropdown-menu-hide="{{ $menuHide }}"
             @endif
             />
+        @if (isset($sufix) && !$sufix->isEmpty())
+            {{ $sufix }}
+        @endif
         <x-ui::button-ghost class="icon" data-r="inc" tabindex="-1">
             <x-tabler-plus />
         </x-ui::button-ghost>

@@ -23,13 +23,11 @@
     @if ($label)
         <label>{{ $label }}</label>
     @endif
-    <div class="select-placeholder">
-        <div>
-            <span data-field-select-placeholder>{{ $value ? '' : $placeholder }}</span>
-        </div>
-        <svg>
-            <use xlink:href="#select-trigger"></use>
-        </svg>
+    <div>
+        @if (isset($prefix) && !$prefix->isEmpty())
+            {{ $prefix }}
+        @endif
+        <div data-field-select-placeholder>{{ $value ? '' : $placeholder }}</div>
         <input
             autocomplete="off"
             {{ $attributesForInputField }}
@@ -41,6 +39,14 @@
             data-dropdown-menu-hide="onclick.outside"
             @disabled($disabled)
             />
+        @if (isset($sufix) && !$sufix->isEmpty())
+            {{ $sufix }}
+        @else
+        <svg>
+            <use xlink:href="#select-trigger"></use>
+        </svg>
+        @endif
+
         <x-ui::dropdown-menu data-field-select-options-menu>
             <div class="options">
                 @if ($searchable)

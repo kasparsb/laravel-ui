@@ -12,7 +12,8 @@
 @endphp
 <div
     {{ $attributesForContainer->class([
-        'form-field field-date',
+        'form-field',
+        'field-date',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     >
@@ -50,6 +51,7 @@
             data-dropdown-menu-trigger="field-date-calendar"
             data-dropdown-menu-show="onfocusin"
             data-dropdown-menu-hide="onclick.outside"
+            data-dropdown-menu-position-at=".field-date"
             />
         @if (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}

@@ -10,7 +10,6 @@
 @endphp
 <div
     {{ $attributesForContainer->class([
-        'form-field',
         'field-hours-minutes',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"

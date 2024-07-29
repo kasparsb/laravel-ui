@@ -2,20 +2,19 @@
 @import 'variables';
 @import 'resets';
 @import 'input-text';
-@import 'form-field-description-error';
-
- @import 'gaps';
- @import 'width';
- @import 'max-width';
- @import 'height';
- @import 'text-size';
- @import 'padding';
- @import 'margin-top';
- @import 'margin-bottom';
- @import 'margin-y';
- @import 'background-colors';
- @import 'border-colors';
- @import 'colors';
+@import 'fields';
+@import 'gaps';
+@import 'width';
+@import 'max-width';
+@import 'height';
+@import 'text-size';
+@import 'padding';
+@import 'margin-top';
+@import 'margin-bottom';
+@import 'margin-y';
+@import 'background-colors';
+@import 'border-colors';
+@import 'colors';
 
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: button;
@@ -594,21 +593,6 @@ body {
 
 
 .form-field {
-    display: grid;
-    // ja parent ir augstāks par content, tad visas rindas ir augšā savā augstumā
-    grid-auto-rows: min-content;
-    gap: @size020;
-
-    &:not(:is([data-state="error"])) {
-        >label {
-            .input-label();
-        }
-    }
-    &[data-state="error"] {
-        >label {
-            .input-label-error();
-        }
-    }
     &:not(:is([data-state="error"])) {
         >div {
             .input-text-border();
@@ -621,8 +605,6 @@ body {
             input,
             textarea {
                 .input-text();
-                padding-left: 0;
-                padding-right: 0;
             }
         }
     }
@@ -643,8 +625,6 @@ body {
             input,
             textarea {
                 .input-text-error();
-                padding-left: 0;
-                padding-right: 0;
             }
         }
     }
@@ -656,7 +636,6 @@ body {
 
     // wrapper div for input and prefix and sufix
     >div {
-
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
@@ -671,12 +650,14 @@ body {
         >input,
         >textarea {
             flex: 1;
+            width: 100%;
         }
         >textarea {
             min-height: @size200;
         }
 
         svg {
+            pointer-events: none;
             width: @size040;
             height: @size040;
             color: hsl(var(--color-muted));
@@ -686,21 +667,19 @@ body {
         }
     }
 
-    // Description and error text
+    .form-field-label();
+    .form-field-layout();
     .form-field-description-error()
 }
 
 .field-increment {
-
-    // te būs pogas un input
     >div {
-        display: flex;
-        flex-flow: row nowrap;
-        // input lauks, izstiepjas pa visu platumu
+        // novācam default form-field side padding
+        padding-left: 0;
+        padding-right: 0;
+
+        // input lauks
         >input {
-            flex: 1;
-            width: 100%;
-            .input-text();
             text-align: center;
         }
 
@@ -718,23 +697,18 @@ body {
             }
         }
     }
-    &:not(:is([data-state="error"])) {
-        >div {
-            .input-text-border();
-            .input-text-border-color-shadow();
-        }
-    }
-    &[data-state="error"] {
-        >div {
-            .input-text-border();
-            .input-text-error-border-color-shadow();
-        }
-    }
-    &:has(input:focus) {
-        >div {
-            .input-text-focused();
-        }
-    }
+}
+
+.field-hours-minutes {
+    .form-field-label();
+    .form-field-layout();
+    .form-field-description-error()
+}
+
+.field-date-time {
+    .form-field-label();
+    .form-field-layout();
+    .form-field-description-error()
 }
 
 .field-date-time {
@@ -748,15 +722,7 @@ body {
 }
 
 .field-select {
-    .select-placeholder {
-        width: 100%;
-
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: space-between;
-
-        gap: @size015;
+    >div {
 
         position: relative;
 
@@ -772,61 +738,24 @@ body {
             //pointer-events: none;
         }
 
-        svg {
-            pointer-events: none;
-            margin-right: @size015;
-            width: @size040;
-            height: @size040;
-        }
-
-        >div {
+        [data-field-select-placeholder] {
             flex: 1;
-            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
 
-            // text size t-3.5 line-height un min-height
-            min-height: @size050;
-            line-height: @size050;
+            width: 100%;
 
-            [data-r="placeholder"] {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                white-space: nowrap;
-                overflow: hidden;
-
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-            }
-        }
-    }
-
-    &[data-is-empty] {
-        [data-r="placeholder"] {
-            color: hsl(var(--color-400))
-        }
-    }
-
-    &:not(:is([data-state="error"])) {
-        .select-placeholder {
             .input-text();
-            .input-text-border();
-            .input-text-border-color-shadow();
-            &:has(input:focus) {
-                .input-text-focused();
-            }
         }
     }
 
-    &[data-state="error"] {
-        .select-placeholder {
-            .input-text-error();
-            .input-text-border();
-            .input-text-error-border-color-shadow();
-            &:has(input:focus) {
-                .input-text-error-focused();
-            }
+    // Vērtība nav norādīta. Šo kontrolē js
+    &[data-is-empty] {
+        [data-field-select-placeholder] {
+            color: hsl(var(--color-400))
         }
     }
 }

@@ -12,7 +12,6 @@
 @endphp
 <div
     {{ $attributesForContainer->class([
-        'form-field',
         'field-date-time',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
@@ -24,7 +23,7 @@
     @if ($label)
         <label>{{ $label }}</label>
     @endif
-    <div>
+    <x-ui::h-stack>
         <x-ui::field-date
             class="w-36"
             :stateUrl="$stateUrl"
@@ -48,7 +47,7 @@
             menuShow="onfocusin"
             menuPositionAt=".field-increment"
             />
-    </div>
+    </x-ui::h-stack>
 
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
