@@ -610,7 +610,11 @@ body {
     }
     &.no-border:not(:is([data-state="error"])) {
         >div {
-            border-color: transparent
+            border-color: transparent;
+            &:has(input:focus),
+            &:has(textarea:focus) {
+                border-color: transparent;
+            }
         }
     }
     &[data-state="error"] {
@@ -631,6 +635,10 @@ body {
     &.no-border[data-state="error"] {
         >div {
             border-color: transparent;
+            &:has(input:focus),
+            &:has(textarea:focus) {
+                border-color: transparent;
+            }
         }
     }
 
