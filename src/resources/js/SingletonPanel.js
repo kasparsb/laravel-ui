@@ -165,7 +165,7 @@ function isClickOutsideIgnoredEl(el) {
 }
 
 function close(panel) {
-    containers[panel.panelIndex].dataset.visible = '';
+    containers[panel.panelIndex].hidden = true;
     removeContentEl(panel.panelIndex);
 }
 
@@ -317,8 +317,6 @@ export default {
 
             let contentEl = parent(ev.target, '[data-singletonpanel-content-el]');
             if (contentEl) {
-
-
                 /**
                  * TODO Šitas vēl jāpārdomā
                  * ja tagad taisa ciet, tad ciet taisīšanas notiek arī uz
@@ -388,9 +386,12 @@ export default {
         removeContentEl(panelIndex);
         replaceContent(containers[panelIndex], contentEl);
 
-        // Ja nav timeout, tad triggerEl nepaspēs nolasīt content el dimensions
+        if (onOpen) {
+            onOpen(contentEl, panelIndex)
+        }
+
+        // Ja nav timeout, tad var nepaspēt nolasīt content el dimensions
         setTimeout(() => {
-            containers[panelIndex].dataset.visible = 'yes';
             if (triggerEl) {
 
                 /**
@@ -405,10 +406,9 @@ export default {
                 positionByEl(panelIndex, positionEl, side, align);
             }
 
-            if (onOpen) {
-                onOpen(contentEl, panelIndex)
-            }
-        }, 1)
+            // Padaram redzamu
+            containers[panelIndex].hidden = false;
+        })
 
         return panelIndex
     },

@@ -1626,11 +1626,6 @@ body {
 
 .dropdown-menu {
 
-    &.floating {
-        position: absolute;
-        pointer-events: none;
-    }
-
     &[hidden] {
         display: none;
     }
@@ -2235,18 +2230,24 @@ body {
     right: 0;
     bottom: 0;
 
-    // hidden stāvoklis
+    // Overlay atslēdzam pointer events
     pointer-events: none;
-    opacity: 0;
+
+    // Visiem childs ieslēdzam pointer events
+    >* {
+        pointer-events: all;
+    }
+
+    opacity: 1;
 
     // Visible slēdzam ar data atribūtu
-    &[data-visible="yes"] {
-        opacity: 1;
-
-        // kad redzams, ieslēdzam pointer events
-        & >* {
-            pointer-events: all;
+    &[hidden] {
+        // Izslēdzam pointer event visiem childs
+        >* {
+            pointer-events: none;
         }
+
+        opacity: 0;
     }
 }
 
