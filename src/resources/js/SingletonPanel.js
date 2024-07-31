@@ -111,7 +111,7 @@ function positionByEl(panelIndex, positionEl, side, align) {
 function createContainer(panelIndex) {
     if (typeof containers[panelIndex] == 'undefined') {
         containers[panelIndex] = (
-            <div class="overlay-container"></div>
+            <div class="overlay-container" hidden></div>
         )
 
         append('body', containers[panelIndex]);
