@@ -209,18 +209,6 @@ export default {
 
             // aizvērsies, jo options ir kā menu-item un Dropdown tādus uz click aizver
         })
-
-        /**
-         * Šo laikam vajag tikai, ja ir FieldSelect režīms
-         * unchecked checked and set checked currently hovered
-         *
-         * šis imitē native select box behaviour
-         */
-        on('mouseover', '.options [data-options-list-option]', (ev, optionEl) => {
-            let optionsEl = parent(optionEl, '.options');
-            uncheck(getChecked(optionsEl));
-            check(optionEl);
-        })
     },
 
     findOptionByValue(optionsEl, value) {

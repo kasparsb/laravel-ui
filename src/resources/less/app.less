@@ -1597,11 +1597,13 @@ body {
 
     padding: @size015;
 
-    &:hover,
     &:active,
     &:focus,
-    &[data-checked] {
+    &:hover {
         background-color: hsl(var(--color-100));
+    }
+    &[data-checked] {
+        background-color: hsl(var(--color-200));
     }
 
     svg {
@@ -1719,19 +1721,28 @@ body {
 
         // Izplešas pa visu augstumu
         flex: 1;
-    }
 
-    >.menu-item {
+        >.menu-item {
 
-        .fw-r();
+            .fw-r();
 
-        &.hidden {
-            display: none;
-        }
-        &:empty {
-            &:before {
-                // invisible character, lai ieņem pareizo augstumu tukšs elements
-                content: '\00a0'
+            &:active,
+            &:focus,
+            &:hover {
+                background-color: hsl(var(--color-100));
+            }
+            &[data-checked] {
+                background-color: hsl(var(--color-200));
+            }
+
+            &.hidden {
+                display: none;
+            }
+            &:empty {
+                &:before {
+                    // invisible character, lai ieņem pareizo augstumu tukšs elements
+                    content: '\00a0'
+                }
             }
         }
     }
