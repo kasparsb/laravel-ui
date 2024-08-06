@@ -4,11 +4,16 @@
     // Ja ir menu open trigger
     if ($menu) {
         if (!in_array($menuHide, ['onclick.outside', 'onmouseout', 'onfocusout',])) {
-            $menuHide = 'onmouseout';
+            $menuHide = 'onclick.outside';
         }
 
         if (!in_array($menuShow, ['onclick', 'onhover',])) {
-            $menuShow = 'onhover';
+            $menuShow = 'onclick';
+        }
+
+        // Ja tukšs string
+        if (is_string($menuFocus) && !$menuFocus) {
+            $menuFocus = true;
         }
     }
     else {
@@ -85,6 +90,9 @@
     @if ($menu)
     data-dropdown-menu-trigger="{{ $menu }}"
     data-dropdown-menu-show="{{ $menuShow }}"
+        @if ($menuFocus)
+        data-dropdown-menu-focus="{{ is_bool($menuFocus) ? '' : $menuFocus }}"
+        @endif
         @if ($menuResetForm)
         data-dropdown-menu-reset-form
         @endif

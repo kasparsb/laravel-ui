@@ -1,23 +1,7 @@
 import {
-    jsx, qa, parent, append, replaceContent,
-    getOffset, getOuterDimensions, getWindowDimensions, isChild,
-    addStyle, click, on, onMouseOverOut
+    jsx, parent, append, replaceContent, addStyle,
+    getOffset, getOuterDimensions, getWindowDimensions
 } from 'dom-helpers'
-
-
-
-function findFirstFocusable(el) {
-    let candidates  = qa(el, 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-    for (let i = 0; i < candidates.length; i++) {
-        // Jāpārbauda vai tabindex ir -1
-        if (candidates[i].tabIndex < 0) {
-            continue;
-        }
-
-        return candidates[i];
-    }
-}
-
 
 /**
  * Vairāki containers pēc hierarhijas
@@ -41,8 +25,6 @@ let panelsStack = [
     // {
     //     contentEl
     //     onContentElRemoveCb
-    //     closeWhen
-    //     clickOutsideIngoredEl - elements, kurš tiks ignorēts uz click outside. Līdzīgi kā pats contentEl
     //     closeTimeout - timeout kuru uzliek aizvēršana, lai to var atcelt uz mouseover vai focusin
     //     mouseoutCloseDelay - delay pēc kāda close, ja ir mouseout
     //     focusoutCloseDelay
@@ -142,28 +124,6 @@ function getContentEl(panelIndex) {
     return containers[panelIndex].firstChild
 }
 
-/**
- * Vai padotais elements atrodas panelī
- */
-function isContentElInPanel(contentEl) {
-    return parent(contentEl, '.overlay-container') ? true : false
-}
-
-function isClickOutsideIgnoredEl(el) {
-    for (let i = 0; i < panelsStack.length; i++) {
-        if (!panelsStack[i].clickOutsideIngoredEl) {
-            continue;
-        }
-
-        if (panelsStack[i].clickOutsideIngoredEl === el) {
-            return true;
-        }
-        if (isChild(el, panelsStack[i].clickOutsideIngoredEl)) {
-            return true;
-        }
-    }
-}
-
 function close(panel) {
     containers[panel.panelIndex].hidden = true;
     removeContentEl(panel.panelIndex);
@@ -187,192 +147,15 @@ function closeByIndex(panelIndex) {
     }, 1)
 }
 
-function closeDelayed(panelIndex, delay) {
-    panelsStack[panelIndex].closeTimeout = setTimeout(() => {
-        closeByIndex(panelIndex)
-    }, delay)
-}
-
-function closeOnMouseOut(panelIndex) {
-    closeDelayed(panelIndex, panelsStack[panelIndex].mouseoutCloseDelay)
-}
-
-function closeOnFocusOut(panelIndex) {
-    closeDelayed(panelIndex, panelsStack[panelIndex].focusoutCloseDelay)
-}
-
-/**
- * No target input lauka notiek Tab ar kuru iet uz nākošo lauku
- * ja ir panelis atvērts, tad vajag lai iefokusējas pirmais lauks
- * ja tāda nav, tad aizver ciet
- *
- * Vēl ir jāpieglabā pazīme, ka šāds scenācijas bija un
- * kad notiek focusout no paneļa, tad vajag iefokusēt nākošo
- * elementu aiz target input elementa
- *
- * Līdzi nāk event, lai to varētu atcelt, ja it iefokusēts pirmais,
- * pretējā gadījumā notiek iefokusēšana un nostrādā Tab līdz galam
- * un pārlec uz nākošo elementu
- */
-function closeOnFocusOutOrFocusFirst(panelIndex, callbacks) {
-    // Atrodam vai panelī ir focusable elements
-    let firstFocusable = findFirstFocusable(panelsStack[panelIndex].contentEl)
-    if (firstFocusable) {
-        firstFocusable.focus();
-        if (callbacks && callbacks.focusFirst) {
-            callbacks.focusFirst(firstFocusable);
-        }
-    }
-    else {
-        closeDelayed(panelIndex, panelsStack[panelIndex].focusoutCloseDelay)
-        if (callbacks && callbacks.close) {
-            callbacks.close(firstFocusable);
-        }
-    }
-}
-
-function handleMouseOver(contentEl) {
-    let panel = panelsStack.find(p => p.contentEl === contentEl);
-    if (!panel) {
-        return
-    }
-
-    clearTimeout(panel.closeTimeout);
-}
-
-function handleMouseout(contentEl) {
-    let panel = panelsStack.find(p => p.contentEl === contentEl);
-    if (!panel) {
-        return
-    }
-
-    if (panel.closeWhen === 'onmouseout') {
-        closeOnMouseOut(panel.panelIndex)
-    }
-}
-
-function handleFocusIn(contentEl) {
-    let panel = panelsStack.find(p => p.contentEl === contentEl);
-    if (!panel) {
-        return
-    }
-
-    clearTimeout(panel.closeTimeout);
-}
-
-/**
- * Noticis click ārpus panel
- */
-function handleClickOutside() {
-    // Atrodam pirmo panel, kura ir closeWhen onclick.outside
-    // aizveram to un visus nākošos paneļus
-    let panelIndex = panelsStack.findIndex(panel => panel.closeWhen == 'onclick.outside');
-
-    if (panelIndex >= 0) {
-        closeDelayed(panelIndex, 10)
-    }
-}
-
-function handleClose(contentEl) {
-    let panel = panelsStack.find(p => p.contentEl === contentEl);
-    if (!panel) {
-        return
-    }
-
-    closeByIndex(panel.panelIndex)
-}
-
-/**
- * Aizver visus panels, kuri ir atvērti no šī panel
- */
-function handleCloseAllChildPanels(contentEl) {
-    let panelInedx = panelsStack.findIndex(p => p.contentEl === contentEl);
-
-    // Aizveram visus child panels
-    if (panelInedx + 1 < panelsStack.length) {
-
-        closeByIndex(panelInedx + 1)
-    }
-
-}
-
-
 export default {
-    init() {
-        // Mouse out from panel
-        onMouseOverOut('.overlay-container [data-singletonpanel-content-el]', {
-            mouseover(ev, contentEl) {
-                handleMouseOver(contentEl)
-            },
-            mouseout(ev, contentEl) {
-                handleMouseout(contentEl)
-            }
-        })
-
-        // Click outside panel
-        click('html', (ev) => {
-            if (isClickOutsideIgnoredEl(ev.target)) {
-                return
-            }
-
-            let contentEl = parent(ev.target, '[data-singletonpanel-content-el]');
-            if (contentEl) {
-                /**
-                 * TODO Šitas vēl jāpārdomā
-                 * ja tagad taisa ciet, tad ciet taisīšanas notiek arī uz
-                 * triggerEl
-                 * iespējams vajag skatīties vai ir open
-                 * es te nezinu vai tas uz kura noklišķināja atvērs citu paneli
-                 *
-                 * Varbūt šis ir speciāli jāpārnes uz DropDown menu un tur jāskatās
-                 * jo tur ir zināms, kurš atvērs jaunu paneli un kurš ir tikai kliks uz panel
-                 */
-
-                // Jāaizver visi panels virs ši panel, kurā notika click
-                //handleCloseAllChildPanels(contentEl);
-
-
-                return
-            }
-
-            handleClickOutside();
-        })
-
-        on('mousedown', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
-            contentEl.dataset.singletonpanelWasMouseDown = '';
-        })
-
-        let focusoutTImeout = 0;
-        // lokālais focusout kontrolēs, ka ir bijis focusout no kāda no elementiem
-        on('focusout', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
-            focusoutTImeout = setTimeout(() => {
-                if ('singletonpanelWasMouseDown' in contentEl.dataset) {
-                    delete contentEl.dataset.singletonpanelWasMouseDown
-                }
-                else {
-                    handleClose(contentEl)
-                }
-            }, 5)
-        })
-        // lokālais focusin, atcelts aizvēršanas timeout
-        on('focusin', '.overlay-container [data-singletonpanel-content-el]', (ev, contentEl) => {
-            clearTimeout(focusoutTImeout);
-            handleFocusIn(contentEl)
-        })
-
-    },
-
     /**
      * Show single instance panel
      */
-    open(contentEl, {onContentElRemove, onOpen, triggerEl, side, align, closeWhen, clickOutsideIngoredEl} = {}) {
+    open(contentEl, {onContentElRemove, onOpen, triggerEl, side, align} = {}) {
 
         let panelIndex = panelsStack.push({
             contentEl: contentEl,
             onContentElRemoveCb: onContentElRemove,
-            // When to close panel
-            closeWhen: closeWhen,
-            clickOutsideIngoredEl: clickOutsideIngoredEl,
             closeTimeout: 0,
             mouseoutCloseDelay: 400,
             focusoutCloseDelay: 50
@@ -414,24 +197,40 @@ export default {
     },
 
     close(panelIndex) {
-        closeByIndex(panelIndex)
+        if (typeof panelIndex != 'undefined') {
+            closeByIndex(panelIndex)
+        }
     },
 
     /**
-     * Šo izmanto, lai uz trigger elementa mouse out aizvērtu
-     * uz mouseover atvērto menu
-     * Bet, ja tomēr mouse pāriet uz atvērto panel, tad
-     * close tiek atcelts
+     * Close all panels stack
      */
-    closeOnMouseOut(panelIndex) {
-        closeOnMouseOut(panelIndex);
+    closeAll() {
+        if (panelsStack.length == 0) {
+            return;
+        }
+
+        // First panel
+        let panel = panelsStack.find(() => true);
+        closeByIndex(panel.panelIndex)
     },
 
-    closeOnFocusOut(panelIndex) {
-        closeOnFocusOut(panelIndex)
+    hasChild(panelIndex) {
+        panelIndex = parseInt(panelIndex, 10)
+        let i = panelsStack.findIndex(panel => panel.panelIndex == panelIndex)
+
+        return i+1 < panelsStack.length
     },
 
-    closeOnFocusOutOrFocusFirst(panelIndex, callbacks) {
-        closeOnFocusOutOrFocusFirst(panelIndex, callbacks)
+    getParent(panelIndex) {
+        let i = panelsStack.findIndex(panel => panel.panelIndex == panelIndex);
+        if (i > 0) {
+            return panelsStack[i-1]
+        }
+        return null;
+    },
+
+    getStack() {
+        return panelsStack
     }
 }

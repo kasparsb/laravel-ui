@@ -7,7 +7,12 @@
     data-dropdown-menu-name="{{ $name }}"
     data-side="{{ $side }}"
     data-align="{{ $align }}"
+    tabIndex="{{ $tabIndex }}"
+    @if ($hidden)
     hidden
+    @endif
     >
     {{ $slot }}
+
+    <input type="text" data-dropdown-menu-focus-trap />
 </div>

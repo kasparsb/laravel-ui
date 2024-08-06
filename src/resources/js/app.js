@@ -16,7 +16,6 @@ import FieldIncrement from './FieldIncrement';
 import FieldHoursMinutes from './FieldHoursMinutes';
 import FieldDateTime from './FieldDateTime';
 
-SingletonPanel.init();
 OptionsPanel.init();
 ButtonLoading.init();
 ButtonDelete.init();

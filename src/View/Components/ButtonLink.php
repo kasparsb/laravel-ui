@@ -19,6 +19,7 @@ class ButtonLink extends Component
 
         public $menu = '',
         public $menuShow = '',
+        public $menuFocus=true, // ko iefokusēt, kad menu atveras. Default pats menu | firstFocusable | querySelector
         public $menuHide = null, // null nozīmē, ka nav uzsetots. Var padot arī empty string vai boolean
         public $menuResetForm = false,
 

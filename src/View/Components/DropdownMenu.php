@@ -25,6 +25,8 @@ class DropdownMenu extends Component
          *     top, bottom, center
          */
         public $align = 'left',
+        public $hidden = true,
+        public $tabIndex = -1,
     )
     {
 

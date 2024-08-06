@@ -7,6 +7,11 @@
     $attributesForInputField = $attributes->filter(function($value, $key){
         return substr($key, 0, 5) == 'data-';
     });
+
+    // Ja tukšs string
+    if (is_string($menuFocus) && !$menuFocus) {
+        $menuFocus = true;
+    }
 @endphp
 <div
     {{ $attributesForContainer->class([
@@ -34,6 +39,10 @@
             @if ($menu)
             data-dropdown-menu-trigger="{{ $menu }}"
             data-dropdown-menu-show="{{ $menuShow }}"
+            data-dropdown-menu-position-at="div"
+                @if ($menuFocus)
+                data-dropdown-menu-focus="{{ is_bool($menuFocus) ? '' : $menuFocus }}"
+                @endif
                 @if ($menuResetForm)
                 data-dropdown-menu-reset-form
                 @endif

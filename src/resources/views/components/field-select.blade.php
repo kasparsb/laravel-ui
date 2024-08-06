@@ -37,6 +37,9 @@
             data-dropdown-menu-trigger="dom.nextSibling"
             data-dropdown-menu-show="onclick"
             data-dropdown-menu-hide="onclick.outside"
+            @if ($searchable)
+            data-dropdown-menu-focus="firstFocusable"
+            @endif
             @disabled($disabled)
             />
         @if (isset($sufix) && !$sufix->isEmpty())
