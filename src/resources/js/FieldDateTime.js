@@ -66,12 +66,11 @@ export default {
             updateValue(parent(el, '.field-date-time'));
         })
 
-
         /**
          * Time picker panel eventi
          */
         // Atverot time picker paneli ieliek tajā time lauka vērtību
-        DropdownMenu.onOpen('timepicker', (menuEl, timeInputEl) => {
+        DropdownMenu.onOpen('ui:timepicker-menu', (menuEl, timeInputEl) => {
             FieldHoursMinutes.setValue(r(menuEl).hoursMinutes, timeInputEl.value)
         })
 

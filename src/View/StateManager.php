@@ -2,7 +2,7 @@
 
 namespace Kasparsb\Ui\View;
 
-use Illuminate\View\ComponentAttributeBag;
+use Illuminate\Support\Str;
 
 /**
  * State priekš laukiem

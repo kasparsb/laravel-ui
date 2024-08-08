@@ -1,4 +1,8 @@
-import {q, qa, parent, next, append, click, on, off, onMouseOverOut, clearFormData} from 'dom-helpers';
+import {
+    q, qa, parent, next, append, is,
+    click, on, off, onMouseOverOut,
+    clearFormData
+} from 'dom-helpers';
 import ButtonDelete from './ButtonDelete';
 import SingletonPanel from './SingletonPanel';
 import Listeners from './helpers/Listeners';
