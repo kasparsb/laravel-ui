@@ -39,4 +39,14 @@ class File extends Model
             get: fn() => substr($this->mime_type, 0, 6) === 'image\\',
         );
     }
+
+    public function getFileSize() {
+        return Storage::disk($this->disk)->size($this->path);
+    }
+
+    function getFileSizeHuman() {
+        $size = $this->getFileSize();
+        $i = $size == 0 ? 0 : floor(log($size) / log(1024));
+        return (+(round($size / pow(1024, $i), 2)) * 1) . ' ' . ['B', 'kB', 'MB', 'GB', 'TB'][$i];
+    }
 }
