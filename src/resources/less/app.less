@@ -2348,19 +2348,16 @@ body {
         display: none;
     }
 
-    /**
-     * TODO files rādīt, kad ir attribūts data-has-files
-     * arī js šito pārrakstīt, lai uzliek pazīmi hasFiles
-     */
-    &[data-state="empty"]:not(:is([data-has-files])) {
-        [data-r="files"] {
+    // Upload state, ja nav multiple, tad slēpjam file picker
+    &.has-single-file[data-state="uploading"] {
+        [data-r="file-picker"] {
             display: none;
         }
     }
 
-    // Upload state, ja nav multiple, tad slēpjam file picker
-    &.has-single-file[data-state="uploading"] {
-        [data-r="file-picker"] {
+    // Ja nav failu, tad nerādām files container el
+    &:not(:has([data-r="files"] .file-upload-single-file)) {
+        [data-r="files"] {
             display: none;
         }
     }

@@ -14,9 +14,6 @@
     @if ($multiple)
     data-multiple
     @endif
-    @if ($files)
-    data-has-files
-    @endif
     >
 
     <x-ui::v-stack>
