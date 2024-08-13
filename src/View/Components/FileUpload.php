@@ -16,8 +16,10 @@ class FileUpload extends Component
          * Pašam jāsaglabā fails
          * līdzi tiek sūtīts url param filename
          * files ir viss post body content
+         *
+         * pēc noklusējuma route('ui::upload')
          */
-        public $link,
+        public $link=null,
         /**
          * empty - faili nav pievienoti
          * uploading - faili pievienoti
@@ -29,12 +31,22 @@ class FileUpload extends Component
         public $filePickerLabel='Select file to upload',
         // Should uploaded image be previewed
         public $previewImage=false,
+
+        // Pēc noklusējuma atgriežam file path. Vēl ir opcija atrgreizt file id
+        public $valueField='path',
+
+        // Jau izveidoti File modeļu kolekcija
+        public $files=null,
     )
     {
         if ($multiple) {
             if (substr($this->name, -2) != '[]') {
                 $this->name .= '[]';
             }
+        }
+
+        if (!$this->link) {
+            $this->link = route('ui::upload');
         }
     }
 

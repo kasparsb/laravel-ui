@@ -2348,7 +2348,11 @@ body {
         display: none;
     }
 
-    &[data-state="empty"] {
+    /**
+     * TODO files rādīt, kad ir attribūts data-has-files
+     * arī js šito pārrakstīt, lai uzliek pazīmi hasFiles
+     */
+    &[data-state="empty"]:not(:is([data-has-files])) {
         [data-r="files"] {
             display: none;
         }
@@ -2498,6 +2502,30 @@ body {
         }
         [data-r="preview"] {
             opacity: 1;
+        }
+    }
+    // Esošs fails
+    &[data-state=existing] {
+        [data-r=failedMessage],
+        [data-r=progressBar] {
+            display: none;
+        }
+        [data-r="preview"] {
+            opacity: 1;
+        }
+    }
+
+    // Download poga
+    &:not(:is([data-downloadable])) {
+        [data-r="button-download"] {
+            display: none;
+        }
+    }
+
+    // Remove poga
+    &:not(:is([data-removable])) {
+        [data-r="button-remove"] {
+            display: none;
         }
     }
 }

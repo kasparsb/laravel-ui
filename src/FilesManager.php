@@ -16,6 +16,9 @@ class FilesManager {
     }
 
     private function disk() {
+        if (!$this->diskName) {
+            throw new \Exception('Files upload there is no configuration of ui.files_disk');
+        }
         return Storage::disk($this->diskName);
     }
 

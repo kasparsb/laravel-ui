@@ -83,7 +83,10 @@ function setFile(fileUploadEl) {
 
         append(fileUploadEl.files, fileEl);
 
-        startFileUpload(fileEl, file, fileUploadEl.dataset.link);
+        startFileUpload(fileEl, file, {
+            uploadLink: fileUploadEl.dataset.link,
+            valueField: fileUploadEl.dataset.valueField,
+        });
     }
 
     fileUploadEl.inputFile.value = '';
@@ -106,7 +109,7 @@ function removeFile(fileEl) {
     }
 }
 
-function startFileUpload(fileEl, file, uploadLink) {
+function startFileUpload(fileEl, file, {uploadLink, valueField}) {
     let previewImage = 'previewImage' in fileEl.dataset;
 
     if (previewImage) {
@@ -146,7 +149,10 @@ function startFileUpload(fileEl, file, uploadLink) {
     fileEl = r(fileEl);
     fileEl.dataset.state = 'uploading';
 
-    let params = {};
+    let params = {
+        value_field: valueField,
+    };
+
     if (previewImage) {
         params.return_url = true;
     }

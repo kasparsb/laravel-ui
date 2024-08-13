@@ -1,10 +1,18 @@
 <div
-    {{ $attributes->class(['file-upload-single-file']) }}
+    {{ $attributes->class([
+        'file-upload-single-file',
+    ]) }}
+    data-container="file-upload-single-file"
     data-file-type="{{ $fileType }}"
     data-state="{{ $state }}"
-    data-container="file-upload-single-file"
     @if ($previewImage)
     data-preview-image
+    @endif
+    @if ($downloadable)
+    data-downloadable
+    @endif
+    @if ($removable)
+    data-removable
     @endif
     >
 
@@ -46,15 +54,25 @@
                 @if ($error) {{ $error }} @else &nbsp; @endif
             </div>
         </div>
-        <div>
-            <x-ui::button-outline class="icon" data-r="button-remove">
+        <x-ui::h-stack class="gap-0">
+
+            <x-ui::button-link
+                as="link"
+                data-r="button-download"
+                :link="$linkDownload"
+                >Download</x-ui::button-link>
+
+            <x-ui::button-outline
+                class="icon"
+                data-r="button-remove">
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#ui-icon-x"></use>
                 </svg>
             </x-ui::button-outline>
-        </div>
+
+        </x-ui::h-stack>
     </div>
 
-    <input type="hidden" name="{{ $name }}" value="" data-r="input" />
+    <input type="hidden" name="{{ $name }}" value="{{ $value }}" data-r="input" />
 
 </div>
