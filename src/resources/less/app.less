@@ -1095,12 +1095,17 @@ body {
 }
 
 .empty-state {
-    .border-lg();
-    border-width: 1px;
-    border-style: solid;
-    border-color: hsl(var(--color-200));
 
-    padding: @size120 @size060;
+    &:not(:is(.no-border)) {
+        .border-lg();
+
+        .shadow();
+
+        border-width: 1px;
+        border-style: solid;
+        border-color: hsl(var(--color-200));
+        padding: @size120 @size060;
+    }
 
     display: flex;
     flex-flow: column;
@@ -1119,8 +1124,6 @@ body {
     >.bottom {
         .mt-6();
     }
-
-    .shadow();
 }
 
 .toggle-switch {
@@ -2342,6 +2345,35 @@ body {
     }
 }
 
+.file-picker {
+    .shadow();
+
+    .border-lg();
+    border-width: 1px;
+    border-style: solid;
+
+    &:not(:has([data-state="error"])) {
+        border-color: hsl(var(--color-200));
+    }
+    &[data-state="error"] {
+        border-color: hsl(var(--color-red-200));
+    }
+
+    padding: @size050;
+
+    position: relative;
+
+    [type="file"] {
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+}
 
 .file-upload {
     [data-r="singleFileTemplate"] {
@@ -2359,6 +2391,15 @@ body {
     &:not(:has([data-r="files"] .file-upload-single-file)) {
         [data-r="files"] {
             display: none;
+        }
+    }
+
+
+
+    &[data-emptystate] {
+        .file-picker {
+            border-style: dashed;
+            text-align: center
         }
     }
 }
@@ -2524,36 +2565,6 @@ body {
         [data-r="button-remove"] {
             display: none;
         }
-    }
-}
-
-.file-picker {
-    .shadow();
-
-    .border-lg();
-    border-width: 1px;
-    border-style: solid;
-
-    &:not(:has([data-state="error"])) {
-        border-color: hsl(var(--color-200));
-    }
-    &[data-state="error"] {
-        border-color: hsl(var(--color-red-200));
-    }
-
-    padding: @size050;
-
-    position: relative;
-
-    [type="file"] {
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
     }
 }
 
