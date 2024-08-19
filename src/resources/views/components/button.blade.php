@@ -1,6 +1,12 @@
 @inject('helpers', 'Kasparsb\Ui\Helpers')
 
 @php
+
+    $defaultAttributes = [];
+    if ($as != 'link') {
+        $defaultAttributes['type'] = 'button';
+    }
+
     // Ja ir menu open trigger
     if ($menu) {
         if (!in_array($menuHide, ['onclick.outside', 'onmouseout', 'onfocusout',])) {
@@ -112,8 +118,10 @@
 
     {{
         $attributes
-            ->class(['button-'.$variant])
-            ->merge(['type' => 'button'])
+            ->class([
+                'button-'.$variant
+            ])
+            ->merge($defaultAttributes)
     }}
     >
     <svg class="spinner" width="24" height="24" viewBox="0 0 24 24">
