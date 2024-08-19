@@ -9,11 +9,15 @@
     $attributesForInputField = $attributes->filter(function($value, $key){
         return substr($key, 0, 5) == 'data-';
     });
+
+    $hasSufix = isset($sufix) && !$sufix->isEmpty();
 @endphp
 <div
     {{ $attributesForContainer->class([
         'form-field',
         'field-date',
+        'has-prefix',
+        'has-sufix' => $hasSufix,
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     >

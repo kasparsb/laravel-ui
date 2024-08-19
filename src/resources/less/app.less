@@ -644,14 +644,16 @@ body {
 
     // wrapper div for input and prefix and sufix
     >div {
+        overflow: hidden;
+
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
 
-        gap: @size030;
+        //gap: @size030;
 
-        padding-left: @size030;
-        padding-right: @size030;
+
+
 
         width: 100%;
 
@@ -672,6 +674,16 @@ body {
             &[data-defautl-calendar-icon] {
                 color: hsl(var(--color-800));
             }
+        }
+    }
+    &.has-prefix {
+        >div {
+            padding-left: @size030;
+        }
+    }
+    &.has-sufix {
+        >div {
+            padding-right: @size030;
         }
     }
 
@@ -1911,6 +1923,13 @@ body {
     }
     &.regular {
         max-width: 56rem;
+    }
+    &.centered {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
     }
 
     &.center-content {

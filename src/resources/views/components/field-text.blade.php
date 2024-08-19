@@ -12,11 +12,16 @@
     if (is_string($menuFocus) && !$menuFocus) {
         $menuFocus = true;
     }
+
+    $hasPrefix = isset($prefix) && !$prefix->isEmpty();
+    $hasSufix = isset($sufix) && !$sufix->isEmpty();
 @endphp
 <div
     {{ $attributesForContainer->class([
         'form-field',
         'field-text',
+        'has-prefix' => $hasPrefix,
+        'has-sufix' => $hasSufix,
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     >
