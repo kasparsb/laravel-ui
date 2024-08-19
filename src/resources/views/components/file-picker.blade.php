@@ -1,7 +1,11 @@
 <div
-    {{ $attributes->class(['file-picker']) }}
+    {{ $attributes->class([
+        'file-picker',
+    ]) }}
     >
+
     <x-ui::button-secondary>{{ $label }}</x-ui::button-secondary>
+
     <input
         data-r="inputFile"
         type="file"
