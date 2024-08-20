@@ -23,6 +23,20 @@ let menuOpenTriggers = {}
 
 let menuNameCounter = 0;
 
+function findRelativeEl(el, querySelector) {
+    let p = querySelector.indexOf(':');
+
+    // Kurā virzienā meklēt pēc querySelector (parent|child)
+    let searchDirection = querySelector.substring(0, p);
+
+    if (searchDirection == 'parent') {
+        return parent(el, querySelector.substring(p+1))
+    }
+
+    // child
+    return q(el, querySelector.substring(p+1))
+}
+
 function findFirstFocusable(el) {
     let candidates  = qa(el, 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
     for (let i = 0; i < candidates.length; i++) {
@@ -166,7 +180,16 @@ function open(triggerEl, menuEl) {
     // Notīrām hide timeout
     clearTimeout(dropDownMenuHideTimeout);
 
+    // Pēc noklusējuma pozicionējam pret trigger el
+    let positionEl = triggerEl;
+    if (triggerEl.dataset.dropdownMenuPositionAt) {
+        positionEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
+    }
+
     SingletonPanel.open(menuEl, {
+        positionEl: positionEl,
+        side: menuEl.dataset.side,
+        align: menuEl.dataset.align,
         onOpen(menuEl, panelIndex) {
             menuEl.dataset.dropdownMenuPanelIndex = panelIndex;
             // Uzliekam tabIndex
@@ -216,7 +239,16 @@ function open(triggerEl, menuEl) {
                 }, 10)
             }
 
-            triggerMenuOpenListeners(menuEl, triggerEl);
+            /**
+             * Tas elements, kuru padots uz Dropdown menu kā to
+             * elementu, kurā var ielikt vērtību. Ja dropdown panel
+             * ir tāda vajadzība
+             */
+            let targetEl = triggerEl;
+            if (triggerEl.dataset.dropdownMenuTargetEl) {
+                targetEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuTargetEl)
+            }
+            triggerMenuOpenListeners(menuEl, targetEl);
         },
         onContentElRemove(menuEl) {
             // novācam tab index
@@ -240,11 +272,17 @@ function open(triggerEl, menuEl) {
             // append back to body, jo var būt vairāki menu un tos meklēs body
             append(q('body'), menuEl);
 
-            triggerMenuCloseListeners(menuEl, menuOpenTriggerEl);
-        },
-        triggerEl: triggerEl,
-        side: menuEl.dataset.side,
-        align: menuEl.dataset.align,
+            /**
+             * Tas elements, kuru padots uz Dropdown menu kā to
+             * elementu, kurā var ielikt vērtību. Ja dropdown panel
+             * ir tāda vajadzība
+             */
+            let targetEl = menuOpenTriggerEl;
+            if (menuOpenTriggerEl.dataset.dropdownMenuTargetEl) {
+                targetEl = findRelativeEl(menuOpenTriggerEl, menuOpenTriggerEl.dataset.dropdownMenuTargetEl)
+            }
+            triggerMenuCloseListeners(menuEl, targetEl);
+        }
     });
 
     // Reset form
@@ -413,7 +451,12 @@ export default {
         on('focusin', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
             // Tikai, ja uzlikts menuShow="onfocusin"
             if (triggerEl.dataset.dropdownMenuShow == 'onfocusin') {
-                console.log('focusin uz trigger, atver menu uz focusin');
+                /**
+                 *
+                 * TODO salabot, lai ir arī focusin
+                 *
+                 */
+                //console.log('focusin uz trigger, atver menu uz focusin');
                 //handleMenuOpenTrigger(triggerEl)
             }
         })

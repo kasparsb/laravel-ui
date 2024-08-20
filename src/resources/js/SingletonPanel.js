@@ -151,7 +151,7 @@ export default {
     /**
      * Show single instance panel
      */
-    open(contentEl, {onContentElRemove, onOpen, triggerEl, side, align} = {}) {
+    open(contentEl, {onContentElRemove, onOpen, positionEl, side, align} = {}) {
 
         let panelIndex = panelsStack.push({
             contentEl: contentEl,
@@ -175,17 +175,7 @@ export default {
 
         // Ja nav timeout, tad var nepaspēt nolasīt content el dimensions
         setTimeout(() => {
-            if (triggerEl) {
-
-                /**
-                 * Nolasām vai ir instrukcija par pozicionēšanu
-                 * Tas ir parent selector relatīvs pret triggerEl
-                 */
-                let positionEl = triggerEl;
-                if (positionEl.dataset.dropdownMenuPositionAt) {
-                    positionEl = parent(positionEl, positionEl.dataset.dropdownMenuPositionAt)
-                }
-
+            if (positionEl) {
                 positionByEl(panelIndex, positionEl, side, align);
             }
 

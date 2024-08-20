@@ -24,7 +24,18 @@
     @if ($label)
         <label>{{ $label }}</label>
     @endif
-    <div>
+    <div
+        data-dropdown-menu-trigger="field-date-calendar"
+        data-dropdown-menu-show="onfocusin"
+        data-dropdown-menu-hide="onclick.outside"
+        {{--
+            target-el vajadzīgs, lai menu atvēršanas click notiktu arī uz prefix un sufix
+            bet tālāk jau vajag, lai tiek padots input elements, jo no tā tiks ņemta vērtība
+            priekš dropdown un attiecīgi arī atgriezta uz to pašu input
+        --}}
+        data-dropdown-menu-target-el="child:input"
+        {{-- data-dropdown-menu-position-at="" --}}
+        >
         @if (isset($prefix) && !$prefix->isEmpty())
             {{ $prefix }}
         @else
@@ -51,11 +62,6 @@
             data-max-date="{{ $maxDate }}"
             @endif
             @disabled($disabled)
-
-            data-dropdown-menu-trigger="field-date-calendar"
-            data-dropdown-menu-show="onfocusin"
-            data-dropdown-menu-hide="onclick.outside"
-            data-dropdown-menu-position-at="div"
             />
         @if (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}

@@ -29,7 +29,23 @@
         <label>{{ $label }}</label>
     @endif
 
-    <div>
+    <div
+        @if ($menu)
+        data-dropdown-menu-trigger="{{ $menu }}"
+        data-dropdown-menu-show="{{ $menuShow }}"
+        data-dropdown-menu-target-el="child:input"
+        {{-- data-dropdown-menu-position-at="(parent|child):div" --}}
+            @if ($menuFocus)
+            data-dropdown-menu-focus="{{ is_bool($menuFocus) ? '' : $menuFocus }}"
+            @endif
+            @if ($menuResetForm)
+            data-dropdown-menu-reset-form
+            @endif
+        @endif
+        @if ($menuHide)
+            data-dropdown-menu-hide="{{ $menuHide }}"
+        @endif
+        >
         @if (isset($prefix) && !$prefix->isEmpty())
             {{ $prefix }}
         @endif
@@ -42,19 +58,7 @@
             @disabled($disabled)
 
             @if ($menu)
-            data-dropdown-menu-trigger="{{ $menu }}"
-            data-dropdown-menu-show="{{ $menuShow }}"
-            data-dropdown-menu-position-at="div"
-                @if ($menuFocus)
-                data-dropdown-menu-focus="{{ is_bool($menuFocus) ? '' : $menuFocus }}"
-                @endif
-                @if ($menuResetForm)
-                data-dropdown-menu-reset-form
-                @endif
-            @endif
-
-            @if ($menuHide)
-            data-dropdown-menu-hide="{{ $menuHide }}"
+                autocomplete="off"
             @endif
 
             />
