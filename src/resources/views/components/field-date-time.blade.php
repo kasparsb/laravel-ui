@@ -46,7 +46,6 @@
             menu="ui:timepicker-menu"
             menuShow="onfocusin"
             menuHide="onclick.outside"
-            menuPositionAt=".field-increment"
             />
     </x-ui::h-stack>
 

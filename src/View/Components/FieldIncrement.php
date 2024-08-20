@@ -38,7 +38,7 @@ class FieldIncrement extends Component
         public $menuShow = '',
         public $menuHide = null, // null nozīmē, ka nav uzsetots. Var padot arī empty string vai boolean
         public $menuResetForm = false,
-        public $menuPositionAt = null,
+        public $menuPositionAt = 'parent:.field-increment',
 
         public $min = 0,
         public $max = null,
