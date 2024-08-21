@@ -95,7 +95,9 @@ class Table extends Component
             return view(
                 'ui::components.field-text',
                 $this->getClassConstructorParameters(FieldText::class, [
-                    'attributes' => new ComponentAttributeBag(),
+                    'attributes' => new ComponentAttributeBag([
+                        'class' => 'no-border',
+                    ]),
                     'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'placeholder' => $col->placeholder,
@@ -106,7 +108,9 @@ class Table extends Component
             return view(
                 'ui::components.field-date',
                 $this->getClassConstructorParameters(FieldDate::class, [
-                    'attributes' => new ComponentAttributeBag(),
+                    'attributes' => new ComponentAttributeBag([
+                        'class' => 'no-border',
+                    ]),
                     'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'placeholder' => $col->placeholder,
@@ -117,7 +121,9 @@ class Table extends Component
             return view(
                 'ui::components.field-select',
                 $this->getClassConstructorParameters(FieldSelect::class, [
-                    'attributes' => new ComponentAttributeBag(),
+                    'attributes' => new ComponentAttributeBag([
+                        'class' => 'no-border',
+                    ]),
                     'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'options' => $col->selectOptions,
