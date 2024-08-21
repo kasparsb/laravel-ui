@@ -93,6 +93,23 @@ class Helpers
         return false;
     }
 
+    public function hasAnyFontWeightClass($classesString) {
+        if (!$classesString) {
+            return false;
+        }
+
+        $classesString = explode(' ', $classesString);
+        foreach ($classesString as $class) {
+            preg_match('/^fw-(\d+(\.\d+)?)$/', $class, $matches);
+
+            if (count($matches) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function hasAnyBorderColorClass($classesString) {
         if (!$classesString) {
             return false;
