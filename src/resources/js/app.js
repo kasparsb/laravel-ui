@@ -1,4 +1,3 @@
-import SingletonPanel from './SingletonPanel';
 import ButtonLoading from './ButtonLoading';
 import ButtonDelete from './ButtonDelete';
 import ButtonPost from './ButtonPost';
