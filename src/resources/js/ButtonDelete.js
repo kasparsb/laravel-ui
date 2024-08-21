@@ -11,8 +11,15 @@ export default {
             // Tabulas rindas dzēšana
             if (el.dataset.buttonDelete == 'tableRow') {
                 if (el.dataset.role == 'menuitem') {
-                    // Jāatrod click trigger
-                    Table.deleteRow(parent(DropdownMenu.findClickTrigger(), 'tr'));
+                    // Dzēšam
+                    Table.deleteRow(
+                        // Atrodam tabula row
+                        parent(
+                            // Atrodam menu open trigger elementu. Tā būs poga tabulas šūnā
+                            DropdownMenu.getOpenTriggerByChild(el)
+                            , 'tr'
+                        )
+                    );
                     DropdownMenu.close();
                 }
                 else {
