@@ -24,7 +24,13 @@
 .input-text-error {
     .t-3\.5();
 
-    height: @size090;
+    &:not(:is(textarea)) {
+        height: @size090;
+    }
+    &:is(textarea) {
+        height: 100%;
+        min-height: @size200;
+    }
     padding-top: @size010;
     padding-bottom: @size010;
     padding-left: @size030;

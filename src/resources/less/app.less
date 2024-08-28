@@ -657,9 +657,6 @@ body {
             flex: 1;
             width: 100%;
         }
-        >textarea {
-            min-height: @size200;
-        }
 
         svg {
             pointer-events: none;
@@ -683,8 +680,18 @@ body {
     }
 
     .form-field-label();
-    .form-field-layout();
-    .form-field-description-error()
+    .form-field-description-error();
+
+    &:not(:is(.field-textarea)) {
+        .form-field-layout();
+    }
+    &:is(.field-textarea) {
+        .form-field-textarea-layout();
+    }
+}
+
+.field-textarea {
+    // Textare wrapper div ir jāaizņem viss augstums, ja pieejams
 }
 
 .field-increment {

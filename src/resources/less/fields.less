@@ -5,6 +5,13 @@
     gap: @size020;
 }
 
+.form-field-textarea-layout {
+    display: grid;
+    // Textarea elements aizņem visu augstumu
+    grid-auto-rows: min-content 1fr min-content min-content;
+    gap: @size020;
+}
+
 .form-field-label {
     &:not(:is([data-state="error"])) {
         >label {
