@@ -36,13 +36,13 @@ class File extends Model
 
     protected function isImage(): Attribute {
         return Attribute::make(
-            get: fn() => substr($this->mime_type, 0, 6) === 'image\\',
+            get: fn() => substr($this->mime_type, 0, 6) === 'image/',
         );
     }
 
     protected function isVideo(): Attribute {
         return Attribute::make(
-            get: fn() => substr($this->mime_type, 0, 6) === 'video\\',
+            get: fn() => substr($this->mime_type, 0, 6) === 'video/',
         );
     }
 
