@@ -2470,38 +2470,19 @@ body {
         ///.transition-color();
     }
 
-    // Ikona, file name, upload progress, remove button
-    >[data-r="controls"] {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: flex-start;
-        gap: 8px;
-
-        >div {
-            // Icon
-            &:nth-child(1) {
-                svg {
-                    width: @size090;
-                    height: @size090;
-                }
-            }
-            // Vidējā daļa. File name, progress bar
-            &:nth-child(2) {
-                flex: 1;
-
-                position: relative;
-            }
-        }
-    }
-
     /**
      * File type icons
      */
-    .icon {
+    .file-type-icon {
         display: flex;
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
+
+        svg {
+            width: @size090;
+            height: @size090;
+        }
     }
     svg[data-type="document"],
     svg[data-type="image"],
@@ -2530,18 +2511,13 @@ body {
         display: inline;
     }
 
-
     // Ja ir preview image, tad ikonu nerādām
     // tikai, ja fails tiešām ir image. Js uzstāda ready
     &[data-preview="ready"] {
-        [data-r="controls"] {
-            >.icon {
-                display: none;
-            }
+        .file-type-icon {
+            display: none;
         }
     }
-
-
 
     /**
      * Failed message
@@ -2551,7 +2527,6 @@ body {
         margin-top: @size005;
         color: hsl(var(--color-red-500));
     }
-
 
     /**
      * States
