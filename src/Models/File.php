@@ -40,6 +40,81 @@ class File extends Model
         );
     }
 
+    protected function isVideo(): Attribute {
+        return Attribute::make(
+            get: fn() => substr($this->mime_type, 0, 6) === 'video\\',
+        );
+    }
+
+    /**
+     * Image vai video
+     */
+    protected function isVisualMedia(): Attribute {
+        return Attribute::make(
+            get: fn() => $this->is_image || $this->is_video,
+        );
+    }
+
+    protected function extension(): Attribute {
+        return Attribute::make(
+            get: fn() => pathinfo($this->path, PATHINFO_EXTENSION),
+        );
+    }
+
+    protected function fileType(): Attribute {
+        return Attribute::make(
+            get: function(){
+                switch ($this->extension) {
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'gif':
+                    case 'bmp':
+                    case 'png':
+                    case 'svg':
+                    case 'tif':
+                    case 'tiff':
+                    case 'webp':
+                        return 'image';
+                    case 'zip':
+                    case 'bzip':
+                    case 'rar':
+                    case '7z':
+                    case 'gz':
+                    case 'tar':
+                    case 'bz2':
+                    case 'lz':
+                    case 'lz4':
+                        return 'archive';
+                    case 'pdf':
+                    case 'doc':
+                    case 'docx':
+                    case 'xls':
+                    case 'xlsx':
+                    case 'odt':
+                    case 'ods':
+                    case 'ots':
+                    case 'fods':
+                    case 'htm':
+                    case 'html':
+                        return 'document';
+                    case 'mp3':
+                    case 'm4a':
+                    case 'wav':
+                    case 'falc':
+                        return 'audio';
+                    case 'mp4':
+                    case 'avi':
+                    case 'mov':
+                    case 'flv':
+                    case 'avchd':
+                        return 'audio';
+                    default:
+                        return 'document';
+                }
+            }
+        );
+    }
+
     public function getFileSize() {
         return Storage::disk($this->disk)->size($this->path);
     }
