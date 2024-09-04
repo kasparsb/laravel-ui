@@ -2341,25 +2341,29 @@ body {
         height: 100%;
     }
 
-    &.image-contain,
-    &.image-cover,
-    &.image-fill {
+    &.media-contain,
+    &.media-cover,
+    &.media-fill {
+        video,
         img {
             width: 100%;
             height: 100%;
         }
     }
-    &.image-contain {
+    &.media-contain {
+        video,
         img {
             object-fit: contain;
         }
     }
-    &.image-cover {
+    &.media-cover {
+        video,
         img {
             object-fit: cover;
         }
     }
-    &.image-fill {
+    &.media-fill {
+        video,
         img {
             object-fit: fill;
         }
@@ -2369,7 +2373,7 @@ body {
         // Content container padaram center
         >div {
             display: flex;
-            flex-direction: column;
+            flex-direction: row nowrap;
             justify-content: center;
             align-items: center;
         }
@@ -2493,6 +2497,12 @@ body {
     /**
      * File type icons
      */
+    .icon {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
     svg[data-type="document"],
     svg[data-type="image"],
     svg[data-type="video"],
