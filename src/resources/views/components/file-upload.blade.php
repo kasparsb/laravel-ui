@@ -8,11 +8,14 @@
     data-state="{{ $state }}"
     data-container="file-upload"
     data-value-field="{{ $valueField }}"
-    @if ($previewImage)
+    @if ($preview)
     data-preview-image
     @endif
     @if ($multiple)
     data-multiple
+    @endif
+    @if ($canAdd)
+    data-file-picker
     @endif
     >
 
@@ -22,9 +25,10 @@
                 @foreach ($files as $file)
                 <x-ui::file-upload-single-file
                     :name="$name"
-                    :removable="true"
-                    :downloadable="true"
-                    :model="$file"
+                    :canRemove="$canRemove"
+                    :canDownload="$canDownload"
+                    :preview="$preview"
+                    :file="$file"
                     :valueField="$valueField"
                 />
                 @endforeach
@@ -42,7 +46,8 @@
 
     <x-ui::file-upload-single-file
         :name="$name"
-        :previewImage="$previewImage"
-        :removable="true"
+        :canRemove="$canRemove"
+        :canDownload="$canDownload"
+        :preview="$preview"
         data-r="singleFileTemplate" />
 </div>

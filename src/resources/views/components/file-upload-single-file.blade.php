@@ -5,11 +5,13 @@
     data-container="file-upload-single-file"
     data-file-type="{{ $fileType }}"
     data-state="{{ $state }}"
+    data-preview-aspect-ratio-default="{{ $previewAspectRatioDefault }}"
+    data-preview-aspect-ratio-default-visual-media="{{ $previewAspectRatioDefaultVisualMedia }}"
     @if ($preview)
         @if ($file)
-        data-preview-image="ready"
+        data-preview="ready"
         @else
-        data-preview-image
+        data-preview
         @endif
     @endif
     @if ($canDownload)
@@ -35,26 +37,9 @@
             <video src="{{ $file->url }}" controls />
             @else
 
-            <x-ui::h-stack class="v-center gap-0.5">
-                <div class="icon">
-                    <svg data-type="document" width="24" height="24" viewBox="0 0 24 24">
-                        <use xlink:href="#ui-icon-document"></use>
-                    </svg>
-                    <svg data-type="image" width="24" height="24" viewBox="0 0 24 24">
-                        <use xlink:href="#ui-icon-image"></use>
-                    </svg>
-                    <svg data-type="video" width="24" height="24" viewBox="0 0 24 24">
-                        <use xlink:href="#ui-icon-video"></use>
-                    </svg>
-                    <svg data-type="audio" width="24" height="24" viewBox="0 0 24 24">
-                        <use xlink:href="#ui-icon-audio"></use>
-                    </svg>
-                    <svg data-type="archive" width="24" height="24" viewBox="0 0 24 24">
-                        <use xlink:href="#ui-icon-archive"></use>
-                    </svg>
-                </div>
-                {{ $file->file_type }} (.{{ $file->extension }})
-            </x-ui::h-stack>
+
+            {{ $file->file_type }} (.{{ $file->extension }})
+
 
             @endif
         @endif

@@ -29,6 +29,11 @@ class FileUploadSingleFile extends Component
         public $preview=false,
         public $previewAspectRatio=null,
 
+        // Default aspect ration priekš visiem failu tipiem
+        public $previewAspectRatioDefault='3:1',
+        // Default aspect ratio priekš image/video
+        public $previewAspectRatioDefaultVisualMedia='4:3',
+
         // File Model instance or any other, that have same fields
         public $file=null,
 

@@ -30,13 +30,19 @@ class FileUpload extends Component
 
         public $filePickerLabel='Select file to upload',
         // Should uploaded image be previewed
-        public $previewImage=false,
+        public $preview=false,
 
         // Pēc noklusējuma atgriežam file path. Vēl ir opcija atrgreizt file id
         public $valueField='path',
 
         // Jau izveidoti File modeļu kolekcija
         public $files=null,
+        public $file=null,
+
+        // Vai var pievienot jaunus failus
+        public $canAdd=true,
+        public $canRemove=true,
+        public $canDownload=true,
     )
     {
         if ($multiple) {
@@ -47,6 +53,11 @@ class FileUpload extends Component
 
         if (!$this->link) {
             $this->link = route('ui::upload');
+        }
+
+        // Viens fails tiek pārtaisīts par iterable
+        if ($this->files && $this->file) {
+            $this->files = [$this->file];
         }
     }
 

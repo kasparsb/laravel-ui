@@ -2457,8 +2457,8 @@ body {
     padding: @size050;
     padding-bottom: @size040;
 
-    // Ja nav data-preview-image, tad slēpjam preview bloku
-    &:not(:is([data-preview-image="ready"])) {
+    // Ja nav data-preview, tad slēpjam preview bloku
+    &:not(:is([data-preview="ready"])) {
         >[data-r="preview"] {
             display: none;
         }
@@ -2533,7 +2533,7 @@ body {
 
     // Ja ir preview image, tad ikonu nerādām
     // tikai, ja fails tiešām ir image. Js uzstāda ready
-    &[data-preview-image="ready"] {
+    &[data-preview="ready"] {
         [data-r="controls"] {
             >.icon {
                 display: none;

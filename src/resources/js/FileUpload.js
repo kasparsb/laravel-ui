@@ -11,14 +11,16 @@ function humanFileSize(size) {
     return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
-function getFileType(file) {
+function getExtension(file) {
     let p = file.name.split('.');
-    let extension = p[p.length-1];
+    return p[p.length-1];
+}
 
+function getFileType(file) {
     /**
      * Šis jātur sync ar Modles\File file_type attribute
      */
-    switch (extension) {
+    switch (getExtension(file)) {
         case 'jpg':
         case 'jpeg':
         case 'gif':
@@ -61,10 +63,26 @@ function getFileType(file) {
         case 'mov':
         case 'flv':
         case 'avchd':
-            return 'audio';
+            return 'video';
         default:
             return 'document';
     }
+}
+
+function isImage(file) {
+    if (file.type.substring(0, 6) === 'image/') {
+        return true;
+    }
+}
+
+function isVideo(file) {
+    if (file.type.substring(0, 6) === 'video/') {
+        return true;
+    }
+}
+
+function isVisualMedia(file) {
+    return isImage(file) || isVideo(file);
 }
 
 function setFile(fileUploadEl) {
@@ -113,37 +131,31 @@ function removeFile(fileEl) {
 }
 
 function startFileUpload(fileEl, file, {uploadLink, valueField}) {
-    let previewImage = 'previewImage' in fileEl.dataset;
+    let preview = 'preview' in fileEl.dataset;
 
-    if (previewImage) {
-        // make sure its image
-        if (file.type.substring(0, 6) !== 'image/') {
-            previewImage = false;
+
+    if (preview) {
+        fileEl.dataset.preview = 'ready';
+
+        AspectRatio.setRatio(
+            fileEl.preview,
+            isVisualMedia(file) ? fileEl.dataset.previewAspectRatioDefaultVisualMedia : fileEl.dataset.previewAspectRatioDefault
+        )
+
+        if (isImage(file)) {
+            // ieliekam preview no local bildes
+            replaceContent(fileEl.preview.content, createImageFromFile(file, {
+                data: {
+                    r: 'image'
+                }
+            }));
         }
-    }
+        else if (isVideo(file)) {
 
-    // liekam pazīmi, ka previewImage tiešām būs
-    if (previewImage) {
-        fileEl.dataset.previewImage = 'ready';
-    }
-
-    /**
-     * Image preview
-     */
-    if (previewImage) {
-        // Ielādējam image dimensions
-        getImageDimensionsFromFile(file)
-            .then(imageDimensions => {
-                // uzliek atbilstošo aspect ratio
-                AspectRatio.setRatioFromDimensions(fileEl.preview, imageDimensions)
-
-                // ieliekam preview no local bildes
-                replaceContent(fileEl.preview.content, createImageFromFile(file, {
-                    data: {
-                        r: 'image'
-                    }
-                }));
-            });
+        }
+        else {
+            replaceContent(fileEl.preview.content, getFileType(file)+' (.'+getExtension(file)+')');
+        }
     }
 
     /**
@@ -156,7 +168,7 @@ function startFileUpload(fileEl, file, {uploadLink, valueField}) {
         value_field: valueField,
     };
 
-    if (previewImage) {
+    if (preview && isVisualMedia(file)) {
         params.return_url = true;
     }
 
@@ -174,13 +186,11 @@ function startFileUpload(fileEl, file, {uploadLink, valueField}) {
             fileEl.input.value = response.value;
             fileEl.dataset.state = 'completed';
 
-            if (previewImage) {
+            if (preview && isImage(file)) {
                 fileEl.preview.image.src = response.url;
             }
         })
         .catch(response => {
-
-            console.log(response);
 
             fileEl.dataset.state = 'failed';
             fileEl.failedMessage.innerHTML = response.message;
