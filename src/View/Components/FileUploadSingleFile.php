@@ -26,32 +26,45 @@ class FileUploadSingleFile extends Component
          */
         public $state='ready',
         // Should uploaded image be previewed
-        public $previewImage=false,
+        public $preview=false,
+        public $previewAspectRatio=null,
 
-        // Models/File instance or any other, that have same fields
-        public $model=null,
+        // File Model instance or any other, that have same fields
+        public $file=null,
+
         // Allow file downlonad
-        public $downloadable=false,
-        public $linkDownload=null,
+        public $canDownload=false,
+        public $downloadLink=null,
+
         // Vai rādīt remove button
-        public $removable=false,
+        public $canRemove=false,
     )
     {
-        if ($this->model) {
-            $this->fileName = $this->model->title;
-            $this->fileDescription = $this->model->getFileSizeHuman();
+        if ($this->file) {
+            $this->fileName = $this->file->title;
+            $this->fileDescription = $this->file->getFileSizeHuman();
 
             // File upload jau ir veikts. Tiek rādīts jau ielādēts fails
             $this->state = 'existing';
 
             if (!$this->value) {
-                $this->value = $this->model->{$this->valueField};
+                $this->value = $this->file->{$this->valueField};
+            }
+
+            if ($this->file->is_visual_media) {
+                if (!$this->previewAspectRatio) {
+                    $this->previewAspectRatio = '1:1';
+                }
             }
         }
 
-        if ($this->downloadable && $this->model) {
-            if (!$this->linkDownload) {
-                $this->linkDownload = route('ui::download', $this->model);
+        if (!$this->previewAspectRatio) {
+            $this->previewAspectRatio = '3:1';
+        }
+
+        if ($this->canDownload && $this->file) {
+            if (!$this->downloadLink) {
+                $this->downloadLink = route('ui::download', $this->file);
             }
         }
     }
