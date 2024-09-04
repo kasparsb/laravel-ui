@@ -15,6 +15,9 @@ function getFileType(file) {
     let p = file.name.split('.');
     let extension = p[p.length-1];
 
+    /**
+     * Šis jātur sync ar Modles\File file_type attribute
+     */
     switch (extension) {
         case 'jpg':
         case 'jpeg':

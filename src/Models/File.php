@@ -61,6 +61,9 @@ class File extends Model
         );
     }
 
+    /**
+     * Šis jātur sync ar FileUpload.js
+     */
     protected function fileType(): Attribute {
         return Attribute::make(
             get: function(){
