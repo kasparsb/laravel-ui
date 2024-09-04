@@ -2331,6 +2331,8 @@ body {
 
 .aspect-ratio-container {
     position: relative;
+
+    // Content container
     >div {
         position: absolute;
         top: 0;
@@ -2360,6 +2362,16 @@ body {
     &.image-fill {
         img {
             object-fit: fill;
+        }
+    }
+
+    &.content-center {
+        // Content container padaram center
+        >div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
     }
 }
@@ -2395,6 +2407,12 @@ body {
 }
 
 .file-upload {
+    &:not(:is([data-file-picker])) {
+        [data-r="file-picker"] {
+            display: none;
+        }
+    }
+
     [data-r="singleFileTemplate"] {
         display: none;
     }
