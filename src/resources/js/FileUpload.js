@@ -205,11 +205,5 @@ export default {
         click('.file-upload [data-r="button-remove"]', (ev, el) => {
             removeFile(parent(el, '[data-container]'));
         })
-
-        // Single file template input file disable. So they do not post
-        qa('.file-upload').forEach(el => {
-            // šajā laukā glabāsies uploaded filename
-            r(el).singleFileTemplate.input.disabled = true;
-        })
     },
 }

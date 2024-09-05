@@ -37,7 +37,6 @@
 
         <x-ui::file-picker
             data-r="file-picker"
-            :removable="true"
             :multiple="$multiple"
             :label="$filePickerLabel"
             />
@@ -49,5 +48,6 @@
         :canRemove="$canRemove"
         :canDownload="$canDownload"
         :preview="$preview"
+        :disabled="true"
         data-r="singleFileTemplate" />
 </div>
