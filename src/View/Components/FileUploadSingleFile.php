@@ -18,6 +18,9 @@ class FileUploadSingleFile extends Component
         public $fileName=null,
         public $fileDescription=null,
         public $error=null,
+
+        public $disabled=false,
+
         /**
          * ready - fails ir pievienots un gatavs upload
          * uploading - notiek file upload

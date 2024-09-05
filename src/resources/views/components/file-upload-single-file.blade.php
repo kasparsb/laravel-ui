@@ -105,6 +105,12 @@
 
     </div>
 
-    <input type="hidden" name="{{ $name }}" value="{{ $value }}" data-r="input" />
+    <input
+        type="hidden"
+        name="{{ $name }}"
+        value="{{ $value }}"
+        data-r="input"
+        @disabled($disabled)
+        />
 
 </div>
