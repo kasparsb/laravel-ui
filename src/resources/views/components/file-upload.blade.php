@@ -17,6 +17,9 @@
     @if ($canAdd)
     data-file-picker
     @endif
+    @if (isset($emptyState))
+    data-has-empty-state
+    @endif
     >
 
     <x-ui::v-stack>
@@ -50,4 +53,10 @@
         :preview="$preview"
         :disabled="true"
         data-r="singleFileTemplate" />
+
+    @if (isset($emptyState))
+    <div data-file-upload-empty-state="">
+        {{ $emptyState }}
+    </div>
+    @endif
 </div>

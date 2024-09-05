@@ -2442,11 +2442,26 @@ body {
     }
 
 
-
-    &[data-emptystate] {
-        .file-picker {
-            border-style: dashed;
-            text-align: center
+    // Ir nodefinēts empty state slot
+    &:not(:is([data-has-empty-state][data-state="empty"])) {
+        [data-file-upload-empty-state] {
+            display: none;
+        }
+    }
+    /**
+     * Empty state gadījumā, kad is empty, tad file picker ir absolute un neredzams
+     * bet tikai gadījumā, ja ir data-file-picker (nav display:none)
+     * Tas tāpēc, lai var jebkurā vietā uz empty state spiest un dropt failus
+     */
+    &[data-has-empty-state][data-state="empty"] {
+        position: relative;
+        [data-r="file-picker"] {
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
     }
 }
