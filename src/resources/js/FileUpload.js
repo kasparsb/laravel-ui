@@ -1,5 +1,5 @@
 import {
-    qa, r, parent, change, click, upload, append, remove, clone, replaceContent
+    q, r, parent, change, click, upload, append, remove, clone, replaceContent
 } from 'dom-helpers';
 import getImageDimensionsFromFile from './getImageDimensionsFromFile';
 import createImageFromFile from './createImageFromFile';
@@ -85,13 +85,18 @@ function isVisualMedia(file) {
     return isImage(file) || isVideo(file);
 }
 
-function setFile(fileUploadEl) {
+/**
+ * Vizuāli izvadām input[type=file] izvēlētos failus
+ */
+function outputSelectedFiles(fileUploadEl) {
     fileUploadEl = r(fileUploadEl);
 
+    // Izvēlētie faili
     for (let i = 0; i < fileUploadEl.inputFile.files.length; i++) {
 
         let file = fileUploadEl.inputFile.files[i];
 
+        // Klonēja single file template
         let fileEl = r(clone(fileUploadEl.singleFileTemplate));
         delete fileEl.dataset.r;
         // Enable filename field, lai tas postējas
@@ -107,11 +112,12 @@ function setFile(fileUploadEl) {
         startFileUpload(fileEl, file, {
             uploadLink: fileUploadEl.dataset.link,
             valueField: fileUploadEl.dataset.valueField,
-        });
+        })
     }
 
+    // Tikko faili salikti noņemam state=empty
     fileUploadEl.inputFile.value = '';
-    fileUploadEl.dataset.state = 'uploading';
+    fileUploadEl.dataset.state = '';
 }
 
 function removeFile(fileEl) {
@@ -124,15 +130,14 @@ function removeFile(fileEl) {
     // Novācam file el
     remove(fileEl);
 
-    // Pārbaudām vai ir palikuši faili
-    if (!fileUploadEl.files.hasChildNodes()) {
+    // Pārbaudām vai ir kāds single file
+    if (!q(fileUploadEl.files, '.file-upload-single-file')) {
         fileUploadEl.dataset.state = 'empty';
     }
 }
 
 function startFileUpload(fileEl, file, {uploadLink, valueField}) {
     let preview = 'preview' in fileEl.dataset;
-
 
     if (preview) {
         fileEl.dataset.preview = 'ready';
@@ -191,7 +196,6 @@ function startFileUpload(fileEl, file, {uploadLink, valueField}) {
             }
         })
         .catch(response => {
-
             fileEl.dataset.state = 'failed';
             fileEl.failedMessage.innerHTML = response.message;
         });
@@ -200,7 +204,7 @@ function startFileUpload(fileEl, file, {uploadLink, valueField}) {
 export default {
     init() {
         change('.file-upload [type=file]', (ev, el) => {
-            setFile(parent(el, '[data-container]'));
+            outputSelectedFiles(parent(el, '[data-container]'));
         })
         click('.file-upload [data-r="button-remove"]', (ev, el) => {
             removeFile(parent(el, '[data-container]'));
