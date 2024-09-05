@@ -2428,7 +2428,7 @@ body {
     }
 
     // Upload state, ja nav multiple, tad slēpjam file picker
-    &.has-single-file[data-state="uploading"] {
+    &.has-single-file:not(:is([data-state="empty"])) {
         [data-r="file-picker"] {
             display: none;
         }
