@@ -46,7 +46,7 @@
     </x-ui::aspect-ratio>
 
     <div data-r="controls">
-        <x-ui::h-stack class="v-top">
+        <x-ui::h-stack class="v-top nowrap">
             <div class="file-type-icon">
                 <svg data-type="document" width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#ui-icon-document"></use>
@@ -66,8 +66,8 @@
             </div>
 
             <x-ui::v-stack class="gap-1 h-stretch">
-                <x-ui::h-stack>
-                    <x-ui::v-stack class="gap-0 h-stretch">
+                <x-ui::h-stack class="nowrap">
+                    <x-ui::v-stack class="gap-0 minw-0 h-stretch">
                         <x-ui::title class="t-3.5" data-r="fileName">
                             @if ($fileName) {{ $fileName }} @else &nbsp; @endif
                         </x-ui::title>
@@ -78,23 +78,23 @@
                             @if ($error) {{ $error }} @else &nbsp; @endif
                         </div>
                     </x-ui::v-stack>
-                    <x-ui::h-stack class="gap-1">
-                        <x-ui::button-ghost
-                            class="icon"
+                    <x-ui::h-stack class="gap-1 nowrap v-top">
+                        <x-ui::button-outline
+                            class="icon small"
                             as="link"
                             data-r="button-download"
                             :link="$downloadLink">
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <use xlink:href="#ui-icon-download"></use>
                             </svg>
-                        </x-ui::button-ghost>
-                        <x-ui::button-ghost
-                            class="icon"
+                        </x-ui::button-outline>
+                        <x-ui::button-outline
+                            class="icon small"
                             data-r="button-remove">
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <use xlink:href="#ui-icon-x"></use>
                             </svg>
-                        </x-ui::button-ghost>
+                        </x-ui::button-outline>
                     </x-ui::h-stack>
                 </x-ui::h-stack>
 
