@@ -78,19 +78,23 @@
                             @if ($error) {{ $error }} @else &nbsp; @endif
                         </div>
                     </x-ui::v-stack>
-                    <x-ui::h-stack class="gap-0">
-                        <x-ui::button-link
+                    <x-ui::h-stack class="gap-1">
+                        <x-ui::button-ghost
+                            class="icon"
                             as="link"
                             data-r="button-download"
-                            :link="$downloadLink"
-                            >Download</x-ui::button-link>
-                        <x-ui::button-outline
+                            :link="$downloadLink">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <use xlink:href="#ui-icon-download"></use>
+                            </svg>
+                        </x-ui::button-ghost>
+                        <x-ui::button-ghost
                             class="icon"
                             data-r="button-remove">
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <use xlink:href="#ui-icon-x"></use>
                             </svg>
-                        </x-ui::button-outline>
+                        </x-ui::button-ghost>
                     </x-ui::h-stack>
                 </x-ui::h-stack>
 
