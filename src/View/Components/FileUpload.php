@@ -42,7 +42,7 @@ class FileUpload extends Component
         // Vai var pievienot jaunus failus
         public $canAdd=true,
         public $canRemove=true,
-        public $canDownload=true,
+        public $canDownload=false,
     )
     {
         if ($multiple) {
