@@ -127,6 +127,23 @@ class Helpers
         return false;
     }
 
+    public function hasAnyBorderStyleClass($classesString) {
+        if (!$classesString) {
+            return false;
+        }
+
+        $classesString = explode(' ', $classesString);
+        foreach ($classesString as $class) {
+            preg_match('/^b-s-([^0-9]*)$/', $class, $matches);
+
+            if (count($matches) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function hasAnyBorderWidthClass($classesString) {
         if (!$classesString) {
             return false;
