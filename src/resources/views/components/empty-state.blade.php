@@ -1,7 +1,13 @@
+@inject('helpers', 'Kasparsb\Ui\Helpers')
 @props([
     'title',
 ])
-<div {{ $attributes->class(['empty-state']) }} >
+<div {{ $attributes->class([
+    'empty-state',
+    'bw-1' => !$helpers->hasAnyBorderWidthClass($attributes->get('class')),
+    'b-s-solid' => !$helpers->hasAnyBorderStyleClass($attributes->get('class')),
+    'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class'))
+]) }} >
 
     @if (isset($icon))
     <div class="top">
