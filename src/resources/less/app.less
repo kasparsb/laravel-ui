@@ -16,6 +16,8 @@
 @import 'margin-y';
 @import 'background-colors';
 @import 'border-colors';
+@import 'border-width';
+@import 'border-style';
 @import 'colors';
 
 [type=button], [type=reset], [type=submit], button {
@@ -1116,12 +1118,8 @@ body {
 
     &:not(:is(.no-border)) {
         .border-lg();
-
         .shadow();
 
-        border-width: 1px;
-        border-style: solid;
-        border-color: hsl(var(--color-200));
         padding: @size120 @size060;
     }
 
