@@ -10,10 +10,34 @@
 @import 'height';
 @import 'max-height';
 @import 'text-size';
-@import 'padding';
+@import 'padding-all';
+@import 'padding-x';
+@import 'padding-y';
+@import 'padding-all-sm';
+@import 'padding-all-md';
+@import 'padding-all-lg';
+@import 'padding-all-xl';
+@import 'padding-all-xxl';
+@import 'padding-x-sm';
+@import 'padding-x-md';
+@import 'padding-x-lg';
+@import 'padding-x-xl';
+@import 'padding-x-xxl';
+@import 'margin-all';
 @import 'margin-top';
 @import 'margin-bottom';
 @import 'margin-y';
+@import 'margin-x';
+@import 'margin-all-sm';
+@import 'margin-all-md';
+@import 'margin-all-lg';
+@import 'margin-all-xl';
+@import 'margin-all-xxl';
+@import 'margin-x-sm';
+@import 'margin-x-md';
+@import 'margin-x-lg';
+@import 'margin-x-xl';
+@import 'margin-x-xxl';
 @import 'background-colors';
 @import 'border-colors';
 @import 'border-width';
@@ -190,7 +214,6 @@ body {
     min-height: 100dvh;
     color: var(--color-950);
 
-    --desktop-width: @desktopWidth;
     --layout-aside-width: 200px;
 
 
@@ -1859,14 +1882,14 @@ body {
      * LAYOUT
      */
     // mob
-    @media (max-width: 749px) {
+    @media (max-width: @mdWidth) {
     }
     // tablet
-    @media (min-width: 750px) and (max-width: (@desktopWidth - 1px)) {
+    @media (min-width: @mdWidth) and (max-width: (@lgWidth - 1px)) {
         display: block;
     }
     // desktop
-    @media (min-width: @desktopWidth) {
+    @media (min-width: @lgWidth) {
         display: flex;
         flex-flow: row nowrap;
 
@@ -1910,39 +1933,59 @@ body {
 }
 .page {
     // desktop
-    @media (min-width: @desktopWidth) {
-        padding-left: @size060;
-        padding-right: @size060;
-        padding-top: @size040;
+    // @media (min-width: @desktopWidth) {
+    //     padding-left: @size060;
+    //     padding-right: @size060;
+    //     padding-top: @size040;
 
-        // Padding bottom ir liels, lai elementi nav pie pašas ekrāna apakšas
-        padding-bottom: @size960;
-    }
+    //     // Padding bottom ir liels, lai elementi nav pie pašas ekrāna apakšas
+    //     padding-bottom: @size960;
+    // }
 
-    margin-left: auto;
-    margin-right: auto;
+    // margin-left: auto;
+    // margin-right: auto;
 
-    &.narrow {
-        max-width: 28rem;
-    }
-    &.regular {
-        max-width: 56rem;
-    }
-    &.centered {
+    // &.narrow {
+    //     max-width: 28rem;
+    // }
+    // &.regular {
+    //     max-width: 56rem;
+    // }
+
+    &.h-center,
+    &.v-center {
         display: flex;
         flex-flow: column;
+    }
+
+    &.h-center {
         align-items: center;
+    }
+    &.v-center {
         justify-content: center;
+        /**
+         * TODO varbūt šito vajag kā atsevišķu klasi?
+         * bet page ir domāts kā galvenais container
+         */
         min-height: 100dvh;
     }
 
-    &.center-content {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
+    // Elementu self align
+    .h-center {
+        align-self: center;
     }
 
+    /**
+     * Lai content nebūtu pie pašas ekrāna apakšas, tad var pielikt scroll beyond
+     */
+    &.scroll-beyond {
+        padding-bottom: 20rem;
+    }
+
+
+    /**
+     * Elements spacing
+     */
     >.header {
         margin-bottom: @size120;
     }
@@ -1951,11 +1994,6 @@ body {
     >* {
         margin-top: @size100;
         &:first-child {
-            margin-top: 0;
-        }
-    }
-    &.center-content {
-        >* {
             margin-top: 0;
         }
     }
