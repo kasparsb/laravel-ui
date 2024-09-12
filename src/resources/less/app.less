@@ -2830,3 +2830,44 @@ body {
         grid-template-rows: repeat(8, auto);
     }
 }
+
+
+.details-list {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+
+    gap: @size040;
+    .gaps-sizes();
+
+    dt,
+    dd {
+        >svg {
+            position: relative;
+            top: .100em;
+            height: 1em;
+            width: 1em;
+            margin-left: -.125em;
+            margin-right: -.125em;
+        }
+    }
+
+    dt {
+        text-align: left;
+    }
+    dd {
+        text-align: right;
+    }
+
+    &.term-ta-left dt,
+    &.description-ta-left dd {
+        text-align: left;
+    }
+    &.term-ta-right dt,
+    &.description-ta-right dd {
+        text-align: right;
+    }
+    &.term-ta-center dt,
+    &.description-ta-center dd {
+        text-align: center;
+    }
+}
