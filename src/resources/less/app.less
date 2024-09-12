@@ -1876,20 +1876,21 @@ body {
 
 
 
-
+/**
+ * LAYOUT
+ */
+body:has(>.layout) {
+    background-color: hsl(var(--color-50));
+}
 .layout {
-    /**
-     * LAYOUT
-     */
-    // mob
-    @media (max-width: @mdWidth) {
-    }
-    // tablet
-    @media (min-width: @mdWidth) and (max-width: (@lgWidth - 1px)) {
-        display: block;
-    }
+
+    max-width: @xxlWidth;
+    margin-left: auto;
+    margin-right: auto;
+
+
     // desktop
-    @media (min-width: @lgWidth) {
+    @media (min-width: @mdWidth) {
         display: flex;
         flex-flow: row nowrap;
 
@@ -1927,8 +1928,16 @@ body {
         padding-left: @size030;
         padding-right: @size030;
     }
+    /**
+     * Content
+     */
     >section {
-        // padding nelieka, to lai dara tas elements, kurš būs ielikts main content daļā
+        background-color: hsl(var(--color-background));
+
+        // Max lielam platumam rādām side border
+        @media (min-width: @xxlWidth) {
+            border-right: 1px solid hsl(var(--color-200));
+        }
     }
 }
 .page {
