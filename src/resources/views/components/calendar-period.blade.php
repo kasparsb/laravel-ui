@@ -1,5 +1,9 @@
 <div
-    class="calendar is-period size-{{ $size }}"
+    {{ $attributes->class([
+        'calendar',
+        'is-period',
+        'size-'.$size,
+    ]) }}
     data-period="yes"
     @if ($stateUrl)
     data-state-url="{{ $stateUrl }}"
