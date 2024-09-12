@@ -2831,7 +2831,6 @@ body {
     }
 }
 
-
 .details-list {
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -2869,5 +2868,47 @@ body {
     &.term-ta-center dt,
     &.description-ta-center dd {
         text-align: center;
+    }
+}
+
+.notification {
+    .border-lg();
+    .shadow();
+    border-width: 1px;
+    border-style: solid;
+
+    padding: @size040;
+
+    .t-3\.5();
+
+    // Krāsas
+    &.c-white {
+        border-color: hsl(var(--color-200));
+        color: hsl(var(--color-950));
+        background-color: hsl(var(--color-background));
+    }
+
+    &.c-red {
+        border-color: hsl(var(--color-red-200));
+        color: hsl(var(--color-red-950));
+        background-color: hsl(var(--color-red-50));
+    }
+
+    &.c-green {
+        border-color: hsl(var(--color-green-200));
+        color: hsl(var(--color-green-950));
+        background-color: hsl(var(--color-green-50));
+    }
+
+    &.c-blue {
+        border-color: hsl(var(--color-blue-200));
+        color: hsl(var(--color-blue-950));
+        background-color: hsl(var(--color-blue-50));
+    }
+
+    &.c-yellow {
+        border-color: hsl(var(--color-yellow-200));
+        color: hsl(var(--color-yellow-950));
+        background-color: hsl(var(--color-yellow-50));
     }
 }
