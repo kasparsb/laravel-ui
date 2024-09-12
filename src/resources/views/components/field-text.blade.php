@@ -1,12 +1,31 @@
 @php
-    // without data-* attributes
+    // without data-* attributes un autocomplete
     $attributesForContainer = $attributes->filter(function($value, $key){
-        return substr($key, 0, 5) != 'data-';
+        if (substr($key, 0, 5) == 'data-') {
+            return false;
+        }
+        if ($key == 'autocomplete') {
+            return false;
+        }
+        return true;
     });
-    // only data-* attributes
+    // only data-* attributes un autocomplete
     $attributesForInputField = $attributes->filter(function($value, $key){
-        return substr($key, 0, 5) == 'data-';
+        if (substr($key, 0, 5) == 'data-') {
+            return true;
+        }
+        if ($key == 'autocomplete') {
+            return true;
+        }
+        return false;
     });
+
+    // Menu gadījumā uzreiz liekam autocomplete off
+    if ($menu) {
+        $attributesForInputField = $attributesForInputField->merge([
+            'autocomplete' => 'off',
+        ]);
+    }
 
     // Ja tukšs string
     if (is_string($menuFocus) && !$menuFocus) {
@@ -56,11 +75,6 @@
             value="{{ $value }}"
             placeholder="{{ $placeholder }}"
             @disabled($disabled)
-
-            @if ($menu)
-                autocomplete="off"
-            @endif
-
             />
         @if (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}
