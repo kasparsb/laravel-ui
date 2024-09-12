@@ -1,1 +1,0 @@
-<div {{ $attributes->class(['form-vertical']) }} >{{ $slot }}</div>
