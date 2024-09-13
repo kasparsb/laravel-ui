@@ -1,12 +1,16 @@
+@php
+    $hasHeader = isset($header) && !$header->isEmpty();
+@endphp
 @if ($as == 'form')
 <form {{ $attributes->class([
     'page',
     'px-3.5',
-    'py-4',
+    'py-4' => !$hasHeader,
+    'py-10' => $hasHeader,
     'md:px-6',
 ])->merge(['method' => $method, 'action' => $action]) }}
 >
-    @if (isset($header) && !$header->isEmpty())
+    @if ($hasHeader)
     <div data-page-sticky-header>{{ $header }}</div>
     @endif
 
@@ -23,7 +27,7 @@
 </form>
 @else
 <div class="page">
-    @if (isset($header) && !$header->isEmpty())
+    @if ($hasHeader)
     <div
         {{ $attributes->class([
             'px-3.5',
@@ -39,7 +43,8 @@
     <div
         {{ $attributes->class([
             'px-3.5',
-            'py-4',
+            'py-4' => !$hasHeader,
+            'py-10' => $hasHeader,
             'md:px-6',
         ]) }}
         data-page-content
