@@ -1941,49 +1941,79 @@ body:has(>.layout) {
     }
 }
 .page {
-    &.h-center,
-    &.v-center {
-        display: flex;
-        flex-flow: column;
-    }
 
-    &.h-center {
-        align-items: center;
-    }
-    &.v-center {
-        justify-content: center;
+    [data-page-content] {
         /**
-         * TODO varbūt šito vajag kā atsevišķu klasi?
-         * bet page ir domāts kā galvenais container
+         * Lai content nebūtu pie pašas ekrāna apakšas, tad var pielikt scroll beyond
          */
-        min-height: 100dvh;
-    }
-
-    // Elementu self align
-    .h-center {
-        align-self: center;
-    }
-
-    /**
-     * Lai content nebūtu pie pašas ekrāna apakšas, tad var pielikt scroll beyond
-     */
-    &.scroll-beyond {
-        padding-bottom: 20rem;
-    }
-
-    /**
-     * Elements spacing
-     */
-    >.header {
-        margin-bottom: @size120;
-    }
-
-    // Spacing starp direct elementiem
-    >* {
-        margin-top: @size100;
-        &:first-child {
-            margin-top: 0;
+        &.scroll-beyond {
+            padding-bottom: 20rem;
         }
+
+        &.h-center,
+        &.h-left,
+        &.h-right,
+        &.v-center {
+            display: flex;
+            flex-flow: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            /**
+             * Ja nav flex, tad childs pēc noklusējuma izplešas uz 100%
+             * flex gadījumā ieņem savu kaut kādu platumu
+             * piespiedu kārtā uzliek 100%, lai pēc uz child var uzlikt
+             * max-width css klases un tad ņemo vērā to platumu var
+             * centrēt vai left vai right
+             */
+            >* {
+                width: 100%;
+            }
+        }
+
+        &.h-center {
+            align-items: center;
+        }
+        &.h-left {
+            align-items: flex-start;
+        }
+        &.h-right {
+            align-items: flex-end;
+        }
+        &.v-center {
+            justify-content: center;
+            /**
+            * TODO varbūt šito vajag kā atsevišķu klasi?
+            * bet page ir domāts kā galvenais container
+            */
+            min-height: 100dvh;
+        }
+
+        // Elementu self align
+        .h-center {
+            align-self: center;
+        }
+
+        // Spacing starp direct elementiem
+        >* {
+            margin-top: @size100;
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+    }
+
+    /**
+     * Sticky header
+     */
+    &:has([data-page-sticky-header]) {
+        position: relative;
+    }
+    [data-page-sticky-header] {
+        position: sticky;
+        top: 0;
+
+        background-color: hsl(var(--color-background));
+        border-bottom: 1px solid hsl(var(--color-200));
     }
 }
 
