@@ -47,7 +47,14 @@ class MenuItem extends Component
             // Ja nav padots name, tad neliekam selected
             // tas ir gadījumam, kad ne NavMenu ne NavMenuItem nav uzlikta aktīvais item
             if (!is_null($this->name)) {
-                $this->selected = $this->name == view()->getConsumableComponentData('item');
+                /**
+                 * selected no parent liekam, tikai, ja tas nav null
+                 * tukšs string der kā derīga vērtība
+                 */
+                $selectedItem = view()->getConsumableComponentData('item');
+                if (!is_null($selectedItem)) {
+                    $this->selected = $this->name == $selectedItem;
+                }
             }
         }
     }
