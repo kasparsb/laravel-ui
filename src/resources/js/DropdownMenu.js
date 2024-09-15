@@ -496,7 +496,10 @@ export default {
         on('mouseup', () => {
             if (mousedownTriggerEl) {
                 // Notīrām menu hide timeout
-                clearTimeout(focusoutTimeout[findDropdown(mousedownTriggerEl).dataset.dropdownMenuName]);
+                let menuEl = findDropdown(mousedownTriggerEl);
+                if (menuEl) {
+                    clearTimeout(focusoutTimeout[menuEl.dataset.dropdownMenuName]);
+                }
 
                 // Notīrām pazīmi, ka bija mousedown
                 delete mousedownTriggerEl.dataset.dropdownMenuIsMousedown;
