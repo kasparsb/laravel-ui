@@ -51,5 +51,15 @@
     disabled="disabled"
     @endif
     >
-    {{ $slot->isEmpty() ? $label : $slot }}
+
+    @if (isset($prefix) && !$prefix->isEmpty())
+        {{ $prefix }}
+    @endif
+
+    @if (
+           (isset($slot) && !$slot->isEmpty())
+        || $label
+    )
+    <span data-menu-item-label>{{ $slot->isEmpty() ? $label : $slot }}</span>
+    @endif
 </a>
