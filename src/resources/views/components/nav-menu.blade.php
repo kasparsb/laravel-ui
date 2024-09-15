@@ -1,3 +1,5 @@
-<nav {{ $attributes->class(['nav-menu']) }}>
+<nav {{ $attributes->class([
+    'nav-menu',
+]) }}>
     {{ $slot }}
 </nav>

@@ -215,6 +215,7 @@ body {
     color: var(--color-950);
 
     --layout-aside-width: 200px;
+    --layout-aside-width-closed: 60px;
 
 
     --size-005: @size005;
@@ -1616,10 +1617,8 @@ body {
 
     .button-link-disabled-base-state();
 
-    display: inline-flex;
-    justify-content: flex-start;
-    align-items: center;
-    white-space: nowrap;
+    .menu-item-horizontal();
+
     &[hidden] {
         display: none;
     }
@@ -1630,28 +1629,21 @@ body {
 
     cursor: pointer;
 
-    &:is(a) {
-        text-decoration: none;
-    }
-    color: hsl(var(--color-950));
-    .t-3\.5();
-    .fw-m();
+    // Idle state
+    // Dropdown menu, nav menu, etc
+    // .menu-item-idle-backgorund();
+
+    // Active state nodefinēs wrapper elements
+    // Dropdown menu, nav menu, etc
+    //.menu-item-active-backgorund();
+
 
     padding: @size015;
 
-    &:active,
-    &:focus,
-    &:hover {
-        background-color: hsl(var(--color-100));
-    }
-    &[data-checked] {
-        background-color: hsl(var(--color-200));
-    }
-
     svg {
         margin-right: @size015;
-        width: @size040;
-        height: @size040;
+        width: 1.25rem;
+        height: 1.25rem;
     }
     // Tikai ikona, bet label
     &.icon {
@@ -1666,6 +1658,100 @@ body {
             background-color: hsl(var(--color-red-50));
         }
     }
+}
+
+.menu-item-hide-label {
+    svg {
+        margin-right: 0;
+    }
+
+    [data-menu-item-label] {
+        display: none;
+    }
+}
+
+/**
+ * Checked, hovered state of menu item
+ * Background color
+ */
+.menu-item-idle-backgorund {
+    &:is(a) {
+        text-decoration: none;
+    }
+    color: hsl(var(--color-950));
+    .t-3\.5();
+    .fw-m();
+}
+.menu-item-active-backgorund {
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: hsl(var(--color-100));
+    }
+    &[data-checked] {
+        background-color: hsl(var(--color-200));
+    }
+}
+/**
+ * font and icon color hightlite
+ */
+.menu-item-idle-color {
+    &:is(a) {
+        text-decoration: none;
+    }
+    .t-3\.5();
+    .fw-r();
+    color: hsl(var(--color-500));
+    svg {
+        color: hsl(var(--color-500));
+    }
+}
+.menu-item-active-color {
+    &:active,
+    &:focus,
+    &:hover {
+        color: hsl(var(--color-blue-500));
+        svg {
+            color: hsl(var(--color-blue-500));
+        }
+    }
+    &[data-checked] {
+        color: hsl(var(--color-blue-600));
+        .fw-b();
+        svg {
+            color: hsl(var(--color-blue-600));
+        }
+    }
+}
+
+.menu-item-vertical {
+    display: inline-flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    [data-menu-item-label] {
+        overflow: hidden;
+        max-width: 100%;
+        display: block;
+    }
+
+    svg {
+        margin-right: 0;
+        margin-bottom: @size015;
+    }
+}
+
+.menu-item-square {
+    aspect-ratio: 1 / 1;
+}
+
+.menu-item-horizontal {
+    display: inline-flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    white-space: nowrap;
 }
 
 .dropdown-menu {
@@ -1687,6 +1773,7 @@ body {
     padding: @size005;
 
     .shadow-lg();
+
 
     display: grid;
     grid-auto-rows: min-content;
@@ -1711,6 +1798,13 @@ body {
         }
     }
 
+    >.menu-item {
+        // idle state
+        .menu-item-idle-backgorund();
+        // active, selected state
+        .menu-item-active-backgorund();
+    }
+
     &[data-dropdown-menu-is-active] {
         //border-color: hsl(var(--color-red-400));
     }
@@ -1729,16 +1823,8 @@ body {
 }
 
 .nav-menu {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: stretch;
-    gap: @size005;
 
-    &.vertical {
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: flex-start;
-    }
+    .nav-menu-vertical();
 
     >.menu-item {
         white-space: nowrap;
@@ -1747,11 +1833,22 @@ body {
 
         padding-top: @size010;
         padding-bottom: @size010;
-
-        &.selected {
-            background-color: hsl(var(--color-200));
-        }
     }
+}
+
+.nav-menu-vertical {
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    gap: @size005;
+}
+
+.nav-menu-horizontal {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    justify-content: space-around;
+    gap: @size005;
 }
 
 .options {
@@ -1880,13 +1977,49 @@ body {
  * LAYOUT
  */
 body:has(>.layout) {
-    // Mobile
-    @media (max-width: @mdWidth) {
-
-    }
     // tablet, desktop
-    @media (min-width: @mdWidth) {
-        background-color: hsl(var(--color-50));
+    @media (min-width: @smWidth) {
+        background-color: hsl(var(--color-100));
+    }
+}
+/**
+ * Mobile, bottom fixed menu. Ārpus layout elementa, lai neatkarīga
+ */
+.layout-bottom-menu {
+    @media (min-width: @smWidth) {
+        display: none;
+    }
+    @media (max-width: @smWidth) {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100dvw;
+        z-index: 100;
+
+        background-color: hsl(var(--color-100));
+        border-top: 1px solid hsl(var(--color-200));
+
+        .nav-menu {
+            .nav-menu-horizontal();
+
+            padding: @size005 0 @size040;
+        }
+
+        .menu-item {
+
+            .menu-item-idle-color();
+            .menu-item-active-color();
+
+            .menu-item-vertical();
+
+            flex: 1 1 25%;
+            max-width: 25%;
+
+            svg {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
     }
 }
 .layout {
@@ -1895,61 +2028,129 @@ body:has(>.layout) {
     margin-left: auto;
     margin-right: auto;
 
-    // Mobile
-    @media (max-width: @mdWidth) {
-        // display: flex;
-        // flex-flow: column;
-
-        // >section {
-        //     order: 1;
-        // }
+    @media (max-width: @smWidth) {
         >aside {
-            //order: 2;
+            display: none;
 
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-
-            z-index: 100;
+            [data-expand-menu],
+            [data-contract-menu] {
+                display: none;
+            }
         }
     }
 
-    // tablet, desktop
-    @media (min-width: @mdWidth) {
+    // uz tablet nerādām menu label
+    @media (min-width: @smWidth) and (max-width: @mdWidth) {
+        &:not(:is([data-sidebar-expanded])) {
+            >aside {
+                .menu-item {
+                    .menu-item-hide-label();
+                }
+            }
+        }
+    }
+
+    // sākot no tablet
+    @media (min-width: @smWidth) {
         display: flex;
         flex-flow: row nowrap;
 
         position: relative;
 
+        &[data-sidebar-expanded] {
+            [data-expand-menu] {
+                display: none;
+            }
+        }
+        &:not([data-sidebar-expanded]) {
+            [data-contract-menu] {
+                display: none;
+            }
+        }
+
+        /**
+         * Width atkarībā no ir expanded vai nav
+         */
+        &:is([data-sidebar-expanded]) {
+            >aside {
+                // Width
+                flex: 0 0 var(--layout-aside-width);
+            }
+        }
+        &:not(:is([data-sidebar-expanded])) {
+            >aside {
+                // Width
+                flex: 0 0 var(--layout-aside-width-closed);
+            }
+        }
+
         >aside {
-            flex: 0 0 var(--layout-aside-width);
-            height: 100dvh;
-            max-height: 100dvh;
-
-            overflow-x: hidden;
-            overflow-y: auto;
-
-            top: 0;
-            position: sticky;
+            padding-top: @size040;
+            padding-bottom: @size040;
 
             display: flex;
             flex-flow: column nowrap;
+            justify-content: flex-start;
 
-            justify-content: space-between;
+            [data-expand-menu],
+            [data-contract-menu] {
+                align-self: flex-start;
+                margin-bottom: @size040;
+            }
+
+            [data-menu] {
+                flex: 1;
+
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: space-between;
+
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+
+            /**
+             * Lai menu stāv uz vietas, kad conten tiek scrollēts
+             * uz mobile chrome, kad notiek address bar slēpšana,
+             * tad mainās augstums un bottom menu kaut kā lēkā
+             * TODO jāpamēģina uz likt menu kā fixed
+             */
+            top: 0;
+            position: sticky;
+
+            height: 100dvh;
+            //max-height: 100dvh;
+
+            .menu-item {
+                .menu-item-idle-backgorund();
+                .menu-item-active-backgorund();
+            }
         }
         >section {
             flex: 1;
         }
     }
+    @media (min-width: @mdWidth) {
+        >aside {
+            flex: 0 0 var(--layout-aside-width);
 
+            [data-expand-menu],
+            [data-contract-menu] {
+                display: none;
+            }
+        }
+    }
 
+    .layout-aside-menubasement {
+        margin-top: @size080;
+    }
 
     /**
      * VISUAL
      */
     >aside {
-        background-color: hsl(var(--color-50));
+        background-color: hsl(var(--color-100));
 
         padding-left: @size030;
         padding-right: @size030;
@@ -1976,6 +2177,7 @@ body:has(>.layout) {
         }
     }
 }
+
 .page {
 
     [data-page-content] {

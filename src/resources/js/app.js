@@ -1,3 +1,4 @@
+import Layout from './Layout';
 import ButtonLoading from './ButtonLoading';
 import ButtonDelete from './ButtonDelete';
 import ButtonPost from './ButtonPost';
@@ -15,6 +16,7 @@ import FieldIncrement from './FieldIncrement';
 import FieldHoursMinutes from './FieldHoursMinutes';
 import FieldDateTime from './FieldDateTime';
 
+Layout.init();
 OptionsPanel.init();
 ButtonLoading.init();
 ButtonDelete.init();
@@ -33,6 +35,7 @@ FieldHoursMinutes.init();
 FieldDateTime.init();
 
 export {
+    Layout,
     OptionsPanel,
     ButtonLoading,
     ButtonDelete,
@@ -53,6 +56,7 @@ export {
 }
 
 export default {
+    Layout,
     OptionsPanel,
     ButtonLoading,
     ButtonDelete,
