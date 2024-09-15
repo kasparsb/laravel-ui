@@ -27,6 +27,7 @@ class DropdownMenu extends Component
         public $align = 'left',
         public $hidden = true,
         public $tabIndex = -1,
+        public $item = null, // null nozīmē, ka neviens nebūs selected
     )
     {
 

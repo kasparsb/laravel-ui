@@ -14,5 +14,5 @@
     >
     {{ $slot }}
 
-    <input type="text" data-dropdown-menu-focus-trap />
+    <span tabindex="0" data-dropdown-menu-focus-trap></span>
 </div>
