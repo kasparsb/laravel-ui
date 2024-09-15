@@ -42,11 +42,10 @@
 @endif
 </div>
 
-<div
-    {{ $bottomMenu->attributes->class([
-    'layout-modal-menu',
-    ]) }}
-    data-layout-modal-menu
-    >
-    Modal menu
-</div>
+<x-ui::dropdown-menu
+    class="layout-modal-menu"
+    name="layout-modal-menu"
+    side="top"
+    align="right">
+    {{ $menu }}
+</x-ui::dropdown-menu>
