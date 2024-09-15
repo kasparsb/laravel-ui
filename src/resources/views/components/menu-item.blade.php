@@ -32,14 +32,22 @@
             }
         }
     }
+
+    $menuItemTagName = 'a';
+    if (!$link) {
+        $menuItemTagName = 'button';
+    }
 @endphp
-<a
+<{{ $menuItemTagName }}
     {{ $attributes->class([
         'menu-item',
-        'selected' => $selected ? true : false,
     ]) }}
 
     data-role="menuitem"
+
+    @if ($selected)
+    data-checked
+    @endif
 
     @if ($name)
     name="{{ $name }}"
@@ -107,4 +115,4 @@
     )
     <span data-menu-item-label>{{ $slot->isEmpty() ? $label : $slot }}</span>
     @endif
-</a>
+</{{ $menuItemTagName }}>
