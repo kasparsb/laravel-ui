@@ -2568,12 +2568,34 @@ body:has(>.layout) {
  * kādu citu ementu. Datepicker
  */
 .overlay-container {
+
+    //background-color: hsl(var(--color-400) / .5);
+
     z-index: 100;
-    position: absolute;
+    position: fixed;
+
+
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
+    flex-flow: column;
+
+    // Content pozicionēšana atkarībā no pozicionēšanas
+    &[data-side="top"][data-align="right"] {
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+    &[data-side="top"][data-align="left"] {
+        justify-content: flex-end;
+        align-items: flex-start;
+    }
+    &[data-side="bottom"][data-align="right"] {
+        justify-content: flex-start;
+        align-items: flex-end;
+    }
+    &[data-side="bottom"][data-align="left"] {
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
 
     // top, left uzliks skripts
     // te vajag augšējā labajā stūrī nolikt, lai iekšējais content neuztaisa scrollbars

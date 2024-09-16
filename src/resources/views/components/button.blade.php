@@ -94,6 +94,26 @@
     @endif
 
     @if ($menu)
+    {{--
+    data-dropdown-menu-position-at nozīmē, ka pozicionēsies pret button elementu
+    var arī likt query selector
+    ja nebūs attribūta vispār, tad ņems no paša DropdownMenu elementa
+    --}}
+    @if (!(is_bool($menuPositionAt) && !$menuPositionAt))
+    data-dropdown-menu-position-at="{{ $menuPositionAt }}"
+    @endif
+    @if (!(is_bool($menuX) && !$menuX))
+    data-dropdown-menu-position-x="{{ $menuX }}"
+    @endif
+    @if (!(is_bool($menuY) && !$menuY))
+    data-dropdown-menu-position-y="{{ $menuY }}"
+    @endif
+    @if (!(is_bool($menuSide) && !$menuSide))
+    data-dropdown-menu-side="{{ $menuSide }}"
+    @endif
+    @if (!(is_bool($menuAlign) && !$menuAlign))
+    data-dropdown-menu-align="{{ $menuAlign }}"
+    @endif
     data-dropdown-menu-trigger="{{ $menu }}"
     data-dropdown-menu-show="{{ $menuShow }}"
         @if ($menuFocus)

@@ -34,9 +34,16 @@
             type="text"
             name="{{ $name }}"
             value="{{ $value }}"
+            {{-- Pasaka, ka dropdownMenuEl ir nākošais siblings --}}
             data-dropdown-menu-trigger="dom.nextSibling"
             data-dropdown-menu-show="onclick"
             data-dropdown-menu-hide="onclick.outside"
+            {{--
+            data-dropdown-menu-position-at nozīmē, ka pozicionēsies pret button elementu
+            var arī likt query selector
+            ja nebūs attribūta vispār, tad ņems no paša DropdownMenu elementa
+            --}}
+            data-dropdown-menu-position-at
             @if ($searchable)
             data-dropdown-menu-focus="firstFocusable"
             @endif

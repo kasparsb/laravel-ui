@@ -53,7 +53,7 @@
         data-dropdown-menu-trigger="{{ $menu }}"
         data-dropdown-menu-show="{{ $menuShow }}"
         data-dropdown-menu-target-el="child:input"
-        {{-- data-dropdown-menu-position-at="(parent|child):div" --}}
+        data-dropdown-menu-position-at
             @if ($menuFocus)
             data-dropdown-menu-focus="{{ is_bool($menuFocus) ? '' : $menuFocus }}"
             @endif

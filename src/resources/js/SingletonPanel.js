@@ -31,59 +31,82 @@ let panelsStack = [
     // }
 ];
 
-function positionByEl(panelIndex, positionEl, side, align) {
-    // Pozicionē container pret input lauku
-    let p = getOffset(positionEl)
-    let triggerDimensions = getOuterDimensions(positionEl);
-    // Content dimensions
-    let menuDimensions = getOuterDimensions(getContentEl(panelIndex));
+/**
+ * Main goal ir pozicionēt neizmantojot getContentEl(panelIndex) dimensions
+ */
+function positionByEl(panelIndex, positionEl, x, y, side, align) {
 
     let gap = 4;
 
+    let pos = {
+        x: x ? x : 0,
+        y: y ? y : 0,
+    }
+
+    // Ir konkrēts elements pret kuru pozicionēt
+    if (positionEl) {
+        let positionElPosition = getOffset(positionEl)
+        let triggerDimensions = getOuterDimensions(positionEl);
+        let windowDimensions = getWindowDimensions();
+
+        if (side == 'bottom' || side == 'top') {
+
+            if (side == 'bottom') {
+                pos.y = (positionElPosition.top + triggerDimensions.height + gap);
+            }
+            else {
+                pos.y = (windowDimensions.height - positionElPosition.top + gap);
+            }
+
+            if (align == 'left') {
+                pos.x = positionElPosition.left;
+            }
+            else if (align == 'right') {
+                pos.x = windowDimensions.width - positionElPosition.left - triggerDimensions.width;
+            }
+        }
+    }
+
     let css = {};
-
-    if (side == 'bottom' || side == 'top') {
-        if (side == 'bottom') {
-            css.top = (p.top + triggerDimensions.height + gap);
-        }
-        else {
-            css.top = (p.top - menuDimensions.height - gap);
-        }
-
-        /**
-         * ! css.right apzīmē kādas būs menu labās puses koordinātes
-         * tas vajadzīgs, lai noteiktu, vai menu būs ārpus window robežām
-         */
-        if (align == 'left') {
-            css.left = p.left;
-            css.right = p.left + menuDimensions.width;
-        }
-        else if (align == 'right') {
-            css.left = ((p.left + triggerDimensions.width) - menuDimensions.width);
-            css.right = css.left
-        }
-        else if (align == 'center') {
-            css.left = ((p.left + (triggerDimensions.width / 2)) - (menuDimensions.width / 2));
-            css.right = css.left + (menuDimensions.width / 2);
-        }
+    switch (side+align) {
+        case 'topright':
+            css = {
+                top: 0,
+                left: 0,
+                bottom: pos.y+'px',
+                right: pos.x+'px'
+            }
+            break;
+        case 'topleft':
+            css = {
+                top: 0,
+                left: pos.x+'px',
+                bottom: pos.y+'px',
+                right: 0
+            }
+            break;
+        case 'bottomright':
+            css = {
+                top: pos.y+'px',
+                left: 0,
+                bottom: 0,
+                right: pos.x+'px'
+            }
+            break;
+        case 'bottomleft':
+            css = {
+                top: pos.y+'px',
+                left: pos.x+'px',
+                bottom: 0,
+                right: 0
+            }
+            break;
     }
 
+    containers[panelIndex].dataset.side = side
+    containers[panelIndex].dataset.align = align
 
-    // Ierobežojam left, ja tas ir novieto menu ārpus window robežām
-    let windowDimensions = getWindowDimensions();
-    // Atņemam scrollbar width
-    windowDimensions.width = windowDimensions.width - 20;
-    if (css.right > windowDimensions.width) {
-        css.left = css.left - (css.right - windowDimensions.width) - gap;
-    }
-    else if (css.left < gap) {
-        css.left = gap;
-    }
-
-    addStyle(containers[panelIndex], {
-        top: css.top + 'px',
-        left: css.left + 'px'
-    })
+    addStyle(containers[panelIndex], css)
 }
 
 /**
@@ -151,7 +174,7 @@ export default {
     /**
      * Show single instance panel
      */
-    open(contentEl, {onContentElRemove, onOpen, positionEl, side, align} = {}) {
+    open(contentEl, {onContentElRemove, onOpen, positionEl, x, y, side, align} = {}) {
 
         let panelIndex = panelsStack.push({
             contentEl: contentEl,
@@ -175,9 +198,7 @@ export default {
 
         // Ja nav timeout, tad var nepaspēt nolasīt content el dimensions
         setTimeout(() => {
-            if (positionEl) {
-                positionByEl(panelIndex, positionEl, side, align);
-            }
+            positionByEl(panelIndex, positionEl, x, y, side, align);
 
             // Padaram redzamu
             containers[panelIndex].hidden = false;

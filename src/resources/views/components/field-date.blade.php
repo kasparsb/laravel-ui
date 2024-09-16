@@ -34,7 +34,7 @@
             priekš dropdown un attiecīgi arī atgriezta uz to pašu input
         --}}
         data-dropdown-menu-target-el="child:input"
-        {{-- data-dropdown-menu-position-at="" --}}
+        data-dropdown-menu-position-at
         >
         @if (isset($prefix) && !$prefix->isEmpty())
             {{ $prefix }}

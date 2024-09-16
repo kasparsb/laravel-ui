@@ -22,6 +22,13 @@ class ButtonOutline extends Component
         public $menuFocus=true, // ko iefokusēt, kad menu atveras. Default pats menu | firstFocusable | querySelector
         public $menuHide = null, // null nozīmē, ka nav uzsetots. Var padot arī empty string vai boolean
         public $menuResetForm = false,
+        public $menuPositionAt = '',
+        // flase nozīmē, ka triggerEl nenoteiks kāds būs side un align
+        public $menuSide = false,
+        public $menuAlign = false,
+        // Custom position coordinates
+        public $menuX = false,
+        public $menuY = false,
 
         public $table = '', // table name, kurai veikt add, delete darbības
 

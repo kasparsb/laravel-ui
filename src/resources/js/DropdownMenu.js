@@ -180,16 +180,51 @@ function open(triggerEl, menuEl) {
     // Notīrām hide timeout
     clearTimeout(dropDownMenuHideTimeout);
 
-    // Pēc noklusējuma pozicionējam pret trigger el
-    let positionEl = triggerEl;
-    if (triggerEl.dataset.dropdownMenuPositionAt) {
-        positionEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
+    let side = menuEl.dataset.side;
+    let align = menuEl.dataset.align;
+    let x = menuEl.dataset.positionX;
+    let y = menuEl.dataset.positionY;
+
+    // Skatamies vai triggerEl override
+    if ('dropdownMenuSide' in triggerEl.dataset) {
+        side = triggerEl.dataset.dropdownMenuSide
+    }
+    if ('dropdownMenuAlign' in triggerEl.dataset) {
+        align = triggerEl.dataset.dropdownMenuAlign
+    }
+    if ('dropdownMenuPositionX' in triggerEl.dataset) {
+        x = triggerEl.dataset.dropdownMenuPositionX
+    }
+    if ('dropdownMenuPositionY' in triggerEl.dataset) {
+        y = triggerEl.dataset.dropdownMenuPositionY
+    }
+
+    // Pēc noklusējuma nav pozicionēšanas elementa
+    let positionEl = null;
+    // skatamies uz paša menuEl
+    if (menuEl.dataset.positionAt) {
+        /**
+         * TODO laikam menuEl.dataset.positionAt jāuzskata kā querySelector
+         */
+        // positionEl = ???
+    }
+    // Uz paša open trigger uzlikts positionAt
+    if ('dropdownMenuPositionAt' in triggerEl.dataset) {
+        if (triggerEl.dataset.dropdownMenuPositionAt) {
+            positionEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
+        }
+        else {
+            // ja nav norādīts konkrēts selector, tad pats triggerEl
+            positionEl = triggerEl
+        }
     }
 
     SingletonPanel.open(menuEl, {
         positionEl: positionEl,
-        side: menuEl.dataset.side,
-        align: menuEl.dataset.align,
+        side: side,
+        align: align,
+        x: x,
+        y: y,
         onOpen(menuEl, panelIndex) {
             menuEl.dataset.dropdownMenuPanelIndex = panelIndex;
             // Uzliekam tabIndex
