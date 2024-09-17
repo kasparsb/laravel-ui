@@ -77,7 +77,7 @@ function focusMenu(menuEl, whatToFocus) {
 function findDropdownMenuEl(triggerEl) {
     // nākošais sibling no triggerEl
     if (triggerEl.dataset.dropdownMenuTrigger == 'dom.nextSibling') {
-        return next(triggerEl, '.dropdown-menu');
+        return next(triggerEl, '[data-dropdown-menu-name]');
     }
     else {
         return findDropdownMenuByName(triggerEl.dataset.dropdownMenuTrigger)
