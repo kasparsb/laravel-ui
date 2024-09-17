@@ -203,9 +203,6 @@ function open(triggerEl, menuEl) {
         positionYOffset = triggerEl.dataset.dropdownMenuPositionYOffset
     }
 
-    console.log(triggerEl.dataset);
-    console.log('QQQQ', positionXOffset, positionYOffset);
-
     // Pēc noklusējuma nav pozicionēšanas elementa
     let positionEl = null;
     let positionElDir = menuEl.dataset.positionAtDir;

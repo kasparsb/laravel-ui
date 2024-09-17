@@ -60,15 +60,10 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
         yOffset = 0;
     }
 
-    console.log('Offset', xOffset, yOffset);
-
     let pos = {
         x: x ? x : 0,
         y: y ? y : 0,
     }
-
-    console.log('start pos', pos);
-    console.log('positionEl', positionEl);
 
     // Elements pret kuru noteikt pos.x un pos.y
     // šis overraid padotos x un y
@@ -87,17 +82,11 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
             positionElDimensions = getOuterDimensions(positionEl);
         }
 
-        console.log(positionElPosition, positionElDimensions    );
-
         pos.x = positionElPosition.left;
         pos.y = positionElPosition.top;
 
-        console.log('positionElPos', pos);
-
         // Position el stūris pēc kura noteikt pos.x un pos.y
         positionElDir = parseDirection(positionElDir);
-
-        console.log('positionElDir', positionElDir);
 
         if (positionElDir.x == 'right') {
             pos.x += positionElDimensions.width;
@@ -105,8 +94,6 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
         if (positionElDir.y == 'bottom') {
             pos.y += positionElDimensions.height;
         }
-
-        console.log('positionElPosAdjusted', pos);
     }
 
     // Pieliekam offset
@@ -148,8 +135,6 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
         css.top = pos.y+'px';
     }
 
-    console.log('dir', dir);
-    console.log('css', css);
     containers[panelIndex].dataset.dir = dir.x+dir.y
 
     addStyle(containers[panelIndex], css)
