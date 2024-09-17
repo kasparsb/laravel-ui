@@ -44,6 +44,9 @@
             ja nebūs attribūta vispār, tad ņems no paša DropdownMenu elementa
             --}}
             data-dropdown-menu-position-at
+            data-dropdown-menu-position-at-dir="left bottom"
+            data-dropdown-menu-position-dir="right bottom"
+            data-dropdown-menu-position-y-offset="4"
             @if ($searchable)
             data-dropdown-menu-focus="firstFocusable"
             @endif
