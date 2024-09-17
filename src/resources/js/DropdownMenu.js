@@ -180,51 +180,77 @@ function open(triggerEl, menuEl) {
     // Notīrām hide timeout
     clearTimeout(dropDownMenuHideTimeout);
 
-    let side = menuEl.dataset.side;
-    let align = menuEl.dataset.align;
-    let x = menuEl.dataset.positionX;
-    let y = menuEl.dataset.positionY;
+    let positionX = menuEl.dataset.positionX;
+    let positionY = menuEl.dataset.positionY;
+    let positionDir = menuEl.dataset.positionDir;
+    let positionXOffset = menuEl.dataset.positionXOffset;
+    let positionYOffset = menuEl.dataset.positionYOffset;
 
     // Skatamies vai triggerEl override
-    if ('dropdownMenuSide' in triggerEl.dataset) {
-        side = triggerEl.dataset.dropdownMenuSide
-    }
-    if ('dropdownMenuAlign' in triggerEl.dataset) {
-        align = triggerEl.dataset.dropdownMenuAlign
-    }
     if ('dropdownMenuPositionX' in triggerEl.dataset) {
-        x = triggerEl.dataset.dropdownMenuPositionX
+        positionX = triggerEl.dataset.dropdownMenuPositionX
     }
     if ('dropdownMenuPositionY' in triggerEl.dataset) {
-        y = triggerEl.dataset.dropdownMenuPositionY
+        positionY = triggerEl.dataset.dropdownMenuPositionY
     }
+    if ('dropdownMenuPositionDir' in triggerEl.dataset) {
+        positionDir = triggerEl.dataset.dropdownMenuPositionDir
+    }
+    if ('dropdownMenuPositionXOffset' in triggerEl.dataset) {
+        positionXOffset = triggerEl.dataset.dropdownMenuPositionXOffset
+    }
+    if ('dropdownMenuPositionYOffset' in triggerEl.dataset) {
+        positionYOffset = triggerEl.dataset.dropdownMenuPositionYOffset
+    }
+
+    console.log(triggerEl.dataset);
+    console.log('QQQQ', positionXOffset, positionYOffset);
 
     // Pēc noklusējuma nav pozicionēšanas elementa
     let positionEl = null;
-    // skatamies uz paša menuEl
+    let positionElDir = menuEl.dataset.positionAtDir;
+
     if (menuEl.dataset.positionAt) {
         /**
          * TODO laikam menuEl.dataset.positionAt jāuzskata kā querySelector
+         *
+         * Special keyword ir viewport
          */
-        // positionEl = ???
-    }
-    // Uz paša open trigger uzlikts positionAt
-    if ('dropdownMenuPositionAt' in triggerEl.dataset) {
-        if (triggerEl.dataset.dropdownMenuPositionAt) {
-            positionEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
+        if (menuEl.dataset.positionAt == 'viewport') {
+            positionEl = menuEl.dataset.positionAt;
         }
         else {
-            // ja nav norādīts konkrēts selector, tad pats triggerEl
-            positionEl = triggerEl
+            positionEl = q(menuEl.dataset.positionAt);
         }
+    }
+
+    // Skatamies vai triggerEl override
+    if ('dropdownMenuPositionAt' in triggerEl.dataset) {
+        if (triggerEl.dataset.dropdownMenuPositionAt == 'viewport') {
+            positionEl = triggerEl.dataset.dropdownMenuPositionAt;
+        }
+        else {
+            if (triggerEl.dataset.dropdownMenuPositionAt) {
+                positionEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
+            }
+            else {
+                // ja nav norādīts konkrēts selector, tad pats triggerEl
+                positionEl = triggerEl
+            }
+        }
+    }
+    if ('dropdownMenuPositionAtDir' in triggerEl.dataset) {
+        positionElDir = triggerEl.dataset.dropdownMenuPositionAtDir
     }
 
     SingletonPanel.open(menuEl, {
         positionEl: positionEl,
-        side: side,
-        align: align,
-        x: x,
-        y: y,
+        positionElDir: positionElDir,
+        x: positionX,
+        y: positionY,
+        xOffset: positionXOffset,
+        yOffset: positionYOffset,
+        dir: positionDir,
         onOpen(menuEl, panelIndex) {
             menuEl.dataset.dropdownMenuPanelIndex = panelIndex;
             // Uzliekam tabIndex

@@ -42,10 +42,8 @@
 @endif
 </div>
 
-<x-ui::dropdown-menu
-    class="layout-modal-menu"
-    name="layout-modal-menu"
-    side="top"
-    align="right">
+<x-ui::dropdown-menu-blank
+    class="layout-modal-menu w-full p-4 bg-c-background"
+    name="layout-modal-menu">
     {{ $menu }}
-</x-ui::dropdown-menu>
+</x-ui::dropdown-menu-blank>

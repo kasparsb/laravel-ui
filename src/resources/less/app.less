@@ -1756,12 +1756,6 @@ body {
 
 .dropdown-menu {
 
-    position: relative;
-
-    &[hidden] {
-        display: none;
-    }
-
     .border-md();
     border-width: 1px;
     border-style: solid;
@@ -1803,22 +1797,6 @@ body {
         .menu-item-idle-backgorund();
         // active, selected state
         .menu-item-active-backgorund();
-    }
-
-    &[data-dropdown-menu-is-active] {
-        //border-color: hsl(var(--color-red-400));
-    }
-
-    // Focus trap
-    [data-dropdown-menu-focus-trap] {
-        //border: 1px solid red;
-        position: absolute;
-        bottom: 0;
-        opacity: 0;
-        pointer-events: none;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
     }
 }
 
@@ -2561,11 +2539,79 @@ body:has(>.layout) {
     }
 }
 
+/**
+ * Wrapper elements priekš actual content, kurš būs kā
+ * dropdown-menu vai kas cits
+ * šim elementam ir slēpšanas loģika
+ * šajā elementā ir focu-trap elements
+ */
+.floating-container {
+
+    //background-color: hsl(var(--color-red-400) / .5);
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+
+    // content tiek likts >div elementā
+    // abiem atslēdzam pointer events
+    >div {
+        pointer-events: none;
+
+        // Visiem childs ieslēdzam pointer events
+        // šis būs tas content, kurš ielikts
+        >* {
+            pointer-events: all;
+        }
+    }
+
+
+    &[hidden] {
+        display: none;
+    }
+
+    &[data-dropdown-menu-is-active] {
+        //border-color: hsl(var(--color-red-400));
+    }
+
+    // Focus trap
+    [data-dropdown-menu-focus-trap] {
+        position: absolute;
+        bottom: 0;
+        opacity: 0;
+        pointer-events: none;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
+
+    display: flex;
+    flex-flow: column;
+
+    // Content pozicionēšana atkarībā no pozicionēšanas
+    [data-dir="righttop"] & {
+        justify-content: flex-end;
+        align-items: flex-start;
+    }
+    [data-dir="lefttop"] & {
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+    [data-dir="rightbottom"] & {
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+    [data-dir="leftbottom"] & {
+        justify-content: flex-start;
+        align-items: flex-end;
+    }
+}
 
 /**
- * Absolūti pozicionēts conatiner elements, kurā ielikt
- * kādu citu elemntu, lai to varētu nopozicionēt pret
- * kādu citu ementu. Datepicker
+ * Fixed position conatiner elements, kuru izmanto, lai nopoziconētu
+ * pret kādu citu elementu
  */
 .overlay-container {
 
@@ -2574,45 +2620,13 @@ body:has(>.layout) {
     z-index: 100;
     position: fixed;
 
-
-    display: flex;
-    flex-flow: column;
-
-    // Content pozicionēšana atkarībā no pozicionēšanas
-    &[data-side="top"][data-align="right"] {
-        justify-content: flex-end;
-        align-items: flex-end;
-    }
-    &[data-side="top"][data-align="left"] {
-        justify-content: flex-end;
-        align-items: flex-start;
-    }
-    &[data-side="bottom"][data-align="right"] {
-        justify-content: flex-start;
-        align-items: flex-end;
-    }
-    &[data-side="bottom"][data-align="left"] {
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-
-
-    // top, left uzliks skripts
-    // te vajag augšējā labajā stūrī nolikt, lai iekšējais content neuztaisa scrollbars
     top: 0;
     left: 0;
-
-    // Lai ir līdz ekrāna malām
     right: 0;
     bottom: 0;
 
     // Overlay atslēdzam pointer events
     pointer-events: none;
-
-    // Visiem childs ieslēdzam pointer events
-    >* {
-        pointer-events: all;
-    }
 
     opacity: 1;
 

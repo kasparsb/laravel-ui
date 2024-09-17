@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class DropdownMenu extends Component
+class DropdownMenuBlank extends Component
 {
     public function __construct(
         // Menu name, pēc kura varēs noteikt, kādu menu rādit spiežo uz pogas
@@ -60,6 +60,6 @@ class DropdownMenu extends Component
 
     public function render(): View|Closure|string
     {
-        return view('ui::components.dropdown-menu');
+        return view('ui::components.dropdown-menu-blank');
     }
 }

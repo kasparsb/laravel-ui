@@ -21,10 +21,7 @@
     @endif
     >
     <div
-        {{ $attributes->class([
-            'dropdown-menu',
-            'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class'))
-        ]) }}
+        {{ $attributes }}
         >
         {{ $slot }}
     </div>

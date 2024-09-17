@@ -99,21 +99,30 @@
     var arī likt query selector
     ja nebūs attribūta vispār, tad ņems no paša DropdownMenu elementa
     --}}
+
     @if (!(is_bool($menuPositionAt) && !$menuPositionAt))
     data-dropdown-menu-position-at="{{ $menuPositionAt }}"
     @endif
-    @if (!(is_bool($menuX) && !$menuX))
-    data-dropdown-menu-position-x="{{ $menuX }}"
+    @if (!(is_bool($menuPositionAtDir) && !$menuPositionAtDir))
+    data-dropdown-menu-position-at-dir="{{ $menuPositionAtDir }}"
     @endif
-    @if (!(is_bool($menuY) && !$menuY))
-    data-dropdown-menu-position-y="{{ $menuY }}"
+
+    @if (!(is_bool($menuPositionX) && !$menuPositionX))
+    data-dropdown-menu-position-x="{{ $menuPositionX }}"
     @endif
-    @if (!(is_bool($menuSide) && !$menuSide))
-    data-dropdown-menu-side="{{ $menuSide }}"
+    @if (!(is_bool($menuPositionY) && !$menuPositionY))
+    data-dropdown-menu-position-y="{{ $menuPositionY }}"
     @endif
-    @if (!(is_bool($menuAlign) && !$menuAlign))
-    data-dropdown-menu-align="{{ $menuAlign }}"
+    @if (!(is_bool($menuPositionDir) && !$menuPositionDir))
+    data-dropdown-menu-position-dir="{{ $menuPositionDir }}"
     @endif
+    @if (!(is_bool($menuPositionXOffset) && !$menuPositionXOffset))
+    data-dropdown-menu-position-x-offset="{{ $menuPositionXOffset }}"
+    @endif
+    @if (!(is_bool($menuPositionYOffset) && !$menuPositionYOffset))
+    data-dropdown-menu-position-y-offset="{{ $menuPositionYOffset }}"
+    @endif
+
     data-dropdown-menu-trigger="{{ $menu }}"
     data-dropdown-menu-show="{{ $menuShow }}"
         @if ($menuFocus)

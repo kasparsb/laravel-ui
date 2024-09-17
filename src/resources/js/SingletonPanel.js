@@ -31,80 +31,126 @@ let panelsStack = [
     // }
 ];
 
-/**
- * Main goal ir pozicionēt neizmantojot getContentEl(panelIndex) dimensions
- */
-function positionByEl(panelIndex, positionEl, x, y, side, align) {
+function parseDirection(dir) {
+    if (!dir) {
+        dir = 'right bottom'
+    }
+    let dirParts = dir.split(' ');
 
-    let gap = 4;
+    return {
+        x: dirParts[0],
+        y: dirParts[1]
+    }
+}
+
+/**
+ * Main goal ir pozicionēt neizmantojot panelī
+ * ieliktā elementa (getContentEl(panelIndex)) dimensions
+ */
+function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset, yOffset) {
+
+    let windowDimensions = getWindowDimensions();
+
+    xOffset = parseInt(xOffset, 10);
+    if (isNaN(xOffset)) {
+        xOffset = 0;
+    }
+    yOffset = parseInt(yOffset, 10);
+    if (isNaN(yOffset)) {
+        yOffset = 0;
+    }
+
+    console.log('Offset', xOffset, yOffset);
 
     let pos = {
         x: x ? x : 0,
         y: y ? y : 0,
     }
 
-    // Ir konkrēts elements pret kuru pozicionēt
+    console.log('start pos', pos);
+    console.log('positionEl', positionEl);
+
+    // Elements pret kuru noteikt pos.x un pos.y
+    // šis overraid padotos x un y
     if (positionEl) {
-        let positionElPosition = getOffset(positionEl)
-        let triggerDimensions = getOuterDimensions(positionEl);
-        let windowDimensions = getWindowDimensions();
-
-        if (side == 'bottom' || side == 'top') {
-
-            if (side == 'bottom') {
-                pos.y = (positionElPosition.top + triggerDimensions.height + gap);
-            }
-            else {
-                pos.y = (windowDimensions.height - positionElPosition.top + gap);
-            }
-
-            if (align == 'left') {
-                pos.x = positionElPosition.left;
-            }
-            else if (align == 'right') {
-                pos.x = windowDimensions.width - positionElPosition.left - triggerDimensions.width;
+        let positionElPosition;
+        let positionElDimensions;
+        if (positionEl == 'viewport') {
+            positionElPosition = {top: 0, left: 0}
+            positionElDimensions = {
+                width: windowDimensions.width,
+                height: windowDimensions.height,
             }
         }
+        else {
+            positionElPosition = getOffset(positionEl)
+            positionElDimensions = getOuterDimensions(positionEl);
+        }
+
+        console.log(positionElPosition, positionElDimensions    );
+
+        pos.x = positionElPosition.left;
+        pos.y = positionElPosition.top;
+
+        console.log('positionElPos', pos);
+
+        // Position el stūris pēc kura noteikt pos.x un pos.y
+        positionElDir = parseDirection(positionElDir);
+
+        console.log('positionElDir', positionElDir);
+
+        if (positionElDir.x == 'right') {
+            pos.x += positionElDimensions.width;
+        }
+        if (positionElDir.y == 'bottom') {
+            pos.y += positionElDimensions.height;
+        }
+
+        console.log('positionElPosAdjusted', pos);
     }
 
-    let css = {};
-    switch (side+align) {
-        case 'topright':
-            css = {
-                top: 0,
-                left: 0,
-                bottom: pos.y+'px',
-                right: pos.x+'px'
-            }
-            break;
-        case 'topleft':
-            css = {
-                top: 0,
-                left: pos.x+'px',
-                bottom: pos.y+'px',
-                right: 0
-            }
-            break;
-        case 'bottomright':
-            css = {
-                top: pos.y+'px',
-                left: 0,
-                bottom: 0,
-                right: pos.x+'px'
-            }
-            break;
-        case 'bottomleft':
-            css = {
-                top: pos.y+'px',
-                left: pos.x+'px',
-                bottom: 0,
-                right: 0
-            }
-            break;
+    // Pieliekam offset
+    pos.x += xOffset;
+    pos.y += yOffset;
+
+    /**
+     * Atkarībā no direction vajag konvertēt pos.x un pos.y uz
+     * css top left bottom right
+     *
+     * Ja x virziens ir left, tad pos.x ir jākonvertē uz css right
+     * Ja y virziens ir top, tad pos.y ir jākonvertē uz css bottom
+     */
+    dir = parseDirection(dir);
+    if (dir.x == 'left') {
+        pos.x = windowDimensions.width - pos.x;
+    }
+    if (dir.y == 'top') {
+        pos.y = windowDimensions.height - pos.y;
     }
 
-    containers[panelIndex].dataset.side = side
-    containers[panelIndex].dataset.align = align
+    let css = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    };
+
+    if (dir.x == 'left') {
+        css.right = pos.x+'px';
+    }
+    if (dir.x == 'right') {
+        css.left = pos.x+'px';
+    }
+    if (dir.y == 'top') {
+        css.bottom = pos.y+'px';
+    }
+    if (dir.y == 'bottom') {
+        css.top = pos.y+'px';
+    }
+
+    console.log('dir', dir);
+    console.log('css', css);
+    containers[panelIndex].dataset.dir = dir.x+dir.y
 
     addStyle(containers[panelIndex], css)
 }
@@ -174,7 +220,7 @@ export default {
     /**
      * Show single instance panel
      */
-    open(contentEl, {onContentElRemove, onOpen, positionEl, x, y, side, align} = {}) {
+    open(contentEl, {onContentElRemove, onOpen, positionEl, positionElDir, x, y, dir, xOffset, yOffset} = {}) {
 
         let panelIndex = panelsStack.push({
             contentEl: contentEl,
@@ -198,7 +244,17 @@ export default {
 
         // Ja nav timeout, tad var nepaspēt nolasīt content el dimensions
         setTimeout(() => {
-            positionByEl(panelIndex, positionEl, x, y, side, align);
+            positionByEl(
+                panelIndex,
+
+                positionEl,
+                positionElDir,
+                x,
+                y,
+                dir,
+                xOffset,
+                yOffset
+            );
 
             // Padaram redzamu
             containers[panelIndex].hidden = false;

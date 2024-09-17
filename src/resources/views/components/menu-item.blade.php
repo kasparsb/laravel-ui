@@ -78,15 +78,39 @@
     @endif
 
     @if ($menu)
+
     data-dropdown-menu-trigger="{{ $menu }}"
     data-dropdown-menu-show="{{ $menuShow }}"
-    data-dropdown-menu-position-at
-        @if ($menuFocus)
-        data-dropdown-menu-focus="{{ is_bool($menuFocus) ? '' : $menuFocus }}"
-        @endif
-        @if ($menuResetForm)
-        data-dropdown-menu-reset-form
-        @endif
+    @if ($menuFocus)
+    data-dropdown-menu-focus="{{ is_bool($menuFocus) ? '' : $menuFocus }}"
+    @endif
+    @if ($menuResetForm)
+    data-dropdown-menu-reset-form
+    @endif
+
+    @if (!(is_bool($menuPositionAt) && !$menuPositionAt))
+    data-dropdown-menu-position-at="{{ $menuPositionAt }}"
+    @endif
+    @if (!(is_bool($menuPositionAtDir) && !$menuPositionAtDir))
+    data-dropdown-menu-position-at-dir="{{ $menuPositionAtDir }}"
+    @endif
+
+    @if (!(is_bool($menuPositionX) && !$menuPositionX))
+    data-dropdown-menu-position-x="{{ $menuPositionX }}"
+    @endif
+    @if (!(is_bool($menuPositionY) && !$menuPositionY))
+    data-dropdown-menu-position-y="{{ $menuPositionY }}"
+    @endif
+    @if (!(is_bool($menuPositionDir) && !$menuPositionDir))
+    data-dropdown-menu-position-dir="{{ $menuPositionDir }}"
+    @endif
+    @if (!(is_bool($menuPositionXOffset) && !$menuPositionXOffset))
+    data-dropdown-menu-position-x-offset="{{ $menuPositionXOffset }}"
+    @endif
+    @if (!(is_bool($menuPositionYOffset) && !$menuPositionYOffset))
+    data-dropdown-menu-position-y-offset="{{ $menuPositionYOffset }}"
+    @endif
+
     @endif
 
     @if ($menuHide)

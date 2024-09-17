@@ -35,6 +35,9 @@
         --}}
         data-dropdown-menu-target-el="child:input"
         data-dropdown-menu-position-at
+        data-dropdown-menu-position-at-dir="left bottom"
+        data-dropdown-menu-position-dir="right bottom"
+        data-dropdown-menu-position-y-offset="4"
         >
         @if (isset($prefix) && !$prefix->isEmpty())
             {{ $prefix }}
