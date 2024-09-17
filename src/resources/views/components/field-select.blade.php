@@ -57,7 +57,7 @@
         </svg>
         @endif
 
-        <x-ui::dropdown-menu data-field-select-options-menu>
+        <x-ui::dropdown-menu>
             <div class="options">
                 @if ($searchable)
                 <x-ui::field-text
