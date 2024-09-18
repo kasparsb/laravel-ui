@@ -370,6 +370,9 @@ body {
 .border-sm {
     border-radius: calc(var(--radius) - 4px);
 }
+.border-round {
+    border-radius: 50%;
+}
 
 .input-label {
     .t-3\.5();
@@ -716,6 +719,19 @@ body {
     &:is(.field-textarea) {
         .form-field-textarea-layout();
     }
+
+
+
+
+    /**
+     * TODO kādā veidā visus lauku dabūt vienādā platumā
+     * un tā lai tie ir responsīvi un pēc tam tiem
+     * var mainīt platumu???
+     */
+    width: 100%;
+    max-width: 240px;
+
+
 }
 
 .field-textarea {
@@ -1172,9 +1188,21 @@ body {
     // un lai nenostrādā click ārpus label teksta
     display: flex;
     flex-flow: column nowrap;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     gap: @size020;
+
+    /**
+     * toggle switch ir zemāks par input lauku
+     * gadījumos, ja vajag, lai ir tāds pats augstums, tad
+     * jāizmanto ši klase
+     *
+     * Lielākoties to nevajag, ja liek rindā (h-stack), tad
+     * uzliek v-center un visi lauki būs vienā līnijā
+     */
+    &.h-input {
+        height: @size090;
+    }
 
     label {
         .remove-tap-highlite();
@@ -1309,7 +1337,10 @@ body {
 }
 
 
-.checkbox {
+.checkbox,
+.radio {
+    .remove-tap-highlite();
+
     // Grid nevar izmanto, jo tad label izstiepjas pa visu platumu
     // checkbox vēlams, lai label ir teksta platumā
     // un lai nenostrādā click ārpus label teksta
@@ -1341,7 +1372,11 @@ body {
         width: @size040;
         height: @size040;
 
-        // border elements. Lai var mainīt width un tas neiteikmē svg (checkmark) platumu
+        /**
+         * Checkbox un radio vizuālais elements
+         * border elements. Lai var mainīt width un tas neiteikmē svg (checkmark) platumu
+         * checkbox un radio paši nodefinē kāds būs border radius
+         */
         &:before {
             content: '';
             display: block;
@@ -1351,7 +1386,7 @@ body {
             width: 100%;
             height: 100%;
 
-            .border-sm();
+            // border tiek definēts atseviški .checkbox un .radio. zemāk
 
             z-index: 1;
         }
@@ -1361,8 +1396,7 @@ body {
         svg {
             opacity: 0;
 
-            width: @size040;
-            height: @size040;
+            // width height definēts atseviški .checkbox un .radio. zemāk
 
             display: block;
 
@@ -1386,6 +1420,32 @@ body {
         label {
             .input-label();
         }
+        // tiek definēts atseviški .checkbox un .radio. zemāk
+    }
+    &[data-state="error"] {
+        label {
+            .input-label-error();
+        }
+        // tiek definēts atseviški .checkbox un .radio. zemāk
+    }
+
+    // Description and error text
+    .form-field-description-error();
+}
+
+.checkbox {
+    span {
+        &:before {
+            .border-sm();
+        }
+
+        svg {
+            width: @size040;
+            height: @size040;
+        }
+    }
+    // Checkbox vizuālais state
+    &:not(:is([data-state="error"])) {
         span {
             &:before {
                 border: 1px solid hsl(var(--color-900));
@@ -1404,9 +1464,6 @@ body {
         }
     }
     &[data-state="error"] {
-        label {
-            .input-label-error();
-        }
         span {
             &:before {
                 border: 1px solid hsl(var(--color-error));
@@ -1423,9 +1480,55 @@ body {
             }
         }
     }
+}
 
-    // Description and error text
-    .form-field-description-error();
+.radio {
+    span {
+        &:before {
+            .border-round();
+        }
+
+        svg {
+            width: @size040;
+            height: @size040;
+        }
+    }
+    // Radio vizuālais state
+    &:not(:is([data-state="error"])) {
+        span {
+            &:before {
+                border: 1px solid hsl(var(--color-900));
+            }
+            &:has(input:focus) {
+                &:before {
+                    border: 2px solid hsl(var(--color-900));
+                }
+            }
+
+            &:has(input:checked) {
+                &:before {
+                    //background-color: hsl(var(--color-900));
+                }
+            }
+        }
+    }
+    &[data-state="error"] {
+        span {
+            &:before {
+                border: 1px solid hsl(var(--color-error));
+            }
+            &:has(input:focus) {
+                &:before {
+                    border: 2px solid hsl(var(--color-error));
+                }
+            }
+            &:has(input:checked) {
+                &:before {
+                    //background-color: hsl(var(--color-error));
+                }
+            }
+        }
+    }
 }
 
 .table {
