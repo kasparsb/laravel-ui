@@ -6,11 +6,13 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Illuminate\Http\Request;
+use Kasparsb\Ui\Traits\Menuable;
 use Kasparsb\Ui\ComponentWithError;
 use Kasparsb\Ui\ComponentWithRequestOldValue;
 
 class FieldIncrement extends Component
 {
+    use Menuable;
     use ComponentWithError;
     use ComponentWithRequestOldValue;
 
@@ -34,18 +36,39 @@ class FieldIncrement extends Component
         // No šī ņems vērtību, kura tika iepostēta
         public ?Request $request=null,
 
-        public $menu = '',
-        public $menuShow = '',
-        public $menuHide = null, // null nozīmē, ka nav uzsetots. Var padot arī empty string vai boolean
-        public $menuResetForm = false,
-        public $menuPositionAt = 'parent:.field-increment',
-
         public $min = 0,
         public $max = null,
         public $step = 1,
         public $format = 'number', // number, time
         public $padLeft = null,
         public $padLeftLength = null,
+
+        public $menu = '',
+        public $menuShow = 'onclick',
+        public $menuFocus=false, // ko iefokusēt, kad menu atveras. Default pats menu | firstFocusable | querySelector
+        /**
+         * Tukšs string nozīmē, ka vajag slēpt automātiski
+         * onclick.outside
+         * onfocusout
+         * boolean false nozīmē, ka nevajag automātiski slēpt
+         *     explicitly ar menuHide="{menuName}" tiks aizvērts
+         */
+        public $menuHide = null,
+        public $menuResetForm = false,
+
+        /**
+         * Custom position coordinates
+         * *Skatīties DropdownMenu aprakstu par to kā veidojas koordinātes
+         */
+        public $menuPositionX = false,
+        public $menuPositionY = false,
+        public $menuPositionDir = null,
+        public $menuPositionXOffset = false,
+        public $menuPositionYOffset = false,
+        // Elements pret kuru pozicionēt ir pati poga
+        public $menuPositionAt = 'parent:.field-increment',
+        // Dir tiek ņemts no Dropdown defaults
+        public $menuPositionAtDir = 'left bottom',
     )
     {
         if (!$this->setOldValue()) {
@@ -68,6 +91,8 @@ class FieldIncrement extends Component
         }
 
         $this->setError();
+
+        $this->setMenuDefaults();
     }
 
     public function render(): View|Closure|string

@@ -31,7 +31,7 @@ class Button extends Component
          * boolean false nozīmē, ka nevajag automātiski slēpt
          *     explicitly ar menuHide="{menuName}" tiks aizvērts
          */
-        public $menuHide = '',
+        public $menuHide = null,
         public $menuResetForm = false,
 
         /**

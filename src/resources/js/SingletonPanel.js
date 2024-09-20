@@ -205,9 +205,25 @@ export default {
     /**
      * Show single instance panel
      */
-    open(contentEl, {onContentElRemove, onOpen, positionEl, positionElDir, x, y, dir, xOffset, yOffset} = {}) {
+    open(contentEl, {
+        /**
+         * Kādā scenārijā vērt ciet menu
+         * ja false, tad netiek vērts ciet
+         **/
+        hide,
+        onContentElRemove,
+        onOpen,
+        positionEl,
+        positionElDir,
+        x,
+        y,
+        dir,
+        xOffset,
+        yOffset
+    } = {}) {
 
         let panelIndex = panelsStack.push({
+            hide: hide,
             contentEl: contentEl,
             onContentElRemoveCb: onContentElRemove,
             closeTimeout: 0,
@@ -254,17 +270,40 @@ export default {
         }
     },
 
+    closeAllAboveIndex(panelIndex) {
+        panelIndex = parseInt(panelIndex, 10)
+        closeByIndex(panelIndex + 1);
+    },
+
     /**
      * Close all panels stack
      */
     closeAll() {
+
         if (panelsStack.length == 0) {
             return;
         }
 
-        // First panel
-        let panel = panelsStack.find(() => true);
-        closeByIndex(panel.panelIndex)
+        /**
+         * Atrodam pēdējo panel, kuru nevar aizvērt
+         *
+         * sāks aizvērt visu no tā panel, kuri ir virs
+         * panel, kuru nevar aizvērt
+         */
+        let indexOfPanelToClose = null;
+        for (let i = panelsStack.length-1; i >= 0; i--) {
+
+            // Atrasts panel, kuru nevar aizvērt
+            if (!panelsStack[i].hide) {
+                break;
+            }
+
+            indexOfPanelToClose = i;
+        }
+
+        if (indexOfPanelToClose !== null) {
+            closeByIndex(indexOfPanelToClose)
+        }
     },
 
     hasChild(panelIndex) {

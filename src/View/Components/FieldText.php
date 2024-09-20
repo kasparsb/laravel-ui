@@ -6,10 +6,10 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Illuminate\Http\Request;
+use Kasparsb\Ui\Traits\Menuable;
 use Kasparsb\Ui\ComponentWithError;
 use Kasparsb\Ui\ComponentWithRequestOldValue;
 
-use Kasparsb\Ui\Traits\Menuable;
 
 class FieldText extends Component
 {
@@ -46,7 +46,7 @@ class FieldText extends Component
          * boolean false nozīmē, ka nevajag automātiski slēpt
          *     explicitly ar menuHide="{menuName}" tiks aizvērts
          */
-        public $menuHide = '',
+        public $menuHide = null,
         public $menuResetForm = false,
 
         /**

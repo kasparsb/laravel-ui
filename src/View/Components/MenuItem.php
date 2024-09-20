@@ -27,7 +27,7 @@ class MenuItem extends Component
          */
         public $menuPositionX = false,
         public $menuPositionY = false,
-        public $menuPositionDir = 'right bottom',
+        public $menuPositionDir = null,
         public $menuPositionXOffset = false,
         public $menuPositionYOffset = false,
         // Elements pret kuru pozicionēt ir pati poga

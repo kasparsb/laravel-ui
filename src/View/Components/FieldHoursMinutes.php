@@ -37,11 +37,6 @@ class FieldHoursMinutes extends Component
 
         // No šī ņems vērtību, kura tika iepostēta
         public ?Request $request=null,
-
-        public $menu = '',
-        public $menuShow = '',
-        public $menuHide = null, // null nozīmē, ka nav uzsetots. Var padot arī empty string vai boolean
-        public $menuResetForm = false,
     )
     {
         if (!$this->setOldValue()) {

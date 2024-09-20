@@ -44,8 +44,8 @@
             step="60"
             :value="$valueTime"
             menu="ui:timepicker-menu"
-            menuShow="onfocusin"
-            menuHide="onclick.outside"
+            menuPositionDir="right bottom"
+            menuPositionAtDir="left bottom"
             />
     </x-ui::h-stack>
 

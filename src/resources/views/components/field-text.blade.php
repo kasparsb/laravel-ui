@@ -27,11 +27,6 @@
         ]);
     }
 
-    // Ja tukšs string
-    if (is_string($menuFocus) && !$menuFocus) {
-        $menuFocus = true;
-    }
-
     $hasPrefix = isset($prefix) && !$prefix->isEmpty();
     $hasSufix = isset($sufix) && !$sufix->isEmpty();
 @endphp
@@ -50,7 +45,6 @@
 
     <div
         @if ($menu)
-
         data-dropdown-menu-trigger="{{ $menu }}"
         data-dropdown-menu-show="{{ $menuShow }}"
         data-dropdown-menu-target-el="child:input"
@@ -85,8 +79,8 @@
         @endif
 
         @endif
-        @if ($menuHide)
-            data-dropdown-menu-hide="{{ $menuHide }}"
+        @if (!(is_bool($menuHide) && !$menuHide))
+        data-dropdown-menu-hide="{{ $menuHide }}"
         @endif
         >
         @if (isset($prefix) && !$prefix->isEmpty())

@@ -728,8 +728,8 @@ body {
      * un tā lai tie ir responsīvi un pēc tam tiem
      * var mainīt platumu???
      */
-    width: 100%;
-    max-width: 240px;
+    // width: 100%;
+    // max-width: 240px;
 
 
 }
@@ -2721,7 +2721,11 @@ body:has(>.layout) {
     //background-color: hsl(var(--color-400) / .5);
 
     z-index: 100;
-    position: fixed;
+    /**
+     * fixed nevar likt, jo tad uz scroll stāvēs uz vietas
+     * jāliek absolute. Un vēl pozicionējot jāņem vērā scrollTop
+     */
+    position: absolute;
 
     top: 0;
     left: 0;

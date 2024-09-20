@@ -27,7 +27,7 @@
     <div
         data-dropdown-menu-trigger="field-date-calendar"
         data-dropdown-menu-show="onfocusin"
-        data-dropdown-menu-hide="onclick.outside"
+        data-dropdown-menu-hide=""
         {{--
             target-el vajadzīgs, lai menu atvēršanas click notiktu arī uz prefix un sufix
             bet tālāk jau vajag, lai tiek padots input elements, jo no tā tiks ņemta vērtība

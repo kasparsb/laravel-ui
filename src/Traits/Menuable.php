@@ -16,6 +16,10 @@ trait Menuable {
                 $this->menuFocus = true;
             }
 
+            if (is_null($this->menuHide)) {
+                $this->menuHide = '';
+            }
+
             if (is_string($this->menuHide)) {
                 if (!$this->menuHide) {
                     // Automātiskais aizvēršanas scenārijs
@@ -23,7 +27,13 @@ trait Menuable {
                 }
             }
         }
-        else {
+        /**
+         * Ja menuHide ir uzsetota not null vērtība
+         * menuHide darbojas arī bez norādīta menu
+         *   ja nav norādīts menu, tas nozīmē, ka tas menu
+         *   kurā ir poga
+         */
+        else if (!is_null($this->menuHide)) {
             // menu hide bez menu trigger, tas nozīme, ka poga varēs aizvērt menu by name
             if (is_string($this->menuHide)) {
                 // empty string nozīmē, ka vajag aizvērt container menu
