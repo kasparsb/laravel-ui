@@ -34,6 +34,7 @@
     </section>
 </div>
 
+@if (isset($bottomMenu))
 <div {{ $bottomMenu->attributes->class([
     'layout-bottom-menu',
 ]) }}>
@@ -41,6 +42,7 @@
 {{ $bottomMenu }}
 @endif
 </div>
+@endif
 
 <x-ui::dropdown-menu-blank
     class="layout-modal-menu w-full p-4 bg-c-background"
