@@ -9,8 +9,11 @@ use Illuminate\Http\Request;
 use Kasparsb\Ui\ComponentWithError;
 use Kasparsb\Ui\ComponentWithRequestOldValue;
 
+use Kasparsb\Ui\Traits\Menuable;
+
 class FieldText extends Component
 {
+    use Menuable;
     use ComponentWithError;
     use ComponentWithRequestOldValue;
 
@@ -36,7 +39,14 @@ class FieldText extends Component
         public $menu = '',
         public $menuShow = '',
         public $menuFocus=false, // ko iefokusēt, kad menu atveras. Default pats menu | firstFocusable | querySelector
-        public $menuHide = null, // null nozīmē, ka nav uzsetots. Var padot arī empty string vai boolean
+        /**
+         * Tukšs string nozīmē, ka vajag slēpt automātiski
+         * onclick.outside
+         * onfocusout
+         * boolean false nozīmē, ka nevajag automātiski slēpt
+         *     explicitly ar menuHide="{menuName}" tiks aizvērts
+         */
+        public $menuHide = '',
         public $menuResetForm = false,
 
         /**
@@ -45,7 +55,7 @@ class FieldText extends Component
          */
         public $menuPositionX = false,
         public $menuPositionY = false,
-        public $menuPositionDir = 'right bottom',
+        public $menuPositionDir = null,
         public $menuPositionXOffset = false,
         public $menuPositionYOffset = false,
         // Elements pret kuru pozicionēt ir pati poga
@@ -61,6 +71,8 @@ class FieldText extends Component
         }
 
         $this->setError();
+
+        $this->setMenuDefaults();
     }
 
     public function render(): View|Closure|string

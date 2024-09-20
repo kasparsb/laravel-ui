@@ -8,8 +8,12 @@ use Illuminate\View\Component;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Kasparsb\Ui\Traits\Menuable;
+
 class Button extends Component
 {
+    use Menuable;
+
     public $variant = 'primary';
 
     public function __construct(
@@ -51,41 +55,7 @@ class Button extends Component
         public $loading = false,
     )
     {
-        /**
-         * Ja nav uzlikts menuPositionDir: tas ir nav norādīts kur jānovieto Dropdown menu
-         * tad novietojumu uzliekam vadoties pēc menuPositionAtDir: tas ir pēc padotā
-         * button stūra pret kuru pozicionēt menu
-         * uzliekam arī menuPositionYOffset
-         */
-        if (!$this->menuPositionDir) {
-            switch ($this->menuPositionAtDir) {
-                case 'left bottom':
-                    $this->menuPositionDir = 'right bottom';
-                    break;
-                case 'right bottom':
-                    $this->menuPositionDir = 'left bottom';
-                    break;
-                case 'left top':
-                    $this->menuPositionDir = 'right top';
-                    break;
-                case 'right top':
-                    $this->menuPositionDir = 'left top';
-                    break;
-            }
-        }
-
-        if ($this->menuPositionYOffset === false) {
-            switch ($this->menuPositionAtDir) {
-                case 'left bottom':
-                case 'right bottom':
-                    $this->menuPositionYOffset = 4;
-                    break;
-                case 'left top':
-                case 'right top':
-                    $this->menuPositionYOffset = -4;
-                    break;
-            }
-        }
+        $this->setMenuDefaults();
     }
 
     public function render(): View|Closure|string
