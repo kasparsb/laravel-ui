@@ -185,20 +185,20 @@ function close(panel) {
 
 function closeByIndex(panelIndex) {
     /**
-     * Liek timeout, lai izpildās nākošajā tick
-     * ja tiek aizvērts uz click, tad nepaspēs nostrādāt
-     * šeit uzliktais click.outside
-     * sanāks situācija, kad click.outside saņems ev.target
-     * kurš jau ir izņemts no panel
+     * Šo nevar likt setTimeout,
+     * jo tad uz jauna menu atvēršanu no esoša menu
+     * sākumā nostrādā closeAllByIndex (visus virs menu)
+     * un tad open. Bet tā kā šeit ir setTimeout, tad
+     * open atvērs un šis uzreiz aizvērs
      */
-    setTimeout(() => {
-        // visus sākot ar pirmo atrasto aizveram
-        panelsStack.slice(panelIndex).forEach(panel => {
-            close(panel)
-        })
-        // atstājam visus līdz pirmajam atrastajam
-        panelsStack.splice(panelIndex);
-    }, 1)
+
+    // visus sākot ar pirmo atrasto aizveram
+    panelsStack.slice(panelIndex).forEach(panel => {
+        close(panel)
+    })
+
+    // atstājam visus līdz pirmajam atrastajam
+    panelsStack.splice(panelIndex);
 }
 
 export default {
