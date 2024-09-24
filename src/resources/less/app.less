@@ -1198,7 +1198,6 @@ body {
      * jāizmanto ši klase
      *
      * Lielākoties to nevajag, ja liek rindā (h-stack), tad
-     * uzliek v-center un visi lauki būs vienā līnijā
      */
     &.h-input {
         height: @size090;
@@ -2721,10 +2720,10 @@ body:has(>.layout) {
     //background-color: hsl(var(--color-400) / .5);
 
     z-index: 100;
-    /**
-     * fixed nevar likt, jo tad uz scroll stāvēs uz vietas
-     * jāliek absolute. Un vēl pozicionējot jāņem vērā scrollTop
-     */
+     /**
+      * fixed nevar likt, jo tad uz scroll stāvēs uz vietas
+      * jāliek absolute. Un vēl pozicionējot jāņem vērā scrollTop
+      */
     position: absolute;
 
     top: 0;
@@ -2875,10 +2874,21 @@ body:has(>.layout) {
         }
     }
 
-    // Ja nav failu, tad nerādām files container el
+
+    /**
+     * TODO uz safari šitas gļuko
+     * it kā darbojas, bet tikai, ja samazina, palielina pārlūku pāris reizes
+     * display none nenotīrās, ja ieliek elementu dinamiski ar js
+     * vajag speciāli otru case, kad ir ievietoti faili un tad atjaunot display:block
+     */
     &:not(:has([data-r="files"] .file-upload-single-file)) {
         [data-r="files"] {
             display: none;
+        }
+    }
+    &:has([data-r="files"] .file-upload-single-file) {
+        [data-r="files"] {
+            display: block;
         }
     }
 
