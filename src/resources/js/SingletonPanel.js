@@ -239,10 +239,6 @@ export default {
         removeContentEl(panelIndex);
         replaceContent(containers[panelIndex], contentEl);
 
-        if (onOpen) {
-            onOpen(contentEl, panelIndex)
-        }
-
         // Ja nav timeout, tad var nepaspēt nolasīt content el dimensions
         setTimeout(() => {
             positionByEl(
@@ -259,6 +255,20 @@ export default {
 
             // Padaram redzamu
             containers[panelIndex].hidden = false;
+
+
+            /**
+             * Pārcēlu open callback šeit, lai tiešām ir tad, kad
+             * menu ir atvērts.
+             * Bija problēma, ka onOpen uzlika mouseover|out eventus uz menu
+             * un tie nostrādāja, jo menu uz mirkli bija visā ekrāna platumā
+             * un kursors tieši bija virs menu
+             * Kad nopozicionējas, tad menu jau vairs nav zem kursors
+             * Tagad eventi uzliekas, kad menu jau ir nopozicionēts
+             */
+            if (onOpen) {
+                onOpen(contentEl, panelIndex)
+            }
         })
 
         return panelIndex
