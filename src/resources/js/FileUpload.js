@@ -109,10 +109,13 @@ function outputSelectedFiles(fileUploadEl) {
 
         append(fileUploadEl.files, fileEl);
 
-        startFileUpload(fileEl, file, {
-            uploadLink: fileUploadEl.dataset.link,
-            valueField: fileUploadEl.dataset.valueField,
-        })
+        setTimeout(() => {
+            startFileUpload(fileEl, file, {
+                uploadLink: fileUploadEl.dataset.link,
+                valueField: fileUploadEl.dataset.valueField,
+            })
+        }, 400)
+
     }
 
     // Tikko faili salikti noņemam state=empty
