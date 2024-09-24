@@ -4,7 +4,8 @@
 ])
 <div {{ $attributes->class([
     'card' => true,
-    'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class'))
+    'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class')),
+    'bw-1' => !$helpers->hasAnyBorderWidthClass($attributes->get('class')),
 ]) }} >
     @if (isset($header) || isset($title) || isset($titleDescription) || isset($headerAside))
     <div class="card-header">

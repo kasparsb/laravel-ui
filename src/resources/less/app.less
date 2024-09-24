@@ -43,6 +43,7 @@
 @import 'border-width';
 @import 'border-style';
 @import 'colors';
+@import 'hidden';
 
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: button;
@@ -691,8 +692,8 @@ body {
 
         svg {
             pointer-events: none;
-            width: @size040;
-            height: @size040;
+            width: @size050;
+            height: @size050;
             color: hsl(var(--color-muted));
             &[data-defautl-calendar-icon] {
                 color: hsl(var(--color-800));
@@ -1102,15 +1103,16 @@ body {
 
 .card {
     .border-lg();
-    border-width: 1px;
     border-style: solid;
 
     // krāsu uzliks ar css klasēm b-c-200, lai to var override
     //border-color: hsl(var(--color-200));
 
-    padding: @size060;
+    &:not(.bw-0) {
+        padding: @size060;
 
-    .shadow();
+        .shadow();
+    }
 
     &.has-bg {
         background-color: hsl(var(--color-background));
