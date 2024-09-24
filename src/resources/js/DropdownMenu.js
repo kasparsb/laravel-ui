@@ -449,16 +449,23 @@ function closeAllInactive() {
 
 export default {
     init() {
+
+
+
+
+
         /**
          * Open
          */
         // Click triggeri, kuri atvērs menu
         click('[data-dropdown-menu-trigger]', (ev, triggerEl) => {
+
+            //console.log('-    OP click [data-dropdown-menu-trigger]', triggerEl.dataset.dropdownMenuShow);
+
             if ('dropdownMenuWasKeydownEnter' in triggerEl.dataset) {
                 delete triggerEl.dataset.dropdownMenuWasKeydownEnter;
                 return
             }
-
             switch (triggerEl.dataset.dropdownMenuShow) {
                 case 'onclick':
                 case 'onfocusin':
@@ -473,25 +480,30 @@ export default {
          * {menu_name} - aizvērs named menu
          */
         click('[data-dropdown-menu-hide]', (ev, buttonEl) => {
-            let menuEl;
 
-            if (buttonEl.dataset.dropdownMenuHide == '_container') {
-                menuEl = findDropdownMenuByChild(buttonEl);
-                if (menuEl) {
+            //console.log('-    CL click [data-dropdown-menu-hide] tikai, ja _container');
 
-                    // Atrkārtoti iefokusējam triggerEl
-                    if (menuOpenTriggers[menuEl.dataset.dropdownMenuName]) {
-                        menuOpenTriggers[menuEl.dataset.dropdownMenuName].focus();
-                    }
+            if (buttonEl.dataset.dropdownMenuHide != '_container') {
+                return;
+            }
 
-                    SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex)
+            let menuEl = findDropdownMenuByChild(buttonEl);
+            if (menuEl) {
+
+                // Atrkārtoti iefokusējam triggerEl
+                if (menuOpenTriggers[menuEl.dataset.dropdownMenuName]) {
+                    menuOpenTriggers[menuEl.dataset.dropdownMenuName].focus();
                 }
+
+                SingletonPanel.close(menuEl.dataset.dropdownMenuPanelIndex)
             }
         })
 
         // Focusout uz trigger el
         // ---- CLOSE menu
         on('focusout', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
+
+            //console.log('-    CL focusout [data-dropdown-menu-trigger]');
 
             // Ignorējam focusout
             if ('dropdownIgnoreFocusout' in triggerEl.dataset) {
@@ -521,6 +533,9 @@ export default {
             }
         })
         on('focusin', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
+
+            //console.log('-    NA focusin [data-dropdown-menu-trigger]');
+
             // Tikai, ja uzlikts menuShow="onfocusin"
             if (triggerEl.dataset.dropdownMenuShow == 'onfocusin') {
                 /**
@@ -534,6 +549,9 @@ export default {
         })
 
         on('keydown', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
+
+            //console.log('-    keydown [data-dropdown-menu-trigger]');
+
             switch (ev.key) {
                 case 'Enter':
                     // Lai nav form submit
@@ -551,36 +569,11 @@ export default {
             }
         })
 
-
-        /**
-         * Lai apietu focusout, kad tas notiek uz menuEl open trigger click
-         * Click notiek vēlāk nekā focusout. Uz focusout menu jau būs aizvērts, bet uz click atkal atvērts
-         * notiek flicker
-         * mousedown piefiskē, kurš triggerEl, tas bija un uzliek pazīmi. Vispārējs mouseup notīra pazīmi
-         */
-        let mousedownTriggerEl;
-        on('mousedown', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onclick"]', (ev, triggerEl) => {
-            // Liekam pazīmi, ka notiek click uz open trigger un tagad is mousedown fāze
-            triggerEl.dataset.dropdownMenuIsMousedown = '';
-            mousedownTriggerEl = triggerEl;
-        });
-        // Vispārējs mouseup. Reaģēja tikai, ja bija mousedown uz triggerEl
-        on('mouseup', () => {
-            if (mousedownTriggerEl) {
-                // Notīrām menu hide timeout
-                let menuEl = findDropdown(mousedownTriggerEl);
-                if (menuEl) {
-                    clearTimeout(focusoutTimeout[menuEl.dataset.dropdownMenuName]);
-                }
-
-                // Notīrām pazīmi, ka bija mousedown
-                delete mousedownTriggerEl.dataset.dropdownMenuIsMousedown;
-                mousedownTriggerEl = undefined
-            }
-        });
-
         // Esc uz Menu
         on('keydown', '[data-dropdown-menu-name]', (ev, menuEl) => {
+
+            //console.log('-    CL keydown [data-dropdown-menu-name]');
+
             switch (ev.key) {
                 case 'Escape':
                     // Ja event notika uz open trigger, tad skip
@@ -606,6 +599,9 @@ export default {
          */
         // ---- CLOSE menu
         on('keydown', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
+
+            //console.log('-    CL keydown [data-dropdown-menu-trigger]');
+
             let menuEl;
             switch (ev.key) {
                 case 'Escape':
@@ -635,6 +631,9 @@ export default {
         // Focusout uz menu
         // ---- CLOSE menu
         on('focusout', '[data-dropdown-menu-name]', (ev, menuEl) => {
+
+            //console.log('-    CL focusout [data-dropdown-menu-name]');
+
             if ('dropdownMenuFocusTrap' in ev.target.dataset) {
                 return;
             }
@@ -664,6 +663,9 @@ export default {
             })(menuEl), closeDealyMs)
         })
         on('focusin', '[data-dropdown-menu-name]', (ev, menuEl) => {
+
+            //console.log('-    focusin [data-dropdown-menu-name]');
+
             if ('dropdownMenuFocusTrap' in ev.target.dataset) {
                 return;
             }
@@ -673,6 +675,39 @@ export default {
             menuEl.dataset.dropdownMenuIsActive = '';
         })
 
+        /**
+         * Lai apietu focusout, kad tas notiek uz menuEl open trigger click
+         * Click notiek vēlāk nekā focusout. Uz focusout menu jau būs aizvērts, bet uz click atkal atvērts
+         * notiek flicker
+         * mousedown piefiskē, kurš triggerEl, tas bija un uzliek pazīmi. Vispārējs mouseup notīra pazīmi
+         */
+        let mousedownTriggerEl;
+        on('mousedown', '[data-dropdown-menu-trigger][data-dropdown-menu-show="onclick"]', (ev, triggerEl) => {
+
+            //console.log('-    mousedown [data-dropdown-menu-trigger][data-dropdown-menu-show="onclick"]');
+
+            // Liekam pazīmi, ka notiek click uz open trigger un tagad is mousedown fāze
+            triggerEl.dataset.dropdownMenuIsMousedown = '';
+            mousedownTriggerEl = triggerEl;
+        });
+        // Vispārējs mouseup. Reaģēja tikai, ja bija mousedown uz triggerEl
+        on('mouseup', () => {
+
+            //console.log('-    mouseup html');
+
+            if (mousedownTriggerEl) {
+                // Notīrām menu hide timeout
+                let menuEl = findDropdown(mousedownTriggerEl);
+                if (menuEl) {
+                    clearTimeout(focusoutTimeout[menuEl.dataset.dropdownMenuName]);
+                }
+
+                // Notīrām pazīmi, ka bija mousedown
+                delete mousedownTriggerEl.dataset.dropdownMenuIsMousedown;
+                mousedownTriggerEl = undefined
+            }
+        });
+
 
         /**
          * Fokuss trap dos zināt, ka ir sasniegts pēdējais elements menu
@@ -681,6 +716,9 @@ export default {
          */
         let focusCycle = true;
         on('focusin', '[data-dropdown-menu-name] [data-dropdown-menu-focus-trap]', (ev, focusTrapEl) => {
+
+            //console.log('-    CL focusin [data-dropdown-menu-name] [data-dropdown-menu-focus-trap]');
+
             let menuEl = findDropdownMenuByChild(focusTrapEl);
             clearTimeout(focusoutTimeout[menuEl.dataset.dropdownMenuName]);
 
@@ -703,6 +741,8 @@ export default {
         onMouseOverOut('[data-dropdown-menu-trigger][data-dropdown-menu-show="onhover"]', {
             mouseover(ev, triggerEl) {
 
+                //console.log('-    OP mouseover [data-dropdown-menu-trigger][data-dropdown-menu-show="onhover"]');
+
                 let menuEl = findDropdown(triggerEl);
                 if (menuEl) {
                     clearTimeout(menuMouseOutTimeout[menuEl.dataset.dropdownMenuName]);
@@ -720,6 +760,9 @@ export default {
          */
         onMouseOverOut('[data-dropdown-menu-trigger][data-dropdown-menu-hide="onmouseout"]', {
             mouseover(ev, triggerEl) {
+
+                //console.log('-    mouseover [data-dropdown-menu-trigger][data-dropdown-menu-hide="onmouseout"]');
+
                 if (!('dropdownMenuOpen' in triggerEl.dataset)) {
                     return
                 }
@@ -736,6 +779,9 @@ export default {
                 }
             },
             mouseout(ev, triggerEl) {
+
+                //console.log('-    CL mouseout [data-dropdown-menu-trigger][data-dropdown-menu-hide="onmouseout"]');
+
                 /**
                  * Ja dažādiem triggerEl ir viens un tas pats menuEl (by name)
                  * tad uz tā otrā triggerEl mouseout nostrādās menu slēpšana
@@ -766,6 +812,9 @@ export default {
         // ---- CLOSE menu
         menuMouseEvents = {
             mouseout(menuEl) {
+
+                //console.log('-    CL mouseout PANEL');
+
                 if (menuEl.dataset.dropdownMenuHide != 'onmouseout') {
                     return;
                 }
@@ -780,6 +829,9 @@ export default {
                 })(menuEl), 500)
             },
             mouseover(menuEl) {
+
+                //console.log('-    mouseover PANEL');
+
                 clearTimeout(menuMouseOutTimeout[menuEl.dataset.dropdownMenuName]);
                 menuEl.dataset.dropdownMenuIsActive = '';
             }
@@ -792,6 +844,9 @@ export default {
         // Menu item click
         // ---- CLOSE menu
         on('click', '[data-dropdown-menu-name] .menu-item', (ev, menuItemEl) => {
+
+            //console.log('-    CL click [data-dropdown-menu-name] .menu-item');
+
             let menuEl = findDropdownMenuByChild(menuItemEl)
             if (menuEl) {
                 let triggerEl = menuOpenTriggers[menuEl.dataset.dropdownMenuName];
@@ -824,12 +879,14 @@ export default {
         // ---- CLOSE menu
         on('mousedown', 'html', (ev) => {
 
+            //console.log('-    CL mousedown html');
+
             // Ja nav atvērtu panels, tad neko nedarām
             if (SingletonPanel.getStack().length == 0) {
                 return;
             }
 
-            // Click ir menu elementā, skip
+            // Click ir menu elementā
             if (parent(ev.target, '[data-dropdown-menu-name]')) {
 
                 let menuEl = findDropdownMenuByChild(ev.target);
