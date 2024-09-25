@@ -1916,6 +1916,25 @@ body {
         padding-top: @size010;
         padding-bottom: @size010;
     }
+
+    /**
+     * Menu item stilojums
+     */
+    // Fonta krāsa
+    &.menu-item-color {
+        >.menu-item {
+            .menu-item-idle-color();
+            .menu-item-active-color();
+        }
+    }
+
+    // Background
+    &.menu-item-background {
+        >.menu-item {
+            .menu-item-idle-backgorund();
+            .menu-item-active-backgorund();
+        }
+    }
 }
 
 .nav-menu-vertical {
