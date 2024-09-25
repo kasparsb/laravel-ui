@@ -16,10 +16,12 @@
     {{ $attributesForContainer->class([
         'form-field',
         'field-date',
+        'input-value-preview',
         'has-prefix',
         'has-sufix' => $hasSufix,
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
+    tabindex="0"
     >
     @if ($label)
         <label>{{ $label }}</label>
@@ -46,10 +48,13 @@
                 <use xlink:href="#ui-icon-calendar"></use>
             </svg>
         @endif
+
+        <div data-input-value-preview-placeholder></div>
+
         <input
         {{ $attributesForInputField }}
             autocomplete="off"
-            type="text"
+            type="hidden"
             @if ($name)
             name="{{ $name }}"
             @endif

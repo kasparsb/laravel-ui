@@ -14,6 +14,8 @@ import getJsonFromHtml from './helpers/getJsonFromHtml';
 import clampDate from './calendar/clampDate';
 import formatDate from './calendar/formatDate';
 import DropdownMenu from './DropdownMenu';
+import InputValuePreview from './InputValuePreview';
+import stringToDate from './calendar/stringToDate';
 
 let calendar;
 let container;
@@ -72,10 +74,8 @@ function dateSelected(date) {
         return;
     }
 
-    activeField.value = formatDate.ymd(date);
-    dispatchEvent(activeField, 'change')
-
-    activeField.focus();
+    setDate(activeField, date);
+    setPlaceholder(activeField, date);
 
     DropdownMenu.close(activeMenu);
 }
@@ -114,19 +114,27 @@ function validateFieldValue(inputFieldEl) {
         return
     }
 
-    let clampedValue = formatDate.ymd(
-        clampDate(
-            inputFieldEl.value,
-            inputFieldEl.dataset.minDate,
-            inputFieldEl.dataset.maxDate
-        )
+    let clampedDate = clampDate(
+        inputFieldEl.value,
+        inputFieldEl.dataset.minDate,
+        inputFieldEl.dataset.maxDate
     );
 
-    if (clampedValue != inputFieldEl.value) {
-        inputFieldEl.value = clampedValue;
-
-        dispatchEvent(inputFieldEl, 'change')
+    if (formatDate.ymd(clampedDate) != inputFieldEl.value) {
+        setDate(inputFieldEl, clampedDate);
     }
+}
+
+function setDate(inputFieldEl, date) {
+    inputFieldEl.value = formatDate.ymd(date);
+    dispatchEvent(inputFieldEl, 'change')
+}
+function setPlaceholder(inputFieldEl, date) {
+    InputValuePreview.setPlaceholder(
+        inputFieldEl,
+        // Formatēta date value
+        formatDate.Mdy(date)
+    );
 }
 
 export default {
@@ -167,6 +175,8 @@ export default {
 
                 validateFieldValue(inputEl);
             })
+
+            setPlaceholder(fieldDateEl, stringToDate(inputEl.value))
         })
     }
 }
