@@ -630,13 +630,25 @@ body {
             .input-text-border();
             .input-text-border-color-shadow();
             .input-text-focus();
+
+            input,
+            textarea {
+                .input-text();
+            }
+
             &:has(input:focus),
             &:has(textarea:focus) {
                 .input-text-focused();
             }
-            input,
-            textarea {
-                .input-text();
+
+        }
+
+        &.input-value-preview {
+            &:active,
+            &:focus {
+                >div {
+                    .input-text-focused();
+                }
             }
         }
     }
@@ -646,6 +658,15 @@ body {
             &:has(input:focus),
             &:has(textarea:focus) {
                 border-color: transparent;
+            }
+        }
+
+        &.input-value-preview {
+            &:active,
+            &:focus {
+                >div {
+                    border-color: transparent;
+                }
             }
         }
     }
@@ -663,6 +684,15 @@ body {
                 .input-text-error();
             }
         }
+
+        &.input-value-preview {
+            &:active,
+            &:focus {
+                >div {
+                    .input-text-error-focused();
+                }
+            }
+        }
     }
     &.bw-0[data-state="error"] {
         >div {
@@ -670,6 +700,15 @@ body {
             &:has(input:focus),
             &:has(textarea:focus) {
                 border-color: transparent;
+            }
+        }
+
+        &.input-value-preview {
+            &:active,
+            &:focus {
+                >div {
+                    border-color: transparent;
+                }
             }
         }
     }
@@ -735,6 +774,53 @@ body {
 
 }
 
+/**
+ * Input lauks ir hidden, priekš vērtības ir placholder divs
+ * nav tieši editējams.
+ * Izmanto priekš field-date, select
+ */
+.input-value-preview {
+
+    .remove-tap-highlite();
+
+    >div {
+
+        position: relative;
+
+        input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: default;
+            // atstājam pointer event, lai nostrādā default dropdown menu eventi
+            //pointer-events: none;
+        }
+
+        [data-input-value-preview-placeholder] {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+
+            width: 100%;
+
+            .input-text();
+        }
+    }
+
+    // Vērtība nav norādīta. Šo kontrolē js
+    &[data-is-empty] {
+        [data-input-value-preview-placeholder] {
+            color: hsl(var(--color-400))
+        }
+    }
+}
+
 .field-textarea {
     // Textare wrapper div ir jāaizņem viss augstums, ja pieejams
 }
@@ -766,6 +852,14 @@ body {
     }
 }
 
+.field-date {
+    cursor: pointer;
+}
+
+.field-select {
+    cursor: pointer;
+}
+
 .field-hours-minutes {
     .form-field-label();
     .form-field-layout();
@@ -785,45 +879,6 @@ body {
 
         gap: @size020;
         .gaps-sizes();
-    }
-}
-
-.field-select {
-    >div {
-
-        position: relative;
-
-        input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: default;
-            // atstājam pointer event, lai nostrādā default dropdown menu eventi
-            //pointer-events: none;
-        }
-
-        [data-field-select-placeholder] {
-            flex: 1;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            white-space: nowrap;
-            overflow: hidden;
-
-            width: 100%;
-
-            .input-text();
-        }
-    }
-
-    // Vērtība nav norādīta. Šo kontrolē js
-    &[data-is-empty] {
-        [data-field-select-placeholder] {
-            color: hsl(var(--color-400))
-        }
     }
 }
 
