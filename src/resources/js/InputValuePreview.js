@@ -6,19 +6,19 @@ import {q, parent} from 'dom-helpers';
 function setPlaceholder(childOrfieldEl, placeholder) {
 
     let fieldEl = parent(childOrfieldEl, '.input-value-preview')
-
     let isEmpty = placeholder.trim() ? false : true;
-    let placeholderHTML = placeholder;
 
     // vajadzīgs priekš css, lai var nostilot tukšo vērtību (placeholder)
     if (isEmpty) {
         fieldEl.dataset.isEmpty = '';
+
+        placeholder = fieldEl.dataset.placeholder;
     }
     else {
         delete fieldEl.dataset.isEmpty
     }
 
-    q(fieldEl, '[data-input-value-preview-placeholder]').innerHTML = placeholderHTML;
+    q(fieldEl, '[data-input-value-preview-placeholder]').innerHTML = placeholder;
 }
 
 export default {

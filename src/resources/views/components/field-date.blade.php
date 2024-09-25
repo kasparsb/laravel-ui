@@ -20,6 +20,10 @@
         'has-prefix',
         'has-sufix' => $hasSufix,
     ]) }}
+    @if (!$value)
+    data-is-empty
+    @endif
+    data-placeholder="{{ $placeholder }}"
     data-state="{{ $hasError ? 'error' : '' }}"
     tabindex="0"
     >
@@ -49,7 +53,7 @@
             </svg>
         @endif
 
-        <div data-input-value-preview-placeholder></div>
+        <div data-input-value-preview-placeholder>{{ $value ? '' : $placeholder }}</div>
 
         <input
         {{ $attributesForInputField }}

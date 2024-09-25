@@ -133,7 +133,7 @@ function setPlaceholder(inputFieldEl, date) {
     InputValuePreview.setPlaceholder(
         inputFieldEl,
         // Formatēta date value
-        formatDate.Mdy(date)
+        date ? formatDate.Mdy(date) : ''
     );
 }
 
@@ -176,7 +176,7 @@ export default {
                 validateFieldValue(inputEl);
             })
 
-            setPlaceholder(fieldDateEl, stringToDate(inputEl.value))
+            setPlaceholder(fieldDateEl, inputEl.value ? stringToDate(inputEl.value) : null)
         })
     }
 }
