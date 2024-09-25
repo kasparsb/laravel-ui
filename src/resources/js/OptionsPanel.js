@@ -110,7 +110,7 @@ function filterOptionsByValue(optionsEl, value) {
  * openTriggerEl būs tas, kurā ielikt izvēlēto options
  */
 function findFieldValue(optionsEl) {
-    return DropdownMenu.getOpenTriggerByChild(optionsEl);
+    return q(DropdownMenu.getOpenTriggerByChild(optionsEl), 'input');
 }
 
 function setFieldValue(optionsEl, selectedOptionEl) {

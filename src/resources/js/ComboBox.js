@@ -1,32 +1,17 @@
 import {qa, q, parent, on, dispatchEvent} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
 import DropdownMenu from './DropdownMenu';
+import InputValuePreview from './InputValuePreview';
 
 /**
  * Field select uzliek izvēlēto option vizuālo vērtību
  */
 function setOption(fieldEl, checkedOptionEl) {
-    let isEmpty = true;
-    let placeholderHTML = fieldEl.dataset.placeholder;
-    let value = '';
-
-    if (checkedOptionEl) {
-        if (checkedOptionEl.dataset.value) {
-            value = checkedOptionEl.dataset.value;
-            placeholderHTML = checkedOptionEl.innerHTML;
-            isEmpty = false;
-        }
-    }
-
-    // vajadzīgs priekš css, lai var nostilot tukšo vērtību (placeholder)
-    if (isEmpty) {
-        fieldEl.dataset.isEmpty = '';
-    }
-    else {
-        delete fieldEl.dataset.isEmpty
-    }
-
-    q(fieldEl, '[data-field-select-placeholder]').innerHTML = placeholderHTML;
+    InputValuePreview.setPlaceholder(
+        fieldEl,
+        // Formatēta date value
+        (checkedOptionEl && checkedOptionEl.dataset.value) ? checkedOptionEl.innerHTML : ''
+    );
 }
 
 /**
@@ -34,7 +19,7 @@ function setOption(fieldEl, checkedOptionEl) {
  * ja nav, tad meklējam options elementu, kurš ir ielikts fieldEl
  */
 function getOptionsEl(fieldEl) {
-    return q(DropdownMenu.getMenuEl(q(fieldEl, 'input')), '.options');
+    return q(DropdownMenu.getMenuEl(q(fieldEl, '[data-dropdown-menu-trigger]')), '.options');
 }
 
 function handleFieldValueChange(fieldEl) {
@@ -56,17 +41,23 @@ export default {
             handleFieldValueChange(parent(inputEl, '.field-select'));
         })
 
-        on('keydown', '.field-select input', (ev, inputEl) => {
+        on('keydown', '.field-select', (ev, fieldEl) => {
+            let inputEl;
             switch (ev.key) {
                 case 'ArrowDown':
                 case 'ArrowRight':
-                    let nextOption = OptionsPanel.nextOption(getOptionsEl(parent(inputEl, '.field-select')));
+                    let nextOption = OptionsPanel.nextOption(getOptionsEl(parent(fieldEl, '.field-select')));
+                    inputEl = q(fieldEl, 'input');
+
                     inputEl.value = nextOption ? nextOption.dataset.value : ''
                     dispatchEvent(inputEl, 'change');
+
                     break;
                 case 'ArrowUp':
                 case 'ArrowLeft':
-                    let prevOption = OptionsPanel.prevOption(getOptionsEl(parent(inputEl, '.field-select')));
+                    let prevOption = OptionsPanel.prevOption(getOptionsEl(parent(fieldEl, '.field-select')));
+                    inputEl = q(fieldEl, 'input');
+
                     inputEl.value = prevOption ? prevOption.dataset.value : ''
                     dispatchEvent(inputEl, 'change');
             }
