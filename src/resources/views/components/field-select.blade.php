@@ -37,7 +37,7 @@
             {{-- Pasaka, ka dropdownMenuEl ir nākošais siblings --}}
             data-dropdown-menu-trigger="dom.nextSibling"
             data-dropdown-menu-show="onclick"
-            data-dropdown-menu-hide=""
+            data-dropdown-menu-hide="_auto"
             {{--
             data-dropdown-menu-position-at nozīmē, ka pozicionēsies pret button elementu
             var arī likt query selector
