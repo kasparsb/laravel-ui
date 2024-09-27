@@ -102,6 +102,8 @@ function filterOptionsByValue(optionsEl, value) {
             optionEl.hidden = false;
         }
     })
+
+    updateState(optionsEl);
 }
 
 /**
@@ -140,9 +142,22 @@ function cleanUp(optionsEl, fieldValue) {
     check(findOptionByValue(optionsEl, fieldValue.value));
 }
 
+function updateState(optionsEl) {
+    // Pārbaudām vai ir options
+    optionsEl.dataset.state = '';
+    if (!q(optionsEl, '[data-options-list-option]:not([hidden])')) {
+        optionsEl.dataset.state = 'empty';
+    }
+}
+
 export default {
     init() {
 
+
+        // Uzliek sākuma state
+        qa('.options').forEach(optionsEl => {
+            updateState(optionsEl);
+        });
 
         /**
          * TODO Dropdown uz atvēršanu focus first input
@@ -158,7 +173,6 @@ export default {
                 cleanUp(q(menuEl, '.options'), fieldValue)
             }
         })
-
 
         on('keydown', '.options', (ev, optionsEl) => {
 

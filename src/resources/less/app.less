@@ -1226,12 +1226,37 @@ body {
     align-items: center;
 
     >.top {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
         >svg {
             color: hsl(var(--color-300));
-            width: 5rem;
-            height: 5rem;
+            width: @size200;
+            height: @size200;
         }
         .mb-6();
+    }
+
+    /**
+     * Mazs. Tā kā ir problēma overraidot ar css klasēm svg platumu/augstumu
+     * jo šeit ir pārāk specifisks un klases vienkārši tiek ignorētas
+     * tad ir manuāli uztaisīts small size
+     * TODO ir jāsataisa, lai visu var ar klsām overraidot. Vai zemāk visas modifiers klases jānoceļ
+     * vai kaut kas cits jāizdomā
+     */
+    &.small {
+        &:not(:is(.bw-0)) {
+            padding: @size060 @size030;
+        }
+
+        >.top {
+            >svg {
+                width: @size050;
+                height:@size050;
+            }
+            .mb-2();
+        }
     }
 
     >.bottom {
@@ -2056,6 +2081,18 @@ body {
                     content: '\00a0'
                 }
             }
+        }
+    }
+
+    // Empty state
+    &[data-state="empty"] {
+        >[role="list"] {
+            display: none;
+        }
+    }
+    &:not([data-state="empty"]) {
+        [data-field-select-empty-state] {
+            display: none;
         }
     }
 }

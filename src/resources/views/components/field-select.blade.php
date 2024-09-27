@@ -23,6 +23,9 @@
     @endif
     data-placeholder="{{ $placeholder }}"
     data-state="{{ $hasError ? 'error' : '' }}"
+    @if ($sourceUrl)
+    data-source-url="{{ $sourceUrl }}"
+    @endif
     data-is-container=""
     tabindex="0"
     >
@@ -79,7 +82,7 @@
             <x-ui::field-text
                 placeholder="{{ $searchPlaceholder }}"
                 data-field-select-search-field
-                class="no-border search-field">
+                class="bw-0 search-field">
                 <x-slot:prefix>
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <use xlink:href="#ui-icon-search"></use>
@@ -110,6 +113,13 @@
                     @endforeach
                 @endif
             </div>
+
+            <x-ui::empty-state class="bw-0 small py-5 px-1.5" data-field-select-empty-state>
+                <x-slot:icon>
+                    <x-tabler-playlist-x />
+                </x-slot:icon>
+                <x-slot:title class="t-3.5 fw-r">No records</x-slot:title>
+            </x-ui::empty-state>
         </div>
     </x-ui::dropdown-menu>
 
