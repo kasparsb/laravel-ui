@@ -15,7 +15,11 @@ function fieldTime(fieldEl) {
 }
 
 function fieldValue(fieldEl) {
-    return q(fieldEl, 'input[type=hidden]')
+    /**
+     * Jāņem tieši tas input, kurš domāts priekš date-time vērtības
+     * jo var būt arī citi input laiki. Piemēram, field-date
+     */
+    return q(fieldEl, '[data-field-date-time-input]')
 }
 
 function updateValue(fieldEl, value) {

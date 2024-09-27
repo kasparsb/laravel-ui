@@ -53,6 +53,7 @@
     <p data-role="error">{{ $errorMessage }}</p>
 
     <input
+        data-field-date-time-input
         {{ $attributesForInputField }}
         type="hidden"
         name="{{ $name }}"
