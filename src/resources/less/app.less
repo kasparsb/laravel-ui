@@ -821,8 +821,17 @@ body {
     }
 }
 
-.field-textarea {
-    // Textare wrapper div ir jāaizņem viss augstums, ja pieejams
+/**
+ * uz iphone, lai nav zoom in, kad notiek field edit dēļ mazā fonta izmēra
+ */
+.form-field.field-text,
+.form-field.field-textarea {
+    >div {
+        input,
+        textarea {
+            .t-4();
+        }
+    }
 }
 
 .field-increment {
@@ -2170,6 +2179,9 @@ body {
  * LAYOUT
  */
 body:has(>.layout) {
+    @media (max-width: @smWidth) {
+        padding-bottom: 200px;
+    }
     // tablet, desktop
     @media (min-width: @smWidth) {
         background-color: hsl(var(--color-100));
