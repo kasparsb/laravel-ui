@@ -45,6 +45,9 @@ trait Menuable {
                 $this->menuHide = '_container';
             }
         }
+        else if (is_null($this->menuHide)) {
+            $this->menuHide = false;
+        }
 
         /**
          * Ja nav uzlikts menuPositionDir: tas ir nav norādīts kur jānovieto Dropdown menu
