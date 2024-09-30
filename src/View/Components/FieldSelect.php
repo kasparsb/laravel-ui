@@ -34,6 +34,8 @@ class FieldSelect extends Component
         public $disabled=false,
         public $searchable=false,
         public $searchPlaceholder='Search...',
+        // Url no kura tiks ielādēti ieraksti
+        public $sourceUrl=false,
 
         public $errorMessage='',
         public $hasError=false,
