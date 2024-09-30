@@ -9,6 +9,14 @@
     });
 
     $hasPrefix = isset($prefix) && !$prefix->isEmpty();
+
+    /**
+     * Vai ir value preview slots
+     * Value ir programmiska vērtība un vizuālā vērtības var atšķirties
+     * tāpēc to, lai varētu norādīt priekš sourceUrl laukiem, tad vajag
+     * sagatavot vizuālo vērtību iepriekš
+     */
+    $hasValueVisual = isset($valueVisual) && !$valueVisual->isEmpty();
 @endphp
 <div
     {{ $attributesForContainer->class([
@@ -23,10 +31,10 @@
     @endif
     data-placeholder="{{ $placeholder }}"
     data-state="{{ $hasError ? 'error' : '' }}"
-    @if ($sourceUrl)
-    data-source-url="{{ $sourceUrl }}"
-    @endif
     data-is-container=""
+    @if ($hasValueVisual)
+    data-has-visual-value=""
+    @endif
     tabindex="0"
     >
 
@@ -56,7 +64,13 @@
             {{ $prefix }}
         @endif
 
-        <div data-input-value-preview-placeholder>{{ $value ? '' : $placeholder }}</div>
+        <div data-input-value-preview-placeholder>
+            @if ($hasValueVisual)
+            {{ $valueVisual }}
+            @else
+            {{ $value ? '' : $placeholder }}
+            @endif
+        </div>
 
         <input
             autocomplete="off"
@@ -76,8 +90,13 @@
         @endif
     </div>
 
-    <x-ui::dropdown-menu>
-        <div class="options">
+    <x-ui::dropdown-menu data-field-select-options-menu>
+        <div
+            class="options"
+            @if ($sourceUrl)
+            data-source-url="{{ $sourceUrl }}"
+            @endif
+            >
             @if ($searchable)
             <x-ui::field-text
                 placeholder="{{ $searchPlaceholder }}"
@@ -113,6 +132,8 @@
                     @endforeach
                 @endif
             </div>
+
+            <div data-field-select-pagination></div>
 
             <x-ui::empty-state class="bw-0 small py-5 px-1.5" data-field-select-empty-state>
                 <x-slot:icon>

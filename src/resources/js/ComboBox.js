@@ -65,6 +65,10 @@ export default {
 
         // Field start values ielikšana
         qa('.field-select').forEach(fieldEl => {
+            // Ja ir manuāli uzstādīts value visual vērtība, tad skip
+            if ('hasVisualValue' in fieldEl.dataset) {
+                return
+            }
             handleFieldValueChange(fieldEl);
         });
     }

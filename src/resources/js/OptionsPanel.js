@@ -2,7 +2,9 @@ import {
     q, qa,
     next, prev,
     parent, on, clickp,
-    dispatchEvent
+    dispatchEvent,
+    get,
+    replaceContent, append
 } from 'dom-helpers';
 import fuzzysearch from './helpers/fuzzysearch';
 import DropdownMenu from './DropdownMenu';
@@ -89,21 +91,27 @@ function prevOption(optionsEl) {
 function filterOptionsByValue(optionsEl, value) {
     value = value.toLowerCase();
 
-    qa(optionsEl, '[data-options-list-option]').forEach(optionEl => {
-        if (value) {
-            if (fuzzysearch(value, optionEl.innerText.toLowerCase())) {
-                optionEl.hidden = false;
+    // Ja ir sourceUrl
+    if (optionsEl.dataset.sourceUrl) {
+        loadOptionsFromUrl(optionsEl, optionsEl.dataset.sourceUrl, value);
+    }
+    else {
+        qa(optionsEl, '[data-options-list-option]').forEach(optionEl => {
+            if (value) {
+                if (fuzzysearch(value, optionEl.innerText.toLowerCase())) {
+                    optionEl.hidden = false;
+                }
+                else {
+                    optionEl.hidden = true;
+                }
             }
             else {
-                optionEl.hidden = true;
+                optionEl.hidden = false;
             }
-        }
-        else {
-            optionEl.hidden = false;
-        }
-    })
+        })
 
-    updateState(optionsEl);
+        updateState(optionsEl);
+    }
 }
 
 /**
@@ -150,6 +158,49 @@ function updateState(optionsEl) {
     }
 }
 
+let counter = 0;
+function loadOptionsFromUrl(optionsEl, url, searchQuery) {
+
+    let params = {};
+    if (searchQuery) {
+        params.q = searchQuery;
+    }
+
+    get(url, params)
+        .then(html => {
+
+            q(optionsEl, '[role="list"]').innerHTML = html;
+            // Meklējam vai ir pieejams pagination tieši priekš options list
+            let paginationEl = q(optionsEl, '[role="list"] [data-options-pagination]');
+
+            if (paginationEl) {
+                optionsEl.dataset.hasPagination = '';
+                let paginationContainerEl = q(optionsEl, '[data-field-select-pagination]');
+
+                /**
+                 * Pagination bija fokusā. Kad notiek paginationEl replace, tad fokuss pazūd
+                 * un Dropdown menu gadījumā dropdown menu aizveras ciet, jo notika focusout
+                 * !šitas it kaut kāds fakaps, kuru īsti nesaprotu kā parezi būtu risināt
+                 * būtu, labi, ja fokusā paliku tas pats page, kurš bija pirms replace
+                 *
+                 * Pateiksim DropdownMenu, lai ignorē focusout
+                 */
+
+                // Vai esam DropdownMenu
+                let menuEl = DropdownMenu.getByChild(optionsEl);
+                if (menuEl) {
+                    DropdownMenu.ignoreFocusoutOnce(menuEl);
+                }
+
+                replaceContent(paginationContainerEl, paginationEl)
+            }
+            else {
+                delete optionsEl.dataset.hasPagination;
+            }
+            updateState(optionsEl);
+        })
+}
+
 export default {
     init() {
 
@@ -169,9 +220,47 @@ export default {
          * apstrādājam tikai Options menu
          */
         DropdownMenu.onCloseAny((menuEl, fieldValue) => {
-            if ('fieldSelectOptionsMenu' in menuEl.dataset) {
-                cleanUp(q(menuEl, '.options'), fieldValue)
+            /**
+             * TODO pārtaisīt Dropdown menu, lai visi properties ir
+             * uz contentEl nevis floating-container
+             * Tāpēc šeit ir quickfix, lai iegūtu īsto menu el
+             */
+            let contentEl = q(menuEl, '[data-dropdown-menu-content-el]');
+            if (!('fieldSelectOptionsMenu' in contentEl.dataset)) {
+                return;
             }
+
+            /**
+             * Varbūt cleanup vajag izsaukt nevis uzreiz kad aizver, bet nedaudz vēlāk
+             * Piemēram ir garš lapojam saraksts, kurā izvēlies vērtību. Saproti, ka
+             * nepareizā, atver un saraksts ir notīrīts. Vajag atkal skrollēt un meklēt
+             */
+            cleanUp(q(contentEl, '.options'), fieldValue)
+        })
+
+        DropdownMenu.onOpenAny((menuEl, fieldValue) => {
+            /**
+             * TODO pārtaisīt Dropdown menu, lai visi properties ir
+             * uz contentEl nevis floating-container
+             * Tāpēc šeit ir quickfix, lai iegūtu īsto menu el
+             */
+            let contentEl = q(menuEl, '[data-dropdown-menu-content-el]');
+            if (!('fieldSelectOptionsMenu' in contentEl.dataset)) {
+                return;
+            }
+
+            let optionsEl = q(contentEl, '.options');
+            if (!optionsEl.dataset.sourceUrl) {
+                return
+            }
+
+            if ('optionsIsLoaded' in optionsEl.dataset) {
+                return
+            }
+
+            // Load items from sourceUrl
+            optionsEl.dataset.optionsIsLoaded = '';
+            loadOptionsFromUrl(optionsEl, optionsEl.dataset.sourceUrl);
         })
 
         on('keydown', '.options', (ev, optionsEl) => {
@@ -201,6 +290,15 @@ export default {
 
         // Filtrēšana
         on('keyup', '.options [data-field-select-search-field]', (ev, inputEl) => {
+
+            // Ignorējam
+            switch (ev.key) {
+                case 'Enter':
+                case 'ArrowUp':
+                case 'ArrowDown':
+                    return;
+            }
+
             let optionsEl = parent(inputEl, '.options');
             if ('ignoreFirstKeyup' in optionsEl.dataset) {
                 delete optionsEl.dataset.ignoreFirstKeyup;
@@ -208,6 +306,12 @@ export default {
             else {
                 filterOptionsByValue(optionsEl, inputEl.value)
             }
+        })
+
+        // Pagination
+        clickp('.options [data-field-select-pagination] a', (ev, linkEl) => {
+            let optionsEl = parent(linkEl, '.options');
+            loadOptionsFromUrl(optionsEl, linkEl.href);
         })
 
         // Options click

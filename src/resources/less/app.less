@@ -2070,7 +2070,10 @@ body {
 
         >.menu-item {
 
-            .fw-r();
+            // idle state
+            .menu-item-idle-backgorund();
+            // active, selected state
+            .menu-item-active-backgorund();
 
             &:active,
             &:focus,
@@ -2093,6 +2096,11 @@ body {
         }
     }
 
+    >[data-field-select-pagination] {
+        padding: @size020;
+        border-top: 1px solid hsl(var(--color-200));
+    }
+
     // Empty state
     &[data-state="empty"] {
         >[role="list"] {
@@ -2101,6 +2109,13 @@ body {
     }
     &:not([data-state="empty"]) {
         [data-field-select-empty-state] {
+            display: none;
+        }
+    }
+
+    // Pagination
+    &:not([data-has-pagination]) {
+        [data-field-select-pagination] {
             display: none;
         }
     }
