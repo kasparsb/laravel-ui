@@ -40,12 +40,27 @@ class Pagination extends Component
         public $hideNav = false,
         public $hideNavPrev = false,
         public $hideNavNext = false,
+
+        // Vaic current lapai uzlikt savādāku izskatu nekā citām lapā
+        public $pageVariant = 'ghost',
+        public $currentPageVariant = 'outline',
+        public $dotsVariant = 'ghost',
+        public $navVariant = 'ghost',
+        public $navPrevVariant = '',
+        public $navNextVariant = '',
     )
     {
 
         if ($this->hideNav) {
             $this->hideNavPrev = true;
             $this->hideNavNext = true;
+        }
+
+        if (!$this->navPrevVariant) {
+            $this->navPrevVariant = $this->navVariant;
+        }
+        if (!$this->navNextVariant) {
+            $this->navNextVariant = $this->navVariant;
         }
 
         /**
