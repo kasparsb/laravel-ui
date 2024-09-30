@@ -44,6 +44,22 @@ export default {
         on('keydown', '.field-select', (ev, fieldEl) => {
             let inputEl;
             switch (ev.key) {
+                case 'Home':
+                    let firstOption = OptionsPanel.firstOption(getOptionsEl(parent(fieldEl, '.field-select')));
+                    inputEl = q(fieldEl, 'input');
+
+                    inputEl.value = firstOption ? firstOption.dataset.value : ''
+                    dispatchEvent(inputEl, 'change');
+
+                    break;
+                case 'End':
+                    let lastOption = OptionsPanel.lastOption(getOptionsEl(parent(fieldEl, '.field-select')));
+                    inputEl = q(fieldEl, 'input');
+
+                    inputEl.value = lastOption ? lastOption.dataset.value : ''
+                    dispatchEvent(inputEl, 'change');
+
+                    break;
                 case 'ArrowDown':
                 case 'ArrowRight':
                     let nextOption = OptionsPanel.nextOption(getOptionsEl(parent(fieldEl, '.field-select')));

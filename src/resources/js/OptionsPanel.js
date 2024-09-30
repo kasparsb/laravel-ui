@@ -4,7 +4,7 @@ import {
     parent, on, clickp,
     dispatchEvent,
     get,
-    replaceContent, append
+    replaceContent, getOffset, getOuterDimensions
 } from 'dom-helpers';
 import fuzzysearch from './helpers/fuzzysearch';
 import DropdownMenu from './DropdownMenu';
@@ -39,6 +39,40 @@ function findOptionByValue(optionsEl, value) {
     return q(optionsEl, `[data-options-list-option][data-value="${value}"]`);
 }
 
+function firstOption(optionsEl) {
+    let currentOptionEl = getChecked(optionsEl, {ignoreHiden: true});
+
+    let options = qa(optionsEl, '[data-options-list-option]:not([hidden])');
+    if (options.length > 0) {
+        let firstEl = options[0];
+
+        if (currentOptionEl) {
+            uncheck(currentOptionEl);
+        }
+
+        let r = check(firstEl);
+        scrollCheckedIntoViewport(optionsEl);
+        return r;
+    }
+}
+
+function lastOption(optionsEl) {
+    let currentOptionEl = getChecked(optionsEl, {ignoreHiden: true});
+
+    let options = qa(optionsEl, '[data-options-list-option]:not([hidden])');
+    if (options.length > 0) {
+        let lastEl = options[options.length - 1];
+
+        if (currentOptionEl) {
+            uncheck(currentOptionEl);
+        }
+
+        let r = check(lastEl);
+        scrollCheckedIntoViewport(optionsEl);
+        return r;
+    }
+}
+
 function nextOption(optionsEl) {
     let currentOptionEl = getChecked(optionsEl, {ignoreHiden: true});
 
@@ -53,14 +87,18 @@ function nextOption(optionsEl) {
         let nextEl = next(currentOptionEl, '[data-options-list-option]:not([hidden])');
         if (nextEl) {
             uncheck(currentOptionEl);
-            return check(nextEl);
+            let r = check(nextEl);
+            scrollCheckedIntoViewport(optionsEl);
+            return r;
         }
         else {
             return currentOptionEl;
         }
     }
     else {
-        return check(first(qa(optionsEl, '[data-options-list-option]:not([hidden])')), optionsEl);
+        let r = check(first(qa(optionsEl, '[data-options-list-option]:not([hidden])')), optionsEl);
+        scrollCheckedIntoViewport(optionsEl);
+        return r;
     }
 }
 
@@ -77,14 +115,47 @@ function prevOption(optionsEl) {
         let prevEl = prev(currentOptionEl, '[data-options-list-option]:not([hidden])');
         if (prevEl) {
             uncheck(currentOptionEl);
-            return check(prevEl);
+            let r = check(prevEl);
+            scrollCheckedIntoViewport(optionsEl);
+            return r;
         }
         else {
             return currentOptionEl;
         }
     }
     else {
-        return check(last(qa(optionsEl, '[data-options-list-option]:not([hidden])')));
+        let r = check(last(qa(optionsEl, '[data-options-list-option]:not([hidden])')));
+        scrollCheckedIntoViewport(optionsEl);
+        return r;
+    }
+}
+
+function scrollCheckedIntoViewport(optionsEl) {
+    let checkedEl = getChecked(optionsEl, {ignoreHiden: true});
+    if (!checkedEl) {
+        return;
+    }
+
+    let padding = 4;
+
+    let listEl = q(optionsEl, '[role=list]');
+
+    let checkedElOffset = getOffset(checkedEl);
+    let checkedElDimensions = getOuterDimensions(checkedEl);
+
+    let listElOffset = getOffset(listEl);
+    let listElDimensions = getOuterDimensions(listEl);
+
+    let checkedElTopOffset = checkedElOffset.top - listElOffset.top;
+    let checkedElBottomOffset = checkedElTopOffset + checkedElDimensions.height;
+
+    // Iet ārpuse viewport uz augšu
+    if (checkedElTopOffset < 0) {
+        listEl.scrollTo(0, listEl.scrollTop + checkedElTopOffset - padding);
+    }
+    // Iet ārpuse viewport uz leju
+    else if (checkedElBottomOffset > listElDimensions.height) {
+        listEl.scrollTo(0, listEl.scrollTop + (checkedElBottomOffset - listElDimensions.height) + padding);
     }
 }
 
@@ -109,6 +180,8 @@ function filterOptionsByValue(optionsEl, value) {
                 optionEl.hidden = false;
             }
         })
+        // Set scroll top uz 0
+        q(optionsEl, '[role=list]').scrollTo(0, 0);
 
         updateState(optionsEl);
     }
@@ -170,6 +243,9 @@ function loadOptionsFromUrl(optionsEl, url, searchQuery) {
         .then(html => {
 
             q(optionsEl, '[role="list"]').innerHTML = html;
+            // Set scroll top uz 0
+            q(optionsEl, '[role=list]').scrollTo(0, 0);
+
             // Meklējam vai ir pieejams pagination tieši priekš options list
             let paginationEl = q(optionsEl, '[role="list"] [data-options-pagination]');
 
@@ -273,14 +349,24 @@ export default {
                     }
 
                     break;
+                case 'Home':
+                    ev.preventDefault();
+                    setFieldValue(optionsEl, firstOption(optionsEl))
+
+                    break;
+                case 'End':
+                    ev.preventDefault();
+                    setFieldValue(optionsEl, lastOption(optionsEl))
+
+                    break;
                 case 'ArrowDown':
-                case 'ArrowRight':
+                //case 'ArrowRight':
                     ev.preventDefault();
                     setFieldValue(optionsEl, nextOption(optionsEl))
 
                     break;
                 case 'ArrowUp':
-                case 'ArrowLeft':
+                //case 'ArrowLeft':
                     ev.preventDefault();
                     setFieldValue(optionsEl, prevOption(optionsEl))
 
@@ -289,6 +375,7 @@ export default {
         });
 
         // Filtrēšana
+        let prevSearchFieldValue = '';
         on('keyup', '.options [data-field-select-search-field]', (ev, inputEl) => {
 
             // Ignorējam
@@ -304,7 +391,10 @@ export default {
                 delete optionsEl.dataset.ignoreFirstKeyup;
             }
             else {
-                filterOptionsByValue(optionsEl, inputEl.value)
+                if (prevSearchFieldValue != inputEl.value) {
+                    prevSearchFieldValue = inputEl.value;
+                    filterOptionsByValue(optionsEl, inputEl.value)
+                }
             }
         })
 
@@ -339,5 +429,13 @@ export default {
 
     prevOption(optionsEl) {
         return prevOption(optionsEl);
+    },
+
+    firstOption(optionsEl) {
+        return firstOption(optionsEl);
+    },
+
+    lastOption(optionsEl) {
+        return lastOption(optionsEl);
     }
 }
