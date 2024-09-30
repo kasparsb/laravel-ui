@@ -455,8 +455,12 @@ body {
     .t-3\.5();
     .fw-m();
     .border-md();
-    .transition-color();
     cursor: pointer;
+
+    // Iespēja atcelt color transition
+    &:not([data-disable-color-transition]) {
+        .transition-color();
+    }
 
     height: @size090;
     padding-left: @size040;
@@ -548,6 +552,13 @@ body {
             }
         }
 
+    }
+
+    // focus outline. Tikai kad ar keyboard fokusē. Ja ar peli, tad nav
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    &:focus-visible {
+        outline-color: hsl(var(--color-400));
     }
 }
 
@@ -759,9 +770,6 @@ body {
     &:is(.field-textarea) {
         .form-field-textarea-layout();
     }
-
-
-
 
     /**
      * TODO kādā veidā visus lauku dabūt vienādā platumā
