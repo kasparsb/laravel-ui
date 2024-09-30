@@ -15,12 +15,13 @@
     @endif
     data-position-at-dir="{{ $positionAtDir }}"
 
-    tabIndex="{{ $tabIndex }}"
+    tabindex="{{ $tabIndex }}"
     @if ($hidden)
     hidden
     @endif
     >
     <div
+        data-dropdown-menu-content-el
         {{ $attributes }}
         >
         {{ $slot }}
