@@ -640,6 +640,11 @@ export default {
         on('focusout', '[data-dropdown-menu-name]', (ev, menuEl) => {
 
             //console.log('-    CL focusout [data-dropdown-menu-name]');
+            // Ignorējam focusout
+            if ('dropdownIgnoreFocusoutOnce' in menuEl.dataset) {
+                delete menuEl.dataset.dropdownIgnoreFocusoutOnce;
+                return;
+            }
 
             if ('dropdownMenuFocusTrap' in ev.target.dataset) {
                 return;
@@ -981,6 +986,10 @@ export default {
         if (dropdownMenuEl && isDropdownMenuOpen(dropdownMenuEl)) {
             return menuOpenTriggers[dropdownMenuEl.dataset.dropdownMenuName];
         }
+    },
+
+    ignoreFocusoutOnce(menuEl) {
+        menuEl.dataset.dropdownIgnoreFocusoutOnce = '';
     },
 
     onOpen(menuName, cb) {
