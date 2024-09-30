@@ -35,7 +35,6 @@
     @if ($hasValueVisual)
     data-has-visual-value=""
     @endif
-    tabindex="0"
     >
 
     @if ($label)
@@ -43,6 +42,8 @@
     @endif
 
     <div
+        tabindex="0"
+
         {{-- Pasaka, ka dropdownMenuEl ir nākošais siblings --}}
         data-dropdown-menu-trigger="dom.nextSibling"
         data-dropdown-menu-show="onclick"
