@@ -53,6 +53,8 @@ class Button extends Component
         public ?Model $model = null,
         public $disabled = false,
         public $loading = false,
+
+        public $tabindex = true,
     )
     {
         if (!$this->variant) {

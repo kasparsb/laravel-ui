@@ -115,6 +115,10 @@
     data-loading="{{ $loading === true ? 'loading' : $loading }}"
     @endif
 
+    @if (is_bool($tabindex) && !$tabindex)
+    tabindex="-1"
+    @endif
+
     {{
         $attributes
             ->class([
