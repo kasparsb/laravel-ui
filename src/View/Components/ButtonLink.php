@@ -4,5 +4,5 @@ namespace Kasparsb\Ui\View\Components;
 
 class ButtonLink extends Button
 {
-    public $variant='link';
+    public $variantOverride = 'link';
 }

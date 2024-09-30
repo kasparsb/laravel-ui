@@ -14,9 +14,9 @@ class Button extends Component
 {
     use Menuable;
 
-    public $variant = 'primary';
 
     public function __construct(
+        public $variant = '',
         public $as = '', // link, delete, delete.tableRow, add.tableRow
         public $link = '', // link: priekš href, delete, dinamiskais, ja sākas ar "model:"
         public $redirect = '', // redirect url after delete
@@ -55,6 +55,9 @@ class Button extends Component
         public $loading = false,
     )
     {
+        if (!$this->variant) {
+            $this->variant = $this->variantOverride;
+        }
         $this->setMenuDefaults();
     }
 
