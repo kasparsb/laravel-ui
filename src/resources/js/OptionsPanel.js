@@ -268,7 +268,27 @@ function loadOptionsFromUrl(optionsEl, url, searchQuery) {
                     DropdownMenu.ignoreFocusoutOnce(menuEl);
                 }
 
+                /**
+                 * Vajag saprast, kurš no pagination linkiem ir fokusā,
+                 * lai var atjaunot fokusu tam pašam linkam
+                 * pēc tam, kad ir nomainīts paginationEl
+                 */
+                let lastPaginationButtonName;
+                if (document.activeElement && document.activeElement.dataset.paginationButtonName) {
+                    lastPaginationButtonName = document.activeElement.dataset.paginationButtonName;
+                }
+
                 replaceContent(paginationContainerEl, paginationEl)
+
+                // Atjaunojam fokusu
+                if (lastPaginationButtonName) {
+                    let newPaginationButtonEl = q(paginationEl, `[data-pagination-button-name=${lastPaginationButtonName}]`)
+                    if (newPaginationButtonEl) {
+                        newPaginationButtonEl.dataset.disableColorTransition = '';
+                        newPaginationButtonEl.focus();
+                        delete newPaginationButtonEl.dataset.disableColorTransition;
+                    }
+                }
             }
             else {
                 delete optionsEl.dataset.hasPagination;
@@ -343,13 +363,20 @@ export default {
 
             switch (ev.key) {
                 case 'Enter':
+                    /**
+                     * TODO saprast, kurā mirklī reaģēt uz Enter, lai aizvērtu options list
+                     */
+
+                    // Ja ir [data-options-list-option], tad vera ciet
+                    //DropdownMenu.close(DropdownMenu.getByChild(optionsEl))
+
                     // Ja ir search field, tad neveram ciet
-                    if (!('fieldSelectSearchField' in ev.target.dataset)) {
-                        DropdownMenu.close(DropdownMenu.getByChild(optionsEl))
-                    }
+                    // if (!('fieldSelectSearchField' in ev.target.dataset)) {
+                    //     DropdownMenu.close(DropdownMenu.getByChild(optionsEl))
+                    // }
 
                     break;
-                case 'Home':
+                case 'End':
                     ev.preventDefault();
                     setFieldValue(optionsEl, firstOption(optionsEl))
 
@@ -360,17 +387,36 @@ export default {
 
                     break;
                 case 'ArrowDown':
-                //case 'ArrowRight':
                     ev.preventDefault();
                     setFieldValue(optionsEl, nextOption(optionsEl))
 
                     break;
                 case 'ArrowUp':
-                //case 'ArrowLeft':
                     ev.preventDefault();
                     setFieldValue(optionsEl, prevOption(optionsEl))
 
                     break;
+            }
+
+            /**
+             * Novācam foksus no pagination pogas
+             */
+            switch (ev.key) {
+                case 'Home':
+                case 'End':
+                case 'ArrowDown':
+                case 'ArrowUp':
+                    if (document.activeElement) {
+                        /**
+                         * TODO tagad nevar iefokusēt .options, var tikai search field
+                         * varbūt, ka ir search field, tad to fokusēt
+                         * sanāk, ka tad, kad pāriet uz options list, tad no pagination
+                         * pazūd fokuss tas aiziet uz options kontrolēšanu (search + up down arrows)
+                         */
+                        // if (parent(document.activeElement, '[data-field-select-pagination]')) {
+                        //     optionsEl.focus();
+                        // }
+                    }
             }
         });
 
