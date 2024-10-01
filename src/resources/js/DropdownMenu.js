@@ -46,6 +46,11 @@ function findFirstFocusable(el) {
             continue;
         }
 
+        // Skip focus trap
+        if ('dropdownMenuFocusTrap' in candidates[i].dataset) {
+            continue;
+        }
+
         return candidates[i];
     }
 }
@@ -67,7 +72,8 @@ function focusMenu(menuEl, whatToFocus) {
     }
 
     if (!focusableEl) {
-        focusableEl = menuEl;
+        // Fokusējam contentEl
+        focusableEl = q(menuEl, '[data-dropdown-menu-content-el]');
     }
 
     focusableEl.focus();
@@ -607,7 +613,7 @@ export default {
         // ---- CLOSE menu
         on('keydown', '[data-dropdown-menu-trigger]', (ev, triggerEl) => {
 
-            //console.log('-    CL keydown [data-dropdown-menu-trigger]');
+            //console.log('-    CL keydown [data-dropdown-menu-trigger]', ev.key, triggerEl);
 
             let menuEl;
             switch (ev.key) {
@@ -640,6 +646,7 @@ export default {
         on('focusout', '[data-dropdown-menu-name]', (ev, menuEl) => {
 
             //console.log('-    CL focusout [data-dropdown-menu-name]');
+
             // Ignorējam focusout
             if ('dropdownIgnoreFocusoutOnce' in menuEl.dataset) {
                 delete menuEl.dataset.dropdownIgnoreFocusoutOnce;
@@ -736,7 +743,10 @@ export default {
 
             if (focusCycle) {
                 // Cycle
-                findFirstFocusable(menuEl).focus()
+                let firstFocusable = findFirstFocusable(menuEl);
+                if (firstFocusable) {
+                    firstFocusable.focus()
+                }
             }
             else {
                 // Atrkārtoti iefokusējam triggerEl
@@ -857,7 +867,6 @@ export default {
         // ---- CLOSE menu
         on('click', '[data-dropdown-menu-name] .menu-item', (ev, menuItemEl) => {
 
-            //console.log('-    CL click [data-dropdown-menu-name] .menu-item');
 
             let menuEl = findDropdownMenuByChild(menuItemEl)
             if (menuEl) {
@@ -908,6 +917,7 @@ export default {
                  * tas ir menu kurā notiek click neaizvērsies. Aizvērsies visi virs tā
                  * savukārt ja notiek click uz html, tad menuEl saņems focusout
                  */
+                //console.log('SingletonPanel.closeAllAboveIndex', menuEl.dataset.dropdownMenuPanelIndex);
                 SingletonPanel.closeAllAboveIndex(menuEl.dataset.dropdownMenuPanelIndex);
 
                 return;
@@ -1012,6 +1022,7 @@ export default {
         }
         onOpenListeners['__any__'].listen(cb);
     },
+
     onCloseAny(cb) {
         if (typeof onCloseListeners['__any__'] == 'undefined') {
             onCloseListeners['__any__'] = new Listeners();
