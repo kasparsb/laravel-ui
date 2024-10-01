@@ -15,16 +15,18 @@
     @endif
     data-position-at-dir="{{ $positionAtDir }}"
 
-    tabindex="{{ $tabIndex }}"
     @if ($hidden)
     hidden
     @endif
     >
     <div
+        @if (!(is_bool($tabIndex) && !$tabIndex))
+        tabindex="{{ $tabIndex }}"
+        @endif
         data-dropdown-menu-content-el
         {{ $attributes }}
         >
         {{ $slot }}
+        <span tabindex="0" data-dropdown-menu-focus-trap></span>
     </div>
-    <span tabindex="0" data-dropdown-menu-focus-trap></span>
 </div>

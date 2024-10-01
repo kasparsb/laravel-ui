@@ -234,6 +234,10 @@ function updateState(optionsEl) {
 let counter = 0;
 function loadOptionsFromUrl(optionsEl, url, searchQuery) {
 
+    if (!url) {
+        return;
+    }
+
     let params = {};
     if (searchQuery) {
         params.q = searchQuery;
@@ -359,40 +363,57 @@ export default {
             loadOptionsFromUrl(optionsEl, optionsEl.dataset.sourceUrl);
         })
 
+
         on('keydown', '.options', (ev, optionsEl) => {
 
             switch (ev.key) {
                 case 'Enter':
-                    /**
-                     * TODO saprast, kurā mirklī reaģēt uz Enter, lai aizvērtu options list
-                     */
-
-                    // Ja ir [data-options-list-option], tad vera ciet
-                    //DropdownMenu.close(DropdownMenu.getByChild(optionsEl))
 
                     // Ja ir search field, tad neveram ciet
-                    // if (!('fieldSelectSearchField' in ev.target.dataset)) {
-                    //     DropdownMenu.close(DropdownMenu.getByChild(optionsEl))
-                    // }
+                    if ('fieldSelectSearchField' in ev.target.dataset) {
+                        return;
+                    }
+
+                    // Ja ir [data-field-select-pagination] neveram ciet
+                    if (parent(ev.target, '[data-field-select-pagination]')) {
+                        return;
+                    }
+
+                    DropdownMenu.close(DropdownMenu.getByChild(optionsEl))
 
                     break;
-                case 'End':
+                /**
+                 * TODO jauca ar search field home un end
+                 */
+                case 'Home':
+                    if ('fieldSelectSearchField' in ev.target.dataset) {
+                        return;
+                    }
+
                     ev.preventDefault();
                     setFieldValue(optionsEl, firstOption(optionsEl))
 
                     break;
                 case 'End':
+                    if ('fieldSelectSearchField' in ev.target.dataset) {
+                        return;
+                    }
+
                     ev.preventDefault();
                     setFieldValue(optionsEl, lastOption(optionsEl))
 
                     break;
                 case 'ArrowDown':
                     ev.preventDefault();
+
+                    q(optionsEl, '[role=list]').focus();
                     setFieldValue(optionsEl, nextOption(optionsEl))
 
                     break;
                 case 'ArrowUp':
                     ev.preventDefault();
+
+                    q(optionsEl, '[role=list]').focus();
                     setFieldValue(optionsEl, prevOption(optionsEl))
 
                     break;

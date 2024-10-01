@@ -47,6 +47,12 @@ class DropdownMenu extends Component
         public $positionAtDir = 'right bottom',
 
         public $hidden = true,
+        /**
+         * -1 nozīmē, ka var iefokusēt, bet ar Tab nevar
+         * ja nebūs tabindex vispār, tad nevarēs vispār iefoksuēt
+         *
+         * Pēc noklusējuma liekam, ka iefokusēt var ar JS, bet nevar ar Tab
+         */
         public $tabIndex = -1,
 
         /**

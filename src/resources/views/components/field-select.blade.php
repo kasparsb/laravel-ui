@@ -91,11 +91,16 @@
         @endif
     </div>
 
-    <x-ui::dropdown-menu data-field-select-options-menu>
+    <x-ui::dropdown-menu data-field-select-options-menu :tabIndex="false">
         <div
             class="options"
             @if ($sourceUrl)
             data-source-url="{{ $sourceUrl }}"
+            @endif
+
+            {{-- Neliekam kā fokusējamu, ja ir search lauks, kurš darbosies kā pirmais fokusējamais --}}
+            @if (!$searchable)
+            tabindex="0"
             @endif
             >
             @if ($searchable)
@@ -111,7 +116,7 @@
             </x-ui::field-text>
             @endif
 
-            <div role="list">
+            <div role="list" tabindex="-1">
                 @if (isset($slot) && !$slot->isEmpty())
                     {{ $slot }}
                 @elseif (is_iterable($options))

@@ -2005,6 +2005,18 @@ body {
         // active, selected state
         .menu-item-active-backgorund();
     }
+
+    // Focus trap
+    position: relative;
+    >[data-dropdown-menu-focus-trap] {
+        position: absolute;
+        bottom: 0;
+        opacity: 0;
+        pointer-events: none;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
 }
 
 .nav-menu {
@@ -2056,7 +2068,6 @@ body {
 }
 
 .options {
-
     /**
      * TODO šis jāņem ārā, pašlaik temp workaround
      */
@@ -2832,18 +2843,6 @@ body:has(>.layout) {
     &[data-dropdown-menu-is-active] {
         //border-color: hsl(var(--color-red-400));
     }
-
-    // Focus trap
-    [data-dropdown-menu-focus-trap] {
-        position: absolute;
-        bottom: 0;
-        opacity: 0;
-        pointer-events: none;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-    }
-
 
     display: flex;
     flex-flow: column;

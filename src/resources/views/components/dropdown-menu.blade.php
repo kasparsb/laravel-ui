@@ -15,19 +15,21 @@
     @endif
     data-position-at-dir="{{ $positionAtDir }}"
 
-    tabindex="{{ $tabIndex }}"
     @if ($hidden)
     hidden
     @endif
     >
     <div
         data-dropdown-menu-content-el
+        @if (!(is_bool($tabIndex) && !$tabIndex))
+        tabindex="{{ $tabIndex }}"
+        @endif
         {{ $attributes->class([
             'dropdown-menu',
             'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class'))
         ]) }}
         >
         {{ $slot }}
+        <span tabindex="0" data-dropdown-menu-focus-trap></span>
     </div>
-    <span tabindex="0" data-dropdown-menu-focus-trap></span>
 </div>
