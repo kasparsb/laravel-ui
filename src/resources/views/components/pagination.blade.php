@@ -7,7 +7,9 @@
                 data-pagination-button-name="page-prev"
                 as="link"
                 class="icon"
-                disabled="true">
+                disabled="true"
+                :tabindex="false"
+                >
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#angle-left"></use>
                 </svg>
@@ -85,7 +87,9 @@
                 data-pagination-button-name="page-next"
                 as="link"
                 class="icon"
-                disabled="true">
+                disabled="true"
+                :tabindex="false"
+                >
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <use xlink:href="#angle-right"></use>
                 </svg>
