@@ -161,9 +161,6 @@ function removeContentEl(panelIndex) {
         return
     }
 
-    // novācam pazīmi, ka tas ir panel content el
-    delete contentEl.dataset.singletonpanelContentEl;
-
     if (!panelsStack[panelIndex].onContentElRemoveCb) {
         return
     }
@@ -232,9 +229,6 @@ export default {
         }) - 1;
         panelsStack[panelIndex].panelIndex = panelIndex;
 
-        // Pazīme, ka šis ir paneļa content elements
-        contentEl.dataset.singletonpanelContentEl = '';
-
         createContainer(panelIndex);
         removeContentEl(panelIndex);
         replaceContent(containers[panelIndex], contentEl);
@@ -289,7 +283,6 @@ export default {
      * Close all panels stack
      */
     closeAll() {
-
         if (panelsStack.length == 0) {
             return;
         }
