@@ -202,11 +202,6 @@ function setFieldValue(optionsEl, selectedOptionEl) {
     dispatchEvent(fieldValue, 'change');
 }
 
-function getFieldValue(optionsEl) {
-    let fieldValue = findFieldValue(optionsEl);
-    return fieldValue.value
-}
-
 function cleanUp(optionsEl, fieldValue) {
     let searchInputEl = q(optionsEl, '[data-field-select-search-field]');
     if (searchInputEl) {
@@ -220,7 +215,7 @@ function cleanUp(optionsEl, fieldValue) {
     })
 
     // check by field value
-    check(findOptionByValue(optionsEl, fieldValue.value));
+    check(findOptionByValue(optionsEl, q(fieldValue, 'input').value))
 }
 
 function updateState(optionsEl) {
