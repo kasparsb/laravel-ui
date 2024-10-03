@@ -10,6 +10,8 @@
 
     $hasPrefix = isset($prefix) && !$prefix->isEmpty();
 
+    $hasEmptyState = isset($emptyState) && !$emptyState->isEmpty();
+
     /**
      * Vai ir value preview slots
      * Value ir programmiska vērtība un vizuālā vērtības var atšķirties
@@ -141,12 +143,19 @@
 
             <div data-field-select-pagination></div>
 
-            <x-ui::empty-state class="bw-0 small py-5 px-1.5" data-field-select-empty-state>
-                <x-slot:icon>
-                    <x-tabler-playlist-x />
-                </x-slot:icon>
-                <x-slot:title class="t-3.5 fw-r">No records</x-slot:title>
-            </x-ui::empty-state>
+            <div data-field-select-empty-state>
+            @if ($hasEmptyState)
+                {{ $emptyState }}
+            @else
+                <x-ui::empty-state class="bw-0 small py-5 px-1.5">
+                    <x-slot:icon>
+                        <x-tabler-playlist-x />
+                    </x-slot:icon>
+                    <x-slot:title class="t-3.5 fw-r">No records</x-slot:title>
+                </x-ui::empty-state>
+            @endif
+            </div>
+
         </div>
     </x-ui::dropdown-menu>
 
