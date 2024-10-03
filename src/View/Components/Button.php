@@ -14,6 +14,7 @@ class Button extends Component
 {
     use Menuable;
 
+    public $variantOverride = 'primary';
 
     public function __construct(
         public $variant = '',
