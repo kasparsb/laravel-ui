@@ -364,6 +364,13 @@ export default {
             switch (ev.key) {
                 case 'Enter':
 
+                    /**
+                     * TODO jāpārtaisa, lai Enter events nāktu tieši no Option
+                     * tas nozīmē, ka vajag options taisīt fokusējamus
+                     * pašlaik tie nav fokusējami. Aktīvais un nākošais/prev tiek
+                     * noteikts pēc css klases
+                     */
+
                     // Ja ir search field, tad neveram ciet
                     if ('fieldSelectSearchField' in ev.target.dataset) {
                         return;
@@ -371,6 +378,11 @@ export default {
 
                     // Ja ir [data-field-select-pagination] neveram ciet
                     if (parent(ev.target, '[data-field-select-pagination]')) {
+                        return;
+                    }
+
+                    // Ja ir empty state elementā, tad skip
+                    if (parent(ev.target, '[data-field-select-empty-state]')) {
                         return;
                     }
 
