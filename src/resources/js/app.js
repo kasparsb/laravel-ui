@@ -11,7 +11,7 @@ import FileUpload from './FileUpload';
 import Tabs from './Tabs';
 import RadioButtons from './RadioButtons';
 import OptionsPanel from './OptionsPanel';
-import ComboBox from './ComboBox';
+import FieldSelect from './FieldSelect';
 import FieldIncrement from './FieldIncrement';
 import FieldHoursMinutes from './FieldHoursMinutes';
 import FieldDateTime from './FieldDateTime';
@@ -30,7 +30,7 @@ Table.init();
 FileUpload.init();
 Tabs.init();
 RadioButtons.init();
-ComboBox.init();
+FieldSelect.init();
 FieldIncrement.init();
 FieldHoursMinutes.init();
 FieldDateTime.init();
@@ -44,14 +44,13 @@ export {
     ButtonPost,
     ButtonAdd,
     DropdownMenu,
-    //FieldSelect,
+    FieldSelect,
     FieldDate,
     Calendar,
     Table,
     FileUpload,
     Tabs,
     RadioButtons,
-    ComboBox,
     FieldIncrement,
     FieldHoursMinutes,
     FieldDateTime,
@@ -66,14 +65,13 @@ export default {
     ButtonPost,
     ButtonAdd,
     DropdownMenu,
-    //FieldSelect,
+    FieldSelect,
     FieldDate,
     Calendar,
     Table,
     FileUpload,
     Tabs,
     RadioButtons,
-    ComboBox,
     FieldIncrement,
     FieldHoursMinutes,
     FieldDateTime,
