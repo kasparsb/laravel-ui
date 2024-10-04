@@ -236,7 +236,6 @@ function updateState(optionsEl) {
         state = 'empty';
     }
 
-    console.log('STATE', state);
     optionsEl.dataset.state = state;
 }
 
