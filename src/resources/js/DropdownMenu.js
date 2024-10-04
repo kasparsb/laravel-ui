@@ -585,7 +585,7 @@ export default {
         // Esc uz Menu
         on('keydown', '[data-dropdown-menu-name]', (ev, menuEl) => {
 
-            //console.log('-    CL keydown [data-dropdown-menu-name]');
+            //console.log('-    CL keydown [data-dropdown-menu-name]', ev.key);
 
             switch (ev.key) {
                 case 'Escape':
