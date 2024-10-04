@@ -15,6 +15,7 @@ import ComboBox from './ComboBox';
 import FieldIncrement from './FieldIncrement';
 import FieldHoursMinutes from './FieldHoursMinutes';
 import FieldDateTime from './FieldDateTime';
+import Form from './Form';
 
 Layout.init();
 OptionsPanel.init();
@@ -33,6 +34,7 @@ ComboBox.init();
 FieldIncrement.init();
 FieldHoursMinutes.init();
 FieldDateTime.init();
+Form.init();
 
 export {
     Layout,
@@ -53,6 +55,7 @@ export {
     FieldIncrement,
     FieldHoursMinutes,
     FieldDateTime,
+    Form,
 }
 
 export default {
@@ -74,4 +77,5 @@ export default {
     FieldIncrement,
     FieldHoursMinutes,
     FieldDateTime,
+    Form,
 }

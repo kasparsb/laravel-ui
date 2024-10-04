@@ -176,6 +176,10 @@ function getContentEl(panelIndex) {
 }
 
 function close(panel) {
+
+    console.log('PANEL CLOSE');
+    console.trace();
+
     containers[panel.panelIndex].hidden = true;
     removeContentEl(panel.panelIndex);
 }
