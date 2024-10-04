@@ -138,7 +138,7 @@ function scrollCheckedIntoViewport(optionsEl) {
 
     let padding = 4;
 
-    let listEl = q(optionsEl, '[role=list]');
+    let listEl = q(optionsEl, '[data-field-select-options-container]');
 
     let checkedElOffset = getOffset(checkedEl);
     let checkedElDimensions = getOuterDimensions(checkedEl);
@@ -151,12 +151,17 @@ function scrollCheckedIntoViewport(optionsEl) {
 
     // Iet ārpuse viewport uz augšu
     if (checkedElTopOffset < 0) {
-        listEl.scrollTo(0, listEl.scrollTop + checkedElTopOffset - padding);
+        scrollViewportTo(optionsEl, listEl.scrollTop + checkedElTopOffset - padding)
     }
     // Iet ārpuse viewport uz leju
     else if (checkedElBottomOffset > listElDimensions.height) {
-        listEl.scrollTo(0, listEl.scrollTop + (checkedElBottomOffset - listElDimensions.height) + padding);
+        scrollViewportTo(optionsEl, listEl.scrollTop + (checkedElBottomOffset - listElDimensions.height) + padding);
     }
+}
+
+function scrollViewportTo(optionsEl, top) {
+    let listEl = q(optionsEl, '[data-field-select-options-container]')
+    listEl.scrollTo(0, top);
 }
 
 function filterOptionsByValue(optionsEl, value) {
@@ -220,18 +225,34 @@ function cleanUp(optionsEl, fieldValue) {
 
 function updateState(optionsEl) {
     // Pārbaudām vai ir options
-    optionsEl.dataset.state = '';
-    if (!q(optionsEl, '[data-options-list-option]:not([hidden])')) {
-        optionsEl.dataset.state = 'empty';
+    let state = '';
+
+
+    // Notiek datu ielāde
+    if ('isLoading' in optionsEl.dataset) {
+        state = 'loading';
     }
+    else if (!q(optionsEl, '[data-options-list-option]:not([hidden])')) {
+        state = 'empty';
+    }
+
+    console.log('STATE', state);
+    optionsEl.dataset.state = state;
 }
 
-let counter = 0;
 function loadOptionsFromUrl(optionsEl, url, searchQuery) {
 
     if (!url) {
         return;
     }
+
+    // Scroll to top
+    scrollViewportTo(optionsEl, 0);
+
+    optionsEl.dataset.isLoading = '';
+    updateState(optionsEl);
+
+
 
     let params = {};
     if (searchQuery) {
@@ -292,7 +313,12 @@ function loadOptionsFromUrl(optionsEl, url, searchQuery) {
             else {
                 delete optionsEl.dataset.hasPagination;
             }
+
+            delete optionsEl.dataset.isLoading;
+
             updateState(optionsEl);
+
+            optionsEl.dataset.optionsLoaded = '';
         })
 }
 
@@ -301,7 +327,15 @@ export default {
 
 
         // Uzliek sākuma state
-        qa('.options').forEach(optionsEl => {
+        qa('.field-select .options').forEach(optionsEl => {
+
+            // Ja ir datasource url un nav ielādēti, tad state liekam kā loading
+            if ('sourceUrl' in optionsEl.dataset) {
+                if (!('optionsIsLoaded' in optionsEl.dataset)) {
+                    optionsEl.dataset.isLoading = '';
+                }
+            }
+
             updateState(optionsEl);
         });
 
@@ -349,12 +383,11 @@ export default {
                 return
             }
 
-            if ('optionsIsLoaded' in optionsEl.dataset) {
+            if ('optionsLoaded' in optionsEl.dataset) {
                 return
             }
 
             // Load items from sourceUrl
-            optionsEl.dataset.optionsIsLoaded = '';
             loadOptionsFromUrl(optionsEl, optionsEl.dataset.sourceUrl);
         })
 

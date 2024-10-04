@@ -101,6 +101,14 @@
             class="options"
             @if ($sourceUrl)
             data-source-url="{{ $sourceUrl }}"
+            data-has-loading
+            @else
+            {{--
+            Pazīmie, ka options jau ir ielādēti
+            sourceUrl gadījumā options vēl nav ielādēti
+            tāpēc nav šīs pazīmes
+            --}}
+            data-options-loaded
             @endif
 
             {{-- Neliekam kā fokusējamu, ja ir search lauks, kurš darbosies kā pirmais fokusējamais --}}
@@ -121,30 +129,39 @@
             </x-ui::field-text>
             @endif
 
-            <div role="list" tabindex="-1">
-                @if (isset($slot) && !$slot->isEmpty())
-                    {{ $slot }}
-                @elseif (is_iterable($options))
-                    @php
-                        $isEmptyChecked = !$value;
-                        // ja ir kāds no options, kurš atbilst vērtībai, tad empty checked būs false
-                        foreach ($options as $optionValue => $html) {
-                            if ($value == $optionValue) {
-                                $isEmptyChecked = false;
-                                break;
-                            }
-                        }
-                    @endphp
-                    @if ($empty)
-                        <x-ui::option value="" :checked="$isEmptyChecked">{{ is_bool($empty) ? '' : $empty }}</x-ui::option>
-                    @endif
-                    @foreach ($options as $optionValue => $html)
-                        <x-ui::option :value="$optionValue" :checked="$value == $optionValue">{{ $html }}</x-ui::option>
-                    @endforeach
-                @endif
-            </div>
+            <div data-field-select-options-container>
+                <div role="list" tabindex="-1">
 
-            <div data-field-select-pagination></div>
+                    @if (isset($slot) && !$slot->isEmpty())
+                        {{ $slot }}
+                    @elseif (is_iterable($options))
+                        @php
+                            $isEmptyChecked = !$value;
+                            // ja ir kāds no options, kurš atbilst vērtībai, tad empty checked būs false
+                            foreach ($options as $optionValue => $html) {
+                                if ($value == $optionValue) {
+                                    $isEmptyChecked = false;
+                                    break;
+                                }
+                            }
+                        @endphp
+                        @if ($empty)
+                            <x-ui::option value="" :checked="$isEmptyChecked">{{ is_bool($empty) ? '' : $empty }}</x-ui::option>
+                        @endif
+                        @foreach ($options as $optionValue => $html)
+                            <x-ui::option :value="$optionValue" :checked="$value == $optionValue">{{ $html }}</x-ui::option>
+                        @endforeach
+                    @endif
+                </div>
+
+                <div data-field-select-loading-state>
+                    <x-ui::v-stack class="skeleton-container-animation gap-0 p-0.5">
+                        @for ($skeletonItemCounter = 0; $skeletonItemCounter < 12; $skeletonItemCounter++)
+                        <div class="skeleton-line" style="width: {{ rand(40, 80) }}%"></div>
+                        @endfor
+                    </x-ui::v-stack>
+                </div>
+            </div>
 
             <div data-field-select-empty-state>
             @if ($hasEmptyState)
@@ -158,6 +175,8 @@
                 </x-ui::empty-state>
             @endif
             </div>
+
+            <div data-field-select-pagination></div>
 
         </div>
     </x-ui::dropdown-menu>
