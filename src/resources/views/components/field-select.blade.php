@@ -37,6 +37,9 @@
     @if ($hasValueVisual)
     data-has-visual-value=""
     @endif
+    @if ($valueVisualUrl)
+    data-value-visual-url="{{ $valueVisualUrl }}"
+    @endif
     >
 
     @if ($label)

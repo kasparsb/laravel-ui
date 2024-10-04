@@ -1,7 +1,8 @@
-import {qa, q, parent, on, dispatchEvent} from 'dom-helpers';
+import {qa, q, parent, on, dispatchEvent, get} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
 import DropdownMenu from './DropdownMenu';
 import InputValuePreview from './InputValuePreview';
+import Form from './Form';
 
 /**
  * Field select uzliek izvēlēto option vizuālo vērtību
@@ -33,8 +34,70 @@ function handleFieldValueChange(fieldEl) {
     })
 }
 
+/**
+ * Taisto click uz form [type=submit] pogas, kad
+ * notiek submit pazūd fokuss. Šajā mirklī aizvērsies
+ * DropdownMenu, kurā ir forma. Tāpēc, ja forma ir
+ * FieldSelect Dropdown menu, tad lieka, lai ignore focousOut
+ */
+function handleBeforeSubmit(formEl) {
+    // Ja ir empty state elementā, tad skip
+    if (!parent(formEl, '[data-field-select-empty-state]')) {
+        return
+    }
+
+    DropdownMenu.ignoreFocusoutOnce(DropdownMenu.getByChild(formEl))
+}
+
+/**
+ * Kad forma ir nosubmitota
+ * tad vajag kaut kur iegūt value un valueVisual
+ * value būs formā, laikā id (šitas konfigurējams)
+ * valueVisual būs jāpieprasa no url
+ */
+function handleAfterSubmit(formEl) {
+    // Ja ir empty state elementā, tad skip
+    if (!parent(formEl, '[data-field-select-empty-state]')) {
+        return
+    }
+
+    let valueFieldName = 'id';
+
+    let valueFieldEl = q(formEl, `[name=${valueFieldName}]`);
+    if (valueFieldEl) {
+        let openTriggerEl = DropdownMenu.getOpenTriggerByChild(formEl);
+        let fieldEl = parent(openTriggerEl, '.field-select');
+        let inputEl = q(fieldEl, 'input');
+        inputEl.value = valueFieldEl.value;
+        dispatchEvent(inputEl, 'change');
+
+
+
+        // ielādējam valueVisual html
+        if ('valueVisualUrl' in fieldEl.dataset) {
+            get(fieldEl.dataset.valueVisualUrl, {
+                value: inputEl.value
+            })
+                .then(valueVisualHtml => {
+                    InputValuePreview.setPlaceholder(
+                        fieldEl,
+                        // Formatēta date value
+                        valueVisualHtml
+                    );
+
+                    DropdownMenu.closeByOpenTrigger(openTriggerEl)
+                    Form.reset(formEl);
+                })
+        }
+    }
+}
+
 export default {
     init() {
+
+        // Klausāmies uz From submit
+        Form.onBeforeSubmit(formEl => handleBeforeSubmit(formEl))
+        Form.onAfterSubmit(formEl => handleAfterSubmit(formEl))
 
         // Kad nomainās input value, tad uzliekam atbilstošo vizuālo value
         on('change', '.field-select input', (ev, inputEl) => {

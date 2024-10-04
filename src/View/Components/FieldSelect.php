@@ -36,6 +36,8 @@ class FieldSelect extends Component
         public $searchPlaceholder='Search...',
         // Url no kura tiks ielādēti ieraksti
         public $sourceUrl=false,
+        // Url, kurā padodot value tiek atgriezts visuValue html
+        public $valueVisualUrl=false,
 
         public $errorMessage='',
         public $hasError=false,
