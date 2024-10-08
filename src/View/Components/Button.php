@@ -53,6 +53,10 @@ class Button extends Component
 
         public ?Model $model = null,
         public $disabled = false,
+        /**
+         * onclick
+         * onsubmit - notiks, tikai, ja poga ir form elementā
+         */
         public $loading = false,
 
         public $tabindex = true,
