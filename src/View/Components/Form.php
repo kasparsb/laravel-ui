@@ -25,8 +25,6 @@ class Form extends Component
 
         /**
          * Form will be submitted by javascript via fetch
-         * If form has submit button it will be set to loading
-         * while submitting
          */
         public $fetchSubmit=false,
 
