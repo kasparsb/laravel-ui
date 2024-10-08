@@ -1,4 +1,4 @@
-import {q, qa, submitp, submitForm, replace, clone} from 'dom-helpers'
+import {q, qa, submitp, submit, submitForm, replace, clone} from 'dom-helpers'
 import Listeners from './helpers/Listeners';
 import ButtonLoading from './ButtonLoading';
 
@@ -7,12 +7,22 @@ let onAfterSubmitListeners = {};
 
 let originalEl = [];
 
-function submit(formEl) {
-    let buttonEl = q(formEl, '[type=submit]');
-    if (buttonEl) {
+/**
+ * Uzliek loading pogām loading, ja tām ir onsumit
+ */
+function setButtonLoadingOnSubmit(formEl) {
+    qa(formEl, 'button[data-loading="onsubmit"]').forEach(buttonEl => {
         ButtonLoading.loading(buttonEl);
-    }
+    })
+}
 
+function setButtonIdleAfterSubmit(formEl) {
+    qa(formEl, 'button[data-loading="onsubmit"]').forEach(buttonEl => {
+        ButtonLoading.idle(buttonEl);
+    })
+}
+
+function handleSubmit(formEl) {
     if (onBeforeSubmitListeners['__any__']) {
         onBeforeSubmitListeners['__any__'].trigger([
             formEl,
@@ -26,15 +36,14 @@ function submit(formEl) {
                 let originalElId = formEl.dataset.originalElId;
                 formEl = replace(formEl, r);
                 formEl.dataset.originalElId = originalElId;
+            }
 
-            }
-            else {
-                ButtonLoading.idle(buttonEl);
-            }
+            setButtonIdleAfterSubmit(formEl);
 
             if (onAfterSubmitListeners['__any__']) {
                 onAfterSubmitListeners['__any__'].trigger([
                     formEl,
+                    r
                 ])
             }
         })
@@ -68,8 +77,11 @@ function reset(formEl) {
 
 export default {
     init() {
+        // Tikai priekš button[data-loading="submit"]
+        submit('form', (ev, formEl) => setButtonLoadingOnSubmit(formEl));
+
         submitp('form[data-fetch-submit]', (ev, formEl) => {
-            submit(formEl);
+            handleSubmit(formEl);
         })
 
         // Save orginal content el
