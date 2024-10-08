@@ -55,44 +55,59 @@ function handleBeforeSubmit(formEl) {
  * value būs formā, laikā id (šitas konfigurējams)
  * valueVisual būs jāpieprasa no url
  */
-function handleAfterSubmit(formEl) {
+function handleAfterSubmit(formEl, response) {
     // Ja ir empty state elementā, tad skip
     if (!parent(formEl, '[data-field-select-empty-state]')) {
         return
     }
 
-    let valueFieldName = 'id';
+    let openTriggerEl = DropdownMenu.getOpenTriggerByChild(formEl);
+    let fieldEl = parent(openTriggerEl, '.field-select');
 
+    let valueFieldName = 'id';
+    let value;
+
+    /**
+     * Šis ir gadījumā, ja ir noticis formEl replace
+     * un ir ienākusi jauna form html, kurā ir id lauks
+     */
     let valueFieldEl = q(formEl, `[name=${valueFieldName}]`);
     if (valueFieldEl) {
-        let openTriggerEl = DropdownMenu.getOpenTriggerByChild(formEl);
-        let fieldEl = parent(openTriggerEl, '.field-select');
-        let inputEl = q(fieldEl, 'input');
-        inputEl.value = valueFieldEl.value;
-        dispatchEvent(inputEl, 'change');
-
-
-
-        // ielādējam valueVisual html
-        if ('valueVisualUrl' in fieldEl.dataset) {
-            get(fieldEl.dataset.valueVisualUrl, {
-                value: inputEl.value
-            })
-                .then(valueVisualHtml => {
-                    InputValuePreview.setPlaceholder(
-                        fieldEl,
-                        // Formatēta date value
-                        valueVisualHtml
-                    );
-
-                    // Liekam mazu delay, lai var redzēt success message, ja tāds ir
-                    setTimeout(() => {
-                        DropdownMenu.closeByOpenTrigger(openTriggerEl)
-                        Form.reset(formEl);
-                    }, 700)
-                })
-        }
+        value = valueFieldEl.value;
     }
+    else if (response && typeof response[valueFieldName] != 'undefined') {
+        value = response[valueFieldName];
+    }
+
+    let inputEl = q(fieldEl, 'input');
+    inputEl.value = value;
+    dispatchEvent(inputEl, 'change');
+
+    // ielādējam valueVisual html
+    if (('valueVisualUrl' in fieldEl.dataset) && value) {
+        get(fieldEl.dataset.valueVisualUrl, {
+            value: value
+        })
+            .then(valueVisualHtml => {
+                InputValuePreview.setPlaceholder(
+                    fieldEl,
+                    // Formatēta date value
+                    valueVisualHtml
+                );
+
+                // Liekam mazu delay, lai var redzēt success message, ja tāds ir
+                setTimeout(() => {
+                    DropdownMenu.closeByOpenTrigger(openTriggerEl)
+                    Form.reset(formEl);
+                }, 700)
+            })
+
+        return;
+    }
+
+
+    DropdownMenu.closeByOpenTrigger(openTriggerEl)
+    Form.reset(formEl);
 }
 
 export default {
@@ -100,7 +115,7 @@ export default {
 
         // Klausāmies uz From submit
         Form.onBeforeSubmit(formEl => handleBeforeSubmit(formEl))
-        Form.onAfterSubmit(formEl => handleAfterSubmit(formEl))
+        Form.onAfterSubmit(handleAfterSubmit)
 
         // Kad nomainās input value, tad uzliekam atbilstošo vizuālo value
         on('change', '.field-select input', (ev, inputEl) => {
