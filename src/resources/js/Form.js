@@ -75,6 +75,20 @@ function reset(formEl) {
     return formEl;
 }
 
+function setBusy(formEl) {
+    let buttonEl = q(formEl, '[type=submit]');
+    if (buttonEl) {
+        ButtonLoading.loading(buttonEl);
+    }
+}
+
+function setNotBusy(formEl) {
+    let buttonEl = q(formEl, '[type=submit]');
+    if (buttonEl) {
+        ButtonLoading.idle(buttonEl);
+    }
+}
+
 export default {
     init() {
         // Tikai priekš button[data-loading="submit"]
@@ -108,6 +122,26 @@ export default {
      * Atjauno formu atpakaļ uz sākuma stāvokli
      */
     reset(formEl) {
+        if (!formEl) {
+            return;
+        }
         reset(formEl);
+    },
+
+    /**
+     * Uzstāda, ka form ir aizņemt un to nevar submitot
+     */
+    setBusy(formEl) {
+        if (!formEl) {
+            return;
+        }
+        setBusy(formEl)
+    },
+
+    setNotBusy(formEl) {
+        if (!formEl) {
+            return;
+        }
+        setNotBusy(formEl)
     }
 }
