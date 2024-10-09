@@ -102,8 +102,16 @@ function outputSelectedFiles(fileUploadEl) {
         // Klonēja single file template
         let fileEl = r(clone(fileUploadEl.singleFileTemplate));
         delete fileEl.dataset.r;
-        // Enable filename field, lai tas postējas
-        fileEl.input.disabled = false;
+
+        /**
+         * Input fails, kurā glabāsies file value tiks enabled,
+         * tad, kad tas ir veiksmīgi uploaded. Arī, ja pievieno
+         * un to nevar ielādēt, tad input el paliek disabled, lai
+         * nepostējas tukša vērtība
+         *
+         * Tas tiek darīt, kad visas upload promises ir resolved
+         */
+        //fileEl.input.disabled = false;
 
         fileEl.dataset.fileType = getFileType(file);
         fileEl.dataset.state = 'ready';
@@ -127,14 +135,25 @@ function outputSelectedFiles(fileUploadEl) {
             Form.setBusy(parent(fileUploadEl, 'form'));
 
             Promise.allSettled(uploadPromises)
-                .then((r) => {
+                .then((uploadPromises) => {
+
+                    // Enable filename field, lai tas postējas
+                    uploadPromises.forEach(uploadPromise => {
+                        if (uploadPromise.status == 'fulfilled') {
+                            // value ir fileEl
+                            uploadPromise.value.input.disabled = false;
+                        }
+
+                    })
+
                     Form.setNotBusy(parent(fileUploadEl, 'form'));
                 })
         }
     }
 
-    // Tikko faili salikti noņemam state=empty
+    // Notīrām upload lauka vērtību, jo īstais upload glabājas katrā fileEl atseviški
     fileUploadEl.inputFile.value = '';
+    // Tikko faili salikti noņemam state=empty
     fileUploadEl.dataset.state = '';
 }
 
@@ -222,13 +241,13 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
                         }
                     }
 
-                    resolve();
+                    resolve(fileEl);
                 })
                 .catch(response => {
                     fileEl.dataset.state = 'failed';
                     fileEl.failedMessage.innerHTML = response.message;
 
-                    reject();
+                    reject(fileEl);
                 });
         }, delay)
     })
