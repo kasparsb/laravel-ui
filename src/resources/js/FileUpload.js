@@ -127,7 +127,6 @@ function outputSelectedFiles(fileUploadEl) {
 
             Promise.allSettled(uploadPromises)
                 .then((r) => {
-                    console.log(r);
                     Form.setNotBusy(parent(fileUploadEl, 'form'));
                 })
         }
