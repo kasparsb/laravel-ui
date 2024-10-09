@@ -1,6 +1,7 @@
 import {
     q, r, parent, change, click, upload, append, remove, clone, replaceContent
 } from 'dom-helpers';
+import createVideoFromFile from './createVideoFromFile';
 import createImageFromFile from './createImageFromFile';
 import AspectRatio from './AspectRatio';
 import Form from './Form';
@@ -173,7 +174,12 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
             }));
         }
         else if (isVideo(file)) {
-
+            // ieliekam preview no local bildes
+            replaceContent(fileEl.preview.content, createVideoFromFile(file, {
+                data: {
+                    r: 'video'
+                }
+            }));
         }
         else {
             replaceContent(fileEl.preview.content, getFileType(file)+' (.'+getExtension(file)+')');
@@ -210,8 +216,10 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
                     fileEl.input.value = response.value;
                     fileEl.dataset.state = 'completed';
 
-                    if (preview && isImage(file)) {
-                        fileEl.preview.image.src = response.url;
+                    if (preview) {
+                        if (isImage(file)) {
+                            fileEl.preview.image.src = response.url;
+                        }
                     }
 
                     resolve();

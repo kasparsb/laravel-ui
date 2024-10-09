@@ -36,11 +36,7 @@
             @elseif ($file->is_video)
             <video src="{{ $file->url }}" controls />
             @else
-
-
             {{ $file->file_type }} (.{{ $file->extension }})
-
-
             @endif
         @endif
     </x-ui::aspect-ratio>
