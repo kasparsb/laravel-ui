@@ -20,6 +20,9 @@
     @if (isset($emptyState))
     data-has-empty-state
     @endif
+    @if ($setFormBusy)
+    data-set-from-busy-while-uploading
+    @endif
     >
 
     <x-ui::v-stack>

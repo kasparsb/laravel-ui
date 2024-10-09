@@ -43,6 +43,11 @@ class FileUpload extends Component
         public $canAdd=true,
         public $canRemove=true,
         public $canDownload=false,
+
+        /**
+         * Set form busy while uploading
+         */
+        public $setFormBusy=true,
     )
     {
         if ($multiple) {

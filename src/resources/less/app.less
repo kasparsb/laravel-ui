@@ -3102,7 +3102,12 @@ body:has(>.layout) {
     }
     &:has([data-r="files"] .file-upload-single-file) {
         [data-r="files"] {
-            display: block;
+            /**
+             * šis ir mega sūdīs haks, jo es te nezinu kādu vajag display
+             * sākumā biju ielicis block, bet nevar, jo files ir flexbox
+             * Tāpēc šeit vajag zināt, kāds ir files diplay, lai to varētu atjaunot
+             */
+            display: flex;
         }
     }
 

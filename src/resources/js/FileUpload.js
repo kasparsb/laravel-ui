@@ -1,9 +1,9 @@
 import {
     q, r, parent, change, click, upload, append, remove, clone, replaceContent
 } from 'dom-helpers';
-import getImageDimensionsFromFile from './getImageDimensionsFromFile';
 import createImageFromFile from './createImageFromFile';
 import AspectRatio from './AspectRatio';
+import Form from './Form';
 
 
 function humanFileSize(size) {
@@ -91,6 +91,8 @@ function isVisualMedia(file) {
 function outputSelectedFiles(fileUploadEl) {
     fileUploadEl = r(fileUploadEl);
 
+    let uploadPromises = [];
+
     // Izvēlētie faili
     for (let i = 0; i < fileUploadEl.inputFile.files.length; i++) {
 
@@ -109,13 +111,26 @@ function outputSelectedFiles(fileUploadEl) {
 
         append(fileUploadEl.files, fileEl);
 
-        setTimeout(() => {
+        uploadPromises.push(
             startFileUpload(fileEl, file, {
+                delay: 400,
                 uploadLink: fileUploadEl.dataset.link,
                 valueField: fileUploadEl.dataset.valueField,
             })
-        }, 400)
+        )
+    }
 
+    if (uploadPromises.length > 0) {
+        if ('setFromBusyWhileUploading' in fileUploadEl.dataset) {
+
+            Form.setBusy(parent(fileUploadEl, 'form'));
+
+            Promise.allSettled(uploadPromises)
+                .then((r) => {
+                    console.log(r);
+                    Form.setNotBusy(parent(fileUploadEl, 'form'));
+                })
+        }
     }
 
     // Tikko faili salikti noņemam state=empty
@@ -139,7 +154,7 @@ function removeFile(fileEl) {
     }
 }
 
-function startFileUpload(fileEl, file, {uploadLink, valueField}) {
+function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
     let preview = 'preview' in fileEl.dataset;
 
     if (preview) {
@@ -180,28 +195,36 @@ function startFileUpload(fileEl, file, {uploadLink, valueField}) {
         params.return_url = true;
     }
 
-    upload(
-        uploadLink,
-        file,
-        params,
-        // Progress callback
-        progress => {
-            fileEl.indicator.style.width = progress+'%';
-            fileEl.progress.innerHTML = progress+'%';
-        }
-    )
-        .then(response => {
-            fileEl.input.value = response.value;
-            fileEl.dataset.state = 'completed';
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            upload(
+                uploadLink,
+                file,
+                params,
+                // Progress callback
+                progress => {
+                    fileEl.indicator.style.width = progress+'%';
+                    fileEl.progress.innerHTML = progress+'%';
+                }
+            )
+                .then(response => {
+                    fileEl.input.value = response.value;
+                    fileEl.dataset.state = 'completed';
 
-            if (preview && isImage(file)) {
-                fileEl.preview.image.src = response.url;
-            }
-        })
-        .catch(response => {
-            fileEl.dataset.state = 'failed';
-            fileEl.failedMessage.innerHTML = response.message;
-        });
+                    if (preview && isImage(file)) {
+                        fileEl.preview.image.src = response.url;
+                    }
+
+                    resolve();
+                })
+                .catch(response => {
+                    fileEl.dataset.state = 'failed';
+                    fileEl.failedMessage.innerHTML = response.message;
+
+                    reject();
+                });
+        }, delay)
+    })
 }
 
 export default {
