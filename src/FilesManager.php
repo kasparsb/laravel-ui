@@ -61,6 +61,14 @@ class FilesManager {
 
         $path = $dir.$fileName;
 
+        /**
+         * TODO vajag pārbaudīt vai uploaded file tiešām ir
+         * ja php max_upload size ir mazāks, tad faile nebūs
+         *
+         * tas var gadīties, ja nginx ir 100Mb, bet php 2Mb, tad
+         * nginx izlaidīs cauri, bet php pusē būs failed
+         */
+
         $uploadedFile->storeAs(
             $dir, $fileName, $this->diskName
         );
