@@ -880,8 +880,23 @@ export default {
                     return;
                 }
 
+                // Aizveram visu menu stack
+                let closeStack = true;
+                // Vai ir closeStack override
+                if ('dropdownMenuCloseStack' in menuItemEl.dataset) {
+                    if (menuItemEl.dataset.dropdownMenuCloseStack == 'false') {
+                        closeStack = false;
+                    }
+                }
+
                 // Aizvera visas
-                SingletonPanel.closeAll();
+                if (closeStack) {
+                    SingletonPanel.closeAll();
+                }
+                // aizver tikai sevi
+                else {
+                    this.close(menuEl);
+                }
             }
         });
 
