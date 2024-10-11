@@ -32,6 +32,11 @@ class Form extends Component
          * Vai aizvietot atgriezto HTML ar esošo formu?
          */
         public $replaceHtml=false,
+
+        /**
+         * Vai atjaunot formu sākuma stāvoklī pēc submit
+         */
+        public $resetFormAfterSubmit=false
     )
     {
         /**

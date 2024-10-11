@@ -11,6 +11,10 @@
     @if ($replaceHtml)
     data-replace-html
     @endif
+
+    @if ($resetFormAfterSubmit)
+    data-reset-form-after-submit
+    @endif
     >
     {{ $slot }}
 

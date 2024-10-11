@@ -46,6 +46,10 @@ function handleSubmit(formEl) {
                     r
                 ])
             }
+
+            if ('resetFormAfterSubmit' in formEl.dataset) {
+                reset(formEl);
+            }
         })
 }
 
@@ -99,7 +103,7 @@ export default {
         })
 
         // Save orginal content el
-        qa('form[data-fetch-submit][data-replace-html]').forEach(formEl => {
+        qa('form[data-fetch-submit][data-replace-html], form[data-reset-form-after-submit]').forEach(formEl => {
             saveOriginalEl(formEl);
         })
     },
