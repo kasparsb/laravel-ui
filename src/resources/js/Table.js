@@ -97,19 +97,28 @@ function deleteRow(trEl) {
 }
 
 function setRowsChecked(tableEl, checked) {
-    qa(tableEl, '[data-r="tableRowCheck"] input').forEach(checkboxEl => {
+    qa(tableEl, '[data-r="tableRowCheck"]').forEach(checkboxEl => {
         checkboxEl.checked = checked
     });
 }
 
+function getCheckedValues(tableEl) {
+    let r = []
+
+    qa(tableEl, '[data-r="tableRowCheck"]:checked').forEach(checkboxEl => {
+        r.push(checkboxEl.value);
+    });
+    return r;
+}
+
 function syncCheckAllRowsCheckbox(tableEl) {
-    let checkAllRowsCheckbox = q(tableEl, 'thead [data-r="tableRowCheck"] input');
+    let checkAllRowsCheckbox = q(tableEl, 'thead [data-r="tableRowCheck"]');
     if (!checkAllRowsCheckbox) {
         return;
     }
 
     let allChecked = false;
-    let rowCheckboxes = qa(tableEl, 'tbody [data-r="tableRowCheck"] input');
+    let rowCheckboxes = qa(tableEl, 'tbody [data-r="tableRowCheck"]');
     if (rowCheckboxes.length > 0) {
         allChecked = true;
         for (let i = 0; i < rowCheckboxes.length; i++) {
@@ -192,14 +201,14 @@ export default {
         })
 
         // Checkbox check/uncheck all table rows
-        change('.table thead [data-r="tableRowCheck"] input', (ev, el) => {
+        change('.table thead [data-r="tableRowCheck"]', (ev, el) => {
             let tableEl = parent(el, 'table');
             if (tableEl) {
                 setRowsChecked(tableEl, el.checked)
             }
         })
 
-        change('.table tbody [data-r="tableRowCheck"] input', (ev, el) => {
+        change('.table tbody [data-r="tableRowCheck"]', (ev, el) => {
             let tableEl = parent(el, '.table');
             if (tableEl) {
                 syncCheckAllRowsCheckbox(tableEl);
@@ -227,5 +236,9 @@ export default {
 
     setRowsChecked(tableEl, checked) {
         setRowsChecked(tableEl, checked)
+    },
+
+    getCheckedValues(tableEl) {
+        return getCheckedValues(tableEl);
     }
 }
