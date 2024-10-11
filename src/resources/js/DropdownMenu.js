@@ -867,6 +867,10 @@ export default {
         // ---- CLOSE menu
         on('click', '[data-dropdown-menu-name] .menu-item', (ev, menuItemEl) => {
 
+            // Ja ir jāatver cits menu, tad ignore close
+            if ('dropdownMenuTrigger' in menuItemEl.dataset) {
+                return;
+            }
 
             let menuEl = findDropdownMenuByChild(menuItemEl)
             if (menuEl) {
