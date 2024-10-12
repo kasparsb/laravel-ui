@@ -81,11 +81,17 @@ class Table extends Component
 
         // Custom view
         if ($col->v && FacadeView::exists($col->v)) {
-            return view($col->v, [
-                'name' => $col->name,
-                'row' => $row,
-                'value' => $value,
-            ])->render();
+
+            $viewData = $col->vData;
+            if (!is_array($viewData)) {
+                $viewData = [];
+            }
+
+            $viewData['name'] = $col->name;
+            $viewData['row'] = $row;
+            $viewData['value'] = $value;
+
+            return view($col->v, $viewData)->render();
         }
 
         /**

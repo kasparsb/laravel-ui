@@ -16,6 +16,8 @@ class TableCol extends Component
         public $type = '',
         // View, kurš tiks renderēts table cell
         public $v = '',
+        // Additional variables form view
+        public $vData = [],
         // button specific attributes
         public $as = '',
         public $link = '',
