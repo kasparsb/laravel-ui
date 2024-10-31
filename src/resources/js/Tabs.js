@@ -62,6 +62,7 @@ let Tabs = {
             if ('name' in tabsEl.dataset) {
                 onChangeListeners[tabsEl.dataset.name].trigger([
                     tabsEl.dataset.selected,
+                    selectedTabEl,
                     tabsEl
                 ]);
             }
