@@ -9,10 +9,10 @@ use Illuminate\View\Component;
 class Tabs extends Component
 {
     public function __construct(
+        public $name = '',
         public $selected = '', // Selected tab
     )
     {
-
     }
 
     public function render(): View|Closure|string

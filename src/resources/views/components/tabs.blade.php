@@ -2,6 +2,9 @@
 
 <div
     {{ $attributes->class(['tabs']) }}
+    @if ($name)
+    data-name="{{ $name }}"
+    @endif
     data-selected="{{ $selected }}"
     >
     <nav>{{ $slot }}</nav>

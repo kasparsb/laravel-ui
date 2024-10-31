@@ -1,4 +1,7 @@
 import {q, qa, parent, click} from 'dom-helpers';
+import Listeners from './helpers/Listeners';
+
+let onChangeListeners = {};
 
 function enableTabContent(tabContentEl) {
     if (!tabContentEl) {
@@ -56,6 +59,12 @@ let Tabs = {
                 }
             });
 
+            if ('name' in tabsEl.dataset) {
+                onChangeListeners[tabsEl.dataset.name].trigger([
+                    tabsEl.dataset.selected,
+                    tabsEl
+                ]);
+            }
         })
 
 
@@ -75,6 +84,13 @@ let Tabs = {
                 disableTabContent(tabContentEl);
             }
         })
+    },
+
+    onChange(tabsName, cb) {
+        if (typeof onChangeListeners[tabsName] == 'undefined') {
+            onChangeListeners[tabsName] = new Listeners();
+        }
+        onChangeListeners[tabsName].listen(cb);
     }
 }
 
