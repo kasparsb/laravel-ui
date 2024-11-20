@@ -1,4 +1,9 @@
-import {q, qa, submitp, submit, submitForm, replace, clone} from 'dom-helpers'
+import {
+    q, qa, parent,
+    submitp, submit, click,
+    request, getFormData,
+    replace, clone
+} from 'dom-helpers'
 import Listeners from './helpers/Listeners';
 import ButtonLoading from './ButtonLoading';
 
@@ -6,6 +11,23 @@ let onBeforeSubmitListeners = {};
 let onAfterSubmitListeners = {};
 
 let originalEl = [];
+
+function submitForm(formEl, url, method) {
+    if (typeof url == 'undefined') {
+        url = formEl.action;
+    }
+    if (typeof method == 'undefined') {
+        method = formEl.method;
+    }
+
+    let formData = getFormData(formEl);
+    if ('clickedSubmitButtonName' in formEl.dataset) {
+        formData[formEl.dataset.clickedSubmitButtonName] = formEl.dataset.clickedSubmitButtonValue;
+    }
+
+    return request(method, url, formData)
+        .then(response => response.text())
+}
 
 /**
  * Uzliek loading pogām loading, ja tām ir onsumit
@@ -98,6 +120,23 @@ export default {
         // Tikai priekš button[data-loading="submit"]
         submit('form', (ev, formEl) => setButtonLoadingOnSubmit(formEl));
 
+        /**
+         * Submit buttons with name
+         * Ja ir vairākas submit pogas ar vienādiem name,
+         * tad vajag submitot to button value, kura tika click
+         */
+        click('form[data-fetch-submit] [type=submit][name]', (ev, buttonSubmitEl) => {
+            let formEl = parent(buttonSubmitEl, 'form');
+
+            delete formEl.dataset.clickedSubmitButtonName;
+            delete formEl.dataset.clickedSubmitButtonValue;
+
+            // Uzliekam formai, nospiestās submit pogas name un value
+            if (buttonSubmitEl.name) {
+                formEl.dataset.clickedSubmitButtonName = buttonSubmitEl.name;
+                formEl.dataset.clickedSubmitButtonValue = buttonSubmitEl.value;
+            }
+        })
         submitp('form[data-fetch-submit]', (ev, formEl) => {
             handleSubmit(formEl);
         })
