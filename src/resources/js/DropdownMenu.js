@@ -872,32 +872,41 @@ export default {
                 return;
             }
 
-            let menuEl = findDropdownMenuByChild(menuItemEl)
-            if (menuEl) {
-                let triggerEl = menuOpenTriggers[menuEl.dataset.dropdownMenuName];
+            /**
+             * Lai paspēj izpildīties uz menu-item uzliktiem eventi
+             * ja aizver pārāk ātri, tad pēc menuItemEl nevarēs
+             * atrast open triggerEl
+             * 50ms, vizuāli nevar pamanīt, ka ir aizture uz aizvēršanu
+             * un šķiet, ka visi arī kaut kādi novēlotie eventi paspēs izpildīties
+             */
+            setTimeout(() => {
+                let menuEl = findDropdownMenuByChild(menuItemEl)
+                if (menuEl) {
+                    let triggerEl = menuOpenTriggers[menuEl.dataset.dropdownMenuName];
 
-                if (!('dropdownMenuHide' in triggerEl.dataset)) {
-                    return;
-                }
+                    if (!('dropdownMenuHide' in triggerEl.dataset)) {
+                        return;
+                    }
 
-                // Aizveram visu menu stack
-                let closeStack = true;
-                // Vai ir closeStack override
-                if ('dropdownMenuCloseStack' in menuItemEl.dataset) {
-                    if (menuItemEl.dataset.dropdownMenuCloseStack == 'false') {
-                        closeStack = false;
+                    // Aizveram visu menu stack
+                    let closeStack = true;
+                    // Vai ir closeStack override
+                    if ('dropdownMenuCloseStack' in menuItemEl.dataset) {
+                        if (menuItemEl.dataset.dropdownMenuCloseStack == 'false') {
+                            closeStack = false;
+                        }
+                    }
+
+                    // Aizvera visas
+                    if (closeStack) {
+                        SingletonPanel.closeAll();
+                    }
+                    // aizver tikai sevi
+                    else {
+                        this.close(menuEl);
                     }
                 }
-
-                // Aizvera visas
-                if (closeStack) {
-                    SingletonPanel.closeAll();
-                }
-                // aizver tikai sevi
-                else {
-                    this.close(menuEl);
-                }
-            }
+            }, 50)
         });
 
 
