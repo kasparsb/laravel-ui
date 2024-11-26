@@ -2,6 +2,7 @@ import Layout from './Layout';
 import ButtonLoading from './ButtonLoading';
 import ButtonDelete from './ButtonDelete';
 import ButtonPost from './ButtonPost';
+import ButtonGet from './ButtonGet';
 import ButtonAdd from './ButtonAdd';
 import DropdownMenu from './DropdownMenu';
 import FieldDate from './FieldDate';
@@ -22,6 +23,7 @@ OptionsPanel.init();
 ButtonLoading.init();
 ButtonDelete.init();
 ButtonPost.init();
+ButtonGet.init();
 ButtonAdd.init();
 DropdownMenu.init();
 FieldDate.init();
@@ -42,6 +44,7 @@ export {
     ButtonLoading,
     ButtonDelete,
     ButtonPost,
+    ButtonGet,
     ButtonAdd,
     DropdownMenu,
     FieldSelect,
@@ -63,6 +66,7 @@ export default {
     ButtonLoading,
     ButtonDelete,
     ButtonPost,
+    ButtonGet,
     ButtonAdd,
     DropdownMenu,
     FieldSelect,

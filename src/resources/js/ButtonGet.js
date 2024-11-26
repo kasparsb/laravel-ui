@@ -1,17 +1,17 @@
-import {post, clickp} from 'dom-helpers';
+import {get, clickp} from 'dom-helpers';
 import ButtonLoading from './ButtonLoading';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 
 export default {
     init() {
-        clickp('[data-button-post]', (ev, el) => {
+        clickp('[data-button-get]', (ev, el) => {
             if (el.dataset.url) {
 
-                ButtonLoading.maybeLoading(el, 'post');
+                ButtonLoading.maybeLoading(el, 'get');
 
                 let elReplacer = new ReplaceElWithNewHtmlIfNecessary(el);
 
-                post(el.dataset.url)
+                get(el.dataset.url)
                     .then(r => {
                         if (el.dataset.redirect) {
                             window.location.href = el.dataset.redirect
@@ -27,8 +27,8 @@ export default {
     /**
      * Pārbauda vai padotais el ir post button
      */
-    isButtonPost(el) {
-        if ('buttonPost' in el.dataset) {
+    isButtonget(el) {
+        if ('buttonGet' in el.dataset) {
             return true;
         }
         return false;

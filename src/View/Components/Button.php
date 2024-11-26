@@ -17,13 +17,17 @@ class Button extends Component
     public $variantOverride = 'primary';
 
     public function __construct(
-        public $variant = '',
-        public $as = '', // link, delete, delete.tableRow, add.tableRow
-        public $link = '', // link: priekš href, delete, dinamiskais, ja sākas ar "model:"
-        public $redirect = '', // redirect url after delete
+        public $variant='',
+        public $as='', // link, delete, delete.tableRow, add.tableRow
+        public $link='', // link: priekš href, delete, dinamiskais, ja sākas ar "model:"
+        public $redirect='', // redirect url after delete
+        public $replaceHtml=false,
+        // Ja atrodas iekš menuEl, bet vajag replaceHtml uz pogas, kas atvēra menu
+        // tagad darbojas tikai šis: dropdownMenuOpenTrigger
+        public $replaceHtmlTarget=false,
 
-        public $menu = '',
-        public $menuShow = '',
+        public $menu='',
+        public $menuShow='',
         public $menuFocus=false, // ko iefokusēt, kad menu atveras. Default pats menu | firstFocusable | querySelector
         /**
          * Tukšs string nozīmē, ka vajag slēpt automātiski
@@ -32,34 +36,34 @@ class Button extends Component
          * boolean false nozīmē, ka nevajag automātiski slēpt
          *     explicitly ar menuHide="{menuName}" tiks aizvērts
          */
-        public $menuHide = null,
-        public $menuResetForm = false,
+        public $menuHide=null,
+        public $menuResetForm=false,
 
         /**
          * Custom position coordinates
          * *Skatīties DropdownMenu aprakstu par to kā veidojas koordinātes
          */
-        public $menuPositionX = false,
-        public $menuPositionY = false,
-        public $menuPositionDir = null,
-        public $menuPositionXOffset = false,
-        public $menuPositionYOffset = false,
+        public $menuPositionX=false,
+        public $menuPositionY=false,
+        public $menuPositionDir=null,
+        public $menuPositionXOffset=false,
+        public $menuPositionYOffset=false,
         // Elements pret kuru pozicionēt ir pati poga
-        public $menuPositionAt = '',
+        public $menuPositionAt='',
         // Dir tiek ņemts no Dropdown defaults
-        public $menuPositionAtDir = 'left bottom',
+        public $menuPositionAtDir='left bottom',
 
-        public $table = '', // table name, kurai veikt add, delete darbības
+        public $table='', // table name, kurai veikt add, delete darbības
 
-        public ?Model $model = null,
-        public $disabled = false,
+        public ?Model $model=null,
+        public $disabled=false,
         /**
          * onclick
          * onsubmit - notiks, tikai, ja poga ir form elementā
          */
-        public $loading = false,
+        public $loading=false,
 
-        public $tabindex = true,
+        public $tabindex=true,
     )
     {
         if (!$this->variant) {

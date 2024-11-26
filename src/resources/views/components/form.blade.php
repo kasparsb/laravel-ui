@@ -9,7 +9,7 @@
     @endif
 
     @if ($replaceHtml)
-    data-replace-html
+    data-replace-html="{{ is_bool($replaceHtml) ? '' : $replaceHtml }}"
     @endif
 
     @if ($resetFormAfterSubmit)

@@ -14,6 +14,10 @@ class MenuItem extends Component
         public $redirect = '', // redirect link pēc delete
         public $selected = null,
         public $as = '', // link, delete, delete.tableRow, add.tableRow
+        public $replaceHtml=false,
+        // Ja atrodas iekš menuEl, bet vajag replaceHtml uz pogas, kas atvēra menu
+        // tagad darbojas tikai šis: dropdownMenuOpenTrigger
+        public $replaceHtmlTarget=false,
 
         public $menu = '',
         public $menuShow = '',

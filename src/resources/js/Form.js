@@ -6,6 +6,7 @@ import {
 } from 'dom-helpers'
 import Listeners from './helpers/Listeners';
 import ButtonLoading from './ButtonLoading';
+import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 
 let onBeforeSubmitListeners = {};
 let onAfterSubmitListeners = {};
@@ -39,7 +40,7 @@ function setButtonLoadingOnSubmit(formEl) {
 }
 
 function setButtonIdleAfterSubmit(formEl) {
-    qa(formEl, 'button[data-loading="onsubmit"]').forEach(buttonEl => {
+    qa(formEl, 'button[data-loading="loading"]').forEach(buttonEl => {
         ButtonLoading.idle(buttonEl);
     })
 }
@@ -51,13 +52,16 @@ function handleSubmit(formEl) {
         ])
     }
 
+    let elReplacer = new ReplaceElWithNewHtmlIfNecessary(formEl);
+
     submitForm(formEl)
         .then(r => {
-            if ('replaceHtml' in formEl.dataset) {
+            let originalElId = formEl.dataset.originalElId;
 
-                let originalElId = formEl.dataset.originalElId;
-                formEl = replace(formEl, r);
-                formEl.dataset.originalElId = originalElId;
+            let newFormEl = elReplacer.replace(r);
+            if (newFormEl) {
+                newFormEl.dataset.originalElId = originalElId;
+                formEl = newFormEl
             }
 
             setButtonIdleAfterSubmit(formEl);

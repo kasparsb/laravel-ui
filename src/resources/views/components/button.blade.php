@@ -59,6 +59,13 @@
     data-button-{{ $as }}="{{ $subAction }}"
     @endif
 
+    @if ($replaceHtml)
+    data-replace-html="{{ is_bool($replaceHtml) ? '' : $replaceHtml }}"
+    @endif
+    @if ($replaceHtmlTarget)
+    data-replace-html-target="{{ $replaceHtmlTarget }}"
+    @endif
+
     @if ($disabled)
     disabled="disabled"
     @endif
