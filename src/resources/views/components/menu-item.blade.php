@@ -147,5 +147,9 @@
         || $label
     )
     <span data-menu-item-label>{{ $slot->isEmpty() ? $label : $slot }}</span>
+
+    @if (isset($sufix) && !$sufix->isEmpty())
+        {{ $sufix }}
+    @endif
     @endif
 </{{ $menuItemTagName }}>
