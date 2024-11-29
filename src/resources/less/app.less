@@ -1987,6 +1987,13 @@ body {
     }
 }
 
+/**
+ * Menu item ir tikai base izskats
+ * background nodefinēs tajā vieta, kur
+ * menu-item tiks izmantots
+ * .dropdown-menu
+ * .nav-menu
+ */
 .menu-item {
     .remove-tap-highlite();
 
@@ -2004,15 +2011,6 @@ body {
 
     cursor: pointer;
 
-    // Idle state
-    // Dropdown menu, nav menu, etc
-    // .menu-item-idle-backgorund();
-
-    // Active state nodefinēs wrapper elements
-    // Dropdown menu, nav menu, etc
-    //.menu-item-active-backgorund();
-
-
     padding: @size015;
 
     svg {
@@ -2020,17 +2018,10 @@ body {
         width: 1.25rem;
         height: 1.25rem;
     }
-    // Tikai ikona, bet label
+    // Tikai ikona, bez label
     &.icon {
         svg {
             margin-right: 0;
-        }
-    }
-
-    &.danger {
-        color: hsl(var(--color-danger));
-        &:hover {
-            background-color: hsl(var(--color-red-50));
         }
     }
 }
@@ -2065,6 +2056,26 @@ body {
     }
     &[data-checked] {
         background-color: hsl(var(--color-200));
+    }
+}
+
+.menu-item-idle-danger-backgorund {
+    &:is(a) {
+        text-decoration: none;
+    }
+    color: hsl(var(--color-red-500));
+    background-color: hsl(var(--color-red-50));
+    .t-3\.5();
+    .fw-m();
+}
+.menu-item-active-danger-backgorund {
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: hsl(var(--color-red-100));
+    }
+    &[data-checked] {
+        background-color: hsl(var(--color-red-200));
     }
 }
 /**
@@ -2172,6 +2183,13 @@ body {
         .menu-item-idle-backgorund();
         // active, selected state
         .menu-item-active-backgorund();
+
+        &.danger {
+            // idle state
+            .menu-item-idle-danger-backgorund();
+            // active, selected state
+            .menu-item-active-danger-backgorund();
+        }
     }
 
     // Focus trap
