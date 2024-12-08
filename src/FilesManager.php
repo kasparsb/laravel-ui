@@ -23,6 +23,12 @@ class FilesManager {
     }
 
     public function createFromUrl($fileUrl) {
+
+        // Pārbaudām vai ir norādīts protocol
+        if (substr($fileUrl, 0, 2) == '//') {
+            $fileUrl = 'https:'.$fileUrl;
+        }
+
         $dir = $this->checkDateDir();
         $fileName = $this->getUniqueFileName($dir, $fileUrl);
 
@@ -117,7 +123,11 @@ class FilesManager {
 
         $i = false;
         while (true) {
-            $fileName = $pathInfo['filename'].($i ? '-'.$i : '').'.'.$pathInfo['extension'];
+            $fileName = $pathInfo['filename'].($i ? '-'.$i : '');
+            // Pārbaudām vai ir extension
+            if (isset($pathInfo['extension'])) {
+                $fileName .= '.'.$pathInfo['extension'];
+            }
             // Sākumā pārbaudām vai padotais fails eksistē
             if (!$disk->exists($dir.$fileName)) {
                 $disk->put($dir.$fileName, '');
