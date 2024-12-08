@@ -28,6 +28,24 @@ class File extends Model
         );
     }
 
+    protected function baseName(): Attribute {
+        return Attribute::make(
+            get: fn() => pathinfo($this->path, PATHINFO_BASENAME),
+        );
+    }
+
+    protected function fileName(): Attribute {
+        return Attribute::make(
+            get: fn() => pathinfo($this->path, PATHINFO_FILENAME),
+        );
+    }
+
+    protected function extension(): Attribute {
+        return Attribute::make(
+            get: fn() => pathinfo($this->path, PATHINFO_EXTENSION),
+        );
+    }
+
     protected function url(): Attribute {
         return Attribute::make(
             get: fn() => Storage::disk($this->disk)->url($this->path),
@@ -52,12 +70,6 @@ class File extends Model
     protected function isVisualMedia(): Attribute {
         return Attribute::make(
             get: fn() => $this->is_image || $this->is_video,
-        );
-    }
-
-    protected function extension(): Attribute {
-        return Attribute::make(
-            get: fn() => pathinfo($this->path, PATHINFO_EXTENSION),
         );
     }
 
