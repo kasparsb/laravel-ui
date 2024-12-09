@@ -60,7 +60,9 @@ function handleSubmit(formEl) {
 
             let newFormEl = elReplacer.replace(r);
             if (newFormEl) {
-                newFormEl.dataset.originalElId = originalElId;
+                if (typeof newFormEl.dataset != 'undefined') {
+                    newFormEl.dataset.originalElId = originalElId;
+                }
                 formEl = newFormEl
             }
 
