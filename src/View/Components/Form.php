@@ -10,6 +10,14 @@ use Illuminate\Database\Eloquent\Model;
 class Form extends Component
 {
     public function __construct(
+        /**
+         * form tags un darbojas kā forma
+         * Ja false, tad būs div elements,
+         * submit varēs izsaukt programmiski
+         * Tas ir gadījumiem, kad vajag pārlādēt
+         * html elementu, kurš jau ir ielikts form tagā
+         */
+        public $asForm=true,
         public $method='post',
         public $action='',
         // Redirect link after form submit
@@ -39,6 +47,14 @@ class Form extends Component
         public $resetFormAfterSubmit=false
     )
     {
+        if (!$asForm) {
+            /**
+             * Ja ir formas aizvietotājs, tad liekam fetchSubmit automātiski,
+             * jo form submit nevar notikt un tā pat submit ir jāpārķer ar JS
+             */
+            $this->fetchSubmit = true;
+        }
+
         /**
          * Pēc model nosakām kāda būs form action
          *

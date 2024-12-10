@@ -1,8 +1,17 @@
-<form
-    {{ $attributes->merge([
-        'method' => $method,
-        'action' => $action,
-    ]) }}
+<{{ $asForm ? 'form' : 'div' }}
+    {{ $attributes->merge(
+        $asForm ? [
+            'method' => $method,
+            'action' => $action,
+        ]
+        :
+        [
+            'data-form-substitute' => '',
+            'data-method' => $method,
+            'data-action' => $action,
+        ]
+    )
+    }}
 
     @if ($fetchSubmit)
     data-fetch-submit
@@ -24,4 +33,4 @@
     @if ($redirectRoutePrefix)
     <input type="hidden" name="_redirect_route_prefix" value="{{ $redirectRoutePrefix }}" />
     @endif
-</form>
+</{{ $asForm ? 'form' : 'div' }}>
