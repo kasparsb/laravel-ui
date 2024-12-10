@@ -13,12 +13,23 @@ let onAfterSubmitListeners = {};
 
 let originalEl = [];
 
+/**
+ * Vai ir form aizvietotājs. Parasts div elements, kura jādarbojas līdzīgi kā form
+ */
+function isSubstitute(formEl) {
+    if (!formEl.dataset) {
+        return false;
+    }
+
+    return 'formSubstitute' in formEl.dataset;
+}
+
 function submitForm(formEl, url, method) {
     if (typeof url == 'undefined') {
-        url = formEl.action;
+        url = isSubstitute(formEl) ? formEl.dataset.action : formEl.action;
     }
     if (typeof method == 'undefined') {
-        method = formEl.method;
+        method = isSubstitute(formEl) ? formEl.dataset.method : formEl.method;
     }
 
     let formData = getFormData(formEl);
@@ -26,6 +37,9 @@ function submitForm(formEl, url, method) {
         formData[formEl.dataset.clickedSubmitButtonName] = formEl.dataset.clickedSubmitButtonValue;
     }
 
+    /**
+     * Jāpieliek error handling. Un te ir jāatgriež jauna Promise
+     */
     return request(method, url, formData)
         .then(response => response.text())
 }
@@ -54,31 +68,37 @@ function handleSubmit(formEl) {
 
     let elReplacer = new ReplaceElWithNewHtmlIfNecessary(formEl);
 
-    submitForm(formEl)
-        .then(r => {
-            let originalElId = formEl.dataset.originalElId;
+    return new Promise((resolve, reject) => {
+        submitForm(formEl)
+            .then(r => {
 
-            let newFormEl = elReplacer.replace(r);
-            if (newFormEl) {
-                if (typeof newFormEl.dataset != 'undefined') {
-                    newFormEl.dataset.originalElId = originalElId;
+                let originalElId = formEl.dataset.originalElId;
+
+                let newFormEl = elReplacer.replace(r);
+                if (newFormEl) {
+                    if (typeof newFormEl.dataset != 'undefined') {
+                        newFormEl.dataset.originalElId = originalElId;
+                    }
+                    formEl = newFormEl
                 }
-                formEl = newFormEl
-            }
 
-            setButtonIdleAfterSubmit(formEl);
+                setButtonIdleAfterSubmit(formEl);
 
-            if (onAfterSubmitListeners['__any__']) {
-                onAfterSubmitListeners['__any__'].trigger([
-                    formEl,
-                    r
-                ])
-            }
+                if (onAfterSubmitListeners['__any__']) {
+                    onAfterSubmitListeners['__any__'].trigger([
+                        formEl,
+                        r
+                    ])
+                }
 
-            if ('resetFormAfterSubmit' in formEl.dataset) {
-                reset(formEl);
-            }
-        })
+                if ('resetFormAfterSubmit' in formEl.dataset) {
+                    reset(formEl);
+                }
+
+                resolve();
+            })
+    })
+
 }
 
 function saveOriginalEl(formEl) {
@@ -143,6 +163,7 @@ export default {
                 formEl.dataset.clickedSubmitButtonValue = buttonSubmitEl.value;
             }
         })
+
         submitp('form[data-fetch-submit]', (ev, formEl) => {
             handleSubmit(formEl);
         })
@@ -153,7 +174,7 @@ export default {
         })
     },
     submit(formEl) {
-        submitForm(formEl)
+        return handleSubmit(formEl)
     },
     onBeforeSubmit(cb) {
         if (typeof onBeforeSubmitListeners['__any__'] == 'undefined') {
