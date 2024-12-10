@@ -60,6 +60,16 @@ function setButtonIdleAfterSubmit(formEl) {
 }
 
 function handleSubmit(formEl) {
+
+    /**
+     * Šitas dublējas ar submit('form')
+     * bet šo vajag, ja notiek form submit caur API
+     * Pa lielam nekas, ja divreiz uzliks pogai loading.
+     * Vienkrāši fetshSubmit gadījumā dublēsies
+     */
+    setButtonLoadingOnSubmit(formEl);
+
+
     if (onBeforeSubmitListeners['__any__']) {
         onBeforeSubmitListeners['__any__'].trigger([
             formEl,
@@ -145,6 +155,18 @@ export default {
     init() {
         // Tikai priekš button[data-loading="submit"]
         submit('form', (ev, formEl) => setButtonLoadingOnSubmit(formEl));
+
+         /**
+          * Atrodam formas, kuras vajag submit pēc norādītā laika
+          */
+        qa('[data-submit-form-after-ms]').forEach(formEl => {
+            let timeoutMs = parseInt(formEl.dataset.submitFormAfterMs, 10);
+            if (timeoutMs) {
+                setTimeout(() => {
+                    handleSubmit(formEl)
+                }, timeoutMs)
+            }
+        })
 
         /**
          * Submit buttons with name

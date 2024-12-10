@@ -44,7 +44,13 @@ class Form extends Component
         /**
          * Vai atjaunot formu sākuma stāvoklī pēc submit
          */
-        public $resetFormAfterSubmit=false
+        public $resetFormAfterSubmit=false,
+
+        /**
+         * Iespēja norādīt, laiku (ms) pēc kāda notiek automātisks submit
+         * šo var izmantot kā polling, ja ir jāgaida garāka fona procesa rezultāts
+         */
+        public $submitAfterMs=false,
     )
     {
         if (!$asForm) {

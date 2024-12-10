@@ -24,6 +24,10 @@
     @if ($resetFormAfterSubmit)
     data-reset-form-after-submit
     @endif
+
+    @if ($submitAfterMs)
+    data-submit-form-after-ms="{{ $submitAfterMs }}"
+    @endif
     >
     {{ $slot }}
 
