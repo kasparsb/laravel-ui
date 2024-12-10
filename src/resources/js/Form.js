@@ -105,6 +105,9 @@ function handleSubmit(formEl) {
                     reset(formEl);
                 }
 
+                // Ja ir ienākušas jaunas formas, kurām vajag uzstādīt setTimeout
+                setTimeoutsForFormsWithSubmitAfterMs();
+
                 resolve();
             })
     })
@@ -151,22 +154,33 @@ function setNotBusy(formEl) {
     }
 }
 
+/**
+ * Atrodam formas, kuras vajag submit pēc norādītā laika
+ */
+function setTimeoutsForFormsWithSubmitAfterMs() {
+    qa('[data-submit-form-after-ms]').forEach(formEl => {
+        // Ja ir jau uzlikts timeout, tad skip
+        if ('submitTimeoutSet' in formEl.dataset) {
+            return;
+        }
+
+        let timeoutMs = parseInt(formEl.dataset.submitFormAfterMs, 10);
+        if (timeoutMs) {
+            // Pazīme, ka timeout jau ir uzlikts
+            formEl.dataset.submitTimeoutSet = '';
+            // Pieglabājam timeout, lai var atcelt
+            formEl.dataset.submitFormAfterTimeout = setTimeout(() => {
+                handleSubmit(formEl)
+                delete formEl.dataset.submitFormAfterTimeout
+            }, timeoutMs)
+        }
+    })
+}
+
 export default {
     init() {
         // Tikai priekš button[data-loading="submit"]
         submit('form', (ev, formEl) => setButtonLoadingOnSubmit(formEl));
-
-         /**
-          * Atrodam formas, kuras vajag submit pēc norādītā laika
-          */
-        qa('[data-submit-form-after-ms]').forEach(formEl => {
-            let timeoutMs = parseInt(formEl.dataset.submitFormAfterMs, 10);
-            if (timeoutMs) {
-                setTimeout(() => {
-                    handleSubmit(formEl)
-                }, timeoutMs)
-            }
-        })
 
         /**
          * Submit buttons with name
@@ -194,6 +208,8 @@ export default {
         qa('form[data-fetch-submit][data-replace-html], form[data-reset-form-after-submit]').forEach(formEl => {
             saveOriginalEl(formEl);
         })
+
+        setTimeoutsForFormsWithSubmitAfterMs();
     },
     submit(formEl) {
         return handleSubmit(formEl)
