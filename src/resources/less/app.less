@@ -3409,6 +3409,26 @@ body:has(>.layout) {
     }
 
     /**
+     * progress bar
+     */
+    [data-progressbar] {
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 8px;
+        align-items: center;
+
+        >div:nth-child(1) {
+            flex: 1;
+        }
+
+        // Precentage label
+        >div:nth-child(2) {
+            .t-3();
+            width: @size090;
+        }
+    }
+
+    /**
      * States
      */
     &[data-state=ready] {
@@ -3482,11 +3502,6 @@ body:has(>.layout) {
 }
 
 .progress-bar {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    gap: 8px;
-
     // Indicator
     >div:nth-child(1) {
         flex: 1;
@@ -3501,11 +3516,6 @@ body:has(>.layout) {
             border-radius: var(--radius);
             height: 100%;
         }
-    }
-    // Precentage labal
-    >div:nth-child(2) {
-        .t-3();
-        width: @size090;
     }
 }
 

@@ -94,7 +94,16 @@
                     </x-ui::h-stack>
                 </x-ui::h-stack>
 
-                <x-ui::progress-bar progress="{{ $progress }}" data-r="progressBar" />
+                <div data-progressbar>
+                    <x-ui::progress-bar progress="{{ $progress }}" />
+                    <div data-r="progress">
+                        @if ($progress)
+                        {{ $progress }}%
+                        @else
+                        &nbsp;
+                        @endif
+                    </div>
+                </div>
             </x-ui::v-stack>
 
         </x-ui::h-stack>
