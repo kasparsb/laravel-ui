@@ -500,6 +500,11 @@ body {
     transition-timing-function: cubic-bezier(.4,0,.2,1);
     transition-duration: .15s;
 }
+.transition-width {
+    transition-property: width;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+}
 .shadow {
     box-shadow:
         0 0 #0000,
@@ -3510,11 +3515,14 @@ body:has(>.layout) {
         overflow: hidden;
         border-radius: var(--radius);
         background-color: hsl(var(--color-200));
+
         span {
             display: block;
             background-color: hsl(var(--color-blue-500));
             border-radius: var(--radius);
             height: 100%;
+
+            .transition-width();
         }
     }
 }

@@ -17,6 +17,7 @@ import FieldIncrement from './FieldIncrement';
 import FieldHoursMinutes from './FieldHoursMinutes';
 import FieldDateTime from './FieldDateTime';
 import Form from './Form';
+import ProgressBar from './ProgressBar';
 
 Layout.init();
 OptionsPanel.init();
@@ -37,6 +38,7 @@ FieldIncrement.init();
 FieldHoursMinutes.init();
 FieldDateTime.init();
 Form.init();
+ProgressBar.init();
 
 export {
     Layout,
@@ -58,6 +60,7 @@ export {
     FieldHoursMinutes,
     FieldDateTime,
     Form,
+    ProgressBar,
 }
 
 export default {
@@ -80,4 +83,5 @@ export default {
     FieldHoursMinutes,
     FieldDateTime,
     Form,
+    ProgressBar,
 }
