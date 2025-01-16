@@ -25,6 +25,27 @@ class Page extends Component
          */
         public $redirectRoutePrefix='',
         public ?Model $model=null,
+
+        /**
+         * Form will be submitted by javascript via fetch
+         */
+        public $fetchSubmit=false,
+
+        /**
+         * Vai aizvietot atgriezto HTML ar esošo formu?
+         */
+        public $replaceHtml=false,
+
+        /**
+         * Vai atjaunot formu sākuma stāvoklī pēc submit
+         */
+        public $resetFormAfterSubmit=false,
+
+        /**
+         * Iespēja norādīt, laiku (ms) pēc kāda notiek automātisks submit
+         * šo var izmantot kā polling, ja ir jāgaida garāka fona procesa rezultāts
+         */
+        public $submitAfterMs=false,
     )
     {
         /**

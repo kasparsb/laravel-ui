@@ -9,6 +9,22 @@
         ])
         ->merge(['method' => $method, 'action' => $action])
     }}
+
+    @if ($fetchSubmit)
+    data-fetch-submit
+    @endif
+
+    @if ($replaceHtml)
+    data-replace-html="{{ is_bool($replaceHtml) ? '' : $replaceHtml }}"
+    @endif
+
+    @if ($resetFormAfterSubmit)
+    data-reset-form-after-submit
+    @endif
+
+    @if ($submitAfterMs)
+    data-submit-form-after-ms="{{ $submitAfterMs }}"
+    @endif
 >
 @else
 <div {{
