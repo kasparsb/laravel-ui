@@ -16,7 +16,7 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
 
     this.shouldReplace = true;
 
-this.originalEl = originalEl;
+    this.originalEl = originalEl;
 
     /**
      * Elements, kuru replace. Normālā gadījuā, tas ir elements, kurš padots
