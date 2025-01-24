@@ -45,6 +45,8 @@
 @import 'colors';
 @import 'hidden';
 
+@import 'layout-top-menu';
+
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: button;
     background-color: transparent;
@@ -217,6 +219,8 @@ body {
 
     --layout-aside-width: 200px;
     --layout-aside-width-closed: 60px;
+
+    --layout-top-menu-content-width: 1000px;
 
 
     --size-005: @size005;
@@ -2683,6 +2687,8 @@ body:has(>.layout) {
         }
     }
 }
+
+
 
 .page {
 
