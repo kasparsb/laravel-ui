@@ -34,7 +34,23 @@
         $disabled = true;
     }
 
-    $p = explode('.', $as);
+    /**
+     * Sākumā bija domāts, ka delimiter būs . bet tad sapratu, ka labāk būs :
+     * TODO Tāpēc šeit vēl pārbaudām vai ir . bet šis ir jāvāc ārā
+     */
+    $subActionDelimiterPos = strpos($as, ':');
+    if ($subActionDelimiterPos === false) {
+        $subActionDelimiterPos = strpos($as, '.');
+    }
+    if ($subActionDelimiterPos === false) {
+        $p = [$as];
+    }
+    else {
+        $p = [
+            substr($as, 0, $subActionDelimiterPos),
+            substr($as, $subActionDelimiterPos+1),
+        ];
+    }
     $as = $p[0];
     $subAction = count($p) > 1 ? $p[1] : '';
 
