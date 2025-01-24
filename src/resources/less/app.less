@@ -2016,7 +2016,7 @@ body {
 
     .border-sm();
 
-    padding: @size015;
+    padding: @size020;
 
     .transition-color();
     cursor: pointer;
@@ -2026,12 +2026,12 @@ body {
      * SVG kurš ir pa tiešo (ar slot:prefix) nevis menu iekš [data-menu-item-label]
      */
     >svg {
-        margin-right: @size015;
+        margin-right: @size010;
         width: 1.25rem;
         height: 1.25rem;
     }
     // Tikai ikona, bez label
-    &.icon {
+    &:not([data-has-label]) {
         >svg {
             margin-right: 0;
         }

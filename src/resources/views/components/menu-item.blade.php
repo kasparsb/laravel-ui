@@ -37,6 +37,11 @@
     if (!$link) {
         $menuItemTagName = 'button';
     }
+
+    // Vai ir norādīts menu label, kas arī ir galvenais slot
+    if (is_null($hasMenuLabel)) {
+        $hasMenuLabel = isset($slot) && !$slot->isEmpty();
+    }
 @endphp
 <{{ $menuItemTagName }}
     {{ $attributes->class([
@@ -136,17 +141,21 @@
     @if ($disabled)
     disabled="disabled"
     @endif
+
+    @if ($hasMenuLabel)
+    data-has-label
+    @endif
     >
 
     @if (isset($prefix) && !$prefix->isEmpty())
         {{ $prefix }}
     @endif
 
-    @if (isset($slot) && !$slot->isEmpty())
-    <span data-menu-item-label>{{ $slot }}</span>
+    @if ($hasMenuLabel)
+        <span data-menu-item-label>{{ $slot }}</span>
 
-    @if (isset($sufix) && !$sufix->isEmpty())
-        {{ $sufix }}
-    @endif
+        @if (isset($sufix) && !$sufix->isEmpty())
+            {{ $sufix }}
+        @endif
     @endif
 </{{ $menuItemTagName }}>

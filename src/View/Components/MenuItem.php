@@ -46,6 +46,11 @@ class MenuItem extends Component
 
         public $disabled = false,
         public $loading = false,
+
+        /**
+         * Vai ir padots galvenais slot, kurš arī ir menu label
+         */
+        public $hasMenuLabel = null,
     )
     {
 
