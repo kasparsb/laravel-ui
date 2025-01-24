@@ -142,11 +142,8 @@
         {{ $prefix }}
     @endif
 
-    @if (
-           (isset($slot) && !$slot->isEmpty())
-        || $label
-    )
-    <span data-menu-item-label>{{ $slot->isEmpty() ? $label : $slot }}</span>
+    @if (isset($slot) && !$slot->isEmpty())
+    <span data-menu-item-label>{{ $slot }}</span>
 
     @if (isset($sufix) && !$sufix->isEmpty())
         {{ $sufix }}
