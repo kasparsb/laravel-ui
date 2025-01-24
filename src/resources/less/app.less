@@ -2016,20 +2016,23 @@ body {
 
     .border-sm();
 
-    .transition-color();
-
-    cursor: pointer;
-
     padding: @size015;
 
-    svg {
+    .transition-color();
+    cursor: pointer;
+    text-align: left;
+
+    /**
+     * SVG kurš ir pa tiešo (ar slot:prefix) nevis menu iekš [data-menu-item-label]
+     */
+    >svg {
         margin-right: @size015;
         width: 1.25rem;
         height: 1.25rem;
     }
     // Tikai ikona, bez label
     &.icon {
-        svg {
+        >svg {
             margin-right: 0;
         }
     }
@@ -2261,7 +2264,13 @@ body {
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-start;
-    justify-content: space-around;
+    /**
+     * TODO kā labāk uzlikt izkārtojumu?
+     * laikam jāliek caur css klasēm,
+     * lai var override
+     */
+    //justify-content: space-around;
+    justify-content: flex-start;
     gap: @size005;
 }
 
