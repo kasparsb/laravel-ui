@@ -61,10 +61,14 @@ class UiServiceProvider extends ServiceProvider
             ]);
         }
 
-
         $packageJson = json_decode(file_get_contents(__DIR__.'/../package.json'));
 
-        view()->share('ui_dist_css', asset('/vendor/ui/dist/app.min-'.$packageJson->version.'.css'));
-        view()->share('ui_dist_js', asset('/vendor/ui/dist/app.min-'.$packageJson->version.'.js'));
+        $cacheBuster = '';
+        if (config('ui.add_cache_buster')) {
+            $cacheBuster = '?r='.time();
+        }
+
+        view()->share('ui_dist_css', asset('/vendor/ui/dist/app.min-'.$packageJson->version.'.css'.$cacheBuster));
+        view()->share('ui_dist_js', asset('/vendor/ui/dist/app.min-'.$packageJson->version.'.js'.$cacheBuster));
     }
 }
