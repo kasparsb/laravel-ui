@@ -194,4 +194,30 @@ class Helpers
 
         return false;
     }
+
+    public function hasAnyNavMenuLayoutClass($classesString) {
+        return $this->hasAnyClass($classesString, ['nav-menu-vertical', 'nav-menu-horizontal',]);
+    }
+
+    public function hasAnyMenuItemVisualClass($classesString) {
+        return $this->hasAnyClass($classesString, ['menu-item-color', 'menu-item-background',]);
+    }
+
+    public function hasAnyClass($classesWhereToSearch, $classesToFind) {
+        if (!$classesWhereToSearch) {
+            return false;
+        }
+
+        if (!is_array($classesWhereToSearch)) {
+            $classesWhereToSearch = explode(' ', $classesWhereToSearch);
+        }
+
+        foreach ($classesToFind as $classToFind) {
+            if (in_array($classToFind, $classesWhereToSearch)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
