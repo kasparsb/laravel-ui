@@ -69,7 +69,7 @@ class MenuItem extends Component
                  * selected no parent liekam, tikai, ja tas nav null
                  * tukšs string der kā derīga vērtība
                  */
-                $selectedItem = view()->getConsumableComponentData('item');
+                $selectedItem = view()->getConsumableComponentData('selected');
                 if (!is_null($selectedItem)) {
                     $this->selected = $this->name == $selectedItem;
                 }

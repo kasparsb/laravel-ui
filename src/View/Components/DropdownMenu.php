@@ -58,7 +58,7 @@ class DropdownMenu extends Component
         /**
          * Child menu itema name, kurš būs selected
          */
-        public $item = null, // null nozīmē, ka neviens nebūs selected
+        public $selected = null, // null nozīmē, ka neviens nebūs selected
     )
     {
 

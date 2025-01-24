@@ -10,7 +10,7 @@ class NavMenu extends Component
 {
     public function __construct(
         // Kurš menu item ir selected
-        public $item='',
+        public $selected='',
     )
     {
     }
