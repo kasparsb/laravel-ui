@@ -20,6 +20,9 @@
     @if ($replaceHtml)
     data-replace-html="{{ is_bool($replaceHtml) ? '' : $replaceHtml }}"
     @endif
+    @if ($replaceHtmlTarget)
+    data-replace-html-target="{{ $replaceHtmlTarget }}"
+    @endif
 
     @if ($resetFormAfterSubmit)
     data-reset-form-after-submit
@@ -27,6 +30,14 @@
 
     @if ($submitAfterMs)
     data-submit-form-after-ms="{{ $submitAfterMs }}"
+    @endif
+
+    @if ($actionSource)
+    data-action-source="{{ $actionSource }}"
+    @endif
+
+    @if ($methodSource)
+    data-method-source="{{ $methodSource }}"
     @endif
     >
     {{ $slot }}
