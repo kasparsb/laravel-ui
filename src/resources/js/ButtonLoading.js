@@ -6,9 +6,19 @@ function loading(el) {
     el.dataset.loading = 'loading';
 
     // previous disabled state
-    el.dataset.pd = el.disabled ? 'disabled' : '';
-    // Ja nav timeout, tad submit nenotiek, jo acīmredzot disabled pogas nesubmitējas, ja arī bija not disabled
-    setTimeout(() => el.disabled = true, 1);
+    //el.dataset.pd = el.disabled ? 'disabled' : '';
+
+    /**
+     * Ja nav timeout, tad submit nenotiek, jo acīmredzot disabled pogas nesubmitējas,
+     * ja arī bija not disabled
+     *
+     * Ja poga ir Dropdown, tad uz disable poga zaudē fokusu un Dropdown menu
+     * nostrādā focusout un Dropdown menu aizveras, tad kad to nevajag darīt
+     *
+     * Disabled, tagad ir radījis divas problēmas. Varbūt labāk netaisīt disable,
+     * bet readonly vai kaut kādu fake disabled???
+     */
+    //setTimeout(() => el.disabled = true, 1);
 }
 
 function idle(el) {
@@ -20,8 +30,8 @@ function idle(el) {
     }
     delete el.dataset.pl;
 
-    el.disabled = el.dataset.pd == 'disabled';
-    delete el.dataset.pd;
+    //el.disabled = el.dataset.pd == 'disabled';
+    //delete el.dataset.pd;
 }
 
 function toggle(el) {
