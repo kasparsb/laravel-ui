@@ -379,6 +379,21 @@ function open(triggerEl, menuEl) {
     }
 }
 
+/**
+ * Nolasām no openTriggerEl atribūtus vērtības un uzlieka uz targetEl
+ *
+ * no opentriggerEl tiek nolasīta atribūta sourceAttrName vērtība un
+ * uzlikta uz targetEl atribūtā attrName
+ */
+function setSourceAttributesFromOpenTrigger(openTriggerEl, targetEl, attributesMap) {
+    for (let attrName in attributesMap) {
+        let sourceAttrName = targetEl.getAttribute(attributesMap[attrName])
+        if (sourceAttrName) {
+            targetEl.setAttribute(attrName, openTriggerEl.getAttribute(sourceAttrName))
+        }
+    }
+}
+
 function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
 
     // Attributes
@@ -395,6 +410,32 @@ function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
             menuItemEl.setAttribute('data-redirect', openTriggerEl.getAttribute(menuItemEl.dataset.redirectSource))
         }
 
+    })
+
+    /**
+     * Form attributes
+     *
+     * visām formām saliekam data-action-source un data-method-source
+     */
+    qa(menuEl, 'form').forEach(formEl => {
+        setSourceAttributesFromOpenTrigger(
+            openTriggerEl,
+            formEl,
+            {
+                'action': 'data-action-source',
+                'method': 'data-method-source',
+            }
+        )
+    })
+    qa(menuEl, '[data-form-substitute]').forEach(substituteFormEl => {
+        setSourceAttributesFromOpenTrigger(
+            openTriggerEl,
+            substituteFormEl,
+            {
+                'data-action': 'data-action-source',
+                'data-method': 'data-method-source',
+            }
+        )
     })
 }
 
@@ -846,6 +887,7 @@ export default {
 
                     delete menuEl.dataset.dropdownMenuIsActive;
 
+                    console.log('closeAllInactive 1');
                     closeAllInactive()
 
                 })(menuEl), 500)
