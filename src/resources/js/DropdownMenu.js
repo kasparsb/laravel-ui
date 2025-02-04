@@ -4,6 +4,7 @@ import {
     clearFormData
 } from 'dom-helpers';
 import ButtonDelete from './ButtonDelete';
+import ButtonPost from './ButtonPost';
 import SingletonPanel from './SingletonPanel';
 import Listeners from './helpers/Listeners';
 
@@ -401,7 +402,10 @@ function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
 
         if (menuItemEl.dataset.linkSource) {
             menuItemEl.setAttribute('href', openTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
-            if (ButtonDelete.isButtonDelete(menuItemEl)) {
+            if (
+                ButtonDelete.isButtonDelete(menuItemEl)
+                || ButtonPost.isButtonPost(menuItemEl)
+            ) {
                 menuItemEl.setAttribute('data-url', openTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
             }
         }
