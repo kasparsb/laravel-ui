@@ -22,6 +22,8 @@ class Form extends Component
         public $action='',
         // Redirect link after form submit
         public $redirect='',
+        public $methodSource=false,
+        public $actionSource=false,
         /**
          * Routes veidojas pēc namig convention
          * Bet, ja vajag, lai route vārdam priekšā
@@ -40,6 +42,10 @@ class Form extends Component
          * Vai aizvietot atgriezto HTML ar esošo formu?
          */
         public $replaceHtml=false,
+
+        // Ja atrodas iekš menuEl, bet vajag replaceHtml uz pogas, kas atvēra menu
+        // tagad darbojas tikai šis: dropdownMenuOpenTrigger
+        public $replaceHtmlTarget=false,
 
         /**
          * Vai atjaunot formu sākuma stāvoklī pēc submit
