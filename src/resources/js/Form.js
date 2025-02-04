@@ -6,6 +6,7 @@ import {
 } from 'dom-helpers'
 import Listeners from './helpers/Listeners';
 import ButtonLoading from './ButtonLoading';
+import DropdownMenu from './DropdownMenu';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 
 let onBeforeSubmitListeners = {};
@@ -16,7 +17,7 @@ let originalEl = [];
 /**
  * Vai ir form aizvietotājs. Parasts div elements, kura jādarbojas līdzīgi kā form
  */
-function isSubstitute(formEl) {
+function isFormSubstitute(formEl) {
     if (!formEl.dataset) {
         return false;
     }
@@ -25,11 +26,12 @@ function isSubstitute(formEl) {
 }
 
 function submitForm(formEl, url, method) {
+
     if (typeof url == 'undefined') {
-        url = isSubstitute(formEl) ? formEl.dataset.action : formEl.action;
+        url = isFormSubstitute(formEl) ? formEl.dataset.action : formEl.action;
     }
     if (typeof method == 'undefined') {
-        method = isSubstitute(formEl) ? formEl.dataset.method : formEl.method;
+        method = isFormSubstitute(formEl) ? formEl.dataset.method : formEl.method;
     }
 
     let formData = getFormData(formEl);
@@ -60,12 +62,18 @@ function setButtonIdleAfterSubmit(formEl) {
 }
 
 function handleSubmit(formEl) {
+    if ('isSubmitting' in formEl.dataset) {
+        // Formā jau notiek submit
+        return;
+    }
+
+    formEl.dataset.isSubmitting = '';
 
     /**
      * Šitas dublējas ar submit('form')
      * bet šo vajag, ja notiek form submit caur API
      * Pa lielam nekas, ja divreiz uzliks pogai loading.
-     * Vienkrāši fetshSubmit gadījumā dublēsies
+     * Vienkrāši fetchSubmit gadījumā dublēsies
      */
     setButtonLoadingOnSubmit(formEl);
 
@@ -100,6 +108,8 @@ function handleSubmit(formEl) {
                         r
                     ])
                 }
+
+                delete formEl.dataset.isSubmitting;
 
                 if ('resetFormAfterSubmit' in formEl.dataset) {
                     reset(formEl);
