@@ -1,5 +1,6 @@
 import {replace, qr} from 'dom-helpers';
 import DropdownMenu from '../DropdownMenu';
+import Container from '../Container';
 
 /**
  * Ja elementam ir nodrādīts data-replace-html, tad aizvietosim
@@ -19,7 +20,7 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
     this.originalEl = originalEl;
 
     /**
-     * Elements, kuru replace. Normālā gadījuā, tas ir elements, kurš padots
+     * Elements, kuru replace. Normālā gadījumā, tas ir elements, kurš padots
      */
     this.elToReplace = originalEl;
 
@@ -30,7 +31,7 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
 
     /**
      * Ja ir norādīts replaceHtml target. Tas ir cits elements, uz kuru
-     * veikt replcaeHtml darbību
+     * veikt replaceHtml darbību
      */
     if ('replaceHtmlTarget' in this.originalEl.dataset) {
         if (this.originalEl.dataset.replaceHtmlTarget == 'dropdownMenuOpenTrigger') {
@@ -46,6 +47,8 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
 
         this.elToReplace = qr(this.elToReplace, this.originalEl.dataset.replaceHtml);
     }
+
+    Container.maybeLoading(this.elToReplace, 'replace');
 }
 
 ReplaceElWithNewHtmlIfNecessary.prototype = {
@@ -59,6 +62,8 @@ ReplaceElWithNewHtmlIfNecessary.prototype = {
         }
 
         this.elToReplace = replace(this.elToReplace, newHtml);
+
+        Container.idle(this.elToReplace);
 
         // Svarīgi atgriez to pašu elementu, kurš tika padots
         return this.shouldReplaceOriginalEl ? this.elToReplace : this.originalEl;
