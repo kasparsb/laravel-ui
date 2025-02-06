@@ -25,9 +25,7 @@ function idle(el) {
     if (el.dataset.pl) {
         el.dataset.loading = el.dataset.pl;
     }
-    else {
-        delete el.dataset.loading;
-    }
+
     delete el.dataset.pl;
 
     //el.disabled = el.dataset.pd == 'disabled';
