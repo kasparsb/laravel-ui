@@ -3901,33 +3901,12 @@ body:has(>.layout) {
         opacity: 0;
     }
 
-    // Loading spinner
-    svg.spinner {
-        display: block;
-        position: absolute;
-        top: var(--size-040);
-        left: var(--size-040);
-
-        width: @size040;
-        height: @size040;
-
-        opacity: 0;
-        pointer-events: none;
-
-        @keyframes spin {
-            100% {
-                transform: rotate(360deg)
-            }
-        }
-        animation: spin .75s infinite linear;
-    }
-
     &[data-loading="loading"] {
-        .skeleton-container-animation();
 
-        &:before,
-        .spinner {
+        &:before {
             opacity: 1;
         }
+
+        .skeleton-container-animation();
     }
 }
