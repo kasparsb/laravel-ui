@@ -1,4 +1,5 @@
 import Layout from './Layout';
+import Container from './Container';
 import ButtonLoading from './ButtonLoading';
 import ButtonDelete from './ButtonDelete';
 import ButtonPost from './ButtonPost';
@@ -22,6 +23,7 @@ import ProgressBar from './ProgressBar';
 
 Layout.init();
 OptionsPanel.init();
+Container.init()
 ButtonLoading.init();
 ButtonDelete.init();
 ButtonPost.init();
@@ -45,6 +47,7 @@ ProgressBar.init();
 export {
     Layout,
     OptionsPanel,
+    Container,
     ButtonLoading,
     ButtonDelete,
     ButtonPost,
@@ -69,6 +72,7 @@ export {
 export default {
     Layout,
     OptionsPanel,
+    Container,
     ButtonLoading,
     ButtonDelete,
     ButtonPost,
