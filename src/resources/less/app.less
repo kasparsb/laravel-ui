@@ -3918,3 +3918,26 @@ body:has(>.layout) {
         .skeleton-container-animation();
     }
 }
+
+.loader {
+    // width definējas ar css klasi
+
+    aspect-ratio: 1/1;
+
+    display: inline-block;
+
+    position: relative;
+
+    .spinner {
+        display: block;
+        width: 100%;
+        height: 100%;
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+        animation: spin .75s infinite linear;
+    }
+}
