@@ -86,6 +86,13 @@ function handleSubmit(formEl) {
 
     let elReplacer = new ReplaceElWithNewHtmlIfNecessary(formEl);
 
+
+    /**
+     * Nevar likt pirms ReplaceElWithNewHtmlIfNecessary, jo tad
+     * dropdownmenu ir aizvēries un vairs nevar atrast openTriggerEl
+     */
+    handleDropdownHideMenu(formEl, 'onsubmit');
+
     return new Promise((resolve, reject) => {
         submitForm(formEl)
             .then(r => {
@@ -110,6 +117,8 @@ function handleSubmit(formEl) {
                 }
 
                 delete formEl.dataset.isSubmitting;
+
+                handleDropdownHideMenu(formEl, 'aftersubmit');
 
                 if ('resetFormAfterSubmit' in formEl.dataset) {
                     reset(formEl);
@@ -185,6 +194,19 @@ function setTimeoutsForFormsWithSubmitAfterMs() {
             }, timeoutMs)
         }
     })
+}
+
+function handleDropdownHideMenu(formEl, eventName) {
+    if (!('hideMenu' in formEl.dataset)) {
+        return;
+    }
+
+    if (formEl.dataset.hideMenu == eventName) {
+        let menuEl = DropdownMenu.getByChild(formEl);
+        if (menuEl) {
+            DropdownMenu.close(menuEl);
+        }
+    }
 }
 
 export default {

@@ -39,6 +39,10 @@
     @if ($methodSource)
     data-method-source="{{ $methodSource }}"
     @endif
+
+    @if ($hideMenu)
+    data-hide-menu="{{ $hideMenu }}"
+    @endif
     >
     {{ $slot }}
 

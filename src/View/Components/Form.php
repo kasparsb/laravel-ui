@@ -25,6 +25,12 @@ class Form extends Component
         public $methodSource=false,
         public $actionSource=false,
         /**
+         * Kad aizvērt Dropdownmenu, kurā ielikta forma
+         * onsubmit, aftersubmit
+         * darbojas savādāk, kā Button.menuHide
+         */
+        public $hideMenu=false,
+        /**
          * Routes veidojas pēc namig convention
          * Bet, ja vajag, lai route vārdam priekšā
          * ir prefix, tad izmantot šo
@@ -36,7 +42,7 @@ class Form extends Component
         /**
          * Form will be submitted by javascript via fetch
          */
-        public $fetchSubmit=false,
+        public $fetchSubmit=null,
 
         /**
          * Vai aizvietot atgriezto HTML ar esošo formu?
@@ -95,6 +101,13 @@ class Form extends Component
                 if (!$this->redirect) {
                     $this->redirect = route($namespace.'.index');
                 }
+            }
+        }
+
+        // Nav norādīts fetchSumbit, tad replaceHtml gadījumā liekam kā true
+        if (is_null($this->fetchSubmit)) {
+            if ($this->replaceHtml) {
+                $this->fetchSubmit = true;
             }
         }
     }
