@@ -48,7 +48,12 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
         this.elToReplace = qr(this.elToReplace, this.originalEl.dataset.replaceHtml);
     }
 
-    Container.maybeLoading(this.elToReplace, 'replace');
+    if (this.elToReplace) {
+        Container.maybeLoading(this.elToReplace, 'replace');
+    }
+    else {
+        console.error('UI.Form el to replace not defined')
+    }
 }
 
 ReplaceElWithNewHtmlIfNecessary.prototype = {
