@@ -3892,23 +3892,25 @@ body:has(>.layout) {
 
     position: relative;
 
-    &:before {
-        content: '';
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: hsl(var(--color-background) / .7);
-        pointer-events: none;
 
-        .transition-color();
-        opacity: 0;
+    &[data-loading-style="ui-faded-ghost"] {
+        &:before {
+            content: '';
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: hsl(var(--color-background) / .7);
+            pointer-events: none;
+
+            .transition-color();
+            opacity: 0;
+        }
     }
 
-    &[data-loading="loading"] {
-
+    &[data-loading="loading"][data-loading-style="ui-faded-ghost"] {
         &:before {
             opacity: 1;
         }
