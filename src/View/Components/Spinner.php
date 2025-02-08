@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Loader extends Component
+class Spinner extends Component
 {
     public function __construct(
     )
@@ -15,6 +15,6 @@ class Loader extends Component
 
     public function render(): View|Closure|string
     {
-        return view('ui::components.loader');
+        return view('ui::components.spinner');
     }
 }
