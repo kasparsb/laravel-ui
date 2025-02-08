@@ -3889,10 +3889,10 @@ body:has(>.layout) {
 
 .container {
 
-    position: relative;
-
-
     &[data-loading-style="ui-faded-ghost"] {
+
+        position: relative;
+
         &:before {
             content: '';
             position: absolute;
@@ -3915,6 +3915,19 @@ body:has(>.layout) {
         }
 
         .skeleton-container-animation();
+    }
+
+
+    /**
+     * Loading style spinner
+     * ar data-custom-spinner norāda, kurš ir tas spinner elements
+     *
+     * šādā izpildījumā nevar būt divi loading containeri viens otrā
+     */
+    &[data-loading-style="custom-spinner"]:not([data-loading="loading"]) {
+        [data-custom-spinner] {
+            display: none;
+        }
     }
 }
 

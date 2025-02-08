@@ -5,6 +5,7 @@
 <div
     {{ $attributes->class([
         'card' => true,
+        'container' => $loading ? true : false,
         'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class')),
         'bw-1' => !$helpers->hasAnyBorderWidthClass($attributes->get('class')),
     ]) }}
