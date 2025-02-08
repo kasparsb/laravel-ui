@@ -55,6 +55,9 @@ class Button extends Component
 
         public $table='', // table name, kurai veikt add, delete darbības
 
+        public $linkSource = '', // data-{attribute name} lai varētu link ielasīt no click trigger el
+        public $redirectSource = '', // data-{attribute name} lai varētu link ielasīt no click trigger el
+
         public ?Model $model=null,
         public $disabled=false,
         /**

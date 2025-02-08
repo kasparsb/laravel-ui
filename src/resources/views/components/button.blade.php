@@ -134,6 +134,14 @@
     data-table="{{ $table }}"
     @endif
 
+    @if ($linkSource)
+    data-link-source="{{ $linkSource }}"
+    @endif
+
+    @if ($redirectSource)
+    data-redirect-source="{{ $redirectSource }}"
+    @endif
+
     @if ($loading)
     data-loading="{{ $loading === true ? 'loading' : $loading }}"
     @endif

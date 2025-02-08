@@ -397,16 +397,25 @@ function setSourceAttributesFromOpenTrigger(openTriggerEl, targetEl, attributesM
 
 function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
 
-    // Attributes
-    qa(menuEl, '[data-role="menuitem"]').forEach(menuItemEl => {
+    /**
+     * Attributes priekš menu item un button
+     *
+     * TODO varbūt button arī uzlikt role nevis vienkārši pēc button?
+     */
+    qa(menuEl, '[data-role="menuitem"], button').forEach(menuItemEl => {
 
         if (menuItemEl.dataset.linkSource) {
-            menuItemEl.setAttribute('href', openTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
             if (
                 ButtonDelete.isButtonDelete(menuItemEl)
                 || ButtonPost.isButtonPost(menuItemEl)
             ) {
                 menuItemEl.setAttribute('data-url', openTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
+            }
+            else {
+                menuItemEl.setAttribute(
+                    menuItemEl.tagName.toLowerCase() == 'a' ? 'href' : 'data-url',
+                    openTriggerEl.getAttribute(menuItemEl.dataset.linkSource)
+                )
             }
         }
 
