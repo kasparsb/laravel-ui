@@ -2,11 +2,20 @@
 @props([
     'title',
 ])
-<div {{ $attributes->class([
-    'card' => true,
-    'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class')),
-    'bw-1' => !$helpers->hasAnyBorderWidthClass($attributes->get('class')),
-]) }} >
+<div
+    {{ $attributes->class([
+        'card' => true,
+        'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class')),
+        'bw-1' => !$helpers->hasAnyBorderWidthClass($attributes->get('class')),
+    ]) }}
+
+    @if ($loadingStyle)
+    data-loading-style="{{ $loadingStyle }}"
+    @endif
+    @if ($loading)
+    data-loading="{{ $loading === true ? 'loading' : $loading }}"
+    @endif
+    >
     @if (isset($header) || isset($title) || isset($titleDescription) || isset($headerAside))
     <div class="card-header">
         @if (isset($header))
