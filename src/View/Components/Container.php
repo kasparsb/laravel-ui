@@ -3,9 +3,8 @@
 namespace Kasparsb\Ui\View\Components;
 
 use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 
 class Container extends Component
