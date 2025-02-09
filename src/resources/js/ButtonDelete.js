@@ -2,21 +2,23 @@ import {parent, del, clickp} from 'dom-helpers'
 import ButtonLoading from './ButtonLoading';
 import Table from './Table';
 import DropdownMenu from './DropdownMenu';
+import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
+import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
 
 export default {
     init() {
-        clickp('[data-button-delete]', (ev, el) => {
+        clickp('[data-button-delete]', (ev, buttonEl) => {
             ev.preventDefault();
 
             // Tabulas rindas dzēšana
-            if (el.dataset.buttonDelete == 'tableRow') {
-                if (el.dataset.role == 'menuitem') {
+            if (buttonEl.dataset.buttonDelete == 'tableRow') {
+                if (buttonEl.dataset.role == 'menuitem') {
                     // Dzēšam
                     Table.deleteRow(
                         // Atrodam tabula row
                         parent(
                             // Atrodam menu open trigger elementu. Tā būs poga tabulas šūnā
-                            DropdownMenu.getOpenTriggerByChild(el)
+                            DropdownMenu.getOpenTriggerByChild(buttonEl)
                             , 'tr'
                         )
                     );
@@ -24,19 +26,29 @@ export default {
                 }
                 else {
                     // Dzēšam to rindu, kurā atrodas delete poga
-                    Table.deleteRow(parent(el, 'tr'));
+                    Table.deleteRow(parent(buttonEl, 'tr'));
                 }
             }
-            else if (el.dataset.url) {
-                ButtonLoading.maybeLoading(el, 'delete');
+            else if (buttonEl.dataset.url) {
+                ButtonLoading.maybeLoading(buttonEl, 'delete');
 
-                del(el.dataset.url)
+                let elReplacer = new ReplaceElWithNewHtmlIfNecessary(buttonEl);
+
+                /**
+                 * Nevar likt pirms ReplaceElWithNewHtmlIfNecessary, jo tad
+                 * dropdownmenu ir aizvēries un vairs nevar atrast openTriggerEl
+                 */
+                handleDropdownMenuHideFromEl(buttonEl, 'onsubmit');
+
+                del(buttonEl.dataset.url)
                     .then(r => {
-                        if (el.dataset.redirect) {
-                            window.location.href = el.dataset.redirect
+                        if (buttonEl.dataset.redirect) {
+                            window.location.href = buttonEl.dataset.redirect
                         }
                         else {
-                            ButtonLoading.idle(el);
+                            elReplacer.replace(r)
+                            ButtonLoading.idle(buttonEl);
+                            handleDropdownMenuHideFromEl(buttonEl, 'aftersubmit');
                         }
                     })
             }
@@ -45,8 +57,8 @@ export default {
     /**
      * Pārbauda vai padotais el ir delete button
      */
-    isButtonDelete(el) {
-        if ('buttonDelete' in el.dataset) {
+    isButtonDelete(buttonEl) {
+        if ('buttonDelete' in buttonEl.dataset) {
             return true;
         }
         return false;

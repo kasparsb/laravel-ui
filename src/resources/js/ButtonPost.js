@@ -1,24 +1,33 @@
 import {post, clickp} from 'dom-helpers';
 import ButtonLoading from './ButtonLoading';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
+import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
 
 export default {
     init() {
-        clickp('[data-button-post]', (ev, el) => {
-            if (el.dataset.url) {
+        clickp('[data-button-post]', (ev, buttonEl) => {
 
-                ButtonLoading.maybeLoading(el, 'post');
+            if (buttonEl.dataset.url) {
 
-                let elReplacer = new ReplaceElWithNewHtmlIfNecessary(el);
+                ButtonLoading.maybeLoading(buttonEl, 'post');
 
-                post(el.dataset.url)
+                let elReplacer = new ReplaceElWithNewHtmlIfNecessary(buttonEl);
+
+                /**
+                 * Nevar likt pirms ReplaceElWithNewHtmlIfNecessary, jo tad
+                 * dropdownmenu ir aizvēries un vairs nevar atrast openTriggerEl
+                 */
+                handleDropdownMenuHideFromEl(buttonEl, 'onsubmit');
+
+                post(buttonEl.dataset.url)
                     .then(r => {
-                        if (el.dataset.redirect) {
-                            window.location.href = el.dataset.redirect
+                        if (buttonEl.dataset.redirect) {
+                            window.location.href = buttonEl.dataset.redirect
                         }
                         else {
                             elReplacer.replace(r)
-                            ButtonLoading.idle(el);
+                            ButtonLoading.idle(buttonEl);
+                            handleDropdownMenuHideFromEl(buttonEl, 'aftersubmit');
                         }
                     })
             }
@@ -27,8 +36,8 @@ export default {
     /**
      * Pārbauda vai padotais el ir post button
      */
-    isButtonPost(el) {
-        if ('buttonPost' in el.dataset) {
+    isButtonPost(buttonEl) {
+        if ('buttonPost' in buttonEl.dataset) {
             return true;
         }
         return false;

@@ -29,7 +29,7 @@ class Form extends Component
          * onsubmit, aftersubmit
          * darbojas savādāk, kā Button.menuHide
          */
-        public $hideMenu=false,
+        public $menuHide=false,
         /**
          * Routes veidojas pēc namig convention
          * Bet, ja vajag, lai route vārdam priekšā

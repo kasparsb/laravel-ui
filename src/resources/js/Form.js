@@ -6,8 +6,8 @@ import {
 } from 'dom-helpers'
 import Listeners from './helpers/Listeners';
 import ButtonLoading from './ButtonLoading';
-import DropdownMenu from './DropdownMenu';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
+import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
 
 let onBeforeSubmitListeners = {};
 let onAfterSubmitListeners = {};
@@ -91,7 +91,7 @@ function handleSubmit(formEl) {
      * Nevar likt pirms ReplaceElWithNewHtmlIfNecessary, jo tad
      * dropdownmenu ir aizvēries un vairs nevar atrast openTriggerEl
      */
-    handleDropdownHideMenu(formEl, 'onsubmit');
+    handleDropdownMenuHideFromEl(formEl, 'onsubmit');
 
     return new Promise((resolve, reject) => {
         submitForm(formEl)
@@ -118,7 +118,7 @@ function handleSubmit(formEl) {
 
                 delete formEl.dataset.isSubmitting;
 
-                handleDropdownHideMenu(formEl, 'aftersubmit');
+                handleDropdownMenuHideFromEl(formEl, 'aftersubmit');
 
                 if ('resetFormAfterSubmit' in formEl.dataset) {
                     reset(formEl);
@@ -196,12 +196,12 @@ function setTimeoutsForFormsWithSubmitAfterMs() {
     })
 }
 
-function handleDropdownHideMenu(formEl, eventName) {
-    if (!('hideMenu' in formEl.dataset)) {
+function handleDropdownMenuHide(formEl, eventName) {
+    if (!('menuHide' in formEl.dataset)) {
         return;
     }
 
-    if (formEl.dataset.hideMenu == eventName) {
+    if (formEl.dataset.menuHide == eventName) {
         let menuEl = DropdownMenu.getByChild(formEl);
         if (menuEl) {
             DropdownMenu.close(menuEl);

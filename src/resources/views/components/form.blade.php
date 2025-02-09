@@ -40,8 +40,8 @@
     data-method-source="{{ $methodSource }}"
     @endif
 
-    @if ($hideMenu)
-    data-hide-menu="{{ $hideMenu }}"
+    @if ($menuHide)
+    data-dropdown-menu-hide="{{ $menuHide }}"
     @endif
     >
     {{ $slot }}
