@@ -75,7 +75,14 @@
             @endif
             @disabled($disabled)
             />
-        @if (isset($sufix) && !$sufix->isEmpty())
+
+        @if ($clearable)
+            <x-ui::button-ghost class="icon" data-dropdown-menu-trigger-ignore data-button-clear>
+                <svg width="24" height="24" viewBox="0 0 24 24" data-defautl-calendar-icon>
+                    <use xlink:href="#ui-icon-x"></use>
+                </svg>
+            </x-ui::button-ghost>
+        @elseif (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}
         @endif
     </div>

@@ -178,5 +178,15 @@ export default {
 
             setPlaceholder(fieldDateEl, inputEl.value ? stringToDate(inputEl.value) : null)
         })
+    },
+
+    /**
+     * TODO Varbūt vajag klausīties uz input lauka change
+     * tad varētu tikai norītī lauku un pārējais viss tiktu izdarīts eventā
+     */
+    clear(fieldDateEl) {
+        let inputEl = q(fieldDateEl, 'input');
+        inputEl.value = '';
+        setPlaceholder(fieldDateEl, null);
     }
 }

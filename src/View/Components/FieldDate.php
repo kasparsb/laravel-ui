@@ -31,6 +31,7 @@ class FieldDate extends Component
         public $state='',
         public $defaultDateState='',
         public $disabled=false,
+        public $clearable=false,
 
         public $errorMessage='',
         public $hasError=false,
