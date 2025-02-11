@@ -6,6 +6,7 @@ import ButtonPost from './ButtonPost';
 import ButtonGet from './ButtonGet';
 import ButtonAdd from './ButtonAdd';
 import ButtonCopy from './ButtonCopy';
+import ButtonClear from './ButtonClear';
 import DropdownMenu from './DropdownMenu';
 import FieldDate from './FieldDate';
 import Calendar from './Calendar';
@@ -30,6 +31,7 @@ ButtonPost.init();
 ButtonGet.init();
 ButtonAdd.init();
 ButtonCopy.init();
+ButtonClear.init();
 DropdownMenu.init();
 FieldDate.init();
 Calendar.init();
@@ -54,6 +56,7 @@ export {
     ButtonGet,
     ButtonAdd,
     ButtonCopy,
+    ButtonClear,
     DropdownMenu,
     FieldSelect,
     FieldDate,
@@ -79,6 +82,7 @@ export default {
     ButtonGet,
     ButtonAdd,
     ButtonCopy,
+    ButtonClear,
     DropdownMenu,
     FieldSelect,
     FieldDate,
