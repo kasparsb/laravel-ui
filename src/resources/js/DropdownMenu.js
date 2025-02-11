@@ -529,6 +529,16 @@ export default {
 
             //console.log('-    OP click [data-dropdown-menu-trigger]', triggerEl.dataset.dropdownMenuShow);
 
+            /**
+             * menu open uzlikts uz visu elementu
+             * bet ir gadījumi, kad vajag, lai uz kādu no child elementiem tomēr menu netatvereas
+             * tad te ir workaround.
+             * Uz to child elementu, kuram vajag ignorēt menu open uzliek data-dropdown-menu-trigger-ignore
+             */
+            if ('dropdownMenuTriggerIgnore' in ev.target.dataset) {
+                return;
+            }
+
             if ('dropdownMenuWasKeydownEnter' in triggerEl.dataset) {
                 delete triggerEl.dataset.dropdownMenuWasKeydownEnter;
                 return
