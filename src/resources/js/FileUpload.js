@@ -186,7 +186,7 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
 
         if (isImage(file)) {
             // ieliekam preview no local bildes
-            replaceContent(fileEl.preview.content, createImageFromFile(file, {
+            replaceContent(fileEl.preview, createImageFromFile(file, {
                 data: {
                     r: 'image'
                 }
@@ -194,14 +194,14 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
         }
         else if (isVideo(file)) {
             // ieliekam preview no local bildes
-            replaceContent(fileEl.preview.content, createVideoFromFile(file, {
+            replaceContent(fileEl.preview, createVideoFromFile(file, {
                 data: {
                     r: 'video'
                 }
             }));
         }
         else {
-            replaceContent(fileEl.preview.content, getFileType(file)+' (.'+getExtension(file)+')');
+            replaceContent(fileEl.preview, getFileType(file)+' (.'+getExtension(file)+')');
         }
     }
 
@@ -232,11 +232,13 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
                 }
             )
                 .then(response => {
+                    console.log('success');
                     fileEl.input.value = response.value;
                     fileEl.dataset.state = 'completed';
 
                     if (preview) {
                         if (isImage(file)) {
+                            console.log(fileEl.preview);
                             fileEl.preview.image.src = response.url;
                         }
                     }
@@ -244,6 +246,7 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
                     resolve(fileEl);
                 })
                 .catch(response => {
+                    console.log('error');
                     fileEl.dataset.state = 'failed';
                     fileEl.failedMessage.innerHTML = response.message;
 
