@@ -10,6 +10,7 @@ use Illuminate\View\Component;
 class AspectRatio extends Component
 {
     public $paddingBottom;
+    public $aspectRatio;
 
     public function __construct(
         public $ratio,
@@ -20,6 +21,7 @@ class AspectRatio extends Component
             $p = explode($delimiter, $this->ratio);
             if (count($p) > 1) {
                 $this->paddingBottom = (($p[1] / $p[0]) * 100).'%';
+                $this->aspectRatio = $p[0].'/'.$p[1];
                 break;
             }
         }

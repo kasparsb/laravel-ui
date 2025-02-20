@@ -4,20 +4,34 @@ function calcPaddingBottom(ratio) {
         return `${ratio * 100}%`;
     }
 
+    let ar = validateAspectRatio(ratio);
+    if (ar) {
+        return `${(ar.y / ar.x) * 100}%`;
+    }
+}
+
+function validateAspectRatio(ratio) {
     let delimiters = [':', '/', 'x', '*'];
     for (let delimiter of delimiters) {
         let parts = ratio.split(delimiter);
         if (parts.length > 1) {
-            return `${(parseFloat(parts[1]) / parseFloat(parts[0])) * 100}%`;
+            return {
+                x: parseFloat(parts[0]),
+                y: parseFloat(parts[1])
+            }
         }
     }
 }
 
 export default {
+    init() {
+
+    },
     setRatio(aspectRatioEl, ratio) {
-        aspectRatioEl.style.paddingBottom = calcPaddingBottom(ratio);
+        let ar = validateAspectRatio(ratio)
+        aspectRatioEl.style.aspectRatio = ar ? ar.x+'/'+ar.y : '';
     },
     setRatioFromDimensions(aspectRatioEl, {width, height}) {
-        aspectRatioEl.style.paddingBottom = calcPaddingBottom(height / width);
+        aspectRatioEl.style.aspectRatio = width+'/'+height;
     }
 }

@@ -3208,16 +3208,6 @@ body:has(>.layout) {
 }
 
 .aspect-ratio-container {
-    position: relative;
-
-    // Content container
-    >div {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
 
     &.media-contain,
     &.media-cover,
@@ -3249,12 +3239,10 @@ body:has(>.layout) {
 
     &.content-center {
         // Content container padaram center
-        >div {
-            display: flex;
-            flex-direction: row nowrap;
-            justify-content: center;
-            align-items: center;
-        }
+        display: flex;
+        flex-direction: row nowrap;
+        justify-content: center;
+        align-items: center;
     }
 }
 

@@ -2,9 +2,7 @@
     {{ $attributes->class([
         'aspect-ratio-container',
     ]) }}
-    style="padding-bottom:{{ $paddingBottom }}"
+    style="aspect-ratio:{{ $aspectRatio }}"
     >
-    <div data-r="content">
-        {{ $slot }}
-    </div>
+    {{ $slot }}
 </div>
