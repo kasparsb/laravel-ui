@@ -21,6 +21,7 @@ import FieldHoursMinutes from './FieldHoursMinutes';
 import FieldDateTime from './FieldDateTime';
 import Form from './Form';
 import ProgressBar from './ProgressBar';
+import AspectRatio from './AspectRatio';
 
 Layout.init();
 OptionsPanel.init();
@@ -45,6 +46,7 @@ FieldHoursMinutes.init();
 FieldDateTime.init();
 Form.init();
 ProgressBar.init();
+AspectRatio.init();
 
 export {
     Layout,
@@ -70,6 +72,7 @@ export {
     FieldDateTime,
     Form,
     ProgressBar,
+    AspectRatio
 }
 
 export default {
@@ -96,4 +99,5 @@ export default {
     FieldDateTime,
     Form,
     ProgressBar,
+    AspectRatio
 }
