@@ -19,6 +19,11 @@
      * sagatavot vizuālo vērtību iepriekš
      */
     $hasValueVisual = isset($valueVisual) && !$valueVisual->isEmpty();
+
+    // As - var nospecificēt kādu funkciju veiks field-select
+    $asParts = explode(':', $as);
+    $as = $asParts[0];
+    $asSubAction = count($asParts) > 1 ? $asParts[1] : '';
 @endphp
 <div
     {{ $attributesForContainer->class([
@@ -84,6 +89,9 @@
             type="hidden"
             name="{{ $name }}"
             value="{{ $value }}"
+            @if ($as)
+            data-{{ $as }}="{{ $asSubAction }}"
+            @endif
             @disabled($disabled)
             />
 

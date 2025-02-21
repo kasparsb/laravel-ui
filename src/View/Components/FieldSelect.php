@@ -19,6 +19,7 @@ class FieldSelect extends Component
     public $optionsListId;
 
     public function __construct(
+        public $as=null, // tabs-switch:{tabName}
         public $label='',
         public $name='',
         // Lauka vārds modelī? Tas ir gadījumā, ja field name atšķiras no model name
