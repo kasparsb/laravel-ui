@@ -1,4 +1,4 @@
-import {q, qa, parent, click} from 'dom-helpers';
+import {q, qa, parent, click, change} from 'dom-helpers';
 import Listeners from './helpers/Listeners';
 
 let onChangeListeners = {};
@@ -33,41 +33,58 @@ function setInputsDisabled(tabContentEl, isDisabled) {
     }
 }
 
+function changeTab(tabsEl, newTabName) {
+    tabsEl.dataset.selected = newTabName;
+
+    let selectedTabEl = null;
+    // Meklējam visus tab-content, jo tab var arī nebūt. Tab var parslēgt caur api vai ar field-select
+    qa(tabsEl, '[data-role=tab-content]').forEach(tabContentEl => {
+        let tabEl = q(tabsEl, `[data-role=tab][data-tab-name="${tabContentEl.dataset.tabName}"]`)
+
+        if (tabContentEl.dataset.tabName == newTabName) {
+            enableTabContent(tabContentEl)
+
+            if (tabEl) {
+                tabEl.dataset.selected = '';
+                selectedTabEl = tabEl;
+            }
+        }
+        else {
+            disableTabContent(tabContentEl)
+            if (tabEl) {
+                delete tabEl.dataset.selected;
+            }
+        }
+    })
+
+    if ('name' in tabsEl.dataset) {
+        if (typeof onChangeListeners[tabsEl.dataset.name] != 'undefined') {
+            onChangeListeners[tabsEl.dataset.name].trigger([
+                tabsEl.dataset.selected,
+                selectedTabEl,
+                tabsEl
+            ]);
+        }
+    }
+}
+
 let Tabs = {
     init() {
+        // Tabs switching by any control, which has data-tabs-switch attribute
+        change('[data-tabs-switch]', (ev, fieldEl) => {
+            if (fieldEl.dataset.tabsSwitch) {
+                changeTab(q(`.tabs[data-name=${fieldEl.dataset.tabsSwitch}]`), fieldEl.value)
+            }
+            else {
+                /**
+                 * TODO Jāapstrādā gadījums, kad lauks ir tabs elementā
+                 */
+                return
+            }
+        })
+        // Tabs switching by tabs control
         click('.tabs .tab', (ev, selectedTabEl) => {
-            let tabsEl = parent(selectedTabEl, '.tabs');
-
-            // Hide currenlty selected tab
-            let currentlySelectedTabEl = q(tabsEl, '[data-selected]');
-            if (currentlySelectedTabEl) {
-                delete currentlySelectedTabEl.dataset.selected;
-            }
-
-            selectedTabEl.dataset.selected = '';
-            tabsEl.dataset.selected = selectedTabEl.dataset.tabName;
-
-
-            // Meklējam visus tab-content
-            qa(tabsEl, '[data-role=tab]').forEach(tabEl => {
-                let tabContentEl = q(`[data-role=tab-content][data-tab-name="${tabEl.dataset.tabName}"]`);
-                if (tabEl.dataset.tabName == selectedTabEl.dataset.tabName) {
-                    enableTabContent(tabContentEl)
-                }
-                else {
-                    disableTabContent(tabContentEl)
-                }
-            });
-
-            if ('name' in tabsEl.dataset) {
-                if (typeof onChangeListeners[tabsEl.dataset.name] != 'undefined') {
-                    onChangeListeners[tabsEl.dataset.name].trigger([
-                        tabsEl.dataset.selected,
-                        selectedTabEl,
-                        tabsEl
-                    ]);
-                }
-            }
+            changeTab(parent(selectedTabEl, '.tabs'), selectedTabEl.dataset.tabName);
         })
 
 

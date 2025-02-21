@@ -1,13 +1,23 @@
 @inject('helpers', 'Kasparsb\Ui\Helpers')
-
+@php
+$hasNav = true;
+if ($slot->isEmpty()) {
+    $hasNav = false;
+}
+@endphp
 <div
-    {{ $attributes->class(['tabs']) }}
+    {{ $attributes->class([
+        'tabs' => true,
+        'tabs-has-nav' => $hasNav,
+    ]) }}
     @if ($name)
     data-name="{{ $name }}"
     @endif
     data-selected="{{ $selected }}"
     >
+    @if ($hasNav)
     <nav>{{ $slot }}</nav>
+    @endif
 
     @if (isset($content))
         @php
@@ -22,7 +32,9 @@
         @endphp
         <div
             data-role="tabs-contents"
-            {{ $content->attributes->class(['mt-3' => !$isAnyMarginTopClassPassed]) }}
+            {{ $content->attributes->class([
+                'mt-3' => $hasNav && !$isAnyMarginTopClassPassed
+            ]) }}
             >
         {{ $content }}
         </div>

@@ -7,6 +7,7 @@ var source = require('vinyl-source-stream')
 var less = require('gulp-less');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
+var fs = require('fs').promises;
 
 var babelify = require('babelify');
 
@@ -175,5 +176,102 @@ function watchless(cb){
     cb();
 };
 
-exports.default = gulp.series(watchjs, watchless);
-exports.dist = gulp.series(js, less2);
+function isExistsAnyDistFile() {
+
+    return new Promise((resolve, reject) => {
+        getPackageJson()
+            .then(package => {
+
+                let filesToCheck = [];
+                filesToCheck.push(files.dest+'/app.min-'+package.version+'.js')
+                filesToCheck.push(files.dest+'/app.min-'+package.version+'.css')
+
+
+                Promise.any(filesToCheck.map(fileName => fs.access(fileName)))
+                    .then(resolve)
+                    .catch(reject)
+            })
+    })
+
+}
+
+function incrementPackageVersion() {
+
+    return fs.readFile('./package.json', 'utf8')
+        .then(fileContent => {
+            // Parse JSON
+            let package = JSON.parse(fileContent);
+            let p = package.version
+                .split('.')
+                .map(Number);
+
+            // inc patch number
+            p[2] += 1;
+
+            package.version = p.join('.');
+
+            return fs.writeFile(
+                './package.json',
+                JSON.stringify(package, null, 2) + '\n',
+                'utf8'
+            )
+        })
+        .catch(err => {
+            throw err;
+        });
+}
+
+function getPackageJson() {
+    return new Promise((resolve, reject) => {
+        fs.readFile('./package.json', 'utf8')
+            .then(fileContent => {
+                resolve(JSON.parse(fileContent))
+            })
+            .catch(err => {
+                throw err;
+            })
+    })
+}
+
+let taskDefault = gulp.series(watchjs, watchless);
+let taskDist = gulp.series(js, less2);
+
+/**
+ * Bump version and create new dist files
+ * check if these dist files already exists
+ * if exists, then do not bump version. Not to
+ * accidentaly polute version number
+ */
+let taskBump = function(done){
+
+
+
+    console.log('Start incrementing version');
+
+    incrementPackageVersion()
+        .finally(() => {
+
+            console.log('Build new files');
+            taskDist(() => {
+                console.log('start default watch');
+                taskDefault(done)
+            })
+
+        })
+}
+
+exports.default = taskDefault;
+exports.dist = taskDist;
+exports.bump = taskBump;
+
+exports.test = function(done){
+    isExistsAnyDistFile()
+        .then(() => {
+            console.log('GOOD');
+            done()
+        })
+        .catch(() => {
+            console.log('BAADD');
+            done()
+        })
+}
