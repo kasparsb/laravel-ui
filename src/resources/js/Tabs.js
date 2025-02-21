@@ -60,11 +60,13 @@ let Tabs = {
             });
 
             if ('name' in tabsEl.dataset) {
-                onChangeListeners[tabsEl.dataset.name].trigger([
-                    tabsEl.dataset.selected,
-                    selectedTabEl,
-                    tabsEl
-                ]);
+                if (typeof onChangeListeners[tabsEl.dataset.name] != 'undefined') {
+                    onChangeListeners[tabsEl.dataset.name].trigger([
+                        tabsEl.dataset.selected,
+                        selectedTabEl,
+                        tabsEl
+                    ]);
+                }
             }
         })
 
