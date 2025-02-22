@@ -2,12 +2,17 @@
 @props([
     'title',
 ])
+@php
+$classString = $attributes->get('class');
+@endphp
 <div
     {{ $attributes->class([
         'card' => true,
         'container' => $loading ? true : false,
-        'b-c-200' => !$helpers->hasAnyBorderColorClass($attributes->get('class')),
-        'bw-1' => !$helpers->hasAnyBorderWidthClass($attributes->get('class')),
+        'b-c-200' => !$helpers->hasAnyBorderColorClass($classString),
+        'bw-1' => !$helpers->hasAnyBorderWidthClass($classString),
+        'p-6' => !$helpers->hasClass($classString, 'compact') && !$helpers->hasAnyPaddingClass($classString),
+        'p-4' => $helpers->hasClass($classString, 'compact') && !$helpers->hasAnyPaddingClass($classString),
     ]) }}
 
     @if ($loadingStyle)

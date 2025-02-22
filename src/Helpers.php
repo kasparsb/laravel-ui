@@ -33,6 +33,10 @@ class Helpers
         return route($namespace.'.'.$routeName);
     }
 
+    public function hasClass($classesString, $classNameToFind) {
+        return in_array($classNameToFind, explode(' ', $classesString));
+    }
+
     /**
      * No padotā classes string meklējam vai kāda no klasēm
      * ir mt-{number} klases
@@ -46,6 +50,23 @@ class Helpers
         $classesString = explode(' ', $classesString);
         foreach ($classesString as $class) {
             preg_match('/^mt-(\d+(\.\d+)?)$/', $class, $matches);
+
+            if (count($matches) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasAnyPaddingClass($classesString) {
+        if (!$classesString) {
+            return false;
+        }
+
+        $classesString = explode(' ', $classesString);
+        foreach ($classesString as $class) {
+            preg_match('/^(p|px|py|)-(\d+(\.\d+)?)$/', $class, $matches);
 
             if (count($matches) > 0) {
                 return true;
