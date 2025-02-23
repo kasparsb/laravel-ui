@@ -21,9 +21,11 @@ function copyToClipboard(el) {
 
     let elText = '';
     if (isInputField(el)) {
-        // Select the text field
-        el.select();
-        el.setSelectionRange(0, 99999); // For mobile devices
+
+        // šis ir gadījumam, ja nav pieejams navigator.clipboard
+        //el.select();
+        //el.setSelectionRange(0, 99999); // For mobile devices
+        //document.execCommand("copy");
 
         elText = el.value;
     }
