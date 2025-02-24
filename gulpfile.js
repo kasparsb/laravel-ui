@@ -8,53 +8,72 @@ var less = require('gulp-less');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
 var fs = require('fs').promises;
+var { exec, execSync } = require('child_process');
 
 var babelify = require('babelify');
 
 // Read package info
 var pkg = require('./package.json');
+var packageVersion = pkg.version;
 
 var files = {
-    js: './src/resources/js/app.js',
-    less: './src/resources/less/app.less',
+    app: {
+        js: './src/resources/js/app.js',
+        less: './src/resources/less/app.less',
+        dest: './public/dist',
+        destFileName: 'app'
+    },
+
+    /**
+     * Visi less faili
+     * Less nemāks klausīties uz no entry point iekļauto
+     * less failu izmaiņām. Tāpēc klausās visu less failu
+     * izmaiņas un rebuild katru no less entry point
+     */
     lesss: './src/resources/less/**/*.less',
-    dest: './public/dist'
 }
+
+/**
+ * Šie ir no files objekta
+ * visi entry points (js un less), kuru watch un build
+ */
+var entrypoints = [
+    'app'
+]
+
 
 /**
  * Configure browserify
  */
 function getBrowserify(entry) {
-    console.log('Browserify entry', entry);
     return browserify({
         entries: [entry],
         // These params are for watchify
         cache: {},
-        packageCache: {}
-
-        ,standalone: 'webit.ui'
+        packageCache: {},
+        standalone: 'webit.ui'
     })
 }
 
 /**
  * Bundel js from browserify
  * If compress is true, then uglify js
+ *
+ * browserify - watch komanda padod watchify
+ * ja nav padots, tad uztaisām browserify
  */
-function bundleJs(browserify, compress, firstRun) {
-    if (typeof compress == 'undefined') {
-        compress = true;
-    }
+function bundleJs(browserify, compress, firstRun, filesName) {
 
-    if (typeof firstRun == 'undefined') {
-        firstRun = true;
+    if (!browserify) {
+        browserify = getBrowserify(files[filesName].js)
     }
 
     var handleError = function(er){
-        console.log(er.message+' on line '+er.line+':'+er.column);
         console.log(er.annotated);
+        console.log(er.message+' on line '+er.line+':'+er.column);
     }
 
-    var destFileName = 'app.min-'+pkg.version+'.js';
+    var destFileName = files[filesName].destFileName+'.min-'+packageVersion+'.js';
 
     var s = browserify;
 
@@ -66,8 +85,8 @@ function bundleJs(browserify, compress, firstRun) {
         s = s.transform(
             'babelify', {
                 presets: [
-                    '@babel/env'
-                    ,[
+                    '@babel/env',
+                    [
                         '@babel/react',
                         {
                             "pragma": "jsx.h",
@@ -80,18 +99,18 @@ function bundleJs(browserify, compress, firstRun) {
                 only: [
                     function(path) {
                         // Enter npm packages which should be compilded by babel
-                        if (path.indexOf('/dom-helpers/') >= 0) {
+                        if (path.indexOf('/node_modules/dom-helpers/') >= 0) {
                             return true;
                         }
-                        if (path.indexOf('/calendar/') >= 0) {
+                        if (path.indexOf('/node_modules/calendar/') >= 0) {
                             return true;
                         }
 
-                        // By default compile everything except node_modules
-                        if (path.indexOf('/node_modules/') >= 0) {
-                            return false;
+
+                        if (path.indexOf('/node_modules/') < 0) {
+                            return true;
                         }
-                        return true;
+                        return false;
                     }
                 ]
             }
@@ -104,95 +123,117 @@ function bundleJs(browserify, compress, firstRun) {
         .pipe(source(destFileName));
 
     if (compress) {
-        console.log('Uglify js');
+        console.log(filesName.padEnd(28, '.')+' js uglify');
         s = s.pipe(buffer()).pipe(uglify())
     }
 
-    s.pipe(gulp.dest(files.dest));
+    s.pipe(gulp.dest(files[filesName].dest));
 }
 
-function bundleLess(compress) {
+function watchJs(filesName){
+
+    var w = watchify(
+        getBrowserify(files[filesName].js, false)
+    );
+
+    var first = true;
+    w.on('update', function(){
+        // bundle without compression for faster response
+        bundleJs(w, false, first, filesName);
+
+        first = false;
+
+        console.log(filesName.padEnd(28, '.')+' js updated');
+    });
+
+    w.bundle().on('data', function() {});
+};
+
+function bundleLess(compress, filesName) {
     if (typeof compress == 'undefined') {
         compress = true;
     }
 
     if (compress) {
-        console.log('Minify css');
+        console.log(filesName.padEnd(28, '.')+' css minify');
     }
 
-    gulp.src(files.less)
+    let destFileName = files[filesName].destFileName+'.min-'+packageVersion+'.css';
+
+    gulp.src(files[filesName].less)
         .pipe(
             less({
                 compress: compress
+                //,math: 'always'
             })
                 .on('error', function(er){
                     console.log(er.type+': '+er.message);
                     console.log(er.filename+':'+er.line);
                 })
         )
-        .pipe(rename('app.min-'+pkg.version+'.css'))
-        .pipe(gulp.dest(files.dest));
+        .pipe(rename(destFileName))
+        .pipe(gulp.dest(files[filesName].dest));
 }
 
-function js(cb){
-    bundleJs(getBrowserify(files.js));
-
-    cb();
-};
-
-function watchjs(cb){
-
-    var w = watchify(
-        getBrowserify(files.js, false)
-    );
-
-    var first = true;
-    w.on('update', function(){
-        // bundle without compression for faster response
-        bundleJs(w, false, first);
-
-        first = false;
-
-        console.log('js files updated');
-    });
-
-    w.bundle().on('data', function() {});
-
-    cb();
-};
-
-function less2(cb){
-    bundleLess();
-
-    cb();
-}
-
-function watchless(cb){
-    watch([files.lesss], function(){
-        console.log('less files updated');
-        bundleLess(false);
-    });
-
-    cb();
-};
-
-function isExistsAnyDistFile() {
-
-    return new Promise((resolve, reject) => {
-        getPackageJson()
-            .then(package => {
-
-                let filesToCheck = [];
-                filesToCheck.push(files.dest+'/app.min-'+package.version+'.js')
-                filesToCheck.push(files.dest+'/app.min-'+package.version+'.css')
 
 
-                Promise.any(filesToCheck.map(fileName => fs.access(fileName)))
-                    .then(resolve)
-                    .catch(reject)
-            })
+function bundleJsAll(cb){
+    entrypoints.forEach(filesName => {
+        bundleJs(false, true, true, filesName);
     })
 
+    cb();
+};
+
+function bundleLessAll(cb){
+    entrypoints
+        .filter(filesName => {
+            return typeof files[filesName].less != 'undefined'
+        })
+        .forEach(filesName => {
+            bundleLess(true, filesName);
+        })
+
+    cb();
+}
+
+function watchJsAll(cb) {
+    entrypoints.forEach(filesName => {
+        watchJs(filesName);
+    })
+
+    cb();
+}
+
+function watchLessAll(cb) {
+    // klausamies visu less failu izmaiņas, jo less nemāk klausīties
+    // iekļauto files izmaiņas
+    watch([files.lesss], function(){
+
+        // rebuilds visus less entry points
+        entrypoints
+            .filter(filesName => {
+                return typeof files[filesName].less != 'undefined'
+            })
+            .forEach(filesName => {
+                console.log(filesName.padEnd(28, '.')+' less updated');
+                bundleLess(false, filesName);
+            })
+    });
+
+    cb();
+}
+
+function getPackageJson() {
+    return new Promise(resolve => {
+        fs.readFile('./package.json', 'utf8')
+            .then(fileContent => {
+                resolve(JSON.parse(fileContent))
+            })
+            .catch(err => {
+                throw err;
+            })
+    })
 }
 
 function incrementPackageVersion() {
@@ -210,68 +251,152 @@ function incrementPackageVersion() {
 
             package.version = p.join('.');
 
-            return fs.writeFile(
-                './package.json',
-                JSON.stringify(package, null, 2) + '\n',
-                'utf8'
-            )
+            return new Promise((resolve, reject) => {
+                fs.writeFile(
+                    './package.json',
+                    JSON.stringify(package, null, 2) + '\n',
+                    'utf8'
+                )
+                    .then(() => resolve(package.version))
+                    .catch(reject)
+            })
         })
         .catch(err => {
             throw err;
         });
 }
 
-function getPackageJson() {
+/**
+ * Pretēji file exists. Resolve promise, tikai, ja faila nav
+ */
+function fileDoesNotExist(filePath) {
     return new Promise((resolve, reject) => {
-        fs.readFile('./package.json', 'utf8')
-            .then(fileContent => {
-                resolve(JSON.parse(fileContent))
-            })
-            .catch(err => {
-                throw err;
+        fs.access(filePath)
+            .then(reject)
+            .catch(resolve)
+    })
+}
+
+function isFileTrackedAndClean(filePath) {
+
+    return new Promise((resolve, reject) => {
+        filePath = filePath.trim();
+        if (filePath.startsWith('./')) {
+            filePath = filePath.substr(2);
+        }
+
+        // Check if file is tracked (in version control)
+        let isTrackedResult = execSync(`git ls-files -- "${filePath}"`, { encoding: 'utf8' });
+
+        if (isTrackedResult.trim().startsWith(filePath)) {
+
+            // Pārbaudām vai ir labojumi
+            let hasChangesResult = execSync(`git status --porcelain -- "${filePath}"`, { encoding: 'utf8' });
+
+            // ja result ir tukšs, tad fails nav labots
+            if (hasChangesResult.trim() === '') {
+
+                resolve();
+
+                return;
+            }
+        }
+
+        reject()
+    })
+}
+
+
+/**
+ * Tasks
+ */
+
+let taskWatch = gulp.series(
+    watchJsAll,
+    watchLessAll
+);
+let taskBundle = gulp.series(
+    bundleJsAll,
+    bundleLessAll
+);
+
+/**
+ * Sapako dist failus
+ * Uztaisa versijas commit
+ */
+function taskDist(done) {
+    taskBundle(() => {
+        getPackageJson()
+            .then(package => {
+
+                console.log(`Bundle version ${package.version}`);
+
+                execSync('git add package.json', { encoding: 'utf8' });
+
+                entrypoints.forEach(filesName => {
+
+                    let file = files[filesName];
+
+                    execSync('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.js'), { encoding: 'utf8' });
+                    execSync('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.css'), { encoding: 'utf8' });
+
+                    console.log('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.js'));
+                    console.log('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.css'));
+
+                })
+
+                execSync(`git commit -m "Bundle version ${package.version}"`, { encoding: 'utf8' });
+
+                done();
             })
     })
 }
 
-let taskDefault = gulp.series(watchjs, watchless);
-let taskDist = gulp.series(js, less2);
+function taskDefault(done) {
+    let destFiles = [];
+    entrypoints.forEach(entry => {
+        destFiles.push(
+            `${files[entry].dest}/${files[entry].destFileName}.min-${packageVersion}.css`
+        );
+        destFiles.push(
+            `${files[entry].dest}/${files[entry].destFileName}.min-${packageVersion}.js`
+        );
+    })
 
-/**
- * Bump version and create new dist files
- * check if these dist files already exists
- * if exists, then do not bump version. Not to
- * accidentaly polute version number
- */
-let taskBump = function(done){
 
-
-
-    console.log('Start incrementing version');
-
-    incrementPackageVersion()
-        .finally(() => {
-
-            console.log('Build new files');
-            taskDist(() => {
-                console.log('start default watch');
-                taskDefault(done)
-            })
-
+    Promise.any([
+        // Nav neviena dist faila
+        Promise.all(
+            destFiles.map(fileDoesNotExist)
+        ),
+        // Visi dist faili ir tracked un bez izmaiņām
+        Promise.all(
+            destFiles.map(isFileTrackedAndClean)
+        )
+    ])
+        .then(() => {
+            console.log('Increment package version');
+            incrementPackageVersion()
+                .then((newPackageVersion) => {
+                    packageVersion = newPackageVersion;
+                    console.log('new version '+packageVersion);
+                    console.log('Bundle');
+                    taskBundle(() => {
+                        console.log('Watch');
+                        taskWatch(done)
+                    })
+                })
+        })
+        .catch(() => {
+            console.log('Watch');
+            taskWatch(done)
         })
 }
+
+
+
 
 exports.default = taskDefault;
 exports.dist = taskDist;
-exports.bump = taskBump;
-
-exports.test = function(done){
-    isExistsAnyDistFile()
-        .then(() => {
-            console.log('GOOD');
-            done()
-        })
-        .catch(() => {
-            console.log('BAADD');
-            done()
-        })
-}
+exports.watch = taskWatch;
+exports.bundle = taskBundle;
