@@ -10,8 +10,6 @@ var buffer = require('vinyl-buffer');
 var fs = require('fs').promises;
 var { exec, execSync } = require('child_process');
 
-var babelify = require('babelify');
-
 // Read package info
 var pkg = require('./package.json');
 var packageVersion = pkg.version;
@@ -339,10 +337,6 @@ function taskDist(done) {
 
                     execSync('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.js'), { encoding: 'utf8' });
                     execSync('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.css'), { encoding: 'utf8' });
-
-                    console.log('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.js'));
-                    console.log('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.css'));
-
                 })
 
                 execSync(`git commit -m "Bundle version ${package.version}"`, { encoding: 'utf8' });
@@ -379,16 +373,15 @@ function taskDefault(done) {
             incrementPackageVersion()
                 .then((newPackageVersion) => {
                     packageVersion = newPackageVersion;
-                    console.log('new version '+packageVersion);
-                    console.log('Bundle');
+                    console.log('Bundle new version '+packageVersion);
                     taskBundle(() => {
-                        console.log('Watch');
+                        console.log('Start watch');
                         taskWatch(done)
                     })
                 })
         })
         .catch(() => {
-            console.log('Watch');
+            console.log('Start watch');
             taskWatch(done)
         })
 }
