@@ -1,5 +1,5 @@
 {
-  "version": "0.0.92",
+  "version": "0.0.111",
   "private": true,
   "devDependenciesComments": {
     "@babel/preset-react": "This is optional"
