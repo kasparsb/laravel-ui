@@ -304,11 +304,26 @@ function isFileTrackedAndClean(filePath) {
     })
 }
 
+function incrementTag() {
+    let nextTag = 'v0.0.1';
+
+    let lastTag = execSync(`git tag --sort=-v:refname | head -n 1`, { encoding: 'utf8' });
+    lastTag = lastTag ? lastTag.trim() : null;
+    if (lastTag) {
+        let parts = lastTag.trim().split('.');
+        // Pēdējo daļu increment
+        parts[parts.length - 1] = parseInt(parts[parts.length - 1], 10) + 1;
+
+        nextTag = parts.join('.');
+    }
+
+    console.log(`New tag ${nextTag}`);
+    execSync(`git tag -a ${nextTag} -m "Version ${nextTag}"`)
+}
 
 /**
  * Tasks
  */
-
 let taskWatch = gulp.series(
     watchJsAll,
     watchLessAll
@@ -386,9 +401,13 @@ function taskDefault(done) {
         })
 }
 
+function taskIncrementTag(done) {
+    incrementTag()
+    done();
+}
 
 
-
+exports.tag = taskIncrementTag;
 exports.default = taskDefault;
 exports.dist = taskDist;
 exports.watch = taskWatch;
