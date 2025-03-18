@@ -44,7 +44,7 @@ class DropdownMenu extends Component
          * relatīvs pret triggerEl
          */
         public $positionAt = false,
-        public $positionAtDir = 'right bottom',
+        public $positionAtDir = 'left bottom',
 
         public $hidden = true,
         /**

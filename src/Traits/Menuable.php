@@ -5,6 +5,14 @@ namespace Kasparsb\Ui\Traits;
 trait Menuable {
     public function setMenuDefaults() {
 
+        // Ja ir tukšs liekam kā boolean false
+        if (!$this->menuPositionDir) {
+            $this->menuPositionDir = false;
+        }
+        if (!$this->menuPositionAtDir) {
+            $this->menuPositionAtDir = false;
+        }
+
         // Ja ir menu open trigger
         if ($this->menu) {
             if (!in_array($this->menuShow, ['onclick', 'onhover', 'onfocusin',])) {

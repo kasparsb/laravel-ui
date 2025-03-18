@@ -45,13 +45,13 @@ class Button extends Component
          */
         public $menuPositionX=false,
         public $menuPositionY=false,
-        public $menuPositionDir=null,
+        public $menuPositionDir='',
         public $menuPositionXOffset=false,
         public $menuPositionYOffset=false,
         // Elements pret kuru pozicionēt ir pati poga
         public $menuPositionAt='',
-        // Dir tiek ņemts no Dropdown defaults
-        public $menuPositionAtDir='left bottom',
+        // Dir tiek ņemts no Dropdown defaults. Tāpēc šeit ir tukšs
+        public $menuPositionAtDir='',
 
         public $table='', // table name, kurai veikt add, delete darbības
 
@@ -72,6 +72,7 @@ class Button extends Component
         if (!$this->variant) {
             $this->variant = $this->variantOverride;
         }
+
         $this->setMenuDefaults();
     }
 
