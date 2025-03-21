@@ -48,7 +48,7 @@ class FilesManager {
 
     public function createFromContent($fileContent, $fileName) {
         $dir = $this->checkDateDir();
-        $fileName = $this->getUniqueFileName($dir, $fileUrl);
+        $fileName = $this->getUniqueFileName($dir, $fileName);
 
         $path = $dir.$fileName;
 
