@@ -46,19 +46,20 @@ class FilesManager {
         return $file;
     }
 
-    public function createFromContent($imageContent, $fileName) {
+    public function createFromContent($fileContent, $fileName) {
         $dir = $this->checkDateDir();
         $fileName = $this->getUniqueFileName($dir, $fileName);
 
-        $this->disk()->put($dir.$fileName, $imageContent);
+        $this->disk()->put($dir.$fileName, $fileContent);
 
-        $image = Image::create([
-            'type' => 'default',
-            'account_id' => -1,
-            'filename' => $dir.$fileName,
+        $file = File::create([
+            'disk' => $this->diskName,
+            'mime_type' => $this->disk()->mimeType($path),
+            'title' => $fileName,
+            'path' => $path,
         ]);
 
-        return $image;
+        return $file;
     }
 
     public function createFromUploadedFile(UploadedFile $uploadedFile) {
