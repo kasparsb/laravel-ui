@@ -60,7 +60,7 @@ function getBrowserify(entry) {
  * browserify - watch komanda padod watchify
  * ja nav padots, tad uztaisām browserify
  */
-function bundleJs(browserify, compress, firstRun, filesName) {
+function bundleJs(browserify, compress, firstRun, filesName, doneCb) {
 
     if (!browserify) {
         browserify = getBrowserify(files[filesName].js)
@@ -125,7 +125,13 @@ function bundleJs(browserify, compress, firstRun, filesName) {
         s = s.pipe(buffer()).pipe(uglify())
     }
 
-    s.pipe(gulp.dest(files[filesName].dest));
+    s
+        .pipe(gulp.dest(files[filesName].dest))
+        .on('finish', function() {
+            if (doneCb) {
+                doneCb()
+            }
+        })
 }
 
 function watchJs(filesName){
@@ -176,11 +182,22 @@ function bundleLess(compress, filesName) {
 
 
 function bundleJsAll(cb){
-    entrypoints.forEach(filesName => {
-        bundleJs(false, true, true, filesName);
-    })
+    let i = 0;
 
-    cb();
+    function nextEntrypoint() {
+        if (entrypoints.length <= i) {
+            // Visi entrypoints izpildīti
+            cb();
+            return;
+        }
+
+        bundleJs(false, true, true, entrypoints[i], () => {
+            i++;
+            nextEntrypoint();
+        });
+    }
+
+    nextEntrypoint()
 };
 
 function bundleLessAll(cb){
@@ -350,8 +367,8 @@ function taskDist(done) {
 
                     let file = files[filesName];
 
-                    execSync('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.js'), { encoding: 'utf8' });
-                    execSync('git add '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.css'), { encoding: 'utf8' });
+                    execSync('git add -f '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.js'), { encoding: 'utf8' });
+                    execSync('git add -f '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.css'), { encoding: 'utf8' });
                 })
 
                 execSync(`git commit -m "Bundle version ${package.version}"`, { encoding: 'utf8' });
