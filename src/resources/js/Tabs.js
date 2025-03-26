@@ -37,25 +37,43 @@ function changeTab(tabsEl, newTabName) {
     tabsEl.dataset.selected = newTabName;
 
     let selectedTabEl = null;
-    // Meklējam visus tab-content, jo tab var arī nebūt. Tab var parslēgt caur api vai ar field-select
-    qa(tabsEl, '[data-role=tab-content]').forEach(tabContentEl => {
-        let tabEl = q(tabsEl, `[data-role=tab][data-tab-name="${tabContentEl.dataset.tabName}"]`)
 
-        if (tabContentEl.dataset.tabName == newTabName) {
-            enableTabContent(tabContentEl)
+    /**
+     * Ja ir tab-content, jo tab var arī nebūt. Tab var parslēgt caur api vai ar field-select
+     * bet šis nedarbosies, ja ir tabs, bez tab content
+     */
+    if (q(tabsEl, '[data-role=tab-content]')) {
+        qa(tabsEl, '[data-role=tab-content]').forEach(tabContentEl => {
+            let tabEl = q(tabsEl, `[data-role=tab][data-tab-name="${tabContentEl.dataset.tabName}"]`)
 
-            if (tabEl) {
+            if (tabContentEl.dataset.tabName == newTabName) {
+                enableTabContent(tabContentEl)
+
+                if (tabEl) {
+                    tabEl.dataset.selected = '';
+                    selectedTabEl = tabEl;
+                }
+            }
+            else {
+                disableTabContent(tabContentEl)
+                if (tabEl) {
+                    delete tabEl.dataset.selected;
+                }
+            }
+        })
+    }
+    // Pārslēdzam pēc tabs
+    else {
+        qa(tabsEl, '[data-role=tab]').forEach(tabEl => {
+            if (tabEl.dataset.tabName == newTabName) {
                 tabEl.dataset.selected = '';
                 selectedTabEl = tabEl;
             }
-        }
-        else {
-            disableTabContent(tabContentEl)
-            if (tabEl) {
+            else {
                 delete tabEl.dataset.selected;
             }
-        }
-    })
+        })
+    }
 
     if ('name' in tabsEl.dataset) {
         if (typeof onChangeListeners[tabsEl.dataset.name] != 'undefined') {
