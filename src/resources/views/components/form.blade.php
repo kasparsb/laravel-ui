@@ -1,8 +1,13 @@
 <{{ $asForm ? 'form' : 'div' }}
     {{ $attributes->merge(
         $asForm ? [
-            'method' => $method,
+            'method' => in_array($method, ['get', 'post']) ? $method : 'post',
             'action' => $action,
+            /**
+             * lai varētu nodefinēt custom method
+             * html forma atļauj tikai get vai post
+             */
+            'data-method' => $method,
         ]
         :
         [
@@ -51,5 +56,8 @@
     @endif
     @if ($redirectRoutePrefix)
     <input type="hidden" name="_redirect_route_prefix" value="{{ $redirectRoutePrefix }}" />
+    @endif
+    @if (!in_array($method, ['get', 'post']))
+        @method($method)
     @endif
 </{{ $asForm ? 'form' : 'div' }}>

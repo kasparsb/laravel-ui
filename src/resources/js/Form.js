@@ -31,7 +31,17 @@ function submitForm(formEl, url, method) {
         url = isFormSubstitute(formEl) ? formEl.dataset.action : formEl.action;
     }
     if (typeof method == 'undefined') {
-        method = isFormSubstitute(formEl) ? formEl.dataset.method : formEl.method;
+        /**
+         * Ja ir nodefinēts data-method tad ņemam to
+         * x-ui::form vienmēr pielikts data-method
+         * dēļ tā, ka html form atļauj tikai get vai post
+         */
+        if (formEl.dataset.method) {
+            method = formEl.dataset.method
+        }
+        else {
+            method = formEl.method;
+        }
     }
 
     let formData = getFormData(formEl);

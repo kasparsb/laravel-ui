@@ -110,6 +110,8 @@ class Form extends Component
                 $this->fetchSubmit = true;
             }
         }
+
+        $this->method = strtolower($this->method);
     }
 
     public function render(): View|Closure|string
