@@ -2,6 +2,7 @@ import {qa, q, parent, on, dispatchEvent, get} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
 import DropdownMenu from './DropdownMenu';
 import InputValuePreview from './InputValuePreview';
+import FieldSelectEmptyState from './FieldSelectEmptyState';
 import Form from './Form';
 
 /**
@@ -34,88 +35,29 @@ function handleFieldValueChange(fieldEl) {
     })
 }
 
-/**
- * Taisto click uz form [type=submit] pogas, kad
- * notiek submit pazūd fokuss. Šajā mirklī aizvērsies
- * DropdownMenu, kurā ir forma. Tāpēc, ja forma ir
- * FieldSelect Dropdown menu, tad lieka, lai ignore focousOut
- */
-function handleBeforeSubmit(formEl) {
-    // Ja ir empty state elementā, tad skip
-    if (!parent(formEl, '[data-field-select-empty-state]')) {
-        return
-    }
+function setupVisualValue(listOfFieldSelectEls) {
+    listOfFieldSelectEls.forEach(fieldEl => {
+        // Ja ir manuāli uzstādīts value visual vērtība, tad skip
+        if ('hasVisualValue' in fieldEl.dataset) {
+            return
+        }
 
-    DropdownMenu.ignoreFocusoutOnce(DropdownMenu.getByChild(formEl))
-}
-
-/**
- * Kad forma ir nosubmitota
- * tad vajag kaut kur iegūt value un valueVisual
- * value būs formā, laikā id (šitas konfigurējams)
- * valueVisual būs jāpieprasa no url
- */
-function handleAfterSubmit(formEl, response) {
-    // Ja ir empty state elementā, tad skip
-    if (!parent(formEl, '[data-field-select-empty-state]')) {
-        return
-    }
-
-    let openTriggerEl = DropdownMenu.getOpenTriggerByChild(formEl);
-    let fieldEl = parent(openTriggerEl, '.field-select');
-
-    let valueFieldName = 'id';
-    let value;
-
-    /**
-     * Šis ir gadījumā, ja ir noticis formEl replace
-     * un ir ienākusi jauna form html, kurā ir id lauks
-     */
-    let valueFieldEl = q(formEl, `[name=${valueFieldName}]`);
-    if (valueFieldEl) {
-        value = valueFieldEl.value;
-    }
-    else if (response && typeof response[valueFieldName] != 'undefined') {
-        value = response[valueFieldName];
-    }
-
-    let inputEl = q(fieldEl, 'input');
-    inputEl.value = value;
-    dispatchEvent(inputEl, 'change');
-
-    // ielādējam valueVisual html
-    if (('valueVisualUrl' in fieldEl.dataset) && value) {
-        get(fieldEl.dataset.valueVisualUrl, {
-            value: value
-        })
-            .then(valueVisualHtml => {
-                InputValuePreview.setPlaceholder(
-                    fieldEl,
-                    // Formatēta date value
-                    valueVisualHtml
-                );
-
-                // Liekam mazu delay, lai var redzēt success message, ja tāds ir
-                setTimeout(() => {
-                    DropdownMenu.closeByOpenTrigger(openTriggerEl)
-                    Form.reset(formEl);
-                }, 700)
-            })
-
-        return;
-    }
-
-
-    DropdownMenu.closeByOpenTrigger(openTriggerEl)
-    Form.reset(formEl);
+        handleFieldValueChange(fieldEl);
+    });
 }
 
 export default {
     init() {
 
-        // Klausāmies uz From submit
-        Form.onBeforeSubmit(formEl => handleBeforeSubmit(formEl))
-        Form.onAfterSubmit(handleAfterSubmit)
+        // Empty state stāvoklis
+        FieldSelectEmptyState.init();
+
+        // Field start values ielikšana
+        setupVisualValue(qa('.field-select'))
+
+        // onAfterSubmit, lai var izvadīt option placeholder vērtību
+        Form.onAfterSubmit(formEl => setupVisualValue(qa(formEl, '.field-select')))
+
 
         // Kad nomainās input value, tad uzliekam atbilstošo vizuālo value
         on('change', '.field-select input', (ev, inputEl) => {
@@ -158,15 +100,6 @@ export default {
                     inputEl.value = prevOption ? prevOption.dataset.value : ''
                     dispatchEvent(inputEl, 'change');
             }
-        });
-
-        // Field start values ielikšana
-        qa('.field-select').forEach(fieldEl => {
-            // Ja ir manuāli uzstādīts value visual vērtība, tad skip
-            if ('hasVisualValue' in fieldEl.dataset) {
-                return
-            }
-            handleFieldValueChange(fieldEl);
         });
     }
 }
