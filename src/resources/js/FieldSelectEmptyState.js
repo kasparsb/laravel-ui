@@ -56,19 +56,39 @@ function handleAfterSubmit(formEl, response) {
 
     let inputEl = q(fieldEl, 'input');
     inputEl.value = value;
-    dispatchEvent(inputEl, 'change');
 
+    // Tāpēc šeit sanāk, ka vajag obligāti šo, dabūtu visualValue html
     // ielādējam valueVisual html
     if (('valueVisualUrl' in fieldEl.dataset) && value) {
         get(fieldEl.dataset.valueVisualUrl, {
             value: value
         })
             .then(valueVisualHtml => {
-                InputValuePreview.setPlaceholder(
-                    fieldEl,
-                    // Formatēta date value
-                    valueVisualHtml
-                );
+
+                /**
+                 * TODO šeit visualValue jāliek OptionsList elementā
+                 * tad jāpalaiž dispatchEvents un tas pats izvilks visualValue
+                 * priekš placeholder elementa
+                 *
+                 * !!! Sis vēl ir jāuztaisa līdz galam
+                 *
+                 * šo nevajag šeit palaist InputValuePreview.setPlaceholder
+                 * vajag ielikt kā option
+                 *
+                 * tātad arī visualValueUrl ir jāpārasauc par OptionUrl
+                 *
+                 * vēl jāsaprot vai man ir paredzēts, ka optionsList elementam
+                 * var būt savādāk elements priekš placeholder?
+                 */
+                // InputValuePreview.setPlaceholder(
+                //     fieldEl,
+                //     // Formatēta date value
+                //     valueVisualHtml
+                // );
+
+                // Palaižam change event
+                dispatchEvent(inputEl, 'change');
+
 
                 // Liekam mazu delay, lai var redzēt success message, ja tāds ir
                 setTimeout(() => {
@@ -78,6 +98,10 @@ function handleAfterSubmit(formEl, response) {
             })
 
         return;
+    }
+    else {
+        // Palaižam change event
+        dispatchEvent(inputEl, 'change');
     }
 
 
