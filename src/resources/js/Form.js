@@ -1,7 +1,7 @@
 import {
     q, qa, parent,
     submitp, submit, click,
-    request, getFormData,
+    request, getFormData, jsonOrText,
     replace, clone
 } from 'dom-helpers'
 import Listeners from './helpers/Listeners';
@@ -53,7 +53,7 @@ function submitForm(formEl, url, method) {
      * Jāpieliek error handling. Un te ir jāatgriež jauna Promise
      */
     return request(method, url, formData)
-        .then(response => response.text())
+        .then(response => jsonOrText(response))
 }
 
 /**
