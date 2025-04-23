@@ -153,7 +153,7 @@ function watchJs(filesName){
     w.bundle().on('data', function() {});
 };
 
-function bundleLess(compress, filesName) {
+function bundleLess(compress, filesName, doneCb) {
     if (typeof compress == 'undefined') {
         compress = true;
     }
@@ -176,7 +176,12 @@ function bundleLess(compress, filesName) {
                 })
         )
         .pipe(rename(destFileName))
-        .pipe(gulp.dest(files[filesName].dest));
+        .pipe(gulp.dest(files[filesName].dest))
+        .on('finish', function() {
+            if (doneCb) {
+                doneCb()
+            }
+        })
 }
 
 
@@ -201,15 +206,27 @@ function bundleJsAll(cb){
 };
 
 function bundleLessAll(cb){
-    entrypoints
-        .filter(filesName => {
-            return typeof files[filesName].less != 'undefined'
-        })
-        .forEach(filesName => {
-            bundleLess(true, filesName);
-        })
 
-    cb();
+    let lessEntrypoints = entrypoints.filter(filesName => {
+        return typeof files[filesName].less != 'undefined'
+    });
+
+    let i = 0;
+
+    function nextEntrypoint() {
+        if (lessEntrypoints.length <= i) {
+            // Visi entrypoints izpildīti
+            cb();
+            return;
+        }
+
+        bundleLess(true, lessEntrypoints[i], () => {
+            i++;
+            nextEntrypoint();
+        });
+    }
+
+    nextEntrypoint()
 }
 
 function watchJsAll(cb) {
@@ -367,8 +384,11 @@ function taskDist(done) {
 
                     let file = files[filesName];
 
-                    execSync('git add -f '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.js'), { encoding: 'utf8' });
-                    execSync('git add -f '+(file.dest+'/'+file.destFileName+'.min-'+package.version+'.css'), { encoding: 'utf8' });
+                    let jsFileName = file.dest+'/'+file.destFileName+'.min-'+package.version+'.js';
+                    let cssFileName = file.dest+'/'+file.destFileName+'.min-'+package.version+'.css';
+
+                    execSync('git add -f '+jsFileName, { encoding: 'utf8' });
+                    execSync('git add -f '+cssFileName, { encoding: 'utf8' });
                 })
 
                 execSync(`git commit -m "Bundle version ${package.version}"`, { encoding: 'utf8' });
