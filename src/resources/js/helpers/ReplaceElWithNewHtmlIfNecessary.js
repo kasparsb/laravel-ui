@@ -12,6 +12,7 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
 
     // Elementu nav paredzēts replaceicot ar jaunu html
     if (!('replaceHtml' in originalEl.dataset)) {
+        this.shouldReplace = false;
         return;
     }
 
@@ -43,6 +44,10 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
 
     // Ir norādīts relative querySelector ar kuru atlasīt elementu, kuru replace
     if (this.originalEl.dataset.replaceHtml) {
+        /**
+         * TODO te ir jāsaprot vai originalEl ir tajā elementā, kurš būs jāreplaceo
+         * case 1: forma, bet vajag replace formas parent elementu. Sanāk, ka form tiks replace
+         */
         this.shouldReplaceOriginalEl = false;
 
         this.elToReplace = qr(this.elToReplace, this.originalEl.dataset.replaceHtml);
@@ -71,7 +76,33 @@ ReplaceElWithNewHtmlIfNecessary.prototype = {
         Container.idle(this.elToReplace);
 
         // Svarīgi atgriez to pašu elementu, kurš tika padots
+        /**
+         * Ja ir replaceHTML, tad padota tiek form, bet replace notie uz citu elemtu,
+         * kurš vairs nav forma. Tāpēc šeit ir shouldReplaceOriginalEl un tiek pārbaudīts
+         * vai atgriezt padoto formu
+         * Bet te ir problēma, ka replceHTML gadijumā tiek padots atpakaļ jau neeksitējošs
+         * elements.
+         * Bet tā ir problēma, ja originalEl ir child elements, tam, kas tiek replacots
+         *
+         * tas, kad tagad uztaisīts ir gadījumā, ka originalEl ir ārpus replaceHTML
+         * tobiš, replaceHTML ir pavisam cits elements ārpus formEl
+         *
+         * tad varbūt vajag pārbaudīts vai repplaceHTML nav parent formEl
+         *
+         */
         return this.shouldReplaceOriginalEl ? this.elToReplace : this.originalEl;
+    },
+    /**
+     * Jaunais el, ar kuru tikai aizvietots vecais
+     */
+    getElToReplace() {
+        return this.elToReplace
+    },
+    /**
+     * Vai ir jānotiek replace html
+     */
+    isReaplceHtml() {
+        return this.shouldReplace;
     }
 }
 

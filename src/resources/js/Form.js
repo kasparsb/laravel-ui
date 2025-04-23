@@ -11,6 +11,7 @@ import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl
 
 let onBeforeSubmitListeners = {};
 let onAfterSubmitListeners = {};
+let onAfterReplaceHtmlListeners = {};
 
 let originalEl = [];
 
@@ -105,34 +106,42 @@ function handleSubmit(formEl) {
 
     return new Promise((resolve, reject) => {
         submitForm(formEl)
-            .then(r => {
+            .then(response => {
 
-                let originalElId = formEl.dataset.originalElId;
+                let replacedEl = elReplacer.replace(response);
 
-                let newFormEl = elReplacer.replace(r);
-                if (newFormEl) {
-                    if (typeof newFormEl.dataset != 'undefined') {
-                        newFormEl.dataset.originalElId = originalElId;
+                // Aizstājam jauno formEl ar iepriekšējo
+                if ('resetFormAfterSubmit' in formEl.dataset) {
+
+                    if (replacedEl) {
+                        if (typeof replacedEl.dataset != 'undefined') {
+                            replacedEl.dataset.originalElId = formEl.dataset.originalElId;
+                        }
+                        formEl = replacedEl
                     }
-                    formEl = newFormEl
+
+                    formEl = reset(formEl);
                 }
 
+                delete formEl.dataset.isSubmitting;
                 setButtonIdleAfterSubmit(formEl);
 
                 if (onAfterSubmitListeners['__any__']) {
                     onAfterSubmitListeners['__any__'].trigger([
                         formEl,
-                        r
+                        response
                     ])
                 }
 
-                delete formEl.dataset.isSubmitting;
+                if (elReplacer.isReaplceHtml() && elReplacer.getElToReplace()) {
+                    if (onAfterReplaceHtmlListeners['__any__']) {
+                        onAfterReplaceHtmlListeners['__any__'].trigger([
+                            elReplacer.getElToReplace()
+                        ])
+                    }
+                }
 
                 handleDropdownMenuHideFromEl(formEl, 'aftersubmit');
-
-                if ('resetFormAfterSubmit' in formEl.dataset) {
-                    reset(formEl);
-                }
 
                 // Ja ir ienākušas jaunas formas, kurām vajag uzstādīt setTimeout
                 setTimeoutsForFormsWithSubmitAfterMs();
@@ -143,7 +152,11 @@ function handleSubmit(formEl) {
 
 }
 
-function saveOriginalEl(formEl) {
+/**
+ * Šis vajadzīgs tikai priekš tam, lai varētu resetot formu pēc submit
+ * bet tas ir iespējams tikai, ja nenotiek šīs pašas forma replace html
+ */
+function saveFormElForReset(formEl) {
     if ('originalElId' in formEl.dataset) {
         return;
     }
@@ -246,9 +259,13 @@ export default {
             handleSubmit(formEl);
         })
 
-        // Save orginal content el
-        qa('form[data-fetch-submit][data-replace-html], form[data-reset-form-after-submit]').forEach(formEl => {
-            saveOriginalEl(formEl);
+        /**
+         * Save orginal form el, lai varētu resetot pēc vajadzības (pēc submit)
+         * šo nevajag priekš replace-html, jo tad forma tiks aizstāta ar content no servera
+         * tikai, ja ir data-reset-form-after-submit
+         */
+        qa('form[data-reset-form-after-submit]').forEach(formEl => {
+            saveFormElForReset(formEl);
         })
 
         setTimeoutsForFormsWithSubmitAfterMs();
@@ -268,6 +285,12 @@ export default {
         }
         onAfterSubmitListeners['__any__'].listen(cb);
     },
+    onAfterReplaceHtml(cb) {
+        if (typeof onAfterReplaceHtmlListeners['__any__'] == 'undefined') {
+            onAfterReplaceHtmlListeners['__any__'] = new Listeners();
+        }
+        onAfterReplaceHtmlListeners['__any__'].listen(cb);
+    },
     /**
      * Atjauno formu atpakaļ uz sākuma stāvokli
      */
@@ -275,7 +298,7 @@ export default {
         if (!formEl) {
             return;
         }
-        reset(formEl);
+        return reset(formEl);
     },
 
     /**

@@ -93,7 +93,6 @@ function handleAfterSubmit(formEl, response) {
                 // Liekam mazu delay, lai var redzēt success message, ja tāds ir
                 setTimeout(() => {
                     DropdownMenu.closeByOpenTrigger(openTriggerEl)
-                    Form.reset(formEl);
                 }, 700)
             })
 
@@ -104,9 +103,19 @@ function handleAfterSubmit(formEl, response) {
         dispatchEvent(inputEl, 'change');
     }
 
+    /**
+     * !!! Šeit netaisīts Form.reset
+     * tas jādara uzliekot formai atribūtu reset-form-after-submit
+     */
 
-    DropdownMenu.closeByOpenTrigger(openTriggerEl)
-    Form.reset(formEl);
+    /**
+     * TODO uztaisīt hide timeout konfigurējamu
+     * un reset form arī laikam vajadzēs pārlik te
+     * savādāk reset notiks uzreiz bet aizvēršanās ar aizturi
+     */
+    setTimeout(() => {
+        DropdownMenu.closeByOpenTrigger(openTriggerEl)
+    }, 700)
 }
 
 /**

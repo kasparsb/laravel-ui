@@ -74,9 +74,10 @@ export default {
         // Field start values ielikšana
         setupPlaceholder(qa('.field-select'))
 
-        // onAfterSubmit, lai var izvadīt option placeholder vērtību
-        Form.onAfterSubmit(formEl => setupPlaceholder(qa(formEl, '.field-select')))
-
+        // onAfterReplaceHtml, lai var izvadīt option placeholder vērtību
+        Form.onAfterReplaceHtml(newEl => {
+            setupPlaceholder(qa(newEl, '.field-select'))
+        })
 
         // Kad nomainās input value, tad uzliekam atbilstošo vizuālo value
         on('change', '.field-select input', (ev, inputEl) => {
