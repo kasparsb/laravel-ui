@@ -1351,6 +1351,26 @@ body {
         margin-left: -.125em;
         margin-right: -.125em;
     }
+
+    /**
+     * pašlaik nav laba doma, jo nevar uztaisīt, multiline skeletonu
+     * tāpēc labāk izmantot skeleton-line un no tā kombinēt sekeltonu.
+     * saliek vairākus .skeleton-lines un tādā veidā kombinē
+     */
+    // Skeleton state
+    // &.skeleton {
+    //     position: relative;
+    //     &:after {
+    //         .ui-skeleton-cover();
+    //     }
+
+    //     &:empty {
+    //         &:before {
+    //             content: '\00a0';
+    //             display: inline;
+    //         }
+    //     }
+    // }
 }
 
 .title-description {
@@ -3866,20 +3886,38 @@ body:has(>.layout) {
     }
 }
 
-.skeleton-line {
+// Tikai helper
+.ui-skeleton-cover {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    .bg-c-200();
+}
 
+.skeleton-text,
+.skeleton-line {
     padding: @size015;
     position: relative;
 
+    // Manuāli jānorāda text-size, lai var override
+    //.t-3\.5();
+
     &:before {
-        .t-3\.5();
+
+        font-size: inherit;
+        line-height: inherit;
 
         // invisible character, lai ieņem pareizo augstumu tukšs elements
         content: '\00a0';
         display: block;
         .bg-c-200();
     }
-    // Samazinām vizuāli skeleton placehlder augstumu
+    // Samazinām vizuāli skeleton placeholder augstumu
     &:after {
         content: '';
         display: block;
