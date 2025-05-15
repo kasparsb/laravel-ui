@@ -224,6 +224,11 @@ body {
 
     --layout-top-menu-content-width: 1000px;
 
+    --size-sm-width: @smWidth;
+    --size-md-width: @mdWidth;
+    --size-lg-width: @lgWidth;
+    --size-xl-width: @xlWidth;
+    --size-xxl-width: @xxlWidth;
 
     --size-005: @size005;
     --size-010: @size010;
@@ -3901,11 +3906,13 @@ body:has(>.layout) {
 
 .skeleton-text,
 .skeleton-line {
-    padding: @size015;
     position: relative;
 
     // Manuāli jānorāda text-size, lai var override
     //.t-3\.5();
+
+    // !! kāpēc te bija padding? Noņēmu, jo sānu padding taisīja nobīdes
+    //padding: @size015;
 
     &:before {
 
@@ -3923,9 +3930,12 @@ body:has(>.layout) {
         display: block;
         position: absolute;
 
+        // !! šis izvākts dēļ padding
+        //top: @size015;
+        //bottom: @size015;
+        top: 0;
+        bottom: 0;
         left: 0;
-        top: @size015;
-        bottom: @size015;
         width: 100%;
 
         border-top: 3px solid hsl(var(--color-background));
