@@ -188,5 +188,19 @@ export default {
         let inputEl = q(fieldDateEl, 'input');
         inputEl.value = '';
         setPlaceholder(fieldDateEl, null);
+    },
+
+    /**
+     * Update field display value
+     */
+    update(fieldDateElOrinputEl) {
+
+        let fieldDateEl = parent(fieldDateElOrinputEl, '.field-date');
+        let inputEl = q(fieldDateEl, 'input');
+
+        setPlaceholder(
+            fieldDateEl,
+            inputEl.value ? stringToDate(inputEl.value) : null
+        )
     }
 }

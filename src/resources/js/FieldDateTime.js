@@ -1,6 +1,7 @@
 import {qa, q, r, click, change, parent, dispatchEvent} from 'dom-helpers'
 import DropdownMenu from './DropdownMenu';
 import FieldHoursMinutes from './FieldHoursMinutes';
+import FieldDate from './FieldDate';
 
 function hoursMinutes(timeString) {
     return timeString.split(':').slice(0, 2).join(':');
@@ -43,7 +44,6 @@ function updateValue(fieldEl, value) {
     }
 
     fieldValue(fieldEl).value = value.trim();
-
     dispatchEvent(fieldValue(fieldEl), 'change');
 }
 
@@ -55,6 +55,8 @@ function displayValue(fieldEl) {
     let p = value.split(' ');
 
     fieldDate(fieldEl).value = p.length > 0 ? p[0] : '';
+    FieldDate.update(fieldDate(fieldEl));
+
     fieldTime(fieldEl).value = p.length > 1 ? hoursMinutes(p[1]) : '';
 }
 
