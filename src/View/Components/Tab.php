@@ -13,6 +13,7 @@ class Tab extends Component
         public $selected = null,
         public $as = '',
         public $link = '',
+        public $type = 'button', // Button type
         public $disabled=false,
     )
     {

@@ -15,7 +15,9 @@
 </a>
 @else
 <button
-    type="button"
+    @if ($type)
+    type="{{ $type }}"
+    @endif
     {{ $attributes->class([ 'tab', ]) }}
     data-role="tab"
     data-tab-name="{{ $name }}"
