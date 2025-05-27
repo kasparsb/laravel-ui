@@ -271,7 +271,12 @@ export default {
         setTimeoutsForFormsWithSubmitAfterMs();
     },
     submit(formEl) {
-        return handleSubmit(formEl)
+        if ('fetchSubmit' in formEl.dataset) {
+            return handleSubmit(formEl)
+        }
+        else {
+            formEl.submit();
+        }
     },
     onBeforeSubmit(cb) {
         if (typeof onBeforeSubmitListeners['__any__'] == 'undefined') {

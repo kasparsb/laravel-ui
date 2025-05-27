@@ -11,6 +11,7 @@ import getJsonFromHtml from './helpers/getJsonFromHtml';
 import Listeners from './helpers/Listeners';
 import getDateFromReference from './calendar/getDateFromReference';
 import clampDate from './calendar/clampDate';
+import Form from './Form';
 
 function CalendarWrapper(containerEl) {
 
@@ -122,7 +123,11 @@ function CalendarWrapper(containerEl) {
                 // Atrodam parent formu un submit
                 let form = parent(this.containerEl, 'form');
                 if (form) {
-                    form.submit();
+                    /**
+                     * Netaisām native submit, lai varētu
+                     * izpildīties Form uzliktie submit eventi
+                     */
+                    Form.submit(form);
                 }
             }
         })
