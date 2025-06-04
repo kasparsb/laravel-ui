@@ -3701,6 +3701,31 @@ body:has(>.layout) {
             }
         }
     }
+
+    // Kvadrāts ar rounded stūriem
+    &.rounded-square,
+    &.rounded-square-sm {
+        .avatar-image {
+            [data-role="image-wrap"] {
+                .border-sm();
+            }
+        }
+    }
+    &.rounded-square-lg {
+        .avatar-image {
+            [data-role="image-wrap"] {
+                .border-lg();
+            }
+        }
+    }
+    &.rounded-square-md {
+        .avatar-image {
+            [data-role="image-wrap"] {
+                .border-md();
+            }
+        }
+    }
+
     // ja ir image, tad noņemam background
     &[data-image] {
         .avatar-image {
