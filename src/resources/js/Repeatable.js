@@ -134,12 +134,15 @@ function deleteItem(childEl) {
      */
     if (currentItemEls.length == 1) {
 
-        repeatableEl.dataset.repeatableState = 'empty';
+        //repeatableEl.dataset.repeatableState = 'empty';
 
         // atrodam vai ir [data-repeatable-blank-item]
         // tas ir user defined item, kurš atrodas vietā, kur jābūt repeatable items
         let blankItemEl = q(repeatableEl, '[data-repeatable-blank-item]');
-        if (!blankItemEl) {
+        if (blankItemEl) {
+            remove(itemEl);
+        }
+        else {
             // izveidojam blank-item-el, kuru ievietojam pēdējā dzēšamā itemEl vietā
             blankItemEl = ce('div');
             blankItemEl.dataset.repeatableBlankItem = '';
