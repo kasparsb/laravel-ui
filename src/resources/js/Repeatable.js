@@ -134,7 +134,7 @@ function deleteItem(childEl) {
      */
     if (currentItemEls.length == 1) {
 
-        //repeatableEl.dataset.repeatableState = 'empty';
+        repeatableEl.dataset.repeatableState = 'empty';
 
         // atrodam vai ir [data-repeatable-blank-item]
         // tas ir user defined item, kurš atrodas vietā, kur jābūt repeatable items
