@@ -1,11 +1,15 @@
 import { clickp } from 'dom-helpers';
 import Table from './Table';
+import Repeatable from './Repeatable';
 
 export default {
     init() {
         clickp('[data-button-add]', (ev, el) => {
             if (el.dataset.table) {
                 Table.addRow(el.dataset.table);
+            }
+            else if (el.dataset.buttonAdd == 'repeatableItem') {
+                Repeatable.addItem(el)
             }
         })
     },

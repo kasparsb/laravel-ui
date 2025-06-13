@@ -74,6 +74,9 @@
     @if ($as)
     data-button-{{ $as }}="{{ $subAction }}"
     @endif
+    @if ($asTarget)
+    data-button-as-target="{{ $asTarget }}"
+    @endif
 
     @if ($replaceHtml)
     data-replace-html="{{ is_bool($replaceHtml) ? '' : $replaceHtml }}"

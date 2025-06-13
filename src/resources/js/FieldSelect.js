@@ -4,6 +4,7 @@ import DropdownMenu from './DropdownMenu';
 import InputValuePreview from './InputValuePreview';
 import FieldSelectEmptyState from './FieldSelectEmptyState';
 import Form from './Form';
+import Repeatable from './Repeatable';
 
 /**
  * Ja ir norādīts options list id, tad meklējam pēc list id
@@ -74,10 +75,25 @@ export default {
         // Field start values ielikšana
         setupPlaceholder(qa('.field-select'))
 
-        // onAfterReplaceHtml, lai var izvadīt option placeholder vērtību
+
+        /**
+         * Form.onAfterReplaceHtml,
+         * Repeatable.onAfterNewItem
+         * lai var izvadīt option placeholder vērtību
+         *
+         * šīs ir tās vietas, kurās dinamiski tiek ievietoti jauno dom elementi
+         * tiem vajag palaist apstrādes
+         *
+         * TODO varbūt vajag kaut kādu centralizētu event
+         */
         Form.onAfterReplaceHtml(newEl => {
             setupPlaceholder(qa(newEl, '.field-select'))
         })
+        Repeatable.onAfterNewItem(newEl => {
+            setupPlaceholder(qa(newEl, '.field-select'))
+        })
+
+
 
         // Kad nomainās input value, tad uzliekam atbilstošo vizuālo value
         on('change', '.field-select input', (ev, inputEl) => {

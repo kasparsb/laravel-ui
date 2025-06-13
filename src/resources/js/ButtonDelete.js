@@ -1,6 +1,7 @@
 import {parent, del, clickp} from 'dom-helpers'
 import ButtonLoading from './ButtonLoading';
 import Table from './Table';
+import Repeatable from './Repeatable';
 import DropdownMenu from './DropdownMenu';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
@@ -12,6 +13,9 @@ export default {
 
             // Tabulas rindas dzēšana
             if (buttonEl.dataset.buttonDelete == 'tableRow') {
+                /**
+                 * TODO šito loģiku vajag pārlikt uz Table
+                 */
                 if (buttonEl.dataset.role == 'menuitem') {
                     // Dzēšam
                     Table.deleteRow(
@@ -27,6 +31,14 @@ export default {
                 else {
                     // Dzēšam to rindu, kurā atrodas delete poga
                     Table.deleteRow(parent(buttonEl, 'tr'));
+                }
+            }
+            else if (buttonEl.dataset.buttonDelete == 'repeatableItem') {
+                if (('buttonAsTarget' in buttonEl.dataset) && buttonEl.dataset.buttonAsTarget == 'dropdownMenuOpenTrigger') {
+                    Repeatable.deleteItem(DropdownMenu.getOpenTriggerByChild(buttonEl))
+                }
+                else {
+                    Repeatable.deleteItem(buttonEl)
                 }
             }
             else if (buttonEl.dataset.url) {

@@ -18,6 +18,12 @@ class MenuItem extends Component
         // Ja atrodas iekš menuEl, bet vajag replaceHtml uz pogas, kas atvēra menu
         // tagad darbojas tikai šis: dropdownMenuOpenTrigger
         public $replaceHtmlTarget=false,
+        /**
+         * Darbojas tā pat kā replaceHtmlTarget, tikai uz as darbību
+         * piemēram as=delete.repeatableItem
+         * ja ir menuItem tad vajag zināt, kurš būs īstais repeatableItem
+         */
+        public $asTarget=false,
 
         public $menu = '',
         public $menuShow = '',

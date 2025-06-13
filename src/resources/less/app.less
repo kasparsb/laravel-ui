@@ -4046,3 +4046,25 @@ body:has(>.layout) {
         animation: spin .75s infinite linear;
     }
 }
+
+
+// Repeatable
+[data-repeatable-container] {
+    [data-repeatable-new-item-placeholder],
+    [data-repeatable-blank-item] {
+        display: none;
+    }
+
+    &[data-repeatable-has-empty-state]:not([data-repeatable-state="empty"]) {
+        [data-repeatable-empty-state] {
+            display: none;
+        }
+    }
+
+    &[data-repeatable-has-empty-state][data-repeatable-state="empty"] {
+        [data-repeatable-content] {
+            display: none;
+        }
+    }
+
+}

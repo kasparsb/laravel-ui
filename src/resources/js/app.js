@@ -22,6 +22,7 @@ import FieldDateTime from './FieldDateTime';
 import Form from './Form';
 import ProgressBar from './ProgressBar';
 import AspectRatio from './AspectRatio';
+import Repeatable from './Repeatable';
 
 Layout.init();
 OptionsPanel.init();
@@ -47,6 +48,7 @@ FieldDateTime.init();
 Form.init();
 ProgressBar.init();
 AspectRatio.init();
+Repeatable.init();
 
 export {
     Layout,
@@ -72,7 +74,8 @@ export {
     FieldDateTime,
     Form,
     ProgressBar,
-    AspectRatio
+    AspectRatio,
+    Repeatable,
 }
 
 export default {
@@ -99,5 +102,6 @@ export default {
     FieldDateTime,
     Form,
     ProgressBar,
-    AspectRatio
+    AspectRatio,
+    Repeatable,
 }
