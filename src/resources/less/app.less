@@ -978,6 +978,32 @@ body {
 }
 
 /**
+ * Field lauks, kurš aizņem field vietu, bet tam nav vizuālā
+ */
+.fieldable {
+    .remove-tap-highlite();
+
+    .form-field-layout();
+    .form-field-label();
+    .form-field-description-error();
+
+    >label,
+    >[data-role="description"] {
+        visibility: hidden
+    }
+
+    >div {
+        .input-text();
+        padding-left: 0;
+        padding-right: 0;
+
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+    }
+}
+
+/**
  * Input lauks ir hidden, priekš vērtības ir placholder divs
  * nav tieši editējams.
  * Izmanto priekš field-date, select
