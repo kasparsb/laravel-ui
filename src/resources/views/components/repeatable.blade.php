@@ -19,6 +19,13 @@ $hasNewItemPlaceholder = isset($newItemPlaceholder) && !$newItemPlaceholder->isE
     @if ($isEmpty)
     data-repeatable-state="empty"
     @endif
+
+    @if ($deletedFieldSelector)
+    data-repeatable-deleted-field-selector="{{ $deletedFieldSelector }}"
+    @endif
+    @if ($idFieldSelector)
+    data-repeatable-id-field-selector="{{ $idFieldSelector }}"
+    @endif
     >
 
     <div data-repeatable-content>

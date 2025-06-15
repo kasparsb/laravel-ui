@@ -1,11 +1,41 @@
 import {
     q, qa, parent, ce,
-    insertAfter, replace, clone, remove,
+    insertAfter, replace, clone, remove, append,
     get
 } from 'dom-helpers';
 import Listeners from './helpers/Listeners';
 
 let onAfterNewItemListeners = {};
+
+function getDeletedFieldEl(itemEl) {
+    let repeatableEl = parent(itemEl, '[data-repeatable-container]')
+
+    if (!('repeatableDeletedFieldSelector' in repeatableEl.dataset)) {
+        return false;
+    }
+
+    if (!repeatableEl.dataset.repeatableDeletedFieldSelector) {
+        return false;
+    }
+
+
+    return q(itemEl, repeatableEl.dataset.repeatableDeletedFieldSelector)
+}
+
+function getIdFieldEl(itemEl) {
+    let repeatableEl = parent(itemEl, '[data-repeatable-container]')
+
+    if (!('repeatableIdFieldSelector' in repeatableEl.dataset)) {
+        return false;
+    }
+
+    if (!repeatableEl.dataset.repeatableIdFieldSelector) {
+        return false;
+    }
+
+
+    return q(itemEl, repeatableEl.dataset.repeatableIdFieldSelector)
+}
 
 function getNewItemPlaceholderEl(repeatableEl, newItemIndex) {
 
@@ -42,7 +72,21 @@ function getNewItemPlaceholderEl(repeatableEl, newItemIndex) {
 }
 
 function getLastItem(repeatableEl) {
-    let allItems = [...qa(repeatableEl, '[data-repeatable-item]')];
+    /**
+     * Visi izņemot deleted
+     * bet tā nevar darīt, jo tad dublēsies index ar tiem item, kuri nav deleted
+     * piemēram izdzēš ar index=2 un tā vietā uztaisa jaunu ar index=2
+     *
+     * TODO ja nav data-deleted-field-selector, tad laikam gan var ņemt tikai nedzēstos
+     *
+     */
+    let allItems;
+    if (repeatableEl.dataset.repeatableIdFieldSelector) {
+        allItems = [...qa(repeatableEl, '[data-repeatable-item]')];
+    }
+    else {
+        allItems = [...qa(repeatableEl, '[data-repeatable-item]:not([data-repeatable-item-deleted])')];
+    }
 
     // Nav neviena repeatable item
     if (allItems.length == 0) {
@@ -124,6 +168,23 @@ function addNewItem(repeatableEl) {
 function deleteItem(childEl) {
     let repeatableEl = parent(childEl, '[data-repeatable-container]')
     let itemEl = parent(childEl, '[data-repeatable-item]')
+
+    // Ja ir track deleted, tad uzliekam input lauku _deleted
+    let deletedFieldEl = getDeletedFieldEl(itemEl);
+    if (deletedFieldEl) {
+        deletedFieldEl.value = '_deleted';
+
+        /**
+         * Pārbaudām vai ir id field. ja ir tad liekam pazīmi, ka ir dzēsts,
+         * bet fiziski item nedzēšam ārā
+         */
+        let idFieldEl = getIdFieldEl(itemEl);
+        if (idFieldEl && idFieldEl.value) {
+            itemEl.dataset.repeatableItemDeleted = '';
+            return;
+        }
+    }
+
 
     let currentItemEls = qa(repeatableEl, '[data-repeatable-item]');
 
