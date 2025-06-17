@@ -13,12 +13,6 @@ class RadioButtons extends Component
         public $value='',
 
         /**
-         * Default vērtības skatīties RadioButton komponentē
-         */
-        public $buttonClass=null,
-        public $buttonClassSelected=null,
-
-        /**
          * Parent komponente nodod savus data attributs,
          * jo blade komponentēm var padot tikai parametrus
          * {{ $dataAttributs }} šādi met error

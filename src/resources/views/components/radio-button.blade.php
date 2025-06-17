@@ -9,30 +9,26 @@
     });
 @endphp
 <button
-    data-role="radio-button"
-    @if ($buttonClass == $buttonClassSelected)
     {{ $attributesForContainer->class([
-        $buttonClass,
+        'button-radio',
     ]) }}
-    @else
-    {{ $attributesForContainer->class([
-        $buttonClassSelected => $selected,
-        $buttonClass => !$selected,
-    ]) }}
-    @endif
 
-    data-class="{{ $buttonClass }}"
-    data-class-selected="{{ $buttonClassSelected }}"
+    data-role="radio-button"
 
     @disabled($disabled)
     >
-    {{ $slot }}
+
+    <span data-role="radio-check-visual"></span>
+    <div data-radio-label>
+        {{ $slot }}
+    </div>
+
     <input
-        {{ $attributesForInputField }}
-        data-r="radio"
-        type="radio"
-        name="{{ $name }}"
-        value="{{ $value }}"
-        @disabled($disabled)
-        @checked($selected) />
+            {{ $attributesForInputField }}
+            type="radio"
+            name="{{ $name }}"
+            value="{{ $value }}"
+            @disabled($disabled)
+            @checked($selected) />
+
 </button>

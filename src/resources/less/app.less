@@ -1691,8 +1691,8 @@ body {
 }
 
 
-.checkbox,
-.radio {
+//.radio,
+.checkbox {
     .remove-tap-highlite();
 
     // Grid nevar izmanto, jo tad label izstiepjas pa visu platumu
@@ -1838,54 +1838,58 @@ body {
     }
 }
 
-.radio {
-    span {
-        &:before {
-            .border-round();
-        }
+// .radio {
+//     span {
+//         &:before {
+//             .border-round();
+//         }
 
-        svg {
-            width: @size040;
-            height: @size040;
-        }
-    }
-    // Radio vizuālais state
-    &:not(:is([data-state="error"])) {
-        span {
-            &:before {
-                border: 1px solid hsl(var(--color-900));
-            }
-            &:has(input:focus) {
-                &:before {
-                    border: 2px solid hsl(var(--color-900));
-                }
-            }
+//         svg {
+//             width: @size040;
+//             height: @size040;
 
-            &:has(input:checked) {
-                &:before {
-                    //background-color: hsl(var(--color-900));
-                }
-            }
-        }
-    }
-    &[data-state="error"] {
-        span {
-            &:before {
-                border: 1px solid hsl(var(--color-error));
-            }
-            &:has(input:focus) {
-                &:before {
-                    border: 2px solid hsl(var(--color-error));
-                }
-            }
-            &:has(input:checked) {
-                &:before {
-                    //background-color: hsl(var(--color-error));
-                }
-            }
-        }
-    }
-}
+//             display: none;
+//         }
+//     }
+//     // Radio vizuālais state
+//     &:not(:is([data-state="error"])) {
+//         span {
+//             &:before {
+//                 border: 1px solid hsl(var(--color-400));
+//                 box-sizing: border-box;
+//             }
+//             &:has(input:focus) {
+//                 &:before {
+//                     border: 5px solid hsl(var(--color-900));
+//                     box-sizing: border-box;
+//                 }
+//             }
+
+//             &:has(input:checked) {
+//                 &:before {
+//                     //background-color: hsl(var(--color-900));
+//                 }
+//             }
+//         }
+//     }
+//     &[data-state="error"] {
+//         span {
+//             &:before {
+//                 border: 1px solid hsl(var(--color-error));
+//             }
+//             &:has(input:focus) {
+//                 &:before {
+//                     border: 2px solid hsl(var(--color-error));
+//                 }
+//             }
+//             &:has(input:checked) {
+//                 &:before {
+//                     //background-color: hsl(var(--color-error));
+//                 }
+//             }
+//         }
+//     }
+// }
 
 .table {
 
@@ -3620,36 +3624,124 @@ body:has(>.layout) {
     }
 }
 
+.button-radio {
+    .remove-tap-highlite();
+
+    cursor: pointer;
+
+    display: inline-flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+    gap: @size020;
+
+    // focus outline. Tikai kad ar keyboard fokusē. Ja ar peli, tad nav
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    &:focus-visible {
+        outline-color: hsl(var(--color-400));
+    }
+
+    // Label text
+    [data-radio-label] {
+        .t-3\.5();
+        .fw-m();
+        color: hsl(var(--color-950));
+    }
+    &:has([disabled]) {
+        [data-radio-label] {
+            color: hsl(var(--color-500));
+        }
+    }
+
+    // Radio checked indicator
+    [data-role="radio-check-visual"] {
+        display: block;
+        box-sizing: border-box;
+        width: @size040;
+        height: @size040;
+        background-color: #fff;
+        border: 1px solid hsl(var(--color-400));
+        border-radius: 50%;
+    }
+    &:has(input:checked) {
+        [data-role="radio-check-visual"] {
+            border: 5px solid hsl(var(--color-900));
+        }
+    }
+
+    // Input field which is type=radio
+    position: relative;
+    input[type=radio] {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+    }
+
+
+    // Default vizuālais
+    .border-sm();
+}
+
 /**
  * Radio buttons are only buttons. Without label, description and error state
  */
 .radio-buttons {
-    // Buttons container, ja tajā nav h-stack vai v-stack
-    // tad taisām flex row
+    /**
+     * Buttons container, ja tajā nav h-stack vai v-stack
+     * tad taisām flex row
+     */
     &:not(:has(.row-items)):not(:has(.col-items)) {
         display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-evenly;
+        flex-flow: column;
+        justify-content: flex-start;
 
         gap: @size020;
 
-        >* {
-            flex: 1;
-        }
+        // >* {
+        //     flex: 1;
+        // }
     }
+}
 
-    [data-role="radio-button"] {
-        cursor: pointer;
-        position: relative;
+// Radio buttons vizuālais
+.radio-buttons,
+.field-radio-buttons {
+    /**
+     * Cards vizuālais noformējums
+     * ar border un background
+     */
+    &.cards {
+        .button-radio {
+            .transition-color();
 
-        input {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
+            .border-md();
+            border-width: 1px;
+            border-style: solid;
+
+            padding-left: @size040;
+            padding-right: @size040;
+            padding-top: @size020;
+            padding-bottom: @size020;
+
+            background-color: hsl(var(--color-white));
+            border-color: hsl(var(--color-200));
+
+            &:not([disabled]):hover {
+                background-color: hsl(var(--color-50));
+                border-color: hsl(var(--color-300));
+            }
+
+            &:has(input:checked),
+            &:has(input:checked):hover {
+                background-color: hsl(var(--color-100));
+                border-color: hsl(var(--color-500));
+            }
         }
     }
 }
@@ -3659,30 +3751,14 @@ body:has(>.layout) {
     grid-auto-rows: min-content;
     gap: @size020;
 
-    // Buttons container
-    >.radio-buttons {
-        .shadow();
-        .border-lg();
-        border-width: 1px;
-        border-style: solid;
-        border-color: hsl(var(--color-200));
-        padding: var(--size-010);
-    }
-
     &:not(:is([data-state="error"])) {
         >label {
             .input-label();
-        }
-        >.radio-buttons {
-            border-color: hsl(var(--color-200));
         }
     }
     &[data-state="error"] {
         >label {
             .input-label-error();
-        }
-        >.radio-buttons {
-            border-color: hsl(var(--color-red-200));
         }
     }
 

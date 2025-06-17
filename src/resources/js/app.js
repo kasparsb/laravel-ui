@@ -40,7 +40,6 @@ Calendar.init();
 Table.init();
 FileUpload.init();
 Tabs.init();
-RadioButtons.init();
 FieldSelect.init();
 FieldIncrement.init();
 FieldHoursMinutes.init();

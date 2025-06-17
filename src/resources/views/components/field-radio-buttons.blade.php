@@ -23,8 +23,6 @@
         :dataAttributes="$dataAttributes"
         :name="$name"
         :value="$value"
-        :buttonClass="$buttonClass"
-        :buttonClassSelected="$buttonClassSelected"
         >
         {{ $slot }}
     </x-ui::radio-buttons>
