@@ -65,6 +65,8 @@ class Table extends Component
                 [
                     'menu' => $col->menu,
                     'menuShow' => $col->menuShow,
+                    'menuPositionDir' => $col->menuPositionDir,
+                    'menuPositionAtDir' => $col->menuPositionAtDir,
                 ]
             )->render();
         }

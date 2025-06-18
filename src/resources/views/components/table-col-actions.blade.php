@@ -2,7 +2,9 @@
     class="icon small"
     data-r="tableRowActions"
     :menu="$menu"
-    :menuShow="$menuShow"
+    :menu-show="$menuShow"
+    :menu-position-dir="$menuPositionDir"
+    :menu-position-at-dir="$menuPositionAtDir"
     >
     <svg width="24" height="24" viewBox="0 0 24 24">
         <use xlink:href="#dots"></use>

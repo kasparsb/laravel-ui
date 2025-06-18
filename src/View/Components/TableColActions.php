@@ -14,6 +14,8 @@ class TableColActions extends Component
     public function __construct(
         public $menu = '',
         public $menuShow = 'onclick', // onhover
+        public $menuPositionDir = 'left bottom',
+        public $menuPositionAtDir = 'right bottom',
     )
     {
         $this->manager = app(TableComponentsManager::class);
