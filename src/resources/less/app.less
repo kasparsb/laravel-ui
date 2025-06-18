@@ -219,7 +219,7 @@ body {
     min-height: 100dvh;
     color: var(--color-950);
 
-    --layout-aside-width: 200px;
+    --layout-aside-width: 252px;
     --layout-aside-width-closed: 60px;
 
     --layout-top-menu-content-width: 1000px;
@@ -2684,11 +2684,10 @@ body:has(>.layout) {
         /**
          * Width atkarībā no ir expanded vai nav
          */
-        &:is([data-sidebar-expanded]) {
-            >aside {
-                // Width
-                flex: 0 0 var(--layout-aside-width);
-            }
+        // default state ir expanded
+        >aside {
+            // Width
+            flex: 0 0 var(--layout-aside-width);
         }
         &:not(:is([data-sidebar-expanded])) {
             >aside {
