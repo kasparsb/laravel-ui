@@ -2656,6 +2656,9 @@ body:has(>.layout) {
     @media (min-width: @smWidth) and (max-width: @mdWidth) {
         &:not(:is([data-sidebar-expanded])) {
             >aside {
+
+                flex: 0 0 var(--layout-aside-width-closed);
+
                 .menu-item {
                     .menu-item-hide-label();
                 }
@@ -2683,17 +2686,18 @@ body:has(>.layout) {
 
         /**
          * Width atkarībā no ir expanded vai nav
+         *
+         * TODO te ir jāpārtaisa. tā kā pēc noklusējuma aside ir bez [data-sidebar-expanded]
+         * tad uz desktop lai uzliktu closed nav variantu kā to noteikt
+         * tāpēc closed platumu definējam tikai platumā tablets un uz leju
+         * uz desktop ir tikai expanded
+         *
+         * bet ja vajag arī uz desktop closed aside platumu, tad jāievieš
+         * data atribūts data-sidecbar-contracted
          */
-        // default state ir expanded
         >aside {
             // Width
             flex: 0 0 var(--layout-aside-width);
-        }
-        &:not(:is([data-sidebar-expanded])) {
-            >aside {
-                // Width
-                flex: 0 0 var(--layout-aside-width-closed);
-            }
         }
 
         >aside {
