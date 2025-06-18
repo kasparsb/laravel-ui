@@ -2865,6 +2865,9 @@ body:has(>.layout) {
         position: sticky;
         top: 0;
 
+        // Jāuzliek vismaz kāds z-index savādāk postion relative elementi lien pa virsu
+        z-index: 100;
+
         background-color: hsl(var(--color-background));
         border-bottom: 1px solid hsl(var(--color-200));
     }
