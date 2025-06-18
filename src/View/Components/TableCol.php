@@ -25,6 +25,9 @@ class TableCol extends Component
         // Field specific attributes
         public $placeholder = '',
         public $selectOptions = [],
+        // Field select options source url
+        public $selectSourceUrl = false,
+        public $selectValueVisualUrl = false,
     )
     {
         $this->manager = app(TableComponentsManager::class);

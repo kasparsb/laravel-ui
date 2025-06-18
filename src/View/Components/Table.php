@@ -135,6 +135,8 @@ class Table extends Component
                     'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'options' => $col->selectOptions,
+                    'sourceUrl' => $col->selectSourceUrl,
+                    'valueVisualUrl' => $col->selectValueVisualUrl,
                     'placeholder' => $col->placeholder,
                 ])
             )->render();
