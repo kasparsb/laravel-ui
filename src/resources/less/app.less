@@ -2213,7 +2213,8 @@ body {
 
     svg {
         margin-right: 0;
-        margin-bottom: @size015;
+        //margin-bottom: @size015;
+        margin-bottom: 0;
     }
 }
 
@@ -2396,6 +2397,18 @@ body {
 
     &::-webkit-scrollbar {
         display: none;
+    }
+
+    // direct child, lai darbojas scroll snap
+    >* {
+        scroll-snap-align: start;
+
+        /**
+         * šis .nav-menu sānu padding, kuru uzliek šeit .layout-bottom-menu
+         * TODO vajadzētu kaut kā konfigurējamu
+         */
+        scroll-margin-left: @size010;
+        scroll-margin-right: @size010;
     }
 }
 
@@ -2644,11 +2657,22 @@ body:has(>.layout) {
         background-color: hsl(var(--color-100));
         border-top: 1px solid hsl(var(--color-200));
 
+        // Menu sānu padding, lai menu items nav pie pašas malas
+        @menuSidePadding: @size010;
+
+        /**
+         * 5 menu items rinndā liekas ir optimālais
+         * citās app arī izmanto tieši 5
+         *
+         * Izrēķinām ārā side padding, lai menuItem nav pie pašas sānu malas
+         */
+        @menuItemWidth: calc(20% - ((@menuSidePadding * 2) / 5));
+
         .nav-menu {
             .nav-menu-horizontal();
             .horizontal-overflow-scrollable();
 
-            padding: @size010 @size010 @size020;
+            padding: @size010 @menuSidePadding @size020;
         }
 
         .menu-item {
@@ -2659,9 +2683,8 @@ body:has(>.layout) {
             .menu-item-vertical();
             .menu-item-label-overflow-elipsis();
 
-            @width: 25%;
-            flex: 0 0 @width;
-            width: @width;
+            flex: 0 0 @menuItemWidth;
+            width: @menuItemWidth;
 
             svg {
                 width: 1.5rem;
@@ -2671,6 +2694,12 @@ body:has(>.layout) {
             [data-menu-item-label] {
                 font-size: @size030;
             }
+
+            // override .nav-menu uzlikto padding
+            padding-top: @size020;
+            padding-bottom: @size020;
+            padding-left: @size010;
+            padding-right: @size010;
         }
     }
 }
