@@ -2657,6 +2657,9 @@ body:has(>.layout) {
         background-color: hsl(var(--color-100));
         border-top: 1px solid hsl(var(--color-200));
 
+        // Safe area bottom padding
+        padding-bottom: env(safe-area-inset-bottom, 0);
+
         // Menu sānu padding, lai menu items nav pie pašas malas
         @menuSidePadding: @size010;
 
