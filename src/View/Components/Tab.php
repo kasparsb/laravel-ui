@@ -8,10 +8,17 @@ use Illuminate\View\Component;
 
 class Tab extends Component
 {
+
+    /**
+     * Priekš as=radio, lai input lukam var norādīt name (Tabs.name)
+     * value būs Tab.name
+     */
+    public $tabsName;
+
     public function __construct(
         public $name = null,
         public $selected = null,
-        public $as = '',
+        public $as = '', // link, radio
         public $link = '',
         public $type = 'button', // Button type
         public $disabled=false,
@@ -43,6 +50,7 @@ class Tab extends Component
                  * tukšs string der kā derīga vērtība
                  */
                 $selectedItem = view()->getConsumableComponentData('selected');
+                $this->tabsName = view()->getConsumableComponentData('name');
                 if (!is_null($selectedItem)) {
                     $this->selected = $this->name == $selectedItem;
                 }
