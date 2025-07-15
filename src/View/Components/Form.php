@@ -63,6 +63,16 @@ class Form extends Component
          * šo var izmantot kā polling, ja ir jāgaida garāka fona procesa rezultāts
          */
         public $submitAfterMs=false,
+
+        /**
+         * Predefinet event, kad taisīt submit
+         *     - onscrollintoviewport
+         */
+        public $submit=null,
+
+        // šis dublējas ar Container
+        public $loading=false,
+        public $loadingStyle='ui-faded-ghost',
     )
     {
         if (!$asForm) {

@@ -1,4 +1,4 @@
-import {click} from 'dom-helpers';
+import {q, click} from 'dom-helpers';
 
 function loading(el) {
     // previous loading state
@@ -7,11 +7,26 @@ function loading(el) {
 }
 
 function idle(el) {
-    if (el.dataset.pl) {
-        el.dataset.loading = el.dataset.pl;
+
+    /**
+     * TODO ja padots fragment, tad vajadzētu meklē container elementu specifiskāk
+     * nevis tikai pēc data-loading
+     */
+    if (el.nodeType && (el.nodeType == Node.DOCUMENT_FRAGMENT_NODE)) {
+        el = q(el, '[data-loading="loading"]');
     }
 
-    delete el.dataset.pl;
+    if (!(el instanceof Node)) {
+        return;
+    }
+
+    if (el.dataset.pl) {
+        el.dataset.loading = el.dataset.pl;
+        delete el.dataset.pl;
+    }
+    else {
+        delete el.dataset.loading;
+    }
 }
 
 function toggle(el) {

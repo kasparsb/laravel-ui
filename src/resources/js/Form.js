@@ -8,12 +8,17 @@ import Listeners from './helpers/Listeners';
 import ButtonLoading from './ButtonLoading';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
+import LimitedBatch from './helpers/LimitedBatch';
+import ScrollIntoViewportObserver from './ScrollIntoViewportObserver';
 
 let onBeforeSubmitListeners = {};
 let onAfterSubmitListeners = {};
 let onAfterReplaceHtmlListeners = {};
 
 let originalEl = [];
+
+// Limit, lai vienlaicīgi izpildās tikai 4
+let scrollIntoViewportBatch = new LimitedBatch(4);
 
 /**
  * Vai ir form aizvietotājs. Parasts div elements, kura jādarbojas līdzīgi kā form
@@ -50,11 +55,28 @@ function submitForm(formEl, url, method) {
         formData[formEl.dataset.clickedSubmitButtonName] = formEl.dataset.clickedSubmitButtonValue;
     }
 
-    /**
-     * Jāpieliek error handling. Un te ir jāatgriež jauna Promise
-     */
-    return request(method, url, formData)
-        .then(response => jsonOrText(response))
+    return new Promise((resolve, reject) => {
+        request(method, url, formData)
+            .then(response => {
+                if (response.ok) {
+                    return jsonOrText(response)
+                }
+                else {
+                    /**
+                     * Jāatgriež vēl viena promise, kura vienmēr fail
+                     * tāpēc, ka response nav ok
+                     */
+                    return new Promise((resolve, reject) => {
+                        jsonOrText(response)
+                            .then(response => reject(response))
+                            .catch(err => reject(err))
+                    })
+                }
+            })
+            .then(response => resolve(response))
+            .catch(err => reject(err));
+    })
+
 }
 
 /**
@@ -75,39 +97,41 @@ function setButtonIdleAfterSubmit(formEl) {
 function handleSubmit(formEl) {
     if ('isSubmitting' in formEl.dataset) {
         // Formā jau notiek submit
-        return;
+        return new Promise((resolve, reject) => {
+            reject('form is already submitting');
+        });
     }
-
-    formEl.dataset.isSubmitting = '';
-
-    /**
-     * Šitas dublējas ar submit('form')
-     * bet šo vajag, ja notiek form submit caur API
-     * Pa lielam nekas, ja divreiz uzliks pogai loading.
-     * Vienkrāši fetchSubmit gadījumā dublēsies
-     */
-    setButtonLoadingOnSubmit(formEl);
-
-
-    if (onBeforeSubmitListeners['__any__']) {
-        onBeforeSubmitListeners['__any__'].trigger([
-            formEl,
-        ])
-    }
-
-    let elReplacer = new ReplaceElWithNewHtmlIfNecessary(formEl);
-
-
-    /**
-     * Nevar likt pirms ReplaceElWithNewHtmlIfNecessary, jo tad
-     * dropdownmenu ir aizvēries un vairs nevar atrast openTriggerEl
-     */
-    handleDropdownMenuHideFromEl(formEl, 'onsubmit');
 
     return new Promise((resolve, reject) => {
+
+        formEl.dataset.isSubmitting = '';
+
+        /**
+         * Šitas dublējas ar submit('form')
+         * bet šo vajag, ja notiek form submit caur API
+         * Pa lielam nekas, ja divreiz uzliks pogai loading.
+         * Vienkārši fetchSubmit gadījumā dublēsies
+         */
+        setButtonLoadingOnSubmit(formEl);
+
+
+        if (onBeforeSubmitListeners['__any__']) {
+            onBeforeSubmitListeners['__any__'].trigger([
+                formEl,
+            ])
+        }
+
+        let elReplacer = new ReplaceElWithNewHtmlIfNecessary(formEl);
+
+        /**
+         * Nevar likt pirms ReplaceElWithNewHtmlIfNecessary, jo tad
+         * dropdownmenu ir aizvēries un vairs nevar atrast openTriggerEl
+         */
+        handleDropdownMenuHideFromEl(formEl, 'onsubmit');
+
+
         submitForm(formEl)
             .then(response => {
-
                 let replacedEl = elReplacer.replace(response);
 
                 // Aizstājam jauno formEl ar iepriekšējo
@@ -145,9 +169,12 @@ function handleSubmit(formEl) {
 
                 // Ja ir ienākušas jaunas formas, kurām vajag uzstādīt setTimeout
                 setTimeoutsForFormsWithSubmitAfterMs();
+                // Scrollintoviewport formas
+                setScrollIntoViewportForms();
 
                 resolve();
             })
+            .catch(err => reject(err))
     })
 
 }
@@ -219,6 +246,15 @@ function setTimeoutsForFormsWithSubmitAfterMs() {
     })
 }
 
+/**
+ * Uzlieka observer uz formā, kuras jābsubmito uz scroll into viewport
+ */
+function setScrollIntoViewportForms() {
+    qa('[data-submit-form-condition="onscrollintoviewport"]')
+        .forEach(el => ScrollIntoViewportObserver.observe(el));
+
+}
+
 function handleDropdownMenuHide(formEl, eventName) {
     if (!('menuHide' in formEl.dataset)) {
         return;
@@ -269,6 +305,24 @@ export default {
         })
 
         setTimeoutsForFormsWithSubmitAfterMs();
+
+
+
+        ScrollIntoViewportObserver.setHandler(el => {
+
+            ScrollIntoViewportObserver.unobserve(el);
+
+            scrollIntoViewportBatch.add(function(){
+                return new Promise((resolve, reject) => {
+                    handleSubmit(el)
+                        .then(resolve)
+                        .catch(reject)
+                })
+            })
+
+
+        });
+        setScrollIntoViewportForms();
     },
     submit(formEl) {
         if ('fetchSubmit' in formEl.dataset) {

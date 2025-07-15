@@ -1,5 +1,7 @@
 <{{ $asForm ? 'form' : 'div' }}
-    {{ $attributes->merge(
+    {{ $attributes->class([
+        'container' => $loadingStyle ? true : false,
+    ])->merge(
         $asForm ? [
             'method' => in_array($method, ['get', 'post']) ? $method : 'post',
             'action' => $action,
@@ -35,6 +37,17 @@
 
     @if ($submitAfterMs)
     data-submit-form-after-ms="{{ $submitAfterMs }}"
+    @endif
+
+    @if ($submit)
+    data-submit-form-condition="{{ $submit }}"
+    @endif
+
+    @if ($loadingStyle)
+    data-loading-style="{{ $loadingStyle }}"
+    @endif
+    @if ($loading)
+    data-loading="{{ $loading === true ? 'loading' : $loading }}"
     @endif
 
     @if ($actionSource)
