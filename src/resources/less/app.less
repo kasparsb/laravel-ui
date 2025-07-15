@@ -49,6 +49,10 @@
 @import 'colors';
 @import 'hidden';
 
+
+// Non visible character
+// content: '\00a0';
+// display: inline;
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: button;
     background-color: transparent;
@@ -1382,26 +1386,6 @@ body {
         margin-left: -.125em;
         margin-right: -.125em;
     }
-
-    /**
-     * pašlaik nav laba doma, jo nevar uztaisīt, multiline skeletonu
-     * tāpēc labāk izmantot skeleton-line un no tā kombinēt sekeltonu.
-     * saliek vairākus .skeleton-lines un tādā veidā kombinē
-     */
-    // Skeleton state
-    // &.skeleton {
-    //     position: relative;
-    //     &:after {
-    //         .ui-skeleton-cover();
-    //     }
-
-    //     &:empty {
-    //         &:before {
-    //             content: '\00a0';
-    //             display: inline;
-    //         }
-    //     }
-    // }
 }
 
 .title-description {
@@ -3432,6 +3416,10 @@ body:has(>.layout) {
         flex-direction: row nowrap;
         justify-content: center;
         align-items: center;
+    }
+
+    &.skeleton {
+        .bg-c-200()
     }
 }
 
