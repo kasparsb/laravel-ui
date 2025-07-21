@@ -11,7 +11,7 @@ class Container extends Component
 {
     public function __construct(
         public $loading=false,
-        public $loadingStyle="ui-faded-ghost",
+        public $loadingStyle='ui-faded-ghost',
     )
     {
         //
