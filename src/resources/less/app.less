@@ -53,6 +53,7 @@
 // Non visible character
 // content: '\00a0';
 // display: inline;
+
 [type=button], [type=reset], [type=submit], button {
     -webkit-appearance: button;
     background-color: transparent;
@@ -2987,6 +2988,36 @@ body:has(>.layout) {
         .shadow-lg();
     }
 }
+.calendar-week {
+    [data-is-calendar] {
+        --text-color-date-default: var(--color-950);
+        --text-color-date-secondary: var(--color-400);
+        --border-radius-date: calc(var(--radius) - 2px);
+        --border-today: 1px solid hsl(var(--color-400));
+        --grid-gap: 2px;
+        --border-width: 0px;
+
+        --opacity-color-hover: 0.8;
+        --bg-color-hover: var(--color-100);
+
+        --opacity-color-selected: 0.8;
+        --bg-color-selected: var(--color-950);
+
+        --opacity-color-periodin: 0.8;
+        --bg-color-periodin: var(--color-200);
+
+
+        .wbcalendar {
+            //width: ~'calc('(@size080 * 7)~' + (var(--grid-gap)*6))';
+        }
+        .wbcalendar-date {
+            width: 100%;
+            aspect-ratio: 1/1;
+
+            border: 1px solid hsl(var(--color-200));
+        }
+    }
+}
 .wbcalendar-grid {
     gap: var(--grid-gap);
 
@@ -3165,6 +3196,21 @@ body:has(>.layout) {
             // Noņemam hover krāsu
             &:hover {
                 background-color: transparent;
+            }
+        }
+    }
+}
+.calendar-week {
+    .wbcalendar-date {
+        >span {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+
+            [data-calendar-week-day] {
+                color: hsl(var(--color-muted));
+                font-size: @size030;
             }
         }
     }

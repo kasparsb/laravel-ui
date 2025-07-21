@@ -22,6 +22,8 @@ let container;
 let activeField;
 let activeMenu;
 
+let namedListeners = {}
+
 function createCalendar(date) {
     return new BaseCalendar.dom(date, {
         //cssprefix: '',
@@ -74,8 +76,16 @@ function dateSelected(date) {
         return;
     }
 
-    setDate(activeField, date);
-    setPlaceholder(activeField, date);
+    if ('datePickerSetSelectedDate' in activeField.dataset) {
+        setDate(activeField, date);
+        setPlaceholder(activeField, date);
+    }
+
+    if ('fieldDateCalendarListenerName' in activeField.dataset) {
+        if (typeof namedListeners[activeField.dataset.fieldDateCalendarListenerName] != 'undefined') {
+            namedListeners[activeField.dataset.fieldDateCalendarListenerName](date);
+        }
+    }
 
     DropdownMenu.close(activeMenu);
 }
@@ -86,10 +96,24 @@ function setupCalendar(field) {
 
     // timeout vajadzīgs, jo kalendārs vēl nav paspējis pilnībā izveidoties un setStateUrl būs error
     setTimeout(() => {
-        // Default date state
-        calendar.setDefaultDateState(getJsonFromHtml(parent(activeField, '.field-date'), 'default-date-state'));
-        // State
-        calendar.setState(getJsonFromHtml(parent(activeField, '.field-date'), 'state'));
+
+
+        // Elements, kurā glabājas date state json
+        // parasti wrapper elements, kurā ir poga/input lauks, kurš izsauc date picker
+        let stateContainerEl = parent(activeField, '[data-date-picker-triggr-el-container]');
+        if (stateContainerEl) {
+            // Default date state
+            calendar.setDefaultDateState(getJsonFromHtml(stateContainerEl, 'default-date-state'));
+            // State
+            calendar.setState(getJsonFromHtml(stateContainerEl, 'state'));
+        }
+        else {
+            // Default date state
+            calendar.setDefaultDateState(null);
+            // State
+            calendar.setState(null);
+        }
+
 
         // State url
         calendar.setStateUrl(field.dataset.stateUrl ? field.dataset.stateUrl : '');
@@ -140,6 +164,12 @@ function setPlaceholder(inputFieldEl, date) {
 export default {
     init() {
 
+        /**
+         * TODO FieldData jāpārsauc par DataPicker vai tamlīdzīgi
+         * doma tāda, ka date picker var atvērt no jebkura elementa, kura uzlikts menu="field-date-calendar"
+         *   - datuma lauks
+         *   - Week calendar datuma poga, kur atver datepicker, lai dabūtu datumu
+         */
         DropdownMenu.onOpen('field-date-calendar', (menuEl, triggerEl) => {
             setupCalendar(triggerEl)
             activeField = triggerEl;
@@ -150,7 +180,6 @@ export default {
             activeField = null;
             activeMenu = null;
         })
-
 
         /**
          * Visiem field-date uzstādām min|max date no
@@ -202,5 +231,17 @@ export default {
             fieldDateEl,
             inputEl.value ? stringToDate(inputEl.value) : null
         )
+    },
+
+    /**
+     * Kāds modulis uzliek savu listener pēc name
+     * kad htmlā taisa elementu uz kur atvērt DatePicker, tad tur
+     * tiks pārbaudīts vai ir uzlikts listener name
+     * Kad tiks izvēlēts datums, tad tiks izsaukts tas listener, kurš atbilst šim name
+     *
+     * htmlā tad varēs norādīts listenername un JS pusē jau pielikt reālo funkciju
+     */
+    setNamedListener(listenerName, cb) {
+        namedListeners[listenerName] = cb;
     }
 }

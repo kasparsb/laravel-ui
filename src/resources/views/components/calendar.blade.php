@@ -20,6 +20,8 @@
     @endif
 
     data-is-calendar
+    data-calendar-show-weekdays
+    data-calendar-show-date-switch
 >
     <input
         type="hidden"

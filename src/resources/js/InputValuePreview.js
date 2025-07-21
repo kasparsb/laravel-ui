@@ -6,6 +6,10 @@ import {q, parent} from 'dom-helpers';
 function setPlaceholder(childOrfieldEl, placeholder) {
 
     let fieldEl = parent(childOrfieldEl, '.input-value-preview')
+    if (!fieldEl) {
+        return;
+    }
+
     let isEmpty = placeholder.trim() ? false : true;
 
     // vajadzīgs priekš css, lai var nostilot tukšo vērtību (placeholder)

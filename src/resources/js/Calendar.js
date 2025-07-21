@@ -7,6 +7,7 @@ import dateCaptionFormatter from './calendar/dateCaptionFormatter';
 import navPrevFormatter from './calendar/navPrevFormatter';
 import navNextFormatter from './calendar/navNextFormatter';
 import monthDayFormatter from './calendar/monthDayFormatter';
+import monthDayWithWeekdayFormatter from './calendar/monthDayWithWeekdayFormatter';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
 import Listeners from './helpers/Listeners';
 import getDateFromReference from './calendar/getDateFromReference';
@@ -45,12 +46,21 @@ function CalendarWrapper(containerEl) {
         }
     }
 
+    // Pēc noklusējuma mēneša skats
+    let calendarView = 'month';
+    if ('calendarView' in containerEl.dataset) {
+        calendarView = containerEl.dataset.calendarView;
+    }
+
+    let showWeekDays = 'calendarShowWeekdays' in containerEl.dataset;
+    let showDateSwitch = 'calendarShowDateSwitch' in containerEl.dataset;
+
     let calendarProps = {
         //cssprefix: '',
-        view: 'month',
+        view: calendarView,
         count: 1,
-        showWeekdays: true,
-        showDateSwitch: true,
+        showWeekdays: showWeekDays,
+        showDateSwitch: showDateSwitch,
         showToday: true,
         showSelectedDate: true,
         selectPeriod: this.isPeriod,
@@ -59,7 +69,8 @@ function CalendarWrapper(containerEl) {
         disablePrevMonthDate: true,
         disableNextMonthDate: true,
 
-        monthDayFormatter: monthDayFormatter,
+        // Atkarībā no tā kāds view
+        monthDayFormatter: calendarView == 'month' ? monthDayFormatter : monthDayWithWeekdayFormatter,
         weekDayToText: weekDayToText,
         dateCaptionFormatter: dateCaptionFormatter,
         navPrevFormatter: navPrevFormatter,
@@ -196,7 +207,7 @@ let onChangeListeners = new Listeners();
 
 export default {
     init() {
-        [...qa('.calendar')].forEach(calendarEl => {
+        [...qa('[data-is-calendar]')].forEach(calendarEl => {
 
             // Ja ir FieldData calendar elements
             if ('fieldDateCalendarContainer' in calendarEl.dataset) {

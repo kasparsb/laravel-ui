@@ -26,6 +26,9 @@
     data-placeholder="{{ $placeholder }}"
     data-state="{{ $hasError ? 'error' : '' }}"
     tabindex="0"
+
+    {{-- šajā elementā data picker (vecais FieldDate) meklē json config --}}
+    data-date-picker-triggr-el-container
     >
     @if ($label)
         <label>{{ $label }}</label>
@@ -73,6 +76,9 @@
             @if ($maxDate)
             data-max-date="{{ $maxDate }}"
             @endif
+
+            {{-- Pazīme, ka šeit vajag uzlikt izvēlētos datumu --}}
+            data-date-picker-set-selected-date
             @disabled($disabled)
             />
 
