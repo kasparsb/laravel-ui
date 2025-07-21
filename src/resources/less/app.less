@@ -1133,240 +1133,6 @@ body {
     }
 }
 
-/**
- * Flexbox
- * main axis: justify-content
- * cross axis: align-items
- */
-
-
-.col-items {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: flex-start;
-    //align-items: flex-start;
-    align-items: stretch;
-
-    gap: @size040;
-    .gaps-sizes();
-
-
-
-    &.v-space-between {
-        justify-content: space-between;
-    }
-    &.v-space-around {
-        justify-content: space-around;
-    }
-    &.v-space-evenly {
-        justify-content: space-evenly;
-    }
-    &.v-center {
-        justify-content: center;
-    }
-    &.v-top {
-        justify-content: flex-start;
-    }
-    &.v-bottom {
-        justify-content: flex-end;
-    }
-    // Custom case, lai childs izplešas vienādi pa visu platumu
-    &.v-stretch {
-        >* {
-            flex: 1;
-        }
-    }
-
-    &.h-center {
-        align-items: center;
-    }
-    &.h-stretch {
-        align-items: stretch;
-    }
-    &.h-left {
-        align-items: flex-start;
-    }
-    &.h-right {
-        align-items: flex-end;
-    }
-
-
-    // Direct child, var pats sevi nopozicionēt uz cross axis
-    >.h-center {
-        align-self: center;
-    }
-    >.h-left {
-        align-self: flex-start;
-    }
-    >.h-right {
-        align-self: flex-end;
-    }
-    // Custom case, lai childs izplešas vienādi pa visu augstumu
-    &.v-stretch {
-        >* {
-            flex: 1;
-        }
-    }
-
-
-    &.condensed {
-
-        gap: 0;
-        .shadow();
-
-        // Cards saspiežam ar bottom malām kopā
-        >.card {
-            box-shadow: none;
-            border-radius: 0;
-            border-top: 0;
-            &:first-child {
-                border-top-left-radius: var(--radius);
-                border-top-right-radius: var(--radius);
-                border-top: 1px solid #e5e7eb;
-            }
-            &:last-child {
-                border-bottom-left-radius: var(--radius);
-                border-bottom-right-radius: var(--radius);
-            }
-        }
-    }
-
-    // Child, lai aizņem visu pieejamo brīvo vietu
-    .flex-1 {
-        flex: 1;
-    }
-}
-
-
-.row-items {
-    /**
-     * TODO Jāuztais responsive. Lai noteiktā platumā vairs nebūtu row, bet būtu column
-     * Kāpēc dev vidē nostrādā wrap ar field-text, bet uz turbozipline lapas
-     * wrap nestrādā un visu laiku paliek vienā rindā un wrapojas?
-     */
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    align-items: center;
-
-    &.nowrap {
-        flex-flow: row nowrap;
-    }
-
-    gap: @size020;
-    .gaps-sizes();
-
-    &.v-center {
-        align-items: center;
-    }
-    &.v-stretch {
-        align-items: stretch;
-    }
-    &.v-top {
-        align-items: flex-start;
-    }
-    &.v-bottom {
-        align-items: flex-end;
-    }
-
-    &.h-space-between {
-        justify-content: space-between;
-    }
-    &.h-space-around {
-        justify-content: space-around;
-    }
-    &.h-space-evenly {
-        justify-content: space-evenly;
-    }
-    &.h-center {
-        justify-content: center;
-    }
-    &.h-right {
-        justify-content: flex-end;
-    }
-    &.h-left {
-        justify-content: flex-start;
-    }
-    // Custom case, lai childs izplešas vienādi pa visu platumu
-    &.h-stretch {
-        >* {
-            flex: 1;
-        }
-    }
-
-    // Direct child, var pats sevi nopozicionēt uz cross axis
-    >.v-center {
-        align-self: center;
-    }
-    >.v-top {
-        align-self: flex-start;
-    }
-    >.v-bottom {
-        align-self: flex-end;
-    }
-    // child aizņem visu pieejamo vietu
-    >.h-stretch {
-        flex: 1;
-    }
-
-    &.condensed {
-        gap: 0;
-
-        >.button-primary,
-        >.button-secondary,
-        >.button-danger,
-        >.button-ghost,
-        >.button-outline,
-        >.form-field {
-            border-radius: 0;
-            &:first-child {
-                border-top-left-radius: var(--radius);
-                border-bottom-left-radius: var(--radius);
-            }
-            &:last-child {
-                border-top-right-radius: var(--radius);
-                border-bottom-right-radius: var(--radius);
-            }
-        }
-        >.form-field {
-            input {
-                border-radius: 0;
-                border-left: 0;
-            }
-            &:first-child {
-                input {
-                    border-top-left-radius: var(--radius);
-                    border-bottom-left-radius: var(--radius);
-                    border-left: 1px solid #e5e7eb;
-                }
-            }
-            &:last-child {
-                input {
-                    border-top-right-radius: var(--radius);
-                    border-bottom-right-radius: var(--radius);
-                }
-            }
-        }
-        >.button-outline {
-            border-left: 0;
-            &:first-child {
-                border-top-left-radius: var(--radius);
-                border-bottom-left-radius: var(--radius);
-                border-left: 1px solid #e5e7eb;
-            }
-            &:last-child {
-                border-top-right-radius: var(--radius);
-                border-bottom-right-radius: var(--radius);
-            }
-        }
-    }
-
-    // Child, lai aizņem visu pieejamo brīvo vietu
-    .flex-1 {
-        flex: 1;
-    }
-}
-
 .title {
     line-height: 1;
 
@@ -1416,7 +1182,12 @@ body {
     }
 }
 
-.card {
+/**
+ * TODO vajag, lai pogai arī var uzlikt card stilu
+ * bet tad tas jaucas pašu .card
+ * šitāds workaround
+ */
+.card:not(.button-radio) {
     .border-lg();
     border-style: solid;
 
@@ -2631,6 +2402,240 @@ body {
 }
 
 
+/**
+ * Flexbox
+ * main axis: justify-content
+ * cross axis: align-items
+ */
+
+
+ .col-items {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    //align-items: flex-start;
+    align-items: stretch;
+
+    gap: @size040;
+    .gaps-sizes();
+
+
+
+    &.v-space-between {
+        justify-content: space-between;
+    }
+    &.v-space-around {
+        justify-content: space-around;
+    }
+    &.v-space-evenly {
+        justify-content: space-evenly;
+    }
+    &.v-center {
+        justify-content: center;
+    }
+    &.v-top {
+        justify-content: flex-start;
+    }
+    &.v-bottom {
+        justify-content: flex-end;
+    }
+    // Custom case, lai childs izplešas vienādi pa visu platumu
+    &.v-stretch {
+        >* {
+            flex: 1;
+        }
+    }
+
+    &.h-center {
+        align-items: center;
+    }
+    &.h-stretch {
+        align-items: stretch;
+    }
+    &.h-left {
+        align-items: flex-start;
+    }
+    &.h-right {
+        align-items: flex-end;
+    }
+
+
+    // Direct child, var pats sevi nopozicionēt uz cross axis
+    >.h-center {
+        align-self: center;
+    }
+    >.h-left {
+        align-self: flex-start;
+    }
+    >.h-right {
+        align-self: flex-end;
+    }
+    // Custom case, lai childs izplešas vienādi pa visu augstumu
+    &.v-stretch {
+        >* {
+            flex: 1;
+        }
+    }
+
+
+    &.condensed {
+
+        gap: 0;
+        .shadow();
+
+        // Cards saspiežam ar bottom malām kopā
+        >.card {
+            box-shadow: none;
+            border-radius: 0;
+            border-top: 0;
+            &:first-child {
+                border-top-left-radius: var(--radius);
+                border-top-right-radius: var(--radius);
+                border-top: 1px solid #e5e7eb;
+            }
+            &:last-child {
+                border-bottom-left-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
+        }
+    }
+
+    // Child, lai aizņem visu pieejamo brīvo vietu
+    .flex-1 {
+        flex: 1;
+    }
+}
+
+
+.row-items {
+    /**
+     * TODO Jāuztais responsive. Lai noteiktā platumā vairs nebūtu row, bet būtu column
+     * Kāpēc dev vidē nostrādā wrap ar field-text, bet uz turbozipline lapas
+     * wrap nestrādā un visu laiku paliek vienā rindā un wrapojas?
+     */
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    &.nowrap {
+        flex-flow: row nowrap;
+    }
+
+    gap: @size020;
+    .gaps-sizes();
+
+    &.v-center {
+        align-items: center;
+    }
+    &.v-stretch {
+        align-items: stretch;
+    }
+    &.v-top {
+        align-items: flex-start;
+    }
+    &.v-bottom {
+        align-items: flex-end;
+    }
+
+    &.h-space-between {
+        justify-content: space-between;
+    }
+    &.h-space-around {
+        justify-content: space-around;
+    }
+    &.h-space-evenly {
+        justify-content: space-evenly;
+    }
+    &.h-center {
+        justify-content: center;
+    }
+    &.h-right {
+        justify-content: flex-end;
+    }
+    &.h-left {
+        justify-content: flex-start;
+    }
+    // Custom case, lai childs izplešas vienādi pa visu platumu
+    &.h-stretch {
+        >* {
+            flex: 1;
+        }
+    }
+
+    // Direct child, var pats sevi nopozicionēt uz cross axis
+    >.v-center {
+        align-self: center;
+    }
+    >.v-top {
+        align-self: flex-start;
+    }
+    >.v-bottom {
+        align-self: flex-end;
+    }
+    // child aizņem visu pieejamo vietu
+    >.h-stretch {
+        flex: 1;
+    }
+
+    &.condensed {
+        gap: 0;
+
+        >.button-primary,
+        >.button-secondary,
+        >.button-danger,
+        >.button-ghost,
+        >.button-outline,
+        >.button-radio,
+        >.form-field {
+            border-radius: 0;
+            &:first-child {
+                border-top-left-radius: var(--radius);
+                border-bottom-left-radius: var(--radius);
+            }
+            &:last-child {
+                border-top-right-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
+        }
+        >.form-field {
+            input {
+                border-radius: 0;
+                border-left: 0;
+            }
+            &:first-child {
+                input {
+                    border-top-left-radius: var(--radius);
+                    border-bottom-left-radius: var(--radius);
+                    border-left: 1px solid #e5e7eb;
+                }
+            }
+            &:last-child {
+                input {
+                    border-top-right-radius: var(--radius);
+                    border-bottom-right-radius: var(--radius);
+                }
+            }
+        }
+        >.button-outline {
+            border-left: 0;
+            &:first-child {
+                border-top-left-radius: var(--radius);
+                border-bottom-left-radius: var(--radius);
+                border-left: 1px solid #e5e7eb;
+            }
+            &:last-child {
+                border-top-right-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
+        }
+    }
+
+    // Child, lai aizņem visu pieejamo brīvo vietu
+    .flex-1 {
+        flex: 1;
+    }
+}
 
 /**
  * LAYOUT
@@ -3824,6 +3829,44 @@ body:has(>.layout) {
 
     // Default vizuālais
     .border-sm();
+
+    // Nerādām vizuālo checked elementu
+    &.hide-check {
+        [data-role="radio-check-visual"] {
+            display: none;
+        }
+    }
+
+    /**
+     * Cards vizuālais noformējums
+     * ar border un background
+     */
+    &.card {
+        .transition-color();
+
+        .border-md();
+        border-width: 1px;
+        border-style: solid;
+
+        padding-left: @size040;
+        padding-right: @size040;
+        padding-top: @size020;
+        padding-bottom: @size020;
+
+        background-color: hsl(var(--color-white));
+        border-color: hsl(var(--color-200));
+
+        &:not([disabled]):hover {
+            background-color: hsl(var(--color-50));
+            border-color: hsl(var(--color-300));
+        }
+
+        &:has(input:checked),
+        &:has(input:checked):hover {
+            background-color: hsl(var(--color-100));
+            border-color: hsl(var(--color-500));
+        }
+    }
 }
 
 /**
@@ -3850,38 +3893,7 @@ body:has(>.layout) {
 // Radio buttons vizuālais
 .radio-buttons,
 .field-radio-buttons {
-    /**
-     * Cards vizuālais noformējums
-     * ar border un background
-     */
-    &.cards {
-        .button-radio {
-            .transition-color();
 
-            .border-md();
-            border-width: 1px;
-            border-style: solid;
-
-            padding-left: @size040;
-            padding-right: @size040;
-            padding-top: @size020;
-            padding-bottom: @size020;
-
-            background-color: hsl(var(--color-white));
-            border-color: hsl(var(--color-200));
-
-            &:not([disabled]):hover {
-                background-color: hsl(var(--color-50));
-                border-color: hsl(var(--color-300));
-            }
-
-            &:has(input:checked),
-            &:has(input:checked):hover {
-                background-color: hsl(var(--color-100));
-                border-color: hsl(var(--color-500));
-            }
-        }
-    }
 }
 
 .field-radio-buttons {
