@@ -157,10 +157,10 @@ function handleSubmit(formEl) {
                     ])
                 }
 
-                if (elReplacer.isReaplceHtml() && elReplacer.getElToReplace()) {
+                if (replacedEl) {
                     if (onAfterReplaceHtmlListeners['__any__']) {
                         onAfterReplaceHtmlListeners['__any__'].trigger([
-                            elReplacer.getElToReplace()
+                            replacedEl
                         ])
                     }
                 }

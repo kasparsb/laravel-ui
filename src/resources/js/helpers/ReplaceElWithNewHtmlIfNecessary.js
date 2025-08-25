@@ -1,4 +1,4 @@
-import {replace, qr} from 'dom-helpers';
+import {replace, ensureDomNode, qr} from 'dom-helpers';
 import DropdownMenu from '../DropdownMenu';
 import Container from '../Container';
 
@@ -71,17 +71,32 @@ ReplaceElWithNewHtmlIfNecessary.prototype = {
             return false;
         }
 
-        this.elToReplace = replace(this.elToReplace, newHtml);
 
-        Container.idle(this.elToReplace);
+        /**
+         * TODO ir problēma ar replace, tas atgriež fragment, kurā
+         * vairs nav elementu, jo tie ir jau pārvietoti uz jaunu location
+         *
+         * tāpēc šeit no response html uztaisām dom
+         * izvelkam visus childs
+         * un tad taisām replace
+         */
+        let newEl = ensureDomNode(newHtml);
+
+        let newChilds = [...newEl.childNodes]
+            // Tikai dom nodes
+            .filter(el => el.nodeType === Node.ELEMENT_NODE);
+
+        replace(this.elToReplace, newEl);
+
+        Container.idle(newChilds);
 
         // Svarīgi atgriez to pašu elementu, kurš tika padots
         /**
-         * Ja ir replaceHTML, tad padota tiek form, bet replace notie uz citu elemtu,
+         * Ja ir replaceHTML, tad padota tiek form, bet replace notiek uz citu elementu,
          * kurš vairs nav forma. Tāpēc šeit ir shouldReplaceOriginalEl un tiek pārbaudīts
          * vai atgriezt padoto formu
-         * Bet te ir problēma, ka replceHTML gadijumā tiek padots atpakaļ jau neeksitējošs
-         * elements.
+         * Bet te ir problēma, ka replceHTML gadijumā tiek padots atpakaļ
+         * jau neeksitējošs elements.
          * Bet tā ir problēma, ja originalEl ir child elements, tam, kas tiek replacots
          *
          * tas, kad tagad uztaisīts ir gadījumā, ka originalEl ir ārpus replaceHTML
@@ -90,13 +105,7 @@ ReplaceElWithNewHtmlIfNecessary.prototype = {
          * tad varbūt vajag pārbaudīts vai repplaceHTML nav parent formEl
          *
          */
-        return this.shouldReplaceOriginalEl ? this.elToReplace : this.originalEl;
-    },
-    /**
-     * Jaunais el, ar kuru tikai aizvietots vecais
-     */
-    getElToReplace() {
-        return this.elToReplace
+        return newChilds;
     },
     /**
      * Vai ir jānotiek replace html

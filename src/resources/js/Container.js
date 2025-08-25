@@ -1,3 +1,4 @@
+import isArray from './helpers/isArray';
 import {q, click} from 'dom-helpers';
 
 function loading(el) {
@@ -7,26 +8,31 @@ function loading(el) {
 }
 
 function idle(el) {
-
-    /**
-     * TODO ja padots fragment, tad vajadzētu meklē container elementu specifiskāk
-     * nevis tikai pēc data-loading
-     */
-    if (el.nodeType && (el.nodeType == Node.DOCUMENT_FRAGMENT_NODE)) {
-        el = q(el, '[data-loading="loading"]');
+    if (!isArray(el)) {
+        el = [el];
     }
 
-    if (!(el instanceof Node)) {
-        return;
-    }
+    el.forEach(el => {
+        /**
+         * TODO ja padots fragment, tad vajadzētu meklē container elementu specifiskāk
+         * nevis tikai pēc data-loading
+         */
+        if (el.nodeType && (el.nodeType == Node.DOCUMENT_FRAGMENT_NODE)) {
+            el = q(el, '[data-loading="loading"]');
+        }
 
-    if (el.dataset.pl) {
-        el.dataset.loading = el.dataset.pl;
-        delete el.dataset.pl;
-    }
-    else {
-        delete el.dataset.loading;
-    }
+        if (!(el instanceof Node)) {
+            return;
+        }
+
+        if (el.dataset.pl) {
+            el.dataset.loading = el.dataset.pl;
+            delete el.dataset.pl;
+        }
+        else {
+            delete el.dataset.loading;
+        }
+    })
 }
 
 function toggle(el) {
