@@ -28,6 +28,7 @@ class TableCol extends Component
         // Field select options source url
         public $selectSourceUrl = false,
         public $selectValueVisualUrl = false,
+        public $selectLoadInitialValueVisual = false,
     )
     {
         $this->manager = app(TableComponentsManager::class);

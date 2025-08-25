@@ -137,6 +137,7 @@ class Table extends Component
                     'options' => $col->selectOptions,
                     'sourceUrl' => $col->selectSourceUrl,
                     'valueVisualUrl' => $col->selectValueVisualUrl,
+                    'loadInitialValueVisual' => $col->selectLoadInitialValueVisual,
                     'placeholder' => $col->placeholder,
                 ])
             )->render();
