@@ -5,6 +5,11 @@ import InputValuePreview from './InputValuePreview';
 import FieldSelectEmptyState from './FieldSelectEmptyState';
 import Form from './Form';
 import Repeatable from './Repeatable';
+import LimitedBatch from './helpers/LimitedBatch';
+import isArray from './helpers/isArray';
+
+// Limit, lai vienlaicīgi izpildās tikai 4
+let loadValueVisualBatch = new LimitedBatch(4);
 
 /**
  * Ja ir norādīts options list id, tad meklējam pēc list id
@@ -62,8 +67,43 @@ function setupPlaceholder(listOfFieldSelectEls) {
             return
         }
 
+        // Ielādējam initial valueVisual no url
+        if ('loadInitialValueVisual' in fieldEl.dataset) {
+            loadValueVisual(fieldEl);
+            return;
+        }
+
         handleFieldValueChange(fieldEl);
     });
+}
+
+function loadValueVisual(fieldEl) {
+    if (!fieldEl.dataset.valueVisualUrl) {
+        return;
+    }
+
+    /**
+     * TODO varbūt vajag uzlikt pazīmi, ka request in progress???
+     */
+
+    loadValueVisualBatch.add(() => {
+
+        return get(fieldEl.dataset.valueVisualUrl, {
+            value: q(fieldEl, 'input').value
+        })
+            .then(valueVisualHtml => {
+
+                setOption(
+                    fieldEl,
+                    valueVisualHtml,
+                    {
+                        event: false
+                    }
+                )
+
+            })
+
+    })
 }
 
 export default {
@@ -87,7 +127,12 @@ export default {
          * TODO varbūt vajag kaut kādu centralizētu event
          */
         Form.onAfterReplaceHtml(newEl => {
-            setupPlaceholder(qa(newEl, '.field-select'))
+            if (!isArray(newEl)) {
+                newEl = [newEl];
+            }
+            newEl.forEach(newEl => {
+                setupPlaceholder(qa(newEl, '.field-select'))
+            })
         })
         Repeatable.onAfterNewItem(newEl => {
             setupPlaceholder(qa(newEl, '.field-select'))

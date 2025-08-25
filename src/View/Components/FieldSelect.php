@@ -40,6 +40,15 @@ class FieldSelect extends Component
         // Url, kurā padodot value tiek atgriezts visuValue html
         public $valueVisualUrl=false,
 
+        /**
+         * vai ielādēt valueVisual no url
+         * šo izmanto gadījumā, ja vērtība nav tā, kas ir vizuālā
+         * un vērtības vizuālis nav ielikts slotā x-slot:value-visual
+         * tad, lai aizpildītu field-select sākuma vērtību, tad tiks izmanots
+         * valueVisualUrl un no tā tiks ielādēta sākumā vērtība
+         */
+        public $loadInitialValueVisual=false,
+
         public $errorMessage='',
         public $hasError=false,
         // Laravel errors, nevar likt tipu, jo tad tas tiks izvilkts no container un būs tukšs

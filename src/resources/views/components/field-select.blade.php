@@ -45,6 +45,9 @@
     @if ($valueVisualUrl)
     data-value-visual-url="{{ $valueVisualUrl }}"
     @endif
+    @if ($loadInitialValueVisual)
+    data-load-initial-value-visual
+    @endif
     >
 
     @if ($label)
