@@ -1,3 +1,6 @@
+/**
+ * Limitējam vienlaicīgos requests
+ */
 function LimitedBatch(maxConcurrent = 5) {
 
     this.maxConcurrent = maxConcurrent;
