@@ -375,5 +375,9 @@ export default {
             return;
         }
         setNotBusy(formEl)
+    },
+
+    findParentForm(el) {
+        return parent(el, 'form, [data-form-substitute]');
     }
 }

@@ -132,7 +132,7 @@ function CalendarWrapper(containerEl) {
 
             if (this.actionOnDateSelect == 'submit') {
                 // Atrodam parent formu un submit
-                let form = parent(this.containerEl, 'form');
+                let form = Form.findParentForm(this.containerEl);
                 if (form) {
                     /**
                      * Netaisām native submit, lai varētu
