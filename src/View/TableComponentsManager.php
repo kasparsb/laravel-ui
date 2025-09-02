@@ -54,6 +54,29 @@ class TableComponentsManager
         ];
     }
 
+    public function registerColHidden($colName) {
+        $tableIndex = count($this->tablesStack) - 1;
+
+        $colsCount = array_push($this->tablesStack[$tableIndex]->cols, (object)[
+            'isCheckboxCol' => false,
+            'isActionsCol' => false,
+            'isDeleteCol' => false,
+            'isHidden' => true,
+            'name' => $colName,
+            // šis būs tekstuālais kolonnas nosaukums
+            'slot' => $colName,
+            // default. Izvada colonnas string vērtību
+            'type' => 'text',
+            'attributes' => null,
+        ]);
+
+        return (object)[
+            'table' => $tableIndex,
+            'col' => $colsCount - 1,
+            //'attributes'
+        ];
+    }
+
     public function registerColCheckbox($colName) {
         $tableIndex = count($this->tablesStack) - 1;
 
@@ -134,11 +157,17 @@ class TableComponentsManager
                 'isDeleteCol' => false,
                 'isHidden' => true,
                 'name' => 'id',
-                'attributes' => new ComponentAttributeBag([
-                    'hidden' => true,
-                ]),
             ]);
         }
+
+        $cols = array_map(function($col){
+            if ($col->isHidden) {
+                $col->attributes = new ComponentAttributeBag([
+                    'hidden' => true,
+                ]);
+            }
+            return $col;
+        }, $cols);
 
         return $cols;
     }
