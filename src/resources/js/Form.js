@@ -172,7 +172,7 @@ function handleSubmit(formEl) {
                 // Scrollintoviewport formas
                 setScrollIntoViewportForms();
 
-                resolve();
+                resolve(response);
             })
             .catch(err => reject(err))
     })
