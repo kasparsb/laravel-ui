@@ -32,7 +32,7 @@ function setOption(fieldEl, checkedOptionEl) {
      * TODO kāpēc šeit tiek pārbaudīts vai ir dataset.value?
      */
     else if (checkedOptionEl && checkedOptionEl.dataset.value) {
-        placeholderHtml = checkedOptionEl.innerHTML
+        placeholderHtml = checkedOptionEl.outerHTML
     }
 
     InputValuePreview.setPlaceholder(
@@ -42,6 +42,7 @@ function setOption(fieldEl, checkedOptionEl) {
 }
 
 function handleFieldValueChange(fieldEl) {
+
     let checkedOptionEl = OptionsPanel.findOptionByValue(
         getOptionsEl(fieldEl),
         q(fieldEl, 'input').value
