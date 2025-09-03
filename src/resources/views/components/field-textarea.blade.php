@@ -27,6 +27,7 @@
             name="{{ $name }}"
             placeholder="{{ $placeholder }}"
             @disabled($disabled)
+            @readonly($readonly)
             >{{ $value }}</textarea>
         @if (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}

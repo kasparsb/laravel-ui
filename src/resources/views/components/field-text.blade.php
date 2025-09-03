@@ -93,6 +93,7 @@
             value="{{ $value }}"
             placeholder="{{ $placeholder }}"
             @disabled($disabled)
+            @readonly($readonly)
             />
         @if (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}

@@ -25,6 +25,7 @@ class FieldTextarea extends Component
         public $placeholder='',
         public $model=null,
         public $disabled=false,
+        public $readonly=false,
 
         public $errorMessage='',
         public $hasError=false,
