@@ -109,6 +109,7 @@ class Table extends Component
                     'name' => $this->fieldName($col->name, $rowIndex),
                     'value' => $value,
                     'placeholder' => $col->placeholder,
+                    'readonly' => $col->readonly,
                 ])
             )->render();
         }
