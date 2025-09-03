@@ -5,11 +5,13 @@ import Repeatable from './Repeatable';
 export default {
     init() {
         clickp('[data-button-add]', (ev, el) => {
-            if (el.dataset.table) {
-                Table.addRow(el.dataset.table);
-            }
-            else if (el.dataset.buttonAdd == 'repeatableItem') {
-                Repeatable.addItem(el)
+            switch (el.dataset.buttonAdd) {
+                case 'tableRow':
+                    Table.addRow(el.dataset.table);
+                    break;
+                case 'repeatableItem':
+                    Repeatable.addItem(el);
+                    break;
             }
         })
     },

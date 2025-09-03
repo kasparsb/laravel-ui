@@ -63,6 +63,7 @@ function handleFieldValueChange(fieldEl) {
 
 function setupPlaceholder(listOfFieldSelectEls) {
     listOfFieldSelectEls.forEach(fieldEl => {
+
         // Ja ir manuāli uzstādīts value visual vērtība, tad skip
         if ('hasVisualValue' in fieldEl.dataset) {
             return
@@ -87,10 +88,24 @@ function loadValueVisual(fieldEl) {
      * TODO varbūt vajag uzlikt pazīmi, ka request in progress???
      */
 
+    let value = q(fieldEl, 'input').value;
+
+    // Ja nav value, tad notīrām placeholder
+    if (!value) {
+        setOption(
+            fieldEl,
+            '',
+            {
+                event: false
+            }
+        )
+        return;
+    }
+
     loadValueVisualBatch.add(() => {
 
         return get(fieldEl.dataset.valueVisualUrl, {
-            value: q(fieldEl, 'input').value
+            value: value
         })
             .then(valueVisualHtml => {
 
@@ -183,5 +198,12 @@ export default {
                     dispatchEvent(inputEl, 'change');
             }
         });
+    },
+
+    /**
+     * Sagatavojam viss field-select laukus padotajā containerEl
+     */
+    setup(containerEl) {
+        setupPlaceholder(qa(containerEl, '.field-select'))
     }
 }

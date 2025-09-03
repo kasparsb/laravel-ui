@@ -2,6 +2,7 @@ import {
     q, qa, append, remove, parent, on, value, clone,
     clearFormData, change, ce
 } from 'dom-helpers';
+import FieldSelect from './FieldSelect';
 
 function addRow(tableEl) {
 
@@ -21,6 +22,7 @@ function addRow(tableEl) {
 
     // clean up values in input fields
     clearFormData(newRow);
+    FieldSelect.setup(newRow);
 
     /**
      * Clear select field placeholders
