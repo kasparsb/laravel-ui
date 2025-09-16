@@ -1045,6 +1045,9 @@ body {
 
             .input-text();
 
+            // Vienāds ar field-text
+            .t-4();
+
             >svg {
                 margin-right: @size015;
                 width: 1.25rem;
@@ -1109,6 +1112,16 @@ body {
     cursor: pointer;
 
     max-width: 500px;
+
+    [data-input-value-preview-placeholder] {
+        // Novācam menu-item padding, jo tie jau ir uzlikti uz .field-select
+        >.menu-item {
+            padding: 0;
+
+            // Font size, lai būtu vienāds ar input field
+            .t-4();
+        }
+    }
 }
 
 .field-hours-minutes {
