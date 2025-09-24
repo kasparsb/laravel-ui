@@ -3,6 +3,9 @@ import {
     clearFormData, change, ce
 } from 'dom-helpers';
 import FieldSelect from './FieldSelect';
+import Listeners from './helpers/Listeners';
+
+let onDeleteRowListeners = {};
 
 function addRow(tableEl) {
 
@@ -96,6 +99,12 @@ function deleteRow(trEl) {
 
     // dzēšot row vajag visām rindā atjaunot input names, lai ir secīgi pēc ar rindu index
     qa('tbody tr').forEach(trEl => setRowInputFieldsNames(tableEl, trEl));
+
+    if (onDeleteRowListeners['__any__']) {
+        onDeleteRowListeners['__any__'].trigger([
+            tableEl,
+        ])
+    }
 }
 
 function setRowsChecked(tableEl, checked) {
@@ -242,5 +251,12 @@ export default {
 
     getCheckedValues(tableEl) {
         return getCheckedValues(tableEl);
-    }
+    },
+
+    onDeleteRow(cb) {
+        if (typeof onDeleteRowListeners['__any__'] == 'undefined') {
+            onDeleteRowListeners['__any__'] = new Listeners();
+        }
+        onDeleteRowListeners['__any__'].listen(cb);
+    },
 }
