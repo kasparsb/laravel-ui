@@ -31,7 +31,7 @@ function isFormSubstitute(formEl) {
     return 'formSubstitute' in formEl.dataset;
 }
 
-function submitForm(formEl, url, method) {
+function submitForm(formEl, url, method, customData) {
 
     if (typeof url == 'undefined') {
         url = isFormSubstitute(formEl) ? formEl.dataset.action : formEl.action;
@@ -50,7 +50,14 @@ function submitForm(formEl, url, method) {
         }
     }
 
-    let formData = getFormData(formEl);
+    let formData;
+    if (typeof customData == 'undefined') {
+        formData = getFormData(formEl)
+    }
+    else {
+        formData = customData
+    }
+
     if ('clickedSubmitButtonName' in formEl.dataset) {
         formData[formEl.dataset.clickedSubmitButtonName] = formEl.dataset.clickedSubmitButtonValue;
     }
@@ -94,7 +101,7 @@ function setButtonIdleAfterSubmit(formEl) {
     })
 }
 
-function handleSubmit(formEl) {
+function handleSubmit(formEl, customData) {
     if ('isSubmitting' in formEl.dataset) {
         // Formā jau notiek submit
         return new Promise((resolve, reject) => {
@@ -130,7 +137,7 @@ function handleSubmit(formEl) {
         handleDropdownMenuHideFromEl(formEl, 'onsubmit');
 
 
-        submitForm(formEl)
+        submitForm(formEl, undefined, undefined, customData)
             .then(response => {
                 let replacedEl = elReplacer.replace(response);
 
@@ -324,11 +331,14 @@ export default {
         });
         setScrollIntoViewportForms();
     },
-    submit(formEl) {
+    submit(formEl, customData) {
         if ('fetchSubmit' in formEl.dataset) {
-            return handleSubmit(formEl)
+            return handleSubmit(formEl, customData)
         }
         else {
+            /**
+             * TODO jāuztaisa, lai šeit customData tiek ielikts formā kā dom fields
+             */
             formEl.submit();
         }
     },
