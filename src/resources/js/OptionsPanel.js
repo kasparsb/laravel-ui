@@ -208,6 +208,7 @@ function setFieldValue(optionsEl, selectedOptionEl) {
 }
 
 function cleanUp(optionsEl, fieldValue) {
+
     let searchInputEl = q(optionsEl, '[data-field-select-search-field]');
     if (searchInputEl) {
         searchInputEl.value = '';
