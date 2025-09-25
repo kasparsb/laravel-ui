@@ -181,7 +181,10 @@ function handleSubmit(formEl, customData) {
 
                 resolve(response);
             })
-            .catch(err => reject(err))
+            .catch(err => {
+                delete formEl.dataset.isSubmitting;
+                reject(err)
+            })
     })
 
 }
