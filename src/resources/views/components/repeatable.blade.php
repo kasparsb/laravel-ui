@@ -6,6 +6,8 @@ $hasNewItemPlaceholder = isset($newItemPlaceholder) && !$newItemPlaceholder->isE
 @endphp
 
 <div
+    {{ $attributes }}
+
     data-repeatable-container
 
     @if ($newItemLink)
