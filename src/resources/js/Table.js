@@ -97,8 +97,8 @@ function deleteRow(trEl) {
         remove(trEl);
     }
 
-    // dzēšot row vajag visām rindā atjaunot input names, lai ir secīgi pēc ar rindu index
-    qa('tbody tr').forEach(trEl => setRowInputFieldsNames(tableEl, trEl));
+    // Dzēšot row vajag visām rindā atjaunot input names, lai ir secīgi ar rindu index
+    qa(tableEl, 'tbody tr').forEach(trEl => setRowInputFieldsNames(tableEl, trEl));
 
     if (onDeleteRowListeners['__any__']) {
         onDeleteRowListeners['__any__'].trigger([
