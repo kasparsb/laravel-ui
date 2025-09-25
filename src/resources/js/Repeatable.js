@@ -182,6 +182,13 @@ function deleteItem(childEl) {
         let idFieldEl = getIdFieldEl(itemEl);
         if (idFieldEl && idFieldEl.value) {
             itemEl.dataset.repeatableItemDeleted = '';
+
+            if (onDeleteItemListeners['__any__']) {
+                onDeleteItemListeners['__any__'].trigger([
+                    repeatableEl
+                ])
+            }
+
             return;
         }
     }
