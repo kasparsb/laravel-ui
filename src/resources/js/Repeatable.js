@@ -6,6 +6,7 @@ import {
 import Listeners from './helpers/Listeners';
 
 let onAfterNewItemListeners = {};
+let onDeleteItemListeners = {};
 
 function getDeletedFieldEl(itemEl) {
     let repeatableEl = parent(itemEl, '[data-repeatable-container]')
@@ -213,6 +214,12 @@ function deleteItem(childEl) {
     else {
         remove(itemEl);
     }
+
+    if (onDeleteItemListeners['__any__']) {
+        onDeleteItemListeners['__any__'].trigger([
+            repeatableEl
+        ])
+    }
 }
 
 export default {
@@ -234,5 +241,11 @@ export default {
     },
     deleteItem(buttonEl) {
         deleteItem(buttonEl);
+    },
+    onDeleteItem(cb) {
+        if (typeof onDeleteItemListeners['__any__'] == 'undefined') {
+            onDeleteItemListeners['__any__'] = new Listeners();
+        }
+        onDeleteItemListeners['__any__'].listen(cb);
     }
 }
