@@ -41,6 +41,11 @@ class FieldSelect extends Component
         public $valueVisualUrl=false,
 
         /**
+         * submit
+         */
+        public $onChange=null,
+
+        /**
          * vai ielādēt valueVisual no url
          * šo izmanto gadījumā, ja vērtība nav tā, kas ir vizuālā
          * un vērtības vizuālis nav ielikts slotā x-slot:value-visual

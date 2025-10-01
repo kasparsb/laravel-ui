@@ -48,6 +48,9 @@
     @if ($loadInitialValueVisual)
     data-load-initial-value-visual
     @endif
+    @if ($onChange)
+    data-on-change="{{ $onChange }}"
+    @endif
     >
 
     @if ($label)

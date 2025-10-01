@@ -1,4 +1,4 @@
-import {qa, q, parent, on, dispatchEvent, get} from 'dom-helpers';
+import {qa, qr, q, parent, on, dispatchEvent, get} from 'dom-helpers';
 import OptionsPanel from './OptionsPanel';
 import DropdownMenu from './DropdownMenu';
 import InputValuePreview from './InputValuePreview';
@@ -158,7 +158,23 @@ export default {
 
         // Kad nomainās input value, tad uzliekam atbilstošo vizuālo value
         on('change', '.field-select input', (ev, inputEl) => {
-            handleFieldValueChange(parent(inputEl, '.field-select'));
+            let fieldEl = parent(inputEl, '.field-select');
+            handleFieldValueChange(fieldEl);
+
+
+            // Izpildām data-on-change event
+            if (fieldEl.dataset.onChange) {
+                if (fieldEl.dataset.onChange == 'submit') {
+                    Form.submit(
+                        Form.findParentForm(fieldEl)
+                    )
+                }
+                else if (fieldEl.dataset.onChange.startsWith('submit:')) {
+                    Form.submit(
+                        qr(fieldEl, fieldEl.dataset.onChange.slice(7))
+                    )
+                }
+            }
         })
 
         on('keydown', '.field-select', (ev, fieldEl) => {
