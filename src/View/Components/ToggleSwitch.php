@@ -27,6 +27,11 @@ class ToggleSwitch extends Component
         public $model=null,
         public $disabled=false,
 
+        /**
+         * submit
+         */
+        public $onChange=null,
+
         public $errorMessage='',
         public $hasError=false,
         // Laravel errors

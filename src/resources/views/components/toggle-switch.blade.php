@@ -13,6 +13,9 @@
         'toggle-switch',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
+    @if ($onChange)
+    data-on-change="{{ $onChange }}"
+    @endif
     >
     <label>
         @if ($labelPosition == 'left')

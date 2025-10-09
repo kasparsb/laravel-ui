@@ -7,5 +7,8 @@
         <p data-role="description">{{ $description }}</p>
         <p data-role="error">{{ $errorMessage }}</p>
     </div>
-    <x-ui::toggle-switch :name="$name" :checked="$checked" value="1" />
+    <x-ui::toggle-switch
+        :name="$name"
+        :checked="$checked"
+        :on-change="$onChange" />
 </div>
