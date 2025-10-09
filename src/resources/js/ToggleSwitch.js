@@ -1,4 +1,5 @@
 import {on, parent} from 'dom-helpers';
+import Form from './Form';
 
 export default {
     init() {
