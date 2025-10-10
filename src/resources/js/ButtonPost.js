@@ -22,7 +22,23 @@ export default {
                 post(buttonEl.dataset.url)
                     .then(r => {
                         if (buttonEl.dataset.redirect) {
-                            window.location.href = buttonEl.dataset.redirect
+
+                            if (buttonEl.dataset.redirect.startsWith('fetchResponse.')) {
+                                /**
+                                 * Ņema redirect no response objekta
+                                 * ņemam to lauku, kurš seko pēc fetchResponse.
+                                 */
+                                let redirectFieldName = buttonEl.dataset.redirect.substr(14);
+                                if (typeof r[redirectFieldName] != 'undefined') {
+                                    window.location.href = r[redirectFieldName]
+                                }
+                                else {
+                                    ButtonLoading.idle(buttonEl);
+                                }
+                            }
+                            else {
+                                window.location.href = buttonEl.dataset.redirect
+                            }
                         }
                         else {
                             elReplacer.replace(r)

@@ -20,7 +20,15 @@ class Button extends Component
         public $variant='',
         public $as='', // link, delete, delete.tableRow, add.tableRow
         public $link='', // link: priekš href, delete, dinamiskais, ja sākas ar "model:"
-        public $redirect='', // redirect url after delete
+        /**
+         * redirect url after post/delete etc
+         * vajag iespēju arī nolasīt redirect no response
+         *
+         * response.{redirect} - šādi varētu norādīt, lai redirect linku
+         * meklē response un {redirect} būtu lauks, kuru meklēt responsē
+         *
+         */
+        public $redirect='',
         public $replaceHtml=false,
         // Ja atrodas iekš menuEl, bet vajag replaceHtml uz pogas, kas atvēra menu
         // tagad darbojas tikai šis: dropdownMenuOpenTrigger
