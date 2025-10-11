@@ -183,7 +183,7 @@ function filterOptionsByValue(optionsEl, value) {
             }
             else {
                 optionEl.hidden = false;
-            }
+              }
         })
         // Set scroll top uz 0
         q(optionsEl, '[role=list]').scrollTo(0, 0);
@@ -192,25 +192,27 @@ function filterOptionsByValue(optionsEl, value) {
     }
 }
 
+function findFieldValueFromOptionsEl(optionsEl) {
+    return findFieldValue(DropdownMenu.getOpenTriggerByChild(optionsEl));
+}
+
 /**
  * Kad options list atrodas Dropdown menu, tad
  * atrodam to un tā openTriggerEl
  * openTriggerEl būs tas, kurā ielikt izvēlēto options
  */
-function findFieldValue(optionsEl) {
-
-    let parentEl = DropdownMenu.getOpenTriggerByChild(optionsEl);
+function findFieldValue(menuOpenTriggerEl) {
 
     // Pārbaudām vai pats parentEl ir input
-    if (is(parentEl, 'input')) {
-        return parentEl;
+    if (is(menuOpenTriggerEl, 'input')) {
+        return menuOpenTriggerEl;
     }
 
-    return q(parentEl, 'input');
+    return q(menuOpenTriggerEl, 'input');
 }
 
 function setFieldValue(optionsEl, selectedOptionEl) {
-    let fieldValue = findFieldValue(optionsEl);
+    let fieldValue = findFieldValueFromOptionsEl(optionsEl);
     fieldValue.value = selectedOptionEl.dataset.value;
     dispatchEvent(fieldValue, 'change');
 }
@@ -228,8 +230,10 @@ function cleanUp(optionsEl, fieldValue) {
         uncheck(optionEl);
     })
 
+    console.log('cleanUp', fieldValue);
+
     // check by field value
-    check(findOptionByValue(optionsEl, q(fieldValue, 'input').value))
+    check(findOptionByValue(optionsEl, fieldValue.value))
 }
 
 function updateState(optionsEl) {
@@ -356,7 +360,9 @@ export default {
          * Klausāmies uz visiem dropdown menu close
          * apstrādājam tikai Options menu
          */
-        DropdownMenu.onCloseAny((menuEl, fieldValue) => {
+        DropdownMenu.onCloseAny((menuEl, menuOpenTriggerEl) => {
+            let fieldValue = findFieldValue(menuOpenTriggerEl);
+
             /**
              * TODO pārtaisīt Dropdown menu, lai visi properties ir
              * uz contentEl nevis floating-container
@@ -372,6 +378,7 @@ export default {
              * Piemēram ir garš lapojam saraksts, kurā izvēlies vērtību. Saproti, ka
              * nepareizā, atver un saraksts ir notīrīts. Vajag atkal skrollēt un meklēt
              */
+            console.log('onCloseAny');
             cleanUp(q(contentEl, '.options'), fieldValue)
         })
 
