@@ -22,7 +22,6 @@ export default {
                 post(buttonEl.dataset.url)
                     .then(r => {
                         if (buttonEl.dataset.redirect) {
-
                             if (buttonEl.dataset.redirect.startsWith('fetchResponse.')) {
                                 /**
                                  * Ņema redirect no response objekta
