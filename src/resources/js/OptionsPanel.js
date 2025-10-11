@@ -1,5 +1,5 @@
 import {
-    q, qa,
+    q, qa, is,
     next, prev,
     parent, on, clickp,
     dispatchEvent,
@@ -198,7 +198,15 @@ function filterOptionsByValue(optionsEl, value) {
  * openTriggerEl būs tas, kurā ielikt izvēlēto options
  */
 function findFieldValue(optionsEl) {
-    return q(DropdownMenu.getOpenTriggerByChild(optionsEl), 'input');
+
+    let parentEl = DropdownMenu.getOpenTriggerByChild(optionsEl);
+
+    // Pārbaudām vai pats parentEl ir input
+    if (is(parentEl, 'input')) {
+        return parentEl;
+    }
+
+    return q(parentEl, 'input');
 }
 
 function setFieldValue(optionsEl, selectedOptionEl) {
