@@ -932,6 +932,11 @@ export default {
         // ---- CLOSE menu
         on('click', '[data-dropdown-menu-name] .menu-item', (ev, menuItemEl) => {
 
+            // Ja ir disabled attribūts, tad ignore tādu, lai neizveras menu
+            if (menuItemEl.attributes.getNamedItem('disabled')) {
+                return;
+            }
+
             // Ja ir jāatver cits menu, tad ignore close
             if ('dropdownMenuTrigger' in menuItemEl.dataset) {
                 return;

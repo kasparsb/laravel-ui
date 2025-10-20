@@ -11,6 +11,7 @@ class Option extends Component
     public function __construct(
         public $value='',
         public $checked=null,
+        public $disabled=false,
     )
     {
         if (is_null($this->checked)) {

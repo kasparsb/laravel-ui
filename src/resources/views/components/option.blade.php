@@ -5,5 +5,10 @@
     data-dropdown-menu-close-stack="false"
     data-options-list-option
     data-value="{{ $value }}"
-    {{ $checked ? 'data-checked' : '' }}
+    @if ($checked)
+    data-checked
+    @endif
+    @if ($disabled)
+    disabled
+    @endif
     >{{ $slot }}</div>

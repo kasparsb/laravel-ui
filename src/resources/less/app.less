@@ -1912,11 +1912,12 @@ body {
     color: hsl(var(--color-950));
     .t-3\.5();
     .fw-m();
+
 }
 .menu-item-active-backgorund {
-    &:active,
-    &:focus,
-    &:hover {
+    &:not([disabled]):active,
+    &:not([disabled]):focus,
+    &:not([disabled]):hover {
         background-color: hsl(var(--color-100));
     }
     &[data-checked] {
@@ -1934,9 +1935,9 @@ body {
     .fw-m();
 }
 .menu-item-active-danger-backgorund {
-    &:active,
-    &:focus,
-    &:hover {
+    &:not([disabled]):active,
+    &:not([disabled]):focus,
+    &:not([disabled]):hover {
         background-color: hsl(var(--color-red-100));
     }
     &[data-checked] {
@@ -1958,9 +1959,9 @@ body {
     }
 }
 .menu-item-active-color {
-    &:active,
-    &:focus,
-    &:hover {
+    &:not([disabled]):active,
+    &:not([disabled]):focus,
+    &:not([disabled]):hover {
         color: hsl(var(--color-blue-500));
         svg {
             color: hsl(var(--color-blue-500));
@@ -2064,6 +2065,7 @@ body {
     }
 
     >.menu-item {
+
         // idle state
         .menu-item-idle-backgorund();
         // active, selected state
@@ -2275,15 +2277,6 @@ body {
             .menu-item-active-backgorund();
 
             .fw-r();
-
-            &:active,
-            &:focus,
-            &:hover {
-                background-color: hsl(var(--color-100));
-            }
-            &[data-checked] {
-                background-color: hsl(var(--color-200));
-            }
 
             &.hidden {
                 display: none;

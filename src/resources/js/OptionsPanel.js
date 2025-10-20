@@ -116,7 +116,7 @@ function nextOption(optionsEl) {
         currentOptionEl = null;
     }
     if (currentOptionEl) {
-        let nextEl = next(currentOptionEl, '[data-options-list-option]:not([hidden])');
+        let nextEl = next(currentOptionEl, '[data-options-list-option]:not([hidden]):not([disabled])');
         if (nextEl) {
             uncheck(currentOptionEl);
             let r = check(nextEl);
@@ -144,7 +144,7 @@ function prevOption(optionsEl) {
         currentOptionEl = null;
     }
     if (currentOptionEl) {
-        let prevEl = prev(currentOptionEl, '[data-options-list-option]:not([hidden])');
+        let prevEl = prev(currentOptionEl, '[data-options-list-option]:not([hidden]):not([disabled])');
         if (prevEl) {
             uncheck(currentOptionEl);
             let r = check(prevEl);
@@ -623,6 +623,16 @@ export default {
 
         // Options click
         clickp('.options [data-options-list-option]', (ev, optionEl) => {
+
+            if (optionEl.attributes.getNamedItem('disabled')) {
+                return;
+            }
+
+            // Check vai optionEl ir disabled
+            if (optionEl.disaled) {
+                return;
+            }
+
             let optionsEl = parent(optionEl, '.options');
 
             let currentOptionEl = getChecked(optionsEl);
