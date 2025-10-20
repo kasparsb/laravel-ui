@@ -1,13 +1,45 @@
 import {
-    q, qa, is,
+    q, qa, qr, is,
     next, prev,
     parent, on, clickp,
     dispatchEvent,
-    get,
+    request, getFormData,
     replaceContent, getOffset, getOuterDimensions
 } from 'dom-helpers';
 import fuzzysearch from './helpers/fuzzysearch';
 import DropdownMenu from './DropdownMenu';
+
+function getSourceParams(optionsEl, overrideParams) {
+    let r = {
+        url: optionsEl.dataset.sourceUrl,
+        method: optionsEl.dataset.sourceMethod,
+        formData: optionsEl.dataset.sourceFormData,
+        /**
+         * Dom elements no kura sākot meklēt formData
+         * formData var būt relatīvais querySelector
+         * piemēram, parents no šī elementa vai child šim elementam
+         *
+         * Tas vajadzīgs, lai FieldSelect varētu būt tas elements no kura
+         * meklē formData nevis optionsEl, jo optionsEl floating ir ārpus formas elementa
+         */
+        formDataTarget: optionsEl.dataset.sourceFormDataTarget,
+
+        /**
+         * input elements, kurš izmanto šo optionsPanel
+         */
+        self: optionsEl.dataset.sourceSelf,
+        selfTarget: optionsEl.dataset.sourceSelfTarget,
+        selfName: optionsEl.dataset.sourceSelfName,
+    }
+
+    if (overrideParams) {
+        for (let paramName in overrideParams) {
+            r[paramName] = overrideParams[paramName];
+        }
+    }
+
+    return r;
+}
 
 function first(nodeList) {
     return nodeList.length > 0 ? nodeList[0] : null
@@ -169,7 +201,11 @@ function filterOptionsByValue(optionsEl, value) {
 
     // Ja ir sourceUrl
     if (optionsEl.dataset.sourceUrl) {
-        loadOptionsFromUrl(optionsEl, optionsEl.dataset.sourceUrl, value);
+        loadOptionsFromSource(
+            optionsEl,
+            getSourceParams(optionsEl),
+            value
+        );
     }
     else {
         qa(optionsEl, '[data-options-list-option]').forEach(optionEl => {
@@ -230,8 +266,6 @@ function cleanUp(optionsEl, fieldValue) {
         uncheck(optionEl);
     })
 
-    console.log('cleanUp', fieldValue);
-
     // check by field value
     check(findOptionByValue(optionsEl, fieldValue.value))
 }
@@ -252,9 +286,9 @@ function updateState(optionsEl) {
     optionsEl.dataset.state = state;
 }
 
-function loadOptionsFromUrl(optionsEl, url, searchQuery) {
+function loadOptionsFromSource(optionsEl, sourceParams, searchQuery) {
 
-    if (!url) {
+    if (!sourceParams.url) {
         return;
     }
 
@@ -265,13 +299,61 @@ function loadOptionsFromUrl(optionsEl, url, searchQuery) {
     updateState(optionsEl);
 
 
-
     let params = {};
+
+    // Meklējam formu, no kuras ņemt data priekš request
+    if (sourceParams.formData) {
+
+        // Pārbaudām vai ir nodefinēts formDataTarget - tas ir elements no kura
+        // relatīvi meklēt formDataEl
+        let formDataTargetEl = optionsEl;
+        if (sourceParams.formDataTarget) {
+            if (sourceParams.formDataTarget == 'dropdownMenuOpenTrigger') {
+                formDataTargetEl = DropdownMenu.getOpenTriggerByChild(optionsEl)
+            }
+        }
+
+        let formDataEl = qr(formDataTargetEl, sourceParams.formData);
+        if (formDataEl) {
+            params = getFormData(formDataEl)
+        }
+    }
+
+    // Vai ir self elements, tas kurš izmanto optionsPanel
+    if (sourceParams.self) {
+        let selfTargetEl = optionsEl;
+        if (sourceParams.selfTarget) {
+            if (sourceParams.selfTarget == 'dropdownMenuOpenTrigger') {
+                selfTargetEl = DropdownMenu.getOpenTriggerByChild(optionsEl)
+            }
+        }
+        let selfEl = qr(selfTargetEl, sourceParams.self);
+
+        if (selfEl) {
+            params.self_name = selfEl.name;
+            params.self_value = selfEl.value;
+        }
+
+        // Pārbaudam vai ir self_name override
+        if (typeof sourceParams.selfName != 'undefined') {
+            params.self_name = sourceParams.selfName;
+        }
+    }
+
     if (searchQuery) {
         params.q = searchQuery;
     }
 
-    get(url, params)
+    /**
+     * TODO Varbūt, ja nav url, tad ņemt no formData??\
+     * bet varbūt tā nevajag, jo formData nav obligāti jābūt formai
+     * un, lai tiktu izmantota options ielāde no source, tiek pārbaudīts
+     * vai ir uzstādīts url. Tā kā url ir svarīgākais
+     */
+    let url = sourceParams.url;
+
+    request(sourceParams.method.toUpperCase(), url, params)
+        .then(response => response.text())
         .then(html => {
 
             q(optionsEl, '[role="list"]').innerHTML = html;
@@ -398,12 +480,20 @@ export default {
                 return
             }
 
-            if ('optionsLoaded' in optionsEl.dataset) {
-                return
+            // Cik bieži ielādēt source
+            // once, always
+            // te pārbaudām pēc not always, lai saglabātu to, ka default būs tikai vienu reizi
+            if (optionsEl.dataset.sourceLoadFrequency != 'always') {
+                if ('optionsLoaded' in optionsEl.dataset) {
+                    return
+                }
             }
 
             // Load items from sourceUrl
-            loadOptionsFromUrl(optionsEl, optionsEl.dataset.sourceUrl);
+            loadOptionsFromSource(
+                optionsEl,
+                getSourceParams(optionsEl)
+            );
         })
 
 
@@ -523,7 +613,12 @@ export default {
         // Pagination
         clickp('.options [data-field-select-pagination] a', (ev, linkEl) => {
             let optionsEl = parent(linkEl, '.options');
-            loadOptionsFromUrl(optionsEl, linkEl.href);
+            loadOptionsFromSource(
+                optionsEl,
+                getSourceParams(optionsEl, {
+                    url: linkEl.href
+                })
+            );
         })
 
         // Options click

@@ -35,8 +35,24 @@ class FieldSelect extends Component
         public $disabled=false,
         public $searchable=false,
         public $searchPlaceholder='Search...',
+
         // Url no kura tiks ielādēti ieraksti
         public $sourceUrl=false,
+        public $sourceMethod='get',
+        public $sourceLoadFrequency='once', // Kad ielādēt options once, always
+        /**
+         * Form elements vai kāds cits parent elements, no kura
+         * savākt form datus un sūtīt līdzi uz sourceUrl
+         */
+        public $sourceFormData=null,
+        /**
+         * Uz source url tiks padots paša field select name un value
+         * Ar šo var pārrakstīt FieldSelect name - vajadzīgs gadījumos, ja
+         * tas ir array elements (product[]). Tādiem indekss ir atkarīgs no
+         * secības datu kopā. Tāpēc šeit var manuāli ievadīt indeksu
+         */
+        public $sourceSelfName=null,
+
         // Url, kurā padodot value tiek atgriezts visuValue html
         public $valueVisualUrl=false,
 

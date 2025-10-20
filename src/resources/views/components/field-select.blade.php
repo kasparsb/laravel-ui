@@ -114,8 +114,23 @@
         <div
             class="options"
             @if ($sourceUrl)
-            data-source-url="{{ $sourceUrl }}"
             data-has-loading
+            data-source-url="{{ $sourceUrl }}"
+            data-source-method="{{ $sourceMethod }}"
+            data-source-load-frequency="{{ $sourceLoadFrequency }}"
+            @if ($sourceFormData)
+            data-source-form-data="{{ $sourceFormData }}"
+            data-source-form-data-target="dropdownMenuOpenTrigger"
+
+            {{-- Tas ir self elements no kura nolasīt name un value --}}
+            data-source-self="child:input"
+            data-source-self-target="dropdownMenuOpenTrigger"
+            {{-- override self_name --}}
+            @if (!is_null($sourceSelfName))
+            data-source-self-name="{{ $sourceSelfName }}"
+            @endif
+
+            @endif
             @else
             {{--
             Pazīmie, ka options jau ir ielādēti
