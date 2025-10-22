@@ -81,6 +81,7 @@ function setupPlaceholder(listOfFieldSelectEls) {
 
 function loadValueVisual(fieldEl) {
     if (!fieldEl.dataset.valueVisualUrl) {
+        console.warn('Field select has set loadInitialValueVisual but there is no defined valueVisualUrl');
         return;
     }
 
