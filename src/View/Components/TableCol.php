@@ -28,6 +28,10 @@ class TableCol extends Component
         public $readonly = false,
         // Field select options source url
         public $selectSourceUrl = false,
+        public $selectSourceMethod='get',
+        public $selectSourceLoadFrequency='once',
+        public $selectSourceFormData=null,
+        public $selectSourceSelfName=null,
         public $selectValueVisualUrl = false,
         public $selectLoadInitialValueVisual = false,
     )
