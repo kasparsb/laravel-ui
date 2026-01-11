@@ -33,10 +33,7 @@
         }
     }
 
-    $menuItemTagName = 'a';
-    if (!$link) {
-        $menuItemTagName = 'button';
-    }
+    $menuItemTagName = $as == 'link' ? 'a' : 'button';
 
     // Vai ir norādīts menu label, kas arī ir galvenais slot
     if (is_null($hasMenuLabel)) {
