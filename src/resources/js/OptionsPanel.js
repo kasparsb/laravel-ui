@@ -460,7 +460,6 @@ export default {
              * Piemēram ir garš lapojam saraksts, kurā izvēlies vērtību. Saproti, ka
              * nepareizā, atver un saraksts ir notīrīts. Vajag atkal skrollēt un meklēt
              */
-            console.log('onCloseAny');
             cleanUp(q(contentEl, '.options'), fieldValue)
         })
 
