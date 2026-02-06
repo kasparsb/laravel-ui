@@ -283,21 +283,9 @@ export default {
 
         /**
          * !! Enter input laukā palaidīs click event uz pirmo [type=submit]
+         * bet tas vēl nav pierādīts. vienā vietā tā darbojas, otrā vairs nē
+         * vēl jātestē
          */
-
-        /**
-         * Substitute formām, kuras ir citās formās vajag pārķert submit eventu
-         * un ja tas ir nācis no elementa, kurš ir substitue formā, tad submit to formu
-         */
-        clickp('[data-form-substitute] [type=submit]', (ev, buttonEl) => {
-            let formEl = parent(buttonEl, '[data-form-substitute]');
-
-            // Vai substiture formu vispār var submit bez fetchSubmit?
-            if ('fetchSubmit' in formEl.dataset) {
-                setButtonLoadingOnSubmit(formEl)
-                handleSubmit(formEl);
-            }
-        });
 
         // Tikai priekš button[data-loading="submit"]
         submit('form', (ev, formEl) => {
@@ -325,6 +313,25 @@ export default {
         submitp('form[data-fetch-submit]', (ev, formEl) => {
             handleSubmit(formEl);
         })
+
+
+
+        /**
+         * Substitute formām, kuras ir citās formās vajag pārķert submit eventu
+         * un ja tas ir nācis no elementa, kurš ir substitue formā, tad submit to formu
+         */
+        clickp('[data-form-substitute] [type=submit]', (ev, buttonEl) => {
+
+            let formEl = parent(buttonEl, '[data-form-substitute]');
+
+            // Vai substiture formu vispār var submit bez fetchSubmit?
+            if ('fetchSubmit' in formEl.dataset) {
+                setButtonLoadingOnSubmit(formEl)
+                handleSubmit(formEl);
+            }
+        });
+
+
 
         /**
          * Save orginal form el, lai varētu resetot pēc vajadzības (pēc submit)
