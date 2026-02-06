@@ -1,6 +1,6 @@
 import {
     q, qa, parent,
-    submitp, submit, click,
+    submitp, submit, click, clickp,
     request, getFormData, jsonOrText,
     replace, clone
 } from 'dom-helpers'
@@ -280,8 +280,29 @@ function handleDropdownMenuHide(formEl, eventName) {
 
 export default {
     init() {
+
+        /**
+         * !! Enter input laukā palaidīs click event uz pirmo [type=submit]
+         */
+
+        /**
+         * Substitute formām, kuras ir citās formās vajag pārķert submit eventu
+         * un ja tas ir nācis no elementa, kurš ir substitue formā, tad submit to formu
+         */
+        clickp('[data-form-substitute] [type=submit]', (ev, buttonEl) => {
+            let formEl = parent(buttonEl, '[data-form-substitute]');
+
+            // Vai substiture formu vispār var submit bez fetchSubmit?
+            if ('fetchSubmit' in formEl.dataset) {
+                setButtonLoadingOnSubmit(formEl)
+                handleSubmit(formEl);
+            }
+        });
+
         // Tikai priekš button[data-loading="submit"]
-        submit('form', (ev, formEl) => setButtonLoadingOnSubmit(formEl));
+        submit('form', (ev, formEl) => {
+            setButtonLoadingOnSubmit(formEl)
+        });
 
         /**
          * Submit buttons with name
