@@ -10,7 +10,9 @@ class Repeatable extends Component
 {
     public function __construct(
         public $newItemLink,
+        public $copyItemLink=null,
         public $isEmpty=false,
+        public $newItemScrollIntoView=false,
 
         /**
          * Id input laiku vārds vai query selector.

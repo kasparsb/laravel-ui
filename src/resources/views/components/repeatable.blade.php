@@ -14,6 +14,14 @@ $hasNewItemPlaceholder = isset($newItemPlaceholder) && !$newItemPlaceholder->isE
     data-new-item-link="{{ $newItemLink }}"
     @endif
 
+    @if ($copyItemLink)
+    data-copy-item-link="{{ $copyItemLink }}"
+    @endif
+
+    @if ($newItemScrollIntoView)
+    data-new-item-scroll-into-view
+    @endif
+
     @if ($hasEmptyState)
     data-repeatable-has-empty-state
     @endif

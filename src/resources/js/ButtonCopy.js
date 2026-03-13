@@ -1,4 +1,6 @@
 import { clickp, q, qr } from 'dom-helpers';
+import DropdownMenu from './DropdownMenu';
+import Repeatable from './Repeatable';
 
 function isInputField(el) {
     switch (el.tagName) {
@@ -42,14 +44,26 @@ function copyToClipboard(el) {
 
 export default {
     init() {
-        clickp('[data-button-copy]', (ev, el) => {
+        clickp('[data-button-copy]', (ev, buttonEl) => {
 
-            // Atrodam elementu, kurā veikt copy
-            let copySourceEl = qr(el, el.dataset.buttonCopy);
+            switch (buttonEl.dataset.buttonCopy) {
+                case 'repeatableItem':
+                    if (('buttonAsTarget' in buttonEl.dataset) && buttonEl.dataset.buttonAsTarget == 'dropdownMenuOpenTrigger') {
+                        Repeatable.copyItem(DropdownMenu.getOpenTriggerByChild(buttonEl))
+                    }
+                    else {
+                        Repeatable.copyItem(buttonEl)
+                    }
+                    break;
+                default:
+                    // Atrodam elementu, kurā veikt copy
+                    let copySourceEl = qr(buttonEl, buttonEl.dataset.buttonCopy);
 
-            if (copySourceEl) {
-                copyToClipboard(copySourceEl);
-            }
+                    if (copySourceEl) {
+                        copyToClipboard(copySourceEl);
+                    }
+                    break;
+                }
         })
     },
     isButtonCopy(el) {

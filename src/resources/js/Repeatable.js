@@ -1,7 +1,7 @@
 import {
     q, qa, parent, ce,
-    insertAfter, replace, clone, remove, append,
-    get
+    insertAfter, replace, clone, remove,
+    get, post, getFormData
 } from 'dom-helpers';
 import Listeners from './helpers/Listeners';
 
@@ -166,6 +166,59 @@ function addNewItem(repeatableEl) {
         })
 }
 
+function copyItem(childEl) {
+    let repeatableEl = parent(childEl, '[data-repeatable-container]');
+
+    if (!('copyItemLink' in repeatableEl.dataset)) {
+        return;
+    }
+    if (!repeatableEl.dataset.copyItemLink) {
+        return;
+    }
+
+    let itemEl = parent(childEl, '[data-repeatable-item]');
+
+    // Atlasam pēdējo repeatable item
+    let lastItem = getLastItem(repeatableEl);
+
+    let newItemPlaceholderEl;
+    let newItemIndex;
+
+    if (lastItem) {
+        newItemIndex = lastItem.index+1;
+        newItemPlaceholderEl = getNewItemPlaceholderEl(repeatableEl, newItemIndex)
+        insertAfter(lastItem.el, newItemPlaceholderEl);
+    }
+
+    if (!newItemPlaceholderEl) {
+        return;
+    }
+
+    if ('newItemScrollIntoView' in repeatableEl.dataset) {
+        newItemPlaceholderEl.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+
+    let formData = getFormData(itemEl);
+    formData.index = newItemIndex;
+
+    setTimeout(() => {
+        replace(newItemPlaceholderEl, post(repeatableEl.dataset.copyItemLink, formData))
+            .then(newItemEl => {
+
+                repeatableEl.dataset.repeatableState = '';
+
+                if (onAfterNewItemListeners['__any__']) {
+                    onAfterNewItemListeners['__any__'].trigger([
+                        newItemEl
+                    ])
+                }
+            })
+    }, 'newItemScrollIntoView' in repeatableEl.dataset ? 100 : 0)
+}
+
 function deleteItem(childEl) {
     let repeatableEl = parent(childEl, '[data-repeatable-container]')
     let itemEl = parent(childEl, '[data-repeatable-item]')
@@ -245,6 +298,9 @@ export default {
      */
     addItem(buttonEl) {
         addNewItem(parent(buttonEl, '[data-repeatable-container]'))
+    },
+    copyItem(buttonEl) {
+        copyItem(buttonEl);
     },
     deleteItem(buttonEl) {
         deleteItem(buttonEl);
