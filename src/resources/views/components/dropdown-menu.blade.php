@@ -12,6 +12,8 @@
 
     data-position-at-dir="{{ $positionAtDir }}"
 
+    data-css-position="{{ $cssPosition }}"
+
     @if (!(is_bool($positionAt) && !$positionAt))
     data-position-at="{{ $positionAt }}"
     @endif

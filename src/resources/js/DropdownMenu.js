@@ -1,5 +1,5 @@
 import {
-    q, qa, parent, next, append, is,
+    q, qa, qr, parent, next, append, is,
     click, on, off, onMouseOverOut,
     clearFormData
 } from 'dom-helpers';
@@ -23,21 +23,6 @@ let focusoutTimeout = {};
 let menuOpenTriggers = {}
 
 let menuNameCounter = 0;
-
-function findRelativeEl(el, querySelector) {
-    let p = querySelector.indexOf(':');
-
-    // Kurā virzienā meklēt pēc querySelector (parent|child)
-    let searchDirection = querySelector.substring(0, p);
-    let query = querySelector.substring(p+1);
-
-    if (searchDirection == 'parent') {
-        return parent(el, query)
-    }
-
-    // child
-    return q(el, query)
-}
 
 function findFirstFocusable(el) {
     let candidates  = qa(el, 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
@@ -200,6 +185,7 @@ function open(triggerEl, menuEl) {
     let positionDir = menuEl.dataset.positionDir;
     let positionXOffset = menuEl.dataset.positionXOffset;
     let positionYOffset = menuEl.dataset.positionYOffset;
+    let cssPosition = menuEl.dataset.cssPosition;
 
     // Skatamies vai triggerEl override
     if ('dropdownMenuPositionX' in triggerEl.dataset) {
@@ -216,6 +202,9 @@ function open(triggerEl, menuEl) {
     }
     if ('dropdownMenuPositionYOffset' in triggerEl.dataset) {
         positionYOffset = triggerEl.dataset.dropdownMenuPositionYOffset
+    }
+    if ('dropdownMenuCssPosition' in triggerEl.dataset) {
+        cssPosition = triggerEl.dataset.dropdownMenuCssPosition
     }
 
     // Pēc noklusējuma nav pozicionēšanas elementa
@@ -243,7 +232,7 @@ function open(triggerEl, menuEl) {
         }
         else {
             if (triggerEl.dataset.dropdownMenuPositionAt) {
-                positionEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
+                positionEl = qr(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
             }
             else {
                 // ja nav norādīts konkrēts selector, tad pats triggerEl
@@ -268,6 +257,7 @@ function open(triggerEl, menuEl) {
         xOffset: positionXOffset,
         yOffset: positionYOffset,
         dir: positionDir,
+        cssPosition: cssPosition,
         onOpen(menuEl, panelIndex) {
             // Dropdown menu hide vērtību replicējam pie menuEl
             // tikai, ja tā ir uzlikta. Ja nav uzlikta, tad drošības pēc dzēšam no menuEl
@@ -333,7 +323,7 @@ function open(triggerEl, menuEl) {
              */
             let targetEl = triggerEl;
             if (triggerEl.dataset.dropdownMenuTargetEl) {
-                targetEl = findRelativeEl(triggerEl, triggerEl.dataset.dropdownMenuTargetEl)
+                targetEl = qr(triggerEl, triggerEl.dataset.dropdownMenuTargetEl)
             }
             triggerMenuOpenListeners(menuEl, targetEl);
         },
@@ -368,7 +358,7 @@ function open(triggerEl, menuEl) {
              */
             let targetEl = menuOpenTriggerEl;
             if (menuOpenTriggerEl.dataset.dropdownMenuTargetEl) {
-                targetEl = findRelativeEl(menuOpenTriggerEl, menuOpenTriggerEl.dataset.dropdownMenuTargetEl)
+                targetEl = qr(menuOpenTriggerEl, menuOpenTriggerEl.dataset.dropdownMenuTargetEl)
             }
             triggerMenuCloseListeners(menuEl, targetEl);
         }

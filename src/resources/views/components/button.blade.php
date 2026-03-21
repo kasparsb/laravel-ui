@@ -118,6 +118,9 @@
     @if (!(is_bool($menuPositionYOffset) && !$menuPositionYOffset))
     data-dropdown-menu-position-y-offset="{{ $menuPositionYOffset }}"
     @endif
+    @if (!is_null($menuCssPosition))
+    data-dropdown-menu-css-position="{{ $menuCssPosition }}"
+    @endif
 
     data-dropdown-menu-trigger="{{ $menu }}"
     data-dropdown-menu-show="{{ $menuShow }}"

@@ -3383,19 +3383,12 @@ body:has(>.layout) {
  */
 .overlay-container {
 
-    //background-color: hsl(var(--color-400) / .5);
-
     z-index: 100;
      /**
       * fixed nevar likt, jo tad uz scroll stāvēs uz vietas
       * jāliek absolute. Un vēl pozicionējot jāņem vērā scrollTop
       */
     position: absolute;
-
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
 
     // Overlay atslēdzam pointer events
     pointer-events: none;

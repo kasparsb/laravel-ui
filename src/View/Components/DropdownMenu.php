@@ -46,6 +46,11 @@ class DropdownMenu extends Component
         public $positionAt = false,
         public $positionAtDir = 'left bottom',
 
+        /**
+         * css position property. Pēc noklusējuma absolute
+         */
+        public $cssPosition = 'absolute',
+
         public $hidden = true,
         /**
          * -1 nozīmē, ka var iefokusēt, bet ar Tab nevar

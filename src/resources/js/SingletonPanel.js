@@ -1,6 +1,7 @@
 import {
     jsx, parent, append, replaceContent, addStyle,
-    getOffset, getOuterDimensions, getWindowDimensions
+    getOffset, getOuterDimensions, getWindowDimensions,
+    getWindowScrollTop
 } from 'dom-helpers'
 
 /**
@@ -47,7 +48,7 @@ function parseDirection(dir) {
  * Main goal ir pozicionēt neizmantojot panelī
  * ieliktā elementa (getContentEl(panelIndex)) dimensions
  */
-function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset, yOffset) {
+function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset, yOffset, cssPosition) {
 
     let windowDimensions = getWindowDimensions();
 
@@ -71,7 +72,11 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
         let positionElPosition;
         let positionElDimensions;
         if (positionEl == 'viewport') {
-            positionElPosition = {top: 0, left: 0}
+            /**
+             * Jāpieliek window scroll top
+             * bet tikai, ja position ir absolute
+             */
+            positionElPosition = {top: getWindowScrollTop(), left: 0}
             positionElDimensions = {
                 width: windowDimensions.width,
                 height: windowDimensions.height,
@@ -96,9 +101,10 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
         }
     }
 
-    // Pieliekam offset
-    pos.x += xOffset;
-    pos.y += yOffset;
+    // Noņemam scrollTop
+    if (cssPosition == 'fixed') {
+        pos.y -= getWindowScrollTop();
+    }
 
     /**
      * Atkarībā no direction vajag konvertēt pos.x un pos.y uz
@@ -115,11 +121,29 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
         pos.y = windowDimensions.height - pos.y;
     }
 
+    // Pieliekam offset
+    pos.x += xOffset;
+    pos.y += yOffset;
+
+    /**
+     * Ja saliek visus top, left, bottom, right, tad chrome to pārtaisa par inset
+     * top un bottom kopā nestrādā kā gribētos. Ja bottom 0, tad container neiet līdz apakšai
+     * nezinu varbūt gļuks manā pusē, bet tā nestrādā
+     *
+     * Darbojamies tikai ar vienu x un vienu y koordināti
+     *
+     * izskatās, ka vispār pietiktu tikai ar top un left
+     *
+     * bottom un right tika izmantoti ar domu, lai overlay container aizpildās līdz pretējai malai
+     * no source koordināts. Bet tagad testēju un nav vajadzības. Content element mierīgi iet ārpus 0 height
+     * parent elementa
+     */
     let css = {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
+        position: cssPosition,
+        top: '',
+        right: '',
+        bottom: '',
+        left: ''
     };
 
     if (dir.x == 'left') {
@@ -220,7 +244,8 @@ export default {
         y,
         dir,
         xOffset,
-        yOffset
+        yOffset,
+        cssPosition
     } = {}) {
 
         let panelIndex = panelsStack.push({
@@ -248,7 +273,8 @@ export default {
                 y,
                 dir,
                 xOffset,
-                yOffset
+                yOffset,
+                cssPosition
             );
 
             // Padaram redzamu
