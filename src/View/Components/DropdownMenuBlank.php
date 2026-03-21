@@ -44,7 +44,12 @@ class DropdownMenuBlank extends Component
          * relatīvs pret triggerEl
          */
         public $positionAt = false,
-        public $positionAtDir = 'right bottom',
+        public $positionAtDir = 'left bottom',
+
+        /**
+         * css position property. Pēc noklusējuma absolute
+         */
+        public $cssPosition = 'absolute',
 
         public $hidden = true,
         /**

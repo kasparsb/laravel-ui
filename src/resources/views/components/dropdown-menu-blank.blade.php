@@ -10,10 +10,13 @@
     data-position-x-offset="{{ $positionXOffset }}"
     data-position-y-offset="{{ $positionYOffset }}"
 
+    data-position-at-dir="{{ $positionAtDir }}"
+
+    data-css-position="{{ $cssPosition }}"
+
     @if (!(is_bool($positionAt) && !$positionAt))
     data-position-at="{{ $positionAt }}"
     @endif
-    data-position-at-dir="{{ $positionAtDir }}"
 
     @if ($hidden)
     hidden
