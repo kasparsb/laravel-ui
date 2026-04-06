@@ -113,6 +113,12 @@ function positionByEl(panelIndex, positionEl, positionElDir, x, y, dir, xOffset,
      * Ja x virziens ir left, tad pos.x ir jākonvertē uz css right
      * Ja y virziens ir top, tad pos.y ir jākonvertē uz css bottom
      */
+
+    /**
+     * !!! TODO ir jāņem vērā scrollbar width, jo elementa width būs bez scrollbar,
+     * bet windowWidth būs ar scrollbar
+     */
+
     dir = parseDirection(dir);
     if (dir.x == 'left') {
         pos.x = windowDimensions.width - pos.x;
