@@ -3,6 +3,7 @@ import {
     append, replaceContent,
     on, dispatchEvent
 } from 'dom-helpers';
+import Form from './Form';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
@@ -72,6 +73,7 @@ function maybeCreateContainerAndCalendar() {
 }
 
 function dateSelected(date) {
+
     if (!activeField) {
         return;
     }
@@ -84,6 +86,21 @@ function dateSelected(date) {
     if ('fieldDateCalendarListenerName' in activeField.dataset) {
         if (typeof namedListeners[activeField.dataset.fieldDateCalendarListenerName] != 'undefined') {
             namedListeners[activeField.dataset.fieldDateCalendarListenerName](date);
+        }
+    }
+
+    // Izpildām data-on-change event
+    let fieldEl = parent(activeField, '.field-date');
+    if (fieldEl.dataset.onChange) {
+        if (fieldEl.dataset.onChange == 'submit') {
+            Form.submit(
+                Form.findParentForm(fieldEl)
+            )
+        }
+        else if (fieldEl.dataset.onChange.startsWith('submit:')) {
+            Form.submit(
+                qr(fieldEl, fieldEl.dataset.onChange.slice(7))
+            )
         }
     }
 

@@ -27,6 +27,10 @@
     data-state="{{ $hasError ? 'error' : '' }}"
     tabindex="0"
 
+    @if ($onChange)
+    data-on-change="{{ $onChange }}"
+    @endif
+
     {{-- šajā elementā data picker (vecais FieldDate) meklē json config --}}
     data-date-picker-triggr-el-container
     >

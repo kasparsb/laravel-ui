@@ -33,6 +33,11 @@ class FieldDate extends Component
         public $disabled=false,
         public $clearable=false,
 
+        /**
+         * submit
+         */
+        public $onChange=null,
+
         public $errorMessage='',
         public $hasError=false,
         // Laravel errors, nevar likt tipu, jo tad tas tiks izvilkts no container un būs tukšs
