@@ -8,7 +8,9 @@ use Illuminate\View\Component;
 
 class Script extends Component
 {
-    public function __construct()
+    public function __construct(
+        public $defer=false,
+    )
     {
         //
     }
