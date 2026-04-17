@@ -1,9 +1,19 @@
 <?php
 
 use Illuminate\Http\Request;
-use Kasparsb\Ui\FilesManager;
-use Kasparsb\Ui\Models\File;
 use Illuminate\Support\Facades\Storage;
+
+use Kasparsb\Ui\View\Components\Svgs;
+use Kasparsb\Ui\Models\File;
+use Kasparsb\Ui\FilesManager;
+
+Route::get('ui/svgs', function(){
+    $r = new Svgs(
+        defer: false,
+    );
+
+    return $r->render()->with($r->data());
+})->name('ui::svgs');
 
 Route::post('/ui/upload', function(FilesManager $filesManager, Request $req) {
 

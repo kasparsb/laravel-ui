@@ -8,9 +8,13 @@ use Illuminate\View\Component;
 
 class Svgs extends Component
 {
-    public function __construct()
+    public $svgsLink;
+
+    public function __construct(
+        public $defer=false,
+    )
     {
-        //
+        $this->svgsLink = route('ui::svgs');
     }
 
     public function render(): View|Closure|string
