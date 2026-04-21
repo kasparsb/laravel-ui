@@ -13,6 +13,9 @@
     data-position-at-dir="{{ $positionAtDir }}"
 
     data-css-position="{{ $cssPosition }}"
+    @if ($scrollLock)
+    data-scroll-lock=""
+    @endif
 
     @if (!(is_bool($positionAt) && !$positionAt))
     data-position-at="{{ $positionAt }}"
