@@ -1,7 +1,8 @@
 import {
-    jsx, parent, append, replaceContent, addStyle,
+    jsx, append, replaceContent, addStyle,
     getOffset, getOuterDimensions, getWindowDimensions,
-    getWindowScrollTop
+    getWindowScrollTop,
+    addClass, removeClass
 } from 'dom-helpers'
 
 /**
@@ -230,6 +231,38 @@ function closeByIndex(panelIndex) {
 
     // atstājam visus līdz pirmajam atrastajam
     panelsStack.splice(panelIndex);
+
+    unlockScrollForBody();
+}
+
+let isBodyScrollLocked = false;
+let scrollY = 0;
+function lockScrollForBody() {
+    isBodyScrollLocked = true;
+
+    let scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+
+    scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+
+    addClass('html', 'scroll-lock');
+}
+
+function unlockScrollForBody() {
+    if (isBodyScrollLocked) {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+
+        removeClass('html', 'scroll-lock');
+
+        window.scrollTo(0, scrollY);
+    }
 }
 
 export default {
@@ -251,7 +284,8 @@ export default {
         dir,
         xOffset,
         yOffset,
-        cssPosition
+        cssPosition,
+        scrollLock
     } = {}) {
 
         let panelIndex = panelsStack.push({
@@ -286,6 +320,9 @@ export default {
             // Padaram redzamu
             containers[panelIndex].hidden = false;
 
+            if (scrollLock) {
+                lockScrollForBody();
+            }
 
             /**
              * Pārcēlu open callback šeit, lai tiešām ir tad, kad

@@ -95,9 +95,10 @@
     var arī likt query selector
     ja nebūs attribūta vispār, tad ņems no paša DropdownMenu elementa
     --}}
-
     @if (!(is_bool($menuPositionAt) && !$menuPositionAt))
-    data-dropdown-menu-position-at="{{ $menuPositionAt }}"
+        @if ($menuPositionAt)
+        data-dropdown-menu-position-at="{{ $menuPositionAt }}"
+        @endif
     @endif
     @if (!(is_bool($menuPositionAtDir) && !$menuPositionAtDir))
     data-dropdown-menu-position-at-dir="{{ $menuPositionAtDir }}"
@@ -120,6 +121,9 @@
     @endif
     @if (!is_null($menuCssPosition))
     data-dropdown-menu-css-position="{{ $menuCssPosition }}"
+    @endif
+    @if (!is_null($menuScrollLock))
+    data-dropdown-menu-scroll-lock="{{ $menuScrollLock ? 'yes' : 'no' }}"
     @endif
 
     data-dropdown-menu-trigger="{{ $menu }}"

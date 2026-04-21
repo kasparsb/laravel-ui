@@ -186,6 +186,7 @@ function open(triggerEl, menuEl) {
     let positionXOffset = menuEl.dataset.positionXOffset;
     let positionYOffset = menuEl.dataset.positionYOffset;
     let cssPosition = menuEl.dataset.cssPosition;
+    let scrollLock = 'scrollLock' in menuEl.dataset;
 
     // Skatamies vai triggerEl override
     if ('dropdownMenuPositionX' in triggerEl.dataset) {
@@ -206,6 +207,9 @@ function open(triggerEl, menuEl) {
     if ('dropdownMenuCssPosition' in triggerEl.dataset) {
         cssPosition = triggerEl.dataset.dropdownMenuCssPosition
     }
+    if ('dropdownMenuScrollLock' in triggerEl.dataset) {
+        scrollLock = triggerEl.dataset.dropdownMenuScrollLock == 'yes';
+    }
 
     // Pēc noklusējuma nav pozicionēšanas elementa
     let positionEl = null;
@@ -225,21 +229,20 @@ function open(triggerEl, menuEl) {
         }
     }
 
-    // Skatamies vai triggerEl override
+    // Skatāmies vai triggerEl override
     if ('dropdownMenuPositionAt' in triggerEl.dataset) {
         if (triggerEl.dataset.dropdownMenuPositionAt == 'viewport') {
             positionEl = triggerEl.dataset.dropdownMenuPositionAt;
         }
-        else {
-            if (triggerEl.dataset.dropdownMenuPositionAt) {
+        else if (triggerEl.dataset.dropdownMenuPositionAt) {
                 positionEl = qr(triggerEl, triggerEl.dataset.dropdownMenuPositionAt)
-            }
-            else {
-                // ja nav norādīts konkrēts selector, tad pats triggerEl
-                positionEl = triggerEl
-            }
         }
     }
+    // ja nav norādīts konkrēts selector, tad pats triggerEl
+    if (!positionEl) {
+        positionEl = triggerEl
+    }
+
     if ('dropdownMenuPositionAtDir' in triggerEl.dataset) {
         positionElDir = triggerEl.dataset.dropdownMenuPositionAtDir
     }
@@ -258,7 +261,20 @@ function open(triggerEl, menuEl) {
         yOffset: positionYOffset,
         dir: positionDir,
         cssPosition: cssPosition,
+        scrollLock: scrollLock,
         onOpen(menuEl, panelIndex) {
+
+            /**
+             * TODO pārbaudīt vai ir form ar [data-submit-form-condition="ondropdownmenuopen"]
+             * tad taisīt šai formai submit
+             *
+             * vēl jāizdomā, kurā tieši mirklī to darīt.
+             * varētu jau pirms rādīšanas sāk ielādēt formu
+             *
+             * kas ar fokusēšanu? Ja tiek ielādēta form, kurā ir input lauki?
+             */
+
+
             // Dropdown menu hide vērtību replicējam pie menuEl
             // tikai, ja tā ir uzlikta. Ja nav uzlikta, tad drošības pēc dzēšam no menuEl
             if ('dropdownMenuHide' in triggerEl.dataset) {

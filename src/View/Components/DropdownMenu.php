@@ -51,6 +51,8 @@ class DropdownMenu extends Component
          */
         public $cssPosition = 'absolute',
 
+        public $scrollLock = false,
+
         public $hidden = true,
         /**
          * -1 nozīmē, ka var iefokusēt, bet ar Tab nevar

@@ -67,6 +67,7 @@ class Button extends Component
         // Dir tiek ņemts no Dropdown defaults. Tāpēc šeit ir tukšs
         public $menuPositionAtDir='',
         public $menuCssPosition=null,
+        public $menuScrollLock = null,
 
         public $table='', // table name, kurai veikt add, delete darbības
 

@@ -4327,3 +4327,22 @@ body:has(>.layout) {
         display: none;
     }
 }
+
+
+/**
+ * scroll lock
+ */
+html.scroll-lock {
+    &, body {
+        overflow: hidden;
+        height: 100%;
+    }
+    body {
+        // helps on modern browsers
+        touch-action: none;
+        // prevents scroll chaining
+        overscroll-behavior: none;
+
+        padding-right: var(--scrollbar-width);
+    }
+}
