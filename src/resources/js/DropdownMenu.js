@@ -916,7 +916,6 @@ export default {
 
                     delete menuEl.dataset.dropdownMenuIsActive;
 
-                    console.log('closeAllInactive 1');
                     closeAllInactive()
 
                 })(menuEl), 500)

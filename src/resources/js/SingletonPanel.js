@@ -213,6 +213,13 @@ function close(panel) {
 
     containers[panel.panelIndex].hidden = true;
     removeContentEl(panel.panelIndex);
+
+    /**
+     * TODO jāparedz, ja ir stacked, tad jāseko līdzi, kurš
+     * prasīja scroll lock un jāņem nost scroll lock tikai,
+     * ja tiek aizvērts tas panelis
+     */
+    unlockScrollForBody();
 }
 
 function closeByIndex(panelIndex) {
@@ -231,8 +238,6 @@ function closeByIndex(panelIndex) {
 
     // atstājam visus līdz pirmajam atrastajam
     panelsStack.splice(panelIndex);
-
-    unlockScrollForBody();
 }
 
 let isBodyScrollLocked = false;
