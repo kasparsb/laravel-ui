@@ -1,4 +1,11 @@
+@inject('stateManager', 'Kasparsb\Ui\View\StateManager')
+
 @php
+    $stateManager->queueSvgIcons([
+        'ui-icon-select-trigger',
+        'ui-icon-search',
+    ]);
+
     // without data-* attributes
     $attributesForContainer = $attributes->filter(function($value, $key){
         return substr($key, 0, 5) != 'data-';
@@ -105,7 +112,7 @@
             {{ $sufix }}
         @else
         <svg style="position:relative;top:3px">
-            <use xlink:href="#select-trigger"></use>
+            <use xlink:href="#ui-icon-select-trigger"></use>
         </svg>
         @endif
     </div>

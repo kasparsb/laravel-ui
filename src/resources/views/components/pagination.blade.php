@@ -1,7 +1,12 @@
+@inject('stateManager', 'Kasparsb\Ui\View\StateManager')
+
 @if ($hasPages)
 <nav {{ $attributes->class(['pagination']) }}>
     @if (!$hideNavPrev)
         @if ($onFirstPage)
+            @php
+                $stateManager->queueSvgIcon('ui-icon-angle-left');
+            @endphp
             <x-ui::button
                 variant="{{ $navPrevVariant }}"
                 data-pagination-button-name="page-prev"
@@ -11,10 +16,13 @@
                 :tabindex="false"
                 >
                 <svg width="24" height="24" viewBox="0 0 24 24">
-                    <use xlink:href="#angle-left"></use>
+                    <use xlink:href="#ui-icon-angle-left"></use>
                 </svg>
             </x-ui::button>
         @else
+            @php
+                $stateManager->queueSvgIcon('ui-icon-angle-left');
+            @endphp
             <x-ui::button
                 variant="{{ $navPrevVariant }}"
                 data-pagination-button-name="page-prev"
@@ -22,7 +30,7 @@
                 class="icon"
                 :link="$previousPageUrl">
                 <svg width="24" height="24" viewBox="0 0 24 24">
-                    <use xlink:href="#angle-left"></use>
+                    <use xlink:href="#ui-icon-angle-left"></use>
                 </svg>
             </x-ui::button>
         @endif
@@ -70,6 +78,9 @@
 
     @if (!$hideNavNext)
         @if ($hasMorePages)
+            @php
+                $stateManager->queueSvgIcon('ui-icon-angle-right');
+            @endphp
             <x-ui::button
                 variant="{{ $navNextVariant }}"
                 data-pagination-button-name="page-next"
@@ -78,10 +89,13 @@
                 :link="$nextPageUrl"
                 >
                 <svg width="24" height="24" viewBox="0 0 24 24">
-                    <use xlink:href="#angle-right"></use>
+                    <use xlink:href="#ui-icon-angle-right"></use>
                 </svg>
             </x-ui::button>
         @else
+            @php
+                $stateManager->queueSvgIcon('ui-icon-angle-right');
+            @endphp
             <x-ui::button
                 variant="{{ $navNextVariant }}"
                 data-pagination-button-name="page-next"
@@ -91,7 +105,7 @@
                 :tabindex="false"
                 >
                 <svg width="24" height="24" viewBox="0 0 24 24">
-                    <use xlink:href="#angle-right"></use>
+                    <use xlink:href="#ui-icon-angle-right"></use>
                 </svg>
             </x-ui::button>
         @endif

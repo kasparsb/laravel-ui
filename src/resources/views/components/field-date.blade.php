@@ -1,6 +1,11 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
+    $stateManager->queueSvgIcons([
+        'ui-icon-x',
+        'ui-icon-calendar',
+    ]);
+
     // without data-* attributes
     $attributesForContainer = $attributes->filter(function($value, $key){
         return substr($key, 0, 5) != 'data-';

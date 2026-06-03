@@ -7,9 +7,11 @@ use Kasparsb\Ui\View\Components\Svgs;
 use Kasparsb\Ui\Models\File;
 use Kasparsb\Ui\FilesManager;
 
-Route::get('ui/svgs', function(){
+Route::get('ui/svgs', function(Request $r){
+
     $r = new Svgs(
         defer: false,
+        icons: $r->collect('icons')->all(),
     );
 
     return $r->render()->with($r->data());

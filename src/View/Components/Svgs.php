@@ -3,8 +3,10 @@
 namespace Kasparsb\Ui\View\Components;
 
 use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
+
+use Kasparsb\Ui\View\StateManager;
 
 class Svgs extends Component
 {
@@ -12,9 +14,14 @@ class Svgs extends Component
 
     public function __construct(
         public $defer=false,
+        public $icons=null,
     )
     {
-        $this->svgsLink = route('ui::svgs');
+        if (is_null($this->icons)) {
+            $this->icons = app(StateManager::class)->queuedSvgIcons;
+        }
+
+        $this->svgsLink = route('ui::svgs', ['icons' => $this->icons]);
     }
 
     public function render(): View|Closure|string

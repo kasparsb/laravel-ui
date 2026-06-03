@@ -1,4 +1,7 @@
+@inject('stateManager', 'Kasparsb\Ui\View\StateManager')
+
 @php
+    $stateManager->queueSvgIcon('ui-icon-checkbox-checked');
     // without data-* attributes
     $attributesForContainer = $attributes->filter(function($value, $key){
         return substr($key, 0, 5) != 'data-';
@@ -22,7 +25,7 @@
                 name="{{ $name }}" @checked($checked)
                 value="{{ $value }}" />
             <svg>
-                <use xlink:href="#checkbox-checked"></use>
+                <use xlink:href="#ui-icon-checkbox-checked"></use>
             </svg>
         </span>
         {{ $label }}
