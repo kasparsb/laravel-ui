@@ -208,11 +208,16 @@ function copyItem(childEl) {
         replace(newItemPlaceholderEl, post(repeatableEl.dataset.copyItemLink, formData))
             .then(newItemEl => {
 
+                // Replace atgriež fragment, kurš tajā mirklī, kad tiek agriezts jau ir tukšs
+                // un tajā nav element, tie jau ir ielikti jaunajā vietā
+                // šitas ir mega gļuks, ko vajag atrisināt
+
                 repeatableEl.dataset.repeatableState = '';
 
                 if (onAfterNewItemListeners['__any__']) {
                     onAfterNewItemListeners['__any__'].trigger([
-                        newItemEl
+                        //newItemEl
+                        repeatableEl
                     ])
                 }
             })

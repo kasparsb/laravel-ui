@@ -67,6 +67,7 @@ class Form extends Component
         /**
          * Predefinet event, kad taisīt submit
          *     - onscrollintoviewport
+         *     - ondropdownmenuopen
          */
         public $submit=null,
 
