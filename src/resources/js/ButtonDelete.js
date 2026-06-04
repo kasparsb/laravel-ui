@@ -80,14 +80,5 @@ export default {
                     })
             }
         })
-    },
-    /**
-     * Pārbauda vai padotais el ir delete button
-     */
-    isButtonDelete(buttonEl) {
-        if ('buttonDelete' in buttonEl.dataset) {
-            return true;
-        }
-        return false;
     }
 }

@@ -47,14 +47,5 @@ export default {
                     })
             }
         })
-    },
-    /**
-     * Pārbauda vai padotais el ir post button
-     */
-    isButtonPost(buttonEl) {
-        if ('buttonPost' in buttonEl.dataset) {
-            return true;
-        }
-        return false;
     }
 }

@@ -3,10 +3,11 @@ import {
     click, on, off, onMouseOverOut,
     clearFormData
 } from 'dom-helpers';
-import ButtonDelete from './ButtonDelete';
-import ButtonPost from './ButtonPost';
 import SingletonPanel from './SingletonPanel';
 import Listeners from './helpers/Listeners';
+import isButtonDelete from './helpers/isButtonDelete';
+import isButtonPost from './helpers/isButtonPost';
+
 
 let dropDownMenuHideTimeout = 0;
 
@@ -412,8 +413,8 @@ function setOverrideFromOpenTriggerEl(openTriggerEl, menuEl) {
 
         if (menuItemEl.dataset.linkSource) {
             if (
-                ButtonDelete.isButtonDelete(menuItemEl)
-                || ButtonPost.isButtonPost(menuItemEl)
+                isButtonDelete(menuItemEl)
+                || isButtonPost(menuItemEl)
             ) {
                 menuItemEl.setAttribute('data-url', openTriggerEl.getAttribute(menuItemEl.dataset.linkSource))
             }
