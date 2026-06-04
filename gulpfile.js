@@ -1,12 +1,12 @@
 var gulp = require('gulp');
 var rename = require('gulp-rename');
 var watch = require('gulp-watch');
-var browserify = require('browserify');
-var watchify = require('watchify');
-var source = require('vinyl-source-stream')
 var less = require('gulp-less');
-var uglify = require('gulp-uglify');
-var buffer = require('vinyl-buffer');
+var rollup = require('rollup');
+var babel = require('@babel/core');
+var { nodeResolve } = require('@rollup/plugin-node-resolve');
+var commonjs = require('@rollup/plugin-commonjs');
+var terser = require('@rollup/plugin-terser');
 var fs = require('fs').promises;
 var { exec, execSync } = require('child_process');
 
@@ -39,118 +39,225 @@ var entrypoints = [
     'app'
 ]
 
+var jsWatchFiles = [
+    './src/resources/js/**/*.js',
+    './node_modules/dom-helpers/**/*.js',
+    './node_modules/calendar/**/*.js'
+];
 
-/**
- * Configure browserify
- */
-function getBrowserify(entry) {
-    return browserify({
-        entries: [entry],
-        // These params are for watchify
-        cache: {},
-        packageCache: {},
-        standalone: 'webit.ui'
-    })
+function shouldTransformWithBabel(path) {
+    if (path.indexOf('/node_modules/dom-helpers/') >= 0) {
+        return true;
+    }
+    if (path.indexOf('/node_modules/calendar/') >= 0) {
+        return true;
+    }
+
+    if (path.indexOf('/node_modules/') < 0) {
+        return true;
+    }
+
+    return false;
 }
 
-/**
- * Bundel js from browserify
- * If compress is true, then uglify js
- *
- * browserify - watch komanda padod watchify
- * ja nav padots, tad uztaisām browserify
- */
-function bundleJs(browserify, compress, firstRun, filesName, doneCb) {
+function babelTransform() {
+    let cache = new Map();
 
-    if (!browserify) {
-        browserify = getBrowserify(files[filesName].js)
-    }
-
-    var handleError = function(er){
-        console.log(er.annotated);
-        console.log(er.message+' on line '+er.line+':'+er.column);
-    }
-
-    var destFileName = files[filesName].destFileName+'.min-'+packageVersion+'.js';
-
-    var s = browserify;
-
-    /**
-     * Watchify un Babel gadījumā vajag tikai vienreiz uzstādīt transfor
-     * pretējā gadījumā ar katru watchify update eventu transform paliek lēnāks
-     */
-    if (firstRun) {
-        s = s.transform(
-            'babelify', {
-                presets: [
-                    '@babel/env',
-                    [
-                        '@babel/react',
-                        {
-                            "pragma": "jsx.h",
-                            "pragmaFrag": "jsx.Fragment",
-                            "throwIfNamespace": false
-                        }
-                    ]
-                ],
-                global: true,
-                only: [
-                    function(path) {
-                        // Enter npm packages which should be compilded by babel
-                        if (path.indexOf('/node_modules/dom-helpers/') >= 0) {
-                            return true;
-                        }
-                        if (path.indexOf('/node_modules/calendar/') >= 0) {
-                            return true;
-                        }
-
-
-                        if (path.indexOf('/node_modules/') < 0) {
-                            return true;
-                        }
-                        return false;
-                    }
-                ]
+    return {
+        name: 'babel-transform',
+        load(id) {
+            if (!shouldTransformWithBabel(id)) {
+                return null;
             }
-        )
-    }
+            if (!id.endsWith('.js')) {
+                return null;
+            }
 
-    s = s
-        .bundle()
-        .on('error', handleError)
-        .pipe(source(destFileName));
+            return fs.stat(id)
+                .then(stat => {
+                    let cached = cache.get(id);
+
+                    if (
+                        cached &&
+                        cached.mtimeMs === stat.mtimeMs &&
+                        cached.size === stat.size
+                    ) {
+                        return cached.result;
+                    }
+
+                    return fs.readFile(id, 'utf8')
+                        .then(code => {
+                            return babel.transformAsync(code, {
+                                filename: id,
+                                babelrc: false,
+                                configFile: false,
+                                sourceMaps: true,
+                                presets: [
+                                    [
+                                        '@babel/env',
+                                        {
+                                            modules: false
+                                        }
+                                    ],
+                                    [
+                                        '@babel/react',
+                                        {
+                                            "pragma": "jsx.h",
+                                            "pragmaFrag": "jsx.Fragment",
+                                            "throwIfNamespace": false
+                                        }
+                                    ]
+                                ]
+                            });
+                        })
+                        .then(result => {
+                            result = {
+                                code: result.code,
+                                map: result.map
+                            };
+
+                            cache.set(id, {
+                                mtimeMs: stat.mtimeMs,
+                                size: stat.size,
+                                result: result
+                            });
+
+                            return result;
+                        });
+                });
+        }
+    };
+}
+
+function getRollupPlugins(compress) {
+    let plugins = [
+        nodeResolve({
+            browser: true
+        }),
+        commonjs(),
+        babelTransform()
+    ];
 
     if (compress) {
-        console.log(filesName.padEnd(28, '.')+' js uglify');
-        s = s.pipe(buffer()).pipe(uglify())
+        plugins.push(terser());
     }
 
-    s
-        .pipe(gulp.dest(files[filesName].dest))
-        .on('finish', function() {
+    return plugins;
+}
+
+function getRollupConfig(filesName, compress) {
+    let destFileName = files[filesName].destFileName+'.min-'+packageVersion+'.js';
+
+    return {
+        input: files[filesName].js,
+        treeshake: true,
+        jsx: {
+            mode: 'classic',
+            factory: 'jsx.h',
+            fragment: 'jsx.Fragment'
+        },
+        plugins: getRollupPlugins(compress),
+        output: {
+            file: files[filesName].dest+'/'+destFileName,
+            format: 'iife',
+            name: 'webit.ui',
+            exports: 'named'
+        }
+    };
+}
+
+function handleRollupError(er) {
+    if (er.loc) {
+        console.log(er.message+' on line '+er.loc.line+':'+er.loc.column);
+        return;
+    }
+
+    console.log(er.message || er);
+}
+
+function bundleJs(compress, filesName, doneCb) {
+    if (compress) {
+        console.log(filesName.padEnd(28, '.')+' js terser');
+    }
+
+    let config = getRollupConfig(filesName, compress);
+
+    return buildRollup(config)
+        .then(() => {
             if (doneCb) {
                 doneCb()
             }
         })
+        .catch(handleRollupError)
+}
+
+function buildRollup(config) {
+    return rollup.rollup(config)
+        .then(bundle => {
+            return bundle.write(config.output)
+                .then(() => {
+                    let cache = bundle.cache;
+                    return bundle.close()
+                        .then(() => cache);
+                });
+        });
 }
 
 function watchJs(filesName){
+    let cache = null;
+    let isRunning = false;
+    let shouldRunAgain = false;
+    let config = getRollupConfig(filesName, false);
 
-    var w = watchify(
-        getBrowserify(files[filesName].js, false)
+    function rebuild(done) {
+        done = done || function() {};
+
+        if (isRunning) {
+            shouldRunAgain = true;
+            done();
+            return;
+        }
+
+        isRunning = true;
+
+        config.cache = cache;
+
+        buildRollup(config)
+            .then(newCache => {
+                cache = newCache;
+                isRunning = false;
+                console.log(filesName.padEnd(28, '.')+' js updated');
+
+                if (shouldRunAgain) {
+                    shouldRunAgain = false;
+                    rebuild();
+                }
+
+                done();
+            })
+            .catch(er => {
+                isRunning = false;
+                handleRollupError(er);
+                done();
+            });
+    }
+
+    console.log(filesName.padEnd(28, '.')+' js watch');
+
+    rebuild();
+
+    gulp.watch(
+        jsWatchFiles,
+        {
+            usePolling: true,
+            interval: 250,
+            awaitWriteFinish: {
+                stabilityThreshold: 100,
+                pollInterval: 50
+            }
+        },
+        rebuild
     );
-
-    var first = true;
-    w.on('update', function(){
-        // bundle without compression for faster response
-        bundleJs(w, false, first, filesName);
-
-        first = false;
-
-        console.log(filesName.padEnd(28, '.')+' js updated');
-    });
-
-    w.bundle().on('data', function() {});
 };
 
 function bundleLess(compress, filesName, doneCb) {
@@ -196,7 +303,7 @@ function bundleJsAll(cb){
             return;
         }
 
-        bundleJs(false, true, true, entrypoints[i], () => {
+        bundleJs(true, entrypoints[i], () => {
             i++;
             nextEntrypoint();
         });
