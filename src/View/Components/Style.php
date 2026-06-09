@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class Style extends Component
 {
     public function __construct(
+        public $defer=false,
         public $deferFont=false,
     )
     {

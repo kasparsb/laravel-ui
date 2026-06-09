@@ -11,4 +11,8 @@ $styleLink = 'https://fonts.googleapis.com/css2?family=Inter:wght@400..600&displ
 @else
 <link href="{{ $styleLink }}" rel="stylesheet">
 @endif
+@if ($defer)
+<link onload="this.onload=null;this.rel='stylesheet'" rel="preload" as="style" href="{{ $ui_dist_css }}" />
+@else
 <link href="{{ $ui_dist_css }}" rel="stylesheet">
+@endif
