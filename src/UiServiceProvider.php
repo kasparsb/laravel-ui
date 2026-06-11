@@ -71,5 +71,6 @@ class UiServiceProvider extends ServiceProvider
         view()->share('ui_dist_css', asset('/vendor/ui/dist/app.min-'.$packageJson->version.'.css'.$cacheBuster));
         view()->share('ui_package_version', $packageJson->version);
         view()->share('ui_cache_buster', $cacheBuster);
+        view()->share('ui_script_loader_file', __DIR__.'/../public/dist/components/ScriptLoader.min-'.$packageJson->version.'.js');
     }
 }

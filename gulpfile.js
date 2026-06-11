@@ -77,7 +77,17 @@ function getComponentOutputPath(componentName) {
     return './public/dist/components/'+componentName+'.min-'+packageVersion+'.js';
 }
 
+function isPlainComponentBundle(componentName) {
+    return componentName == 'ScriptLoader';
+}
+
 function getComponentEntrySource(componentName, modulePath) {
+    if (isPlainComponentBundle(componentName)) {
+        return `
+            import ${JSON.stringify(modulePath)};
+        `;
+    }
+
     return `
         import Component from ${JSON.stringify(modulePath)};
 
@@ -105,7 +115,7 @@ function handleRollupError(er) {
 function buildComponentJsWithEsbuild(componentName, minify) {
     let modulePath = process.cwd().replace(/\\/g, '/')+'/src/resources/js/'+componentName+'.js';
 
-    return esbuild.build({
+    let buildOptions = {
         stdin: {
             contents: getComponentEntrySource(componentName, modulePath),
             resolveDir: process.cwd(),
@@ -115,7 +125,6 @@ function buildComponentJsWithEsbuild(componentName, minify) {
         bundle: true,
         outfile: getComponentOutputPath(componentName),
         format: 'iife',
-        globalName: 'webit.ui.components.'+componentName,
         platform: 'browser',
         loader: {
             '.js': 'jsx'
@@ -124,7 +133,13 @@ function buildComponentJsWithEsbuild(componentName, minify) {
         jsxFragment: 'jsx.Fragment',
         minify: minify,
         logLevel: 'warning'
-    });
+    };
+
+    if (!isPlainComponentBundle(componentName)) {
+        buildOptions.globalName = 'webit.ui.components.'+componentName;
+    }
+
+    return esbuild.build(buildOptions);
 }
 
 function bundleLess(compress, filesName, doneCb) {
