@@ -15,6 +15,7 @@
         'field-date-time',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
+    data-ui-js="FieldDateTime"
 
     @if ($defaultTime)
     data-default-time="{{ $defaultTime }}"
@@ -63,3 +64,4 @@
 </div>
 
 <x-ui::time-picker-menu />
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldDateTime'); @endphp

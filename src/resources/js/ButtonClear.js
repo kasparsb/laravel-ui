@@ -1,5 +1,4 @@
 import { clickp, parent } from 'dom-helpers';
-import FieldDate from './FieldDate';
 
 export default {
     init() {
@@ -14,7 +13,10 @@ export default {
 
             let fieldDateEl = parent(buttonEl, '.field-date');
             if (fieldDateEl) {
-                FieldDate.clear(fieldDateEl);
+                // Late resolve. Tikai ja ir pieejams FieldDate
+                if (window.webit.ui.FieldDate) {
+                    window.webit.ui.FieldDate.clear(fieldDateEl);
+                }
             }
         })
     },

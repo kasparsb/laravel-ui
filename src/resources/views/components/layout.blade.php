@@ -4,7 +4,7 @@
     'bottomMenu',
 ])
 
-<div class="layout">
+<div class="layout" data-ui-js="Layout">
     <aside>
         <div data-app-identity></div>
 
@@ -49,3 +49,4 @@
     name="layout-modal-menu">
     {{ $menu }}
 </x-ui::dropdown-menu-blank>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Layout'); @endphp

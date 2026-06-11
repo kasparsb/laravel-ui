@@ -1,7 +1,7 @@
 @inject('helpers', 'Kasparsb\Ui\Helpers')
 
 @php
-
+    $jsComponents = [];
     $defaultAttributes = [];
     if ($as != 'link') {
         $defaultAttributes['type'] = 'button';
@@ -33,6 +33,10 @@
     if ($loading === true) {
         $disabled = true;
     }
+    // Ja ir jebkāds loading
+    if ($loading) {
+        $jsComponents[] = 'ButtonLoading';
+    }
 
     /**
      * Sākumā bija domāts, ka delimiter būs . bet tad sapratu, ka labāk būs :
@@ -55,6 +59,22 @@
     $subAction = count($p) > 1 ? $p[1] : '';
 
     $tag = $as == 'link' ? 'a' : 'button';
+    $buttonJsComponents = [
+        'add' => 'ButtonAdd',
+        'clear' => 'ButtonClear',
+        'copy' => 'ButtonCopy',
+        'delete' => 'ButtonDelete',
+        'get' => 'ButtonGet',
+        'post' => 'ButtonPost',
+    ];
+
+    if (isset($buttonJsComponents[$as])) {
+        $jsComponents[] = $buttonJsComponents[$as];
+    }
+    if ($menu) {
+        $jsComponents[] = 'DropdownMenu';
+    }
+    $jsComponents = array_unique($jsComponents);
 
 @endphp
 
@@ -155,6 +175,9 @@
     @if ($loading)
     data-loading="{{ $loading === true ? 'loading' : $loading }}"
     @endif
+    @if (count($jsComponents))
+    data-ui-js="{{ implode(' ', $jsComponents) }}"
+    @endif
 
     @if (is_bool($tabindex) && !$tabindex)
     tabindex="-1"
@@ -171,3 +194,6 @@
     <x-ui::spinner />
     {{ $slot }}
 </{{ $tag }}>
+@foreach ($jsComponents as $jsComponent)
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript($jsComponent); @endphp
+@endforeach

@@ -2,6 +2,7 @@
     {{ $attributes->class([
         'container' => true,
     ]) }}
+    data-ui-js="Container"
     @if ($loadingStyle)
     data-loading-style="{{ $loadingStyle }}"
     @endif
@@ -11,3 +12,4 @@
     >
     {{ $slot }}
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Container'); @endphp

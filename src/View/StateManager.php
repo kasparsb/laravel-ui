@@ -20,6 +20,8 @@ class StateManager
 
     public $queuedSvgIcons = [];
 
+    public $queuedComponentScripts = [];
+
     public function queueSvgIcon($iconId) {
         if (!in_array($iconId, $this->queuedSvgIcons)) {
             $this->queuedSvgIcons[] = $iconId;
@@ -30,5 +32,24 @@ class StateManager
         foreach ($iconIds as $iconId) {
             $this->queueSvgIcon($iconId);
         }
+    }
+
+    public function queueComponentScript($component) {
+        if (!in_array($component, $this->queuedComponentScripts)) {
+            $this->queuedComponentScripts[] = $component;
+        }
+    }
+
+    public function queueComponentScripts($components) {
+        foreach ($components as $component) {
+            $this->queueComponentScript($component);
+        }
+    }
+
+    public function flushQueuedComponentScripts() {
+        $componentScripts = $this->queuedComponentScripts;
+        $this->queuedComponentScripts = [];
+
+        return $componentScripts;
     }
 }

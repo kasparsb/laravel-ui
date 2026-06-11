@@ -9,6 +9,7 @@
         ])
         ->merge(['method' => $method, 'action' => $action])
     }}
+    data-ui-js="Form"
 
     @if ($fetchSubmit)
     data-fetch-submit
@@ -74,4 +75,7 @@
 </form>
 @else
 </div>
+@endif
+@if ($as == 'form')
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Form'); @endphp
 @endif

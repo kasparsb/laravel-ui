@@ -20,6 +20,7 @@
     @endif
 
     data-is-calendar
+    data-ui-js="Calendar"
     data-calendar-show-weekdays
     data-calendar-show-date-switch
 >
@@ -39,3 +40,4 @@
     <script data-role="state" type="application/json">@json($state)</script>
     @endif
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Calendar'); @endphp

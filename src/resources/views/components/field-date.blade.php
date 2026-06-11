@@ -36,6 +36,8 @@
     data-on-change="{{ $onChange }}"
     @endif
 
+    data-ui-js="FieldDate"
+
     {{-- šajā elementā data picker (vecais FieldDate) meklē json config --}}
     data-date-picker-triggr-el-container
     >
@@ -97,6 +99,7 @@
                     <use xlink:href="#ui-icon-x"></use>
                 </svg>
             </x-ui::button-ghost>
+            @php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ButtonClear'); @endphp
         @elseif (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}
         @endif
@@ -123,3 +126,4 @@
     </div>
 </x-ui::dropdown-menu>
 @endif
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldDate'); @endphp

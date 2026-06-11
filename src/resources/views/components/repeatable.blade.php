@@ -9,6 +9,7 @@ $hasNewItemPlaceholder = isset($newItemPlaceholder) && !$newItemPlaceholder->isE
     {{ $attributes }}
 
     data-repeatable-container
+    data-ui-js="Repeatable"
 
     @if ($newItemLink)
     data-new-item-link="{{ $newItemLink }}"
@@ -57,3 +58,4 @@ $hasNewItemPlaceholder = isset($newItemPlaceholder) && !$newItemPlaceholder->isE
     @endif
 
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Repeatable'); @endphp

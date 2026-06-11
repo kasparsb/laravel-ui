@@ -1,15 +1,18 @@
 import {qa, qr, q, parent, on, dispatchEvent, get} from 'dom-helpers';
-import OptionsPanel from './OptionsPanel';
-import DropdownMenu from './DropdownMenu';
-import InputValuePreview from './InputValuePreview';
-import FieldSelectEmptyState from './FieldSelectEmptyState';
-import Form from './Form';
-import Repeatable from './Repeatable';
 import LimitedBatch from './helpers/LimitedBatch';
 import isArray from './helpers/isArray';
-
+import OptionsPanel from './OptionsPanel';
+import FieldSelectEmptyState from './FieldSelectEmptyState';
 // Limit, lai vienlaicīgi izpildās tikai 4
 let loadValueVisualBatch = new LimitedBatch(4);
+
+/**
+ * Indivudual komponentes, kuras ielādē ar savu js
+ */
+let DropdownMenu = window.webit.ui.DropdownMenu;
+let InputValuePreview = window.webit.ui.InputValuePreview;
+let Form = window.webit.ui.Form;
+let Repeatable = window.webit.ui.Repeatable;
 
 /**
  * Ja ir norādīts options list id, tad meklējam pēc list id
@@ -126,12 +129,12 @@ function loadValueVisual(fieldEl) {
 export default {
     init() {
 
-        // Empty state stāvoklis
+        OptionsPanel.init();
         FieldSelectEmptyState.init();
+
 
         // Field start values ielikšana
         setupPlaceholder(qa('.field-select'))
-
 
         /**
          * Form.onAfterReplaceHtml,
@@ -161,7 +164,6 @@ export default {
         on('change', '.field-select input', (ev, inputEl) => {
             let fieldEl = parent(inputEl, '.field-select');
             handleFieldValueChange(fieldEl);
-
 
             // Izpildām data-on-change event
             if (fieldEl.dataset.onChange) {

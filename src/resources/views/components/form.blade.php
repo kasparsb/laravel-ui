@@ -19,6 +19,7 @@
         ]
     )
     }}
+    data-ui-js="Form"
 
     @if ($fetchSubmit)
     data-fetch-submit
@@ -74,3 +75,4 @@
         @method($method)
     @endif
 </{{ $asForm ? 'form' : 'div' }}>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Form'); @endphp

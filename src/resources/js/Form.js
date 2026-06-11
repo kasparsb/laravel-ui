@@ -5,11 +5,15 @@ import {
     replace, clone
 } from 'dom-helpers'
 import Listeners from './helpers/Listeners';
-import ButtonLoading from './ButtonLoading';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
 import LimitedBatch from './helpers/LimitedBatch';
 import ScrollIntoViewportObserver from './ScrollIntoViewportObserver';
+
+/**
+ * Indivudual komponentes, kuras ielādē ar savu js
+ */
+let ButtonLoading = window.webit.ui.ButtonLoading;
 
 let onBeforeSubmitListeners = {};
 let onAfterSubmitListeners = {};

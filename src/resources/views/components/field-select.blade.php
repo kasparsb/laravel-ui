@@ -46,6 +46,7 @@
     data-placeholder="{{ $placeholder }}"
     data-state="{{ $hasError ? 'error' : '' }}"
     data-is-container=""
+    data-ui-js="FieldSelect"
     @if ($hasValueVisual)
     data-has-visual-value=""
     @endif
@@ -220,3 +221,11 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
+@php
+$stateManager->queueComponentScripts([
+    'InputValuePreview',
+    'Form',
+    'Repeatable',
+    'FieldSelect',
+]);
+@endphp

@@ -3,9 +3,12 @@ import {
 } from 'dom-helpers';
 import createVideoFromFile from './createVideoFromFile';
 import createImageFromFile from './createImageFromFile';
-import AspectRatio from './AspectRatio';
-import Form from './Form';
 
+/**
+ * Indivudual komponentes, kuras ielādē ar savu js
+ */
+let AspectRatio = window.webit.ui.AspectRatio;
+let Form = window.webit.ui.Form;
 
 function humanFileSize(size) {
     let i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
@@ -232,13 +235,11 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
                 }
             )
                 .then(response => {
-                    console.log('success');
                     fileEl.input.value = response.value;
                     fileEl.dataset.state = 'completed';
 
                     if (preview) {
                         if (isImage(file)) {
-                            console.log(fileEl.preview);
                             fileEl.preview.image.src = response.url;
                         }
                     }
@@ -246,7 +247,6 @@ function startFileUpload(fileEl, file, {delay, uploadLink, valueField}) {
                     resolve(fileEl);
                 })
                 .catch(response => {
-                    console.log('error');
                     fileEl.dataset.state = 'failed';
                     fileEl.failedMessage.innerHTML = response.message;
 

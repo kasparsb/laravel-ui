@@ -25,6 +25,7 @@
     data-placeholder="{{ $placeholder }}"
     data-state="{{ $hasError ? 'error' : '' }}"
     data-is-container=""
+    data-ui-js="DropdownMenu"
 
     @if (is_numeric($tabindex))
     tabindex="{{ $tabindex }}"
@@ -74,3 +75,4 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('DropdownMenu'); @endphp

@@ -1,8 +1,4 @@
 import {parent, del, clickp} from 'dom-helpers'
-import ButtonLoading from './ButtonLoading';
-import Table from './Table';
-import Repeatable from './Repeatable';
-import DropdownMenu from './DropdownMenu';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
 
@@ -18,31 +14,31 @@ export default {
                  */
                 if (buttonEl.dataset.role == 'menuitem') {
                     // Dzēšam
-                    Table.deleteRow(
+                    window.webit.ui.Table.deleteRow(
                         // Atrodam tabula row
                         parent(
                             // Atrodam menu open trigger elementu. Tā būs poga tabulas šūnā
-                            DropdownMenu.getOpenTriggerByChild(buttonEl)
+                            window.webit.ui.DropdownMenu.getOpenTriggerByChild(buttonEl)
                             , 'tr'
                         )
                     );
-                    DropdownMenu.close();
+                    window.webit.ui.DropdownMenu.close();
                 }
                 else {
                     // Dzēšam to rindu, kurā atrodas delete poga
-                    Table.deleteRow(parent(buttonEl, 'tr'));
+                    window.webit.ui.Table.deleteRow(parent(buttonEl, 'tr'));
                 }
             }
             else if (buttonEl.dataset.buttonDelete == 'repeatableItem') {
                 if (('buttonAsTarget' in buttonEl.dataset) && buttonEl.dataset.buttonAsTarget == 'dropdownMenuOpenTrigger') {
-                    Repeatable.deleteItem(DropdownMenu.getOpenTriggerByChild(buttonEl))
+                    window.webit.ui.Repeatable.deleteItem(window.webit.ui.DropdownMenu.getOpenTriggerByChild(buttonEl))
                 }
                 else {
-                    Repeatable.deleteItem(buttonEl)
+                    window.webit.ui.Repeatable.deleteItem(buttonEl)
                 }
             }
             else if (buttonEl.dataset.url) {
-                ButtonLoading.maybeLoading(buttonEl, 'delete');
+                window.webit.ui.ButtonLoading.maybeLoading(buttonEl, 'delete');
 
                 let elReplacer = new ReplaceElWithNewHtmlIfNecessary(buttonEl);
 
@@ -65,7 +61,7 @@ export default {
                                     window.location.href = r[redirectFieldName]
                                 }
                                 else {
-                                    ButtonLoading.idle(buttonEl);
+                                    window.webit.ui.ButtonLoading.idle(buttonEl);
                                 }
                             }
                             else {
@@ -74,7 +70,7 @@ export default {
                         }
                         else {
                             elReplacer.replace(r)
-                            ButtonLoading.idle(buttonEl);
+                            window.webit.ui.ButtonLoading.idle(buttonEl);
                             handleDropdownMenuHideFromEl(buttonEl, 'aftersubmit');
                         }
                     })

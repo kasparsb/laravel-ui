@@ -7,7 +7,11 @@ import {
     replaceContent, getOffset, getOuterDimensions
 } from 'dom-helpers';
 import fuzzysearch from './helpers/fuzzysearch';
-import DropdownMenu from './DropdownMenu';
+
+/**
+ * Indivudual komponentes, kuras ielādē ar savu js
+ */
+let DropdownMenu = window.webit.ui.DropdownMenu;
 
 function getSourceParams(optionsEl, overrideParams) {
     let r = {

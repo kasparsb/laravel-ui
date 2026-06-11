@@ -2,13 +2,10 @@ var gulp = require('gulp');
 var rename = require('gulp-rename');
 var watch = require('gulp-watch');
 var less = require('gulp-less');
-var rollup = require('rollup');
-var babel = require('@babel/core');
-var { nodeResolve } = require('@rollup/plugin-node-resolve');
-var commonjs = require('@rollup/plugin-commonjs');
-var terser = require('@rollup/plugin-terser');
+var esbuild = require('esbuild');
 var fs = require('fs').promises;
 var { exec, execSync } = require('child_process');
+var path = require('path');
 
 // Read package info
 var pkg = require('./package.json');
@@ -16,7 +13,6 @@ var packageVersion = pkg.version;
 
 var files = {
     app: {
-        js: './src/resources/js/app.js',
         less: './src/resources/less/app.less',
         dest: './public/dist',
         destFileName: 'app'
@@ -45,125 +41,72 @@ var jsWatchFiles = [
     './node_modules/calendar/**/*.js'
 ];
 
-function shouldTransformWithBabel(path) {
-    if (path.indexOf('/node_modules/dom-helpers/') >= 0) {
-        return true;
-    }
-    if (path.indexOf('/node_modules/calendar/') >= 0) {
-        return true;
-    }
-
-    if (path.indexOf('/node_modules/') < 0) {
-        return true;
-    }
-
-    return false;
+function isComponentJsFile(fileName) {
+    return /^[A-Z].+\.js$/.test(fileName);
 }
 
-function babelTransform() {
-    let cache = new Map();
+function getComponentNames() {
+    return fs.readdir('./src/resources/js')
+        .then(files => {
+            return files
+                .filter(isComponentJsFile)
+                .map(file => file.replace(/\.js$/, ''))
+                .sort();
+        });
+}
 
-    return {
-        name: 'babel-transform',
-        load(id) {
-            if (!shouldTransformWithBabel(id)) {
-                return null;
+function getComponentNameFromPath(filePath) {
+    let srcJsDir = path.resolve('./src/resources/js');
+    let resolvedFilePath = path.resolve(filePath);
+    let relativeFilePath = path.relative(srcJsDir, resolvedFilePath);
+    let pathParts = relativeFilePath.split(path.sep);
+
+    if (pathParts.length !== 1) {
+        return null;
+    }
+
+    let fileName = pathParts[0];
+    if (!isComponentJsFile(fileName)) {
+        return null;
+    }
+
+    return fileName.replace(/\.js$/, '');
+}
+
+function getComponentOutputPath(componentName) {
+    return './public/dist/components/'+componentName+'.min-'+packageVersion+'.js';
+}
+
+function getComponentEntrySource(componentName, modulePath) {
+    return `
+        import Component from ${JSON.stringify(modulePath)};
+
+        function getComponentName() {
+            let script = document.currentScript;
+            if (!script || !script.src) {
+                return ${JSON.stringify(componentName)};
             }
-            if (!id.endsWith('.js')) {
-                return null;
-            }
 
-            return fs.stat(id)
-                .then(stat => {
-                    let cached = cache.get(id);
+            let fileName = script.src.split('/').pop().split('?')[0];
 
-                    if (
-                        cached &&
-                        cached.mtimeMs === stat.mtimeMs &&
-                        cached.size === stat.size
-                    ) {
-                        return cached.result;
-                    }
-
-                    return fs.readFile(id, 'utf8')
-                        .then(code => {
-                            return babel.transformAsync(code, {
-                                filename: id,
-                                babelrc: false,
-                                configFile: false,
-                                sourceMaps: true,
-                                presets: [
-                                    [
-                                        '@babel/env',
-                                        {
-                                            modules: false
-                                        }
-                                    ],
-                                    [
-                                        '@babel/react',
-                                        {
-                                            "pragma": "jsx.h",
-                                            "pragmaFrag": "jsx.Fragment",
-                                            "throwIfNamespace": false
-                                        }
-                                    ]
-                                ]
-                            });
-                        })
-                        .then(result => {
-                            result = {
-                                code: result.code,
-                                map: result.map
-                            };
-
-                            cache.set(id, {
-                                mtimeMs: stat.mtimeMs,
-                                size: stat.size,
-                                result: result
-                            });
-
-                            return result;
-                        });
-                });
+            return fileName
+                .replace(/\\.min-[0-9]+\\.[0-9]+\\.[0-9]+\\.js$/, '')
+                .replace(/\\.js$/, '');
         }
-    };
-}
 
-function getRollupPlugins(compress) {
-    let plugins = [
-        nodeResolve({
-            browser: true
-        }),
-        commonjs(),
-        babelTransform()
-    ];
+        let componentName = getComponentName();
+        let componentEls = document.querySelectorAll('[data-ui-js~="'+componentName+'"]');
 
-    if (compress) {
-        plugins.push(terser());
-    }
+        window.webit = window.webit || {};
+        window.webit.ui = window.webit.ui || {};
+        window.webit.ui.components = window.webit.ui.components || {};
+        window.webit.ui[componentName] = Component;
+        window.webit.ui.components[componentName] = Component;
 
-    return plugins;
-}
-
-function getRollupConfig(filesName, compress) {
-    let destFileName = files[filesName].destFileName+'.min-'+packageVersion+'.js';
-
-    return {
-        input: files[filesName].js,
-        treeshake: true,
-        jsx: {
-            mode: 'classic',
-            factory: 'jsx.h',
-            fragment: 'jsx.Fragment'
-        },
-        plugins: getRollupPlugins(compress),
-        output: {
-            file: files[filesName].dest+'/'+destFileName,
-            format: 'iife',
-            name: 'webit.ui',
-            exports: 'named'
+        if (Component && typeof Component.init == 'function') {
+            Component.init(componentName, componentEls);
         }
-    };
+    `;
 }
 
 function handleRollupError(er) {
@@ -175,90 +118,30 @@ function handleRollupError(er) {
     console.log(er.message || er);
 }
 
-function bundleJs(compress, filesName, doneCb) {
-    if (compress) {
-        console.log(filesName.padEnd(28, '.')+' js terser');
-    }
+function buildComponentJsWithEsbuild(componentName, minify) {
+    let modulePath = process.cwd().replace(/\\/g, '/')+'/src/resources/js/'+componentName+'.js';
 
-    let config = getRollupConfig(filesName, compress);
-
-    return buildRollup(config)
-        .then(() => {
-            if (doneCb) {
-                doneCb()
-            }
-        })
-        .catch(handleRollupError)
-}
-
-function buildRollup(config) {
-    return rollup.rollup(config)
-        .then(bundle => {
-            return bundle.write(config.output)
-                .then(() => {
-                    let cache = bundle.cache;
-                    return bundle.close()
-                        .then(() => cache);
-                });
-        });
-}
-
-function watchJs(filesName){
-    let cache = null;
-    let isRunning = false;
-    let shouldRunAgain = false;
-    let config = getRollupConfig(filesName, false);
-
-    function rebuild(done) {
-        done = done || function() {};
-
-        if (isRunning) {
-            shouldRunAgain = true;
-            done();
-            return;
-        }
-
-        isRunning = true;
-
-        config.cache = cache;
-
-        buildRollup(config)
-            .then(newCache => {
-                cache = newCache;
-                isRunning = false;
-                console.log(filesName.padEnd(28, '.')+' js updated');
-
-                if (shouldRunAgain) {
-                    shouldRunAgain = false;
-                    rebuild();
-                }
-
-                done();
-            })
-            .catch(er => {
-                isRunning = false;
-                handleRollupError(er);
-                done();
-            });
-    }
-
-    console.log(filesName.padEnd(28, '.')+' js watch');
-
-    rebuild();
-
-    gulp.watch(
-        jsWatchFiles,
-        {
-            usePolling: true,
-            interval: 250,
-            awaitWriteFinish: {
-                stabilityThreshold: 100,
-                pollInterval: 50
-            }
+    return esbuild.build({
+        stdin: {
+            contents: getComponentEntrySource(componentName, modulePath),
+            resolveDir: process.cwd(),
+            sourcefile: componentName+'.entry.js',
+            loader: 'js'
         },
-        rebuild
-    );
-};
+        bundle: true,
+        outfile: getComponentOutputPath(componentName),
+        format: 'iife',
+        globalName: 'webit.ui.components.'+componentName,
+        platform: 'browser',
+        loader: {
+            '.js': 'jsx'
+        },
+        jsxFactory: 'jsx.h',
+        jsxFragment: 'jsx.Fragment',
+        minify: minify,
+        logLevel: 'warning'
+    });
+}
 
 function bundleLess(compress, filesName, doneCb) {
     if (typeof compress == 'undefined') {
@@ -291,26 +174,98 @@ function bundleLess(compress, filesName, doneCb) {
         })
 }
 
+function bundleComponentJsAll(cb) {
+    getComponentNames()
+        .then(componentNames => {
+            let i = 0;
 
+            function nextComponent() {
+                if (componentNames.length <= i) {
+                    cb();
+                    return;
+                }
 
-function bundleJsAll(cb){
-    let i = 0;
+                let componentName = componentNames[i];
 
-    function nextEntrypoint() {
-        if (entrypoints.length <= i) {
-            // Visi entrypoints izpildīti
+                bundleComponentJs(componentName, true)
+                    .then(() => {
+                        i++;
+                        nextComponent();
+                    })
+                    .catch(er => {
+                        handleRollupError(er);
+                        cb();
+                    });
+            }
+
+            nextComponent();
+        })
+        .catch(er => {
+            handleRollupError(er);
             cb();
-            return;
-        }
-
-        bundleJs(true, entrypoints[i], () => {
-            i++;
-            nextEntrypoint();
         });
+}
+
+function bundleComponentJs(componentName, compress) {
+    if (compress) {
+        console.log(componentName.padEnd(28, '.')+' js component esbuild');
     }
 
-    nextEntrypoint()
-};
+    return buildComponentJsWithEsbuild(componentName, compress);
+}
+
+function componentOutputExists(componentName) {
+    return fs.access(getComponentOutputPath(componentName))
+        .then(() => true)
+        .catch(() => false);
+}
+
+function bundleMissingComponentJsAll(cb) {
+    getComponentNames()
+        .then(componentNames => {
+            let i = 0;
+
+            function nextComponent() {
+                if (componentNames.length <= i) {
+                    cb();
+                    return;
+                }
+
+                let componentName = componentNames[i];
+
+                componentOutputExists(componentName)
+                    .then(exists => {
+                        if (exists) {
+                            i++;
+                            nextComponent();
+                            return;
+                        }
+
+                        console.log(componentName.padEnd(28, '.')+' js component missing');
+
+                        buildComponentJsWithEsbuild(componentName, false)
+                            .then(() => {
+                                i++;
+                                nextComponent();
+                            })
+                            .catch(er => {
+                                handleRollupError(er);
+                                cb();
+                            });
+                    })
+                    .catch(er => {
+                        handleRollupError(er);
+                        cb();
+                    });
+            }
+
+            nextComponent();
+        })
+        .catch(er => {
+            handleRollupError(er);
+            cb();
+        });
+}
 
 function bundleLessAll(cb){
 
@@ -336,10 +291,70 @@ function bundleLessAll(cb){
     nextEntrypoint()
 }
 
-function watchJsAll(cb) {
-    entrypoints.forEach(filesName => {
-        watchJs(filesName);
-    })
+function watchComponentJsAll(cb) {
+    let runningComponents = {};
+    let queuedComponents = {};
+
+    function rebuild(componentName, done) {
+        done = done || function() {};
+
+        if (!componentName) {
+            done();
+            return;
+        }
+
+        if (runningComponents[componentName]) {
+            queuedComponents[componentName] = true;
+            done();
+            return;
+        }
+
+        runningComponents[componentName] = true;
+
+        buildComponentJsWithEsbuild(componentName, false)
+            .then(() => {
+                runningComponents[componentName] = false;
+                console.log(componentName.padEnd(28, '.')+' js updated');
+
+                if (queuedComponents[componentName]) {
+                    queuedComponents[componentName] = false;
+                    rebuild(componentName);
+                }
+
+                done();
+            })
+            .catch(er => {
+                runningComponents[componentName] = false;
+                handleRollupError(er);
+                done();
+            });
+    }
+
+    console.log('component'.padEnd(28, '.')+' js watch');
+
+    bundleMissingComponentJsAll(function() {});
+
+    gulp.watch(
+        jsWatchFiles,
+        {
+            usePolling: true,
+            interval: 250,
+            awaitWriteFinish: {
+                stabilityThreshold: 100,
+                pollInterval: 50
+            }
+        }
+    )
+        .on('change', filePath => {
+            let componentName = getComponentNameFromPath(filePath);
+            //console.log('change: '+filePath);
+            rebuild(componentName);
+        })
+        .on('add', filePath => {
+            let componentName = getComponentNameFromPath(filePath);
+            //console.log('add: '+filePath);
+            rebuild(componentName);
+        });
 
     cb();
 }
@@ -466,11 +481,11 @@ function incrementTag() {
  * Tasks
  */
 let taskWatch = gulp.series(
-    watchJsAll,
+    watchComponentJsAll,
     watchLessAll
 );
 let taskBundle = gulp.series(
-    bundleJsAll,
+    bundleComponentJsAll,
     bundleLessAll
 );
 
@@ -491,11 +506,11 @@ function taskDist(done) {
 
                     let file = files[filesName];
 
-                    let jsFileName = file.dest+'/'+file.destFileName+'.min-'+package.version+'.js';
                     let cssFileName = file.dest+'/'+file.destFileName+'.min-'+package.version+'.css';
+                    let componentJsFiles = file.dest+'/components/*.min-'+package.version+'.js';
 
-                    execSync('git add -f '+jsFileName, { encoding: 'utf8' });
                     execSync('git add -f '+cssFileName, { encoding: 'utf8' });
+                    execSync('git add -f '+componentJsFiles, { encoding: 'utf8' });
                 })
 
                 execSync(`git commit -m "Bundle version ${package.version}"`, { encoding: 'utf8' });
@@ -510,9 +525,6 @@ function taskDefault(done) {
     entrypoints.forEach(entry => {
         destFiles.push(
             `${files[entry].dest}/${files[entry].destFileName}.min-${packageVersion}.css`
-        );
-        destFiles.push(
-            `${files[entry].dest}/${files[entry].destFileName}.min-${packageVersion}.js`
         );
     })
 

@@ -7,6 +7,7 @@
     data-link="{{ $link }}"
     data-state="{{ $state }}"
     data-container="file-upload"
+    data-ui-js="FileUpload"
     data-value-field="{{ $valueField }}"
     @if ($preview)
     data-preview-image
@@ -63,3 +64,5 @@
     </div>
     @endif
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Form'); @endphp
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FileUpload'); @endphp

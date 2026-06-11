@@ -10,6 +10,7 @@
     @if ($name)
     data-name="{{ $name }}"
     @endif
+    data-ui-js="Table"
     @if ($trackDeleted)
     data-track-deleted="{{ $trackDeleted }}"
     @endif
@@ -55,3 +56,4 @@
     </tbody>
     </table>
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Table'); @endphp

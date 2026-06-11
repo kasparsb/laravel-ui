@@ -12,6 +12,7 @@
     {{ $attributesForContainer->class([
         'toggle-switch',
     ]) }}
+    data-ui-js="ToggleSwitch"
     data-state="{{ $hasError ? 'error' : '' }}"
     @if ($onChange)
     data-on-change="{{ $onChange }}"
@@ -40,3 +41,4 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ToggleSwitch'); @endphp

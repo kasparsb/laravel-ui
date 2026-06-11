@@ -3,6 +3,7 @@
     class="floating-container"
 
     data-dropdown-menu-name="{{ $name }}"
+    data-ui-js="DropdownMenu"
 
     data-position-x="{{ $positionX }}"
     data-position-y="{{ $positionY }}"
@@ -39,3 +40,4 @@
         <span tabindex="0" data-dropdown-menu-focus-trap></span>
     </div>
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('DropdownMenu'); @endphp

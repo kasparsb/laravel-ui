@@ -38,6 +38,9 @@
         'has-sufix' => $hasSufix,
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
+    @if ($menu)
+    data-ui-js="DropdownMenu"
+    @endif
     >
     @if ($label)
         <label>{{ $label }}</label>
@@ -102,3 +105,6 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
+@if ($menu)
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('DropdownMenu'); @endphp
+@endif

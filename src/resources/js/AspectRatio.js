@@ -1,15 +1,3 @@
-function calcPaddingBottom(ratio) {
-    // Padota malu attiecība kā number
-    if (!isNaN(ratio)) {
-        return `${ratio * 100}%`;
-    }
-
-    let ar = validateAspectRatio(ratio);
-    if (ar) {
-        return `${(ar.y / ar.x) * 100}%`;
-    }
-}
-
 function validateAspectRatio(ratio) {
     let delimiters = [':', '/', 'x', '*'];
     for (let delimiter of delimiters) {

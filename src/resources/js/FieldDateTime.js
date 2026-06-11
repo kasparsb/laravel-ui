@@ -1,7 +1,11 @@
 import {qa, q, r, click, change, parent, dispatchEvent} from 'dom-helpers'
-import DropdownMenu from './DropdownMenu';
-import FieldHoursMinutes from './FieldHoursMinutes';
-import FieldDate from './FieldDate';
+
+/**
+ * Indivudual komponentes, kuras ielādē ar savu js
+ */
+let DropdownMenu = window.webit.ui.DropdownMenu;
+let FieldDate = window.webit.ui.FieldDate;
+let FieldHoursMinutes = window.webit.ui.FieldHoursMinutes;
 
 function hoursMinutes(timeString) {
     return timeString.split(':').slice(0, 2).join(':');

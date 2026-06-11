@@ -1,6 +1,4 @@
-import { clickp, q, qr } from 'dom-helpers';
-import DropdownMenu from './DropdownMenu';
-import Repeatable from './Repeatable';
+import { clickp, qr } from 'dom-helpers';
 
 function isInputField(el) {
     switch (el.tagName) {
@@ -49,10 +47,10 @@ export default {
             switch (buttonEl.dataset.buttonCopy) {
                 case 'repeatableItem':
                     if (('buttonAsTarget' in buttonEl.dataset) && buttonEl.dataset.buttonAsTarget == 'dropdownMenuOpenTrigger') {
-                        Repeatable.copyItem(DropdownMenu.getOpenTriggerByChild(buttonEl))
+                        window.webit.ui.Repeatable.copyItem(window.webit.ui.DropdownMenu.getOpenTriggerByChild(buttonEl))
                     }
                     else {
-                        Repeatable.copyItem(buttonEl)
+                        window.webit.ui.Repeatable.copyItem(buttonEl)
                     }
                     break;
                 default:

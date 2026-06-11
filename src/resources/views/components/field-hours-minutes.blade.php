@@ -13,6 +13,7 @@
         'field-hours-minutes',
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
+    data-ui-js="FieldHoursMinutes"
     >
     @if ($label)
         <label>{{ $label }}</label>
@@ -48,3 +49,4 @@
         value="{{ $value }}"
         @disabled($disabled) />
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldHoursMinutes'); @endphp

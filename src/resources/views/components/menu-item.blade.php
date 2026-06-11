@@ -39,6 +39,23 @@
     if (is_null($hasMenuLabel)) {
         $hasMenuLabel = isset($slot) && !$slot->isEmpty();
     }
+
+    $buttonJsComponents = [
+        'add' => 'ButtonAdd',
+        'clear' => 'ButtonClear',
+        'copy' => 'ButtonCopy',
+        'delete' => 'ButtonDelete',
+        'get' => 'ButtonGet',
+        'post' => 'ButtonPost',
+    ];
+    $jsComponents = [];
+    if (isset($buttonJsComponents[$as])) {
+        $jsComponents[] = $buttonJsComponents[$as];
+    }
+    if ($menu) {
+        $jsComponents[] = 'DropdownMenu';
+    }
+    $jsComponents = array_unique($jsComponents);
 @endphp
 <{{ $menuItemTagName }}
     {{ $attributes->class([
@@ -144,6 +161,9 @@
     @if ($hasMenuLabel)
     data-has-label
     @endif
+    @if (count($jsComponents))
+    data-ui-js="{{ implode(' ', $jsComponents) }}"
+    @endif
     >
 
     @if (isset($prefix) && !$prefix->isEmpty())
@@ -158,3 +178,6 @@
         @endif
     @endif
 </{{ $menuItemTagName }}>
+@foreach ($jsComponents as $jsComponent)
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript($jsComponent); @endphp
+@endforeach

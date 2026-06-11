@@ -1,9 +1,8 @@
 import {
-    jsx, q, qa, parent, isChild,
-    append, replaceContent,
-    on, dispatchEvent
+    jsx, q, qa, parent,
+    replaceContent,
+    dispatchEvent
 } from 'dom-helpers';
-import Form from './Form';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import dateCaptionFormatter from './calendar/dateCaptionFormatter';
@@ -14,9 +13,13 @@ import getDateFromReference from './calendar/getDateFromReference';
 import getJsonFromHtml from './helpers/getJsonFromHtml';
 import clampDate from './calendar/clampDate';
 import formatDate from './calendar/formatDate';
-import DropdownMenu from './DropdownMenu';
 import InputValuePreview from './InputValuePreview';
 import stringToDate from './calendar/stringToDate';
+
+/**
+ * Indivudual komponentes, kuras ielādē ar savu js
+ */
+let DropdownMenu = window.webit.ui.DropdownMenu;
 
 let calendar;
 let container;
@@ -93,14 +96,21 @@ function dateSelected(date) {
     let fieldEl = parent(activeField, '.field-date');
     if (fieldEl.dataset.onChange) {
         if (fieldEl.dataset.onChange == 'submit') {
-            Form.submit(
-                Form.findParentForm(fieldEl)
-            )
+            /**
+             * Šeit izmantojam late resolve. Tikai ja ir Form, tad izmantojam to
+             */
+            if (window.webit.ui.Form) {
+                window.webit.ui.Form.submit(
+                    window.webit.ui.Form.findParentForm(fieldEl)
+                )
+            }
         }
         else if (fieldEl.dataset.onChange.startsWith('submit:')) {
-            Form.submit(
-                qr(fieldEl, fieldEl.dataset.onChange.slice(7))
-            )
+            if (window.webit.ui.Form) {
+                Form.submit(
+                    qr(fieldEl, fieldEl.dataset.onChange.slice(7))
+                )
+            }
         }
     }
 

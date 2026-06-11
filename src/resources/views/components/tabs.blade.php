@@ -13,6 +13,7 @@ if ($slot->isEmpty()) {
     @if ($name)
     data-name="{{ $name }}"
     @endif
+    data-ui-js="Tabs"
     data-selected="{{ $selected }}"
     >
     @if ($hasNav)
@@ -40,3 +41,4 @@ if ($slot->isEmpty()) {
         </div>
     @endif
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Tabs'); @endphp

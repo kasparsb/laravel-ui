@@ -1,7 +1,11 @@
 import {get, clickp} from 'dom-helpers';
-import ButtonLoading from './ButtonLoading';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
+
+/**
+ * Indivudual komponentes, kuras ielādē ar savu js
+ */
+let ButtonLoading = window.webit.ui.ButtonLoading;
 
 export default {
     init() {

@@ -6,6 +6,7 @@
 
     {{-- šajā elementā data picker (vecais FieldDate) meklē json config --}}
     data-date-picker-triggr-el-container
+    data-ui-js="CalendarWeek Calendar"
     >
 
     <span class="t-3.5">June, 2025</span>
@@ -63,3 +64,5 @@
 
     </x-ui::h-stack>
 </x-ui::v-stack>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('CalendarWeek'); @endphp
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Calendar'); @endphp

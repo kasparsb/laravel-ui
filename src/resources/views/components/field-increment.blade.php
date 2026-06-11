@@ -15,6 +15,7 @@
     ]) }}
     data-state="{{ $hasError ? 'error' : '' }}"
     data-is-container
+    data-ui-js="FieldIncrement"
 
     data-format="{{ $format }}"
     data-step="{{ $step }}"
@@ -98,3 +99,4 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
+@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldIncrement'); @endphp
