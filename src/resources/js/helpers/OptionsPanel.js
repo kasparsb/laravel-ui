@@ -6,7 +6,7 @@ import {
     request, getFormData,
     replaceContent, getOffset, getOuterDimensions
 } from 'dom-helpers';
-import fuzzysearch from './helpers/fuzzysearch';
+import fuzzysearch from './fuzzysearch';
 
 /**
  * Indivudual komponentes, kuras ielādē ar savu js

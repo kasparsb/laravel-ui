@@ -1,4 +1,4 @@
-import {jsx, q, qa, parent, append, get} from 'dom-helpers';
+import {jsx, q, qa, append} from 'dom-helpers';
 import BaseCalendar from 'calendar';
 import weekDayToText from './calendar/weekDayToText';
 import stringToDate from './calendar/stringToDate';
@@ -12,7 +12,6 @@ import getJsonFromHtml from './helpers/getJsonFromHtml';
 import Listeners from './helpers/Listeners';
 import getDateFromReference from './calendar/getDateFromReference';
 import clampDate from './calendar/clampDate';
-import Form from './Form';
 
 function CalendarWrapper(containerEl) {
 
@@ -132,13 +131,13 @@ function CalendarWrapper(containerEl) {
 
             if (this.actionOnDateSelect == 'submit') {
                 // Atrodam parent formu un submit
-                let form = Form.findParentForm(this.containerEl);
+                let form = window.webit.ui.Form.findParentForm(this.containerEl);
                 if (form) {
                     /**
                      * Netaisām native submit, lai varētu
                      * izpildīties Form uzliktie submit eventi
                      */
-                    Form.submit(form);
+                    window.webit.ui.Form.submit(form);
                 }
             }
         })

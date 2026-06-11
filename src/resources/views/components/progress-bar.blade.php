@@ -6,4 +6,4 @@
         <span data-r="indicator" style="width: {{ $progress }}%"></span>
     </div>
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ProgressBar'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ProgressBar') !!}

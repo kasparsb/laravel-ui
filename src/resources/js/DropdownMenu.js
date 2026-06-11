@@ -3,11 +3,10 @@ import {
     click, on, off, onMouseOverOut,
     clearFormData
 } from 'dom-helpers';
-import SingletonPanel from './SingletonPanel';
+import SingletonPanel from './helpers/SingletonPanel';
 import Listeners from './helpers/Listeners';
 import isButtonDelete from './helpers/isButtonDelete';
 import isButtonPost from './helpers/isButtonPost';
-
 
 let dropDownMenuHideTimeout = 0;
 

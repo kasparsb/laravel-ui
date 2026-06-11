@@ -179,5 +179,5 @@
     @endif
 </{{ $menuItemTagName }}>
 @foreach ($jsComponents as $jsComponent)
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript($jsComponent); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript($jsComponent) !!}
 @endforeach

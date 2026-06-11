@@ -81,30 +81,14 @@ function getComponentEntrySource(componentName, modulePath) {
     return `
         import Component from ${JSON.stringify(modulePath)};
 
-        function getComponentName() {
-            let script = document.currentScript;
-            if (!script || !script.src) {
-                return ${JSON.stringify(componentName)};
-            }
-
-            let fileName = script.src.split('/').pop().split('?')[0];
-
-            return fileName
-                .replace(/\\.min-[0-9]+\\.[0-9]+\\.[0-9]+\\.js$/, '')
-                .replace(/\\.js$/, '');
-        }
-
-        let componentName = getComponentName();
-        let componentEls = document.querySelectorAll('[data-ui-js~="'+componentName+'"]');
-
         window.webit = window.webit || {};
         window.webit.ui = window.webit.ui || {};
         window.webit.ui.components = window.webit.ui.components || {};
-        window.webit.ui[componentName] = Component;
-        window.webit.ui.components[componentName] = Component;
+        window.webit.ui[${JSON.stringify(componentName)}] = Component;
+        window.webit.ui.components[${JSON.stringify(componentName)}] = Component;
 
         if (Component && typeof Component.init == 'function') {
-            Component.init(componentName, componentEls);
+            Component.init();
         }
     `;
 }

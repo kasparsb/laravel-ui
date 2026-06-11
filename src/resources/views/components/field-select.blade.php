@@ -1,7 +1,7 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
-    $stateManager->queueSvgIcons([
+    $svgIconsMarker = $stateManager->queueSvgIcons([
         'ui-icon-select-trigger',
         'ui-icon-search',
     ]);
@@ -32,6 +32,7 @@
     $as = $asParts[0];
     $asSubAction = count($asParts) > 1 ? $asParts[1] : '';
 @endphp
+{!! $svgIconsMarker !!}
 <div
     {{ $attributesForContainer->class([
         'form-field',
@@ -221,11 +222,4 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
-@php
-$stateManager->queueComponentScripts([
-    'InputValuePreview',
-    'Form',
-    'Repeatable',
-    'FieldSelect',
-]);
-@endphp
+{!! $stateManager->queueComponentScripts(['InputValuePreview', 'Form', 'Repeatable', 'FieldSelect']) !!}

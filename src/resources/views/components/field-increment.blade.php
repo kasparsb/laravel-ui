@@ -99,4 +99,4 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldIncrement'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldIncrement') !!}

@@ -1,5 +1,4 @@
 import {on, parent} from 'dom-helpers';
-import Form from './Form';
 
 export default {
     init() {
@@ -9,12 +8,12 @@ export default {
             // Izpildām data-on-change event
             if (toggleSwitchEl.dataset.onChange) {
                 if (toggleSwitchEl.dataset.onChange == 'submit') {
-                    Form.submit(
-                        Form.findParentForm(toggleSwitchEl)
+                    window.webit.ui.Form.submit(
+                        window.webit.ui.Form.findParentForm(toggleSwitchEl)
                     )
                 }
                 else if (toggleSwitchEl.dataset.onChange.startsWith('submit:')) {
-                    Form.submit(
+                    window.webit.ui.Form.submit(
                         qr(toggleSwitchEl, toggleSwitchEl.dataset.onChange.slice(7))
                     )
                 }

@@ -49,4 +49,4 @@
     name="layout-modal-menu">
     {{ $menu }}
 </x-ui::dropdown-menu-blank>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Layout'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Layout') !!}

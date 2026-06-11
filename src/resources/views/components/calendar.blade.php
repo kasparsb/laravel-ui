@@ -40,4 +40,4 @@
     <script data-role="state" type="application/json">@json($state)</script>
     @endif
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Calendar'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Calendar') !!}

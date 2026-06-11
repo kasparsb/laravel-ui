@@ -1,7 +1,7 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
-    $stateManager->queueSvgIcons([
+    $svgIconsMarker = $stateManager->queueSvgIcons([
         'ui-icon-document',
         'ui-icon-image',
         'ui-icon-video',
@@ -11,6 +11,7 @@
         'ui-icon-x',
     ]);
 @endphp
+{!! $svgIconsMarker !!}
 <div
     {{ $attributes->class([
         'file-upload-single-file',

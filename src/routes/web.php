@@ -10,7 +10,6 @@ use Kasparsb\Ui\FilesManager;
 Route::get('ui/svgs', function(Request $r){
 
     $r = new Svgs(
-        defer: false,
         icons: $r->collect('icons')->all(),
     );
 

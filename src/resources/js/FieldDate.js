@@ -16,11 +16,6 @@ import formatDate from './calendar/formatDate';
 import InputValuePreview from './InputValuePreview';
 import stringToDate from './calendar/stringToDate';
 
-/**
- * Indivudual komponentes, kuras ielādē ar savu js
- */
-let DropdownMenu = window.webit.ui.DropdownMenu;
-
 let calendar;
 let container;
 let activeField;
@@ -114,7 +109,7 @@ function dateSelected(date) {
         }
     }
 
-    DropdownMenu.close(activeMenu);
+    window.webit.ui.DropdownMenu.close(activeMenu);
 }
 
 function setupCalendar(field) {
@@ -197,13 +192,13 @@ export default {
          *   - datuma lauks
          *   - Week calendar datuma poga, kur atver datepicker, lai dabūtu datumu
          */
-        DropdownMenu.onOpen('field-date-calendar', (menuEl, triggerEl) => {
+        window.webit.ui.DropdownMenu.onOpen('field-date-calendar', (menuEl, triggerEl) => {
             setupCalendar(triggerEl)
             activeField = triggerEl;
             activeMenu = menuEl;
         })
 
-        DropdownMenu.onClose('field-date-calendar', (menuEl, triggerEl) => {
+        window.webit.ui.DropdownMenu.onClose('field-date-calendar', (menuEl, triggerEl) => {
             activeField = null;
             activeMenu = null;
         })

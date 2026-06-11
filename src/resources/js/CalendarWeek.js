@@ -1,9 +1,6 @@
-import FieldDate from './FieldDate';
-
-
 export default {
     init() {
-        FieldDate.setNamedListener(
+        window.webit.ui.FieldDate.setNamedListener(
             'calendar-week-data-picker',
             function(date){
                 console.log('calendar-week-data-picker');

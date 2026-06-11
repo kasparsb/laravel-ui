@@ -49,4 +49,4 @@
         value="{{ $value }}"
         @disabled($disabled) />
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldHoursMinutes'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldHoursMinutes') !!}

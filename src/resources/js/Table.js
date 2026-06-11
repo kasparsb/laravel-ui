@@ -2,7 +2,6 @@ import {
     q, qa, append, remove, parent, on, value, clone,
     clearFormData, change, ce
 } from 'dom-helpers';
-import FieldSelect from './FieldSelect';
 import Listeners from './helpers/Listeners';
 
 let onDeleteRowListeners = {};
@@ -25,7 +24,7 @@ function addRow(tableEl) {
 
     // clean up values in input fields
     clearFormData(newRow);
-    FieldSelect.setup(newRow);
+    window.webit.ui.FieldSelect.setup(newRow);
 
     /**
      * Clear select field placeholders

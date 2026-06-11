@@ -10,4 +10,4 @@
     >
     {{ $slot }}
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('RadioButtons'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('RadioButtons') !!}

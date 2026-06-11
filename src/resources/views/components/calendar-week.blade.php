@@ -64,5 +64,5 @@
 
     </x-ui::h-stack>
 </x-ui::v-stack>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('CalendarWeek'); @endphp
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Calendar'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('CalendarWeek') !!}
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Calendar') !!}

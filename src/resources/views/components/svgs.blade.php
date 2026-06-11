@@ -1,4 +1,3 @@
-@if (!$defer)
 @if (count($icons) > 0)
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     @if (in_array('ui-icon-checkbox-checked', $icons))
@@ -176,23 +175,4 @@
     </symbol>
     @endif
 </svg>
-@endif
-@endif
-
-@if ($defer)
-@if (count($icons) > 0)
-<script>
-fetch('{!! $svgsLink !!}')
-    .then(function(response){
-        return response.text();
-    })
-    .then(function(svgsHtml){
-        let div = document.createElement('div');
-        div.style.display = 'none';
-        div.innerHTML = svgsHtml;
-
-        document.body.append(div);
-    })
-</script>
-@endif
 @endif

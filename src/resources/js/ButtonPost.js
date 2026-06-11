@@ -2,18 +2,13 @@ import {post, clickp} from 'dom-helpers';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
 
-/**
- * Indivudual komponentes, kuras ielādē ar savu js
- */
-let ButtonLoading = window.webit.ui.ButtonLoading;
-
 export default {
     init() {
         clickp('[data-button-post]', (ev, buttonEl) => {
 
             if (buttonEl.dataset.url) {
 
-                ButtonLoading.maybeLoading(buttonEl, 'post');
+                window.webit.ui.ButtonLoading.maybeLoading(buttonEl, 'post');
 
                 let elReplacer = new ReplaceElWithNewHtmlIfNecessary(buttonEl);
 
@@ -36,7 +31,7 @@ export default {
                                     window.location.href = r[redirectFieldName]
                                 }
                                 else {
-                                    ButtonLoading.idle(buttonEl);
+                                    window.webit.ui.ButtonLoading.idle(buttonEl);
                                 }
                             }
                             else {
@@ -45,7 +40,7 @@ export default {
                         }
                         else {
                             elReplacer.replace(r)
-                            ButtonLoading.idle(buttonEl);
+                            window.webit.ui.ButtonLoading.idle(buttonEl);
                             handleDropdownMenuHideFromEl(buttonEl, 'aftersubmit');
                         }
                     })

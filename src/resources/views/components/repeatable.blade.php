@@ -58,4 +58,4 @@ $hasNewItemPlaceholder = isset($newItemPlaceholder) && !$newItemPlaceholder->isE
     @endif
 
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Repeatable'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Repeatable') !!}

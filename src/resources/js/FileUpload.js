@@ -1,8 +1,8 @@
 import {
     q, r, parent, change, click, upload, append, remove, clone, replaceContent
 } from 'dom-helpers';
-import createVideoFromFile from './createVideoFromFile';
-import createImageFromFile from './createImageFromFile';
+import createVideoFromFile from './helpers/createVideoFromFile';
+import createImageFromFile from './helpers/createImageFromFile';
 
 /**
  * Indivudual komponentes, kuras ielādē ar savu js

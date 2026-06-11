@@ -56,4 +56,4 @@
     </tbody>
     </table>
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Table'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Table') !!}

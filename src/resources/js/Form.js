@@ -8,7 +8,7 @@ import Listeners from './helpers/Listeners';
 import ReplaceElWithNewHtmlIfNecessary from './helpers/ReplaceElWithNewHtmlIfNecessary';
 import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl';
 import LimitedBatch from './helpers/LimitedBatch';
-import ScrollIntoViewportObserver from './ScrollIntoViewportObserver';
+import ScrollIntoViewportObserver from './helpers/ScrollIntoViewportObserver';
 
 /**
  * Indivudual komponentes, kuras ielādē ar savu js
@@ -105,6 +105,37 @@ function setButtonIdleAfterSubmit(formEl) {
     })
 }
 
+function loadComponentScripts(root) {
+    if (
+        window.webit &&
+        window.webit.ui &&
+        typeof window.webit.ui.loadComponentScripts == 'function'
+    ) {
+        return window.webit.ui.loadComponentScripts(root);
+    }
+
+    return Promise.resolve();
+}
+
+function loadSvgIcons(root) {
+    if (
+        window.webit &&
+        window.webit.ui &&
+        typeof window.webit.ui.loadSvgIcons == 'function'
+    ) {
+        return window.webit.ui.loadSvgIcons(root);
+    }
+
+    return Promise.resolve();
+}
+
+function loadAssets(root) {
+    return Promise.all([
+        loadSvgIcons(root),
+        loadComponentScripts(root)
+    ]);
+}
+
 function handleSubmit(formEl, customData) {
     if ('isSubmitting' in formEl.dataset) {
         // Formā jau notiek submit
@@ -161,29 +192,35 @@ function handleSubmit(formEl, customData) {
                 delete formEl.dataset.isSubmitting;
                 setButtonIdleAfterSubmit(formEl);
 
-                if (onAfterSubmitListeners['__any__']) {
-                    onAfterSubmitListeners['__any__'].trigger([
-                        formEl,
-                        response
-                    ])
-                }
+                loadAssets(replacedEl)
+                    .then(() => {
+                        if (onAfterSubmitListeners['__any__']) {
+                            onAfterSubmitListeners['__any__'].trigger([
+                                formEl,
+                                response
+                            ])
+                        }
 
-                if (replacedEl) {
-                    if (onAfterReplaceHtmlListeners['__any__']) {
-                        onAfterReplaceHtmlListeners['__any__'].trigger([
-                            replacedEl
-                        ])
-                    }
-                }
+                        if (replacedEl) {
+                            if (onAfterReplaceHtmlListeners['__any__']) {
+                                onAfterReplaceHtmlListeners['__any__'].trigger([
+                                    replacedEl
+                                ])
+                            }
+                        }
 
-                handleDropdownMenuHideFromEl(formEl, 'aftersubmit');
+                        handleDropdownMenuHideFromEl(formEl, 'aftersubmit');
 
-                // Ja ir ienākušas jaunas formas, kurām vajag uzstādīt setTimeout
-                setTimeoutsForFormsWithSubmitAfterMs();
-                // Scrollintoviewport formas
-                setScrollIntoViewportForms();
+                        // Ja ir ienākušas jaunas formas, kurām vajag uzstādīt setTimeout
+                        setTimeoutsForFormsWithSubmitAfterMs();
+                        // Scrollintoviewport formas
+                        setScrollIntoViewportForms();
 
-                resolve(response);
+                        resolve(response);
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
             })
             .catch(err => {
                 delete formEl.dataset.isSubmitting;

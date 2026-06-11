@@ -2,10 +2,11 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
-    $stateManager->queueSvgIcons([
+    $svgIconsMarker = $stateManager->queueSvgIcons([
         'ui-icon-loading',
     ]);
 @endphp
+{!! $svgIconsMarker !!}
 
 <span {{ $attributes->class([
     'spinner' => true,

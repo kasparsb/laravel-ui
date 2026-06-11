@@ -1,8 +1,8 @@
 import {qa, qr, q, parent, on, dispatchEvent, get} from 'dom-helpers';
 import LimitedBatch from './helpers/LimitedBatch';
 import isArray from './helpers/isArray';
-import OptionsPanel from './OptionsPanel';
-import FieldSelectEmptyState from './FieldSelectEmptyState';
+import OptionsPanel from './helpers/OptionsPanel';
+import FieldSelectEmptyState from './helpers/FieldSelectEmptyState';
 // Limit, lai vienlaicīgi izpildās tikai 4
 let loadValueVisualBatch = new LimitedBatch(4);
 

@@ -41,4 +41,4 @@
     <p data-role="description">{{ $description }}</p>
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ToggleSwitch'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ToggleSwitch') !!}

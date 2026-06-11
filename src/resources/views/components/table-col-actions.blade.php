@@ -1,8 +1,9 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
-    $stateManager->queueSvgIcon('ui-icon-dots');
+    $svgIconsMarker = $stateManager->queueSvgIcon('ui-icon-dots');
 @endphp
+{!! $svgIconsMarker !!}
 <x-ui::button-ghost
     class="icon small"
     data-r="tableRowActions"

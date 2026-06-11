@@ -41,4 +41,4 @@ if ($slot->isEmpty()) {
         </div>
     @endif
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Tabs'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Tabs') !!}

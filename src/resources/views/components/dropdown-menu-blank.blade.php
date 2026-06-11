@@ -37,4 +37,4 @@
         <span tabindex="0" data-dropdown-menu-focus-trap></span>
     </div>
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('DropdownMenu'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('DropdownMenu') !!}

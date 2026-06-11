@@ -77,5 +77,5 @@
 </div>
 @endif
 @if ($as == 'form')
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Form'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Form') !!}
 @endif

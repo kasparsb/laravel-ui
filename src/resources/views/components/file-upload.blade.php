@@ -64,5 +64,5 @@
     </div>
     @endif
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Form'); @endphp
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FileUpload'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Form') !!}
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FileUpload') !!}

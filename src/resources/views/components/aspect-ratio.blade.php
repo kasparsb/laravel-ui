@@ -7,4 +7,4 @@
     >
     {{ $slot }}
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('AspectRatio'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('AspectRatio') !!}

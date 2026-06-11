@@ -4,9 +4,7 @@
 <nav {{ $attributes->class(['pagination']) }}>
     @if (!$hideNavPrev)
         @if ($onFirstPage)
-            @php
-                $stateManager->queueSvgIcon('ui-icon-angle-left');
-            @endphp
+            {!! $stateManager->queueSvgIcon('ui-icon-angle-left') !!}
             <x-ui::button
                 variant="{{ $navPrevVariant }}"
                 data-pagination-button-name="page-prev"
@@ -20,9 +18,7 @@
                 </svg>
             </x-ui::button>
         @else
-            @php
-                $stateManager->queueSvgIcon('ui-icon-angle-left');
-            @endphp
+            {!! $stateManager->queueSvgIcon('ui-icon-angle-left') !!}
             <x-ui::button
                 variant="{{ $navPrevVariant }}"
                 data-pagination-button-name="page-prev"
@@ -78,9 +74,7 @@
 
     @if (!$hideNavNext)
         @if ($hasMorePages)
-            @php
-                $stateManager->queueSvgIcon('ui-icon-angle-right');
-            @endphp
+            {!! $stateManager->queueSvgIcon('ui-icon-angle-right') !!}
             <x-ui::button
                 variant="{{ $navNextVariant }}"
                 data-pagination-button-name="page-next"
@@ -93,9 +87,7 @@
                 </svg>
             </x-ui::button>
         @else
-            @php
-                $stateManager->queueSvgIcon('ui-icon-angle-right');
-            @endphp
+            {!! $stateManager->queueSvgIcon('ui-icon-angle-right') !!}
             <x-ui::button
                 variant="{{ $navNextVariant }}"
                 data-pagination-button-name="page-next"

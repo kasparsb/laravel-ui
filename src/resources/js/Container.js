@@ -1,5 +1,5 @@
-import isArray from './helpers/isArray';
 import {q, click} from 'dom-helpers';
+import isArray from './helpers/isArray';
 
 function loading(el) {
     // previous loading state

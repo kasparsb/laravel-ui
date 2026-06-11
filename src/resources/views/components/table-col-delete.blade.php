@@ -1,10 +1,11 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
-    $stateManager->queueSvgIcons([
+    $svgIconsMarker = $stateManager->queueSvgIcons([
         'ui-icon-trash',
     ]);
 @endphp
+{!! $svgIconsMarker !!}
 <x-ui::button-ghost
     class="icon"
     data-r="tableRowDelete"

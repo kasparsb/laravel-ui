@@ -2,8 +2,9 @@
 
 @if ($direction == 'vertical')
 @php
-    $stateManager->queueSvgIcon('ui-icon-delimiter-vertical');
+    $svgIconsMarker = $stateManager->queueSvgIcon('ui-icon-delimiter-vertical');
 @endphp
+{!! $svgIconsMarker !!}
 <svg {{ $attributes->class(['delimiter-vertical']) }}>
     <use xlink:href="#ui-icon-delimiter-vertical"></use>
 </svg>

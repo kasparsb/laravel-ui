@@ -12,4 +12,4 @@
     >
     {{ $slot }}
 </div>
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Container'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('Container') !!}

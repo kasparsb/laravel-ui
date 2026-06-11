@@ -64,4 +64,4 @@
 </div>
 
 <x-ui::time-picker-menu />
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldDateTime'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldDateTime') !!}

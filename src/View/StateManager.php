@@ -2,8 +2,6 @@
 
 namespace Kasparsb\Ui\View;
 
-use Illuminate\Support\Str;
-
 /**
  * State priekš laukiem
  */
@@ -23,27 +21,71 @@ class StateManager
     public $queuedComponentScripts = [];
 
     public function queueSvgIcon($iconId) {
-        if (!in_array($iconId, $this->queuedSvgIcons)) {
-            $this->queuedSvgIcons[] = $iconId;
-        }
+        return $this->queueSvgIcons([$iconId]);
     }
 
     public function queueSvgIcons($iconIds) {
-        foreach ($iconIds as $iconId) {
-            $this->queueSvgIcon($iconId);
+        if (is_string($iconIds)) {
+            $iconIds = [$iconIds];
         }
+
+        $queuedIcons = [];
+
+        foreach ($iconIds as $iconId) {
+            if (!$iconId) {
+                continue;
+            }
+
+            if (!in_array($iconId, $this->queuedSvgIcons)) {
+                $this->queuedSvgIcons[] = $iconId;
+            }
+
+            if (!in_array($iconId, $queuedIcons)) {
+                $queuedIcons[] = $iconId;
+            }
+        }
+
+        if (!count($queuedIcons)) {
+            return '';
+        }
+
+        return '<template data-ui-svg-icons="'.
+            htmlspecialchars(implode(' ', $queuedIcons), ENT_QUOTES, 'UTF-8').
+            '"></template>';
     }
 
     public function queueComponentScript($component) {
-        if (!in_array($component, $this->queuedComponentScripts)) {
-            $this->queuedComponentScripts[] = $component;
-        }
+        return $this->queueComponentScripts([$component]);
     }
 
     public function queueComponentScripts($components) {
-        foreach ($components as $component) {
-            $this->queueComponentScript($component);
+        if (is_string($components)) {
+            $components = [$components];
         }
+
+        $queuedComponents = [];
+
+        foreach ($components as $component) {
+            if (!$component) {
+                continue;
+            }
+
+            if (!in_array($component, $this->queuedComponentScripts)) {
+                $this->queuedComponentScripts[] = $component;
+            }
+
+            if (!in_array($component, $queuedComponents)) {
+                $queuedComponents[] = $component;
+            }
+        }
+
+        if (!count($queuedComponents)) {
+            return '';
+        }
+
+        return '<template data-ui-component-scripts="'.
+            htmlspecialchars(implode(' ', $queuedComponents), ENT_QUOTES, 'UTF-8').
+            '"></template>';
     }
 
     public function flushQueuedComponentScripts() {

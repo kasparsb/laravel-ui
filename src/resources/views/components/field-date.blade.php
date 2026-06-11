@@ -1,7 +1,7 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
-    $stateManager->queueSvgIcons([
+    $svgIconsMarker = $stateManager->queueSvgIcons([
         'ui-icon-x',
         'ui-icon-calendar',
     ]);
@@ -17,6 +17,7 @@
 
     $hasSufix = isset($sufix) && !$sufix->isEmpty();
 @endphp
+{!! $svgIconsMarker !!}
 <div
     {{ $attributesForContainer->class([
         'form-field',
@@ -99,7 +100,7 @@
                     <use xlink:href="#ui-icon-x"></use>
                 </svg>
             </x-ui::button-ghost>
-            @php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ButtonClear'); @endphp
+            {!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('ButtonClear') !!}
         @elseif (isset($sufix) && !$sufix->isEmpty())
             {{ $sufix }}
         @endif
@@ -126,4 +127,4 @@
     </div>
 </x-ui::dropdown-menu>
 @endif
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldDate'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('FieldDate') !!}

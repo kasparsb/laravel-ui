@@ -106,5 +106,5 @@
     <p data-role="error">{{ $errorMessage }}</p>
 </div>
 @if ($menu)
-@php app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('DropdownMenu'); @endphp
+{!! app('Kasparsb\\Ui\\View\\StateManager')->queueComponentScript('DropdownMenu') !!}
 @endif

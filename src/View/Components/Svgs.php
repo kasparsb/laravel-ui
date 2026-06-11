@@ -10,18 +10,13 @@ use Kasparsb\Ui\View\StateManager;
 
 class Svgs extends Component
 {
-    public $svgsLink;
-
     public function __construct(
-        public $defer=false,
         public $icons=null,
     )
     {
         if (is_null($this->icons)) {
             $this->icons = app(StateManager::class)->queuedSvgIcons;
         }
-
-        $this->svgsLink = route('ui::svgs', ['icons' => $this->icons]);
     }
 
     public function render(): View|Closure|string

@@ -1,7 +1,7 @@
 @inject('stateManager', 'Kasparsb\Ui\View\StateManager')
 
 @php
-    $stateManager->queueSvgIcon('ui-icon-checkbox-checked');
+    $svgIconsMarker = $stateManager->queueSvgIcon('ui-icon-checkbox-checked');
     // without data-* attributes
     $attributesForContainer = $attributes->filter(function($value, $key){
         return substr($key, 0, 5) != 'data-';
@@ -11,6 +11,7 @@
         return substr($key, 0, 5) == 'data-';
     });
 @endphp
+{!! $svgIconsMarker !!}
 <div
     {{ $attributesForContainer->class([
         'checkbox',

@@ -1,16 +1,14 @@
-import { clickp } from 'dom-helpers';
-import Table from './Table';
-import Repeatable from './Repeatable';
+import {clickp} from 'dom-helpers';
 
 export default {
     init() {
         clickp('[data-button-add]', (ev, el) => {
             switch (el.dataset.buttonAdd) {
                 case 'tableRow':
-                    Table.addRow(el.dataset.table);
+                    window.webit.ui.Table.addRow(el.dataset.table);
                     break;
                 case 'repeatableItem':
-                    Repeatable.addItem(el);
+                    window.webit.ui.Repeatable.addItem(el);
                     break;
             }
         })

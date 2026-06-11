@@ -1,6 +1,4 @@
 import {q, parent, dispatchEvent, get} from 'dom-helpers';
-import DropdownMenu from './DropdownMenu';
-import Form from './Form';
 
 function isChildOfFieldSelectEmptyState(el) {
     if (parent(el, '[data-field-select-empty-state]')) {
@@ -21,7 +19,7 @@ function handleBeforeSubmit(formEl, response) {
         return
     }
 
-    DropdownMenu.ignoreFocusoutOnce(DropdownMenu.getByChild(formEl))
+    window.webit.ui.DropdownMenu.ignoreFocusoutOnce(window.webit.ui.DropdownMenu.getByChild(formEl))
 }
 
 /**
@@ -36,7 +34,7 @@ function handleAfterSubmit(formEl, response) {
         return
     }
 
-    let openTriggerEl = DropdownMenu.getOpenTriggerByChild(formEl);
+    let openTriggerEl = window.webit.ui.DropdownMenu.getOpenTriggerByChild(formEl);
     let fieldEl = parent(openTriggerEl, '.field-select');
 
     let valueFieldName = 'id';
@@ -92,7 +90,7 @@ function handleAfterSubmit(formEl, response) {
 
                 // Liekam mazu delay, lai var redzēt success message, ja tāds ir
                 setTimeout(() => {
-                    DropdownMenu.closeByOpenTrigger(openTriggerEl)
+                    window.webit.ui.DropdownMenu.closeByOpenTrigger(openTriggerEl)
                 }, 700)
             })
 
@@ -114,7 +112,7 @@ function handleAfterSubmit(formEl, response) {
      * savādāk reset notiks uzreiz bet aizvēršanās ar aizturi
      */
     setTimeout(() => {
-        DropdownMenu.closeByOpenTrigger(openTriggerEl)
+        window.webit.ui.DropdownMenu.closeByOpenTrigger(openTriggerEl)
     }, 700)
 }
 
@@ -127,7 +125,7 @@ function handleAfterSubmit(formEl, response) {
 export default {
     init() {
         // Klausāmies uz From submit
-        Form.onBeforeSubmit(handleBeforeSubmit)
-        Form.onAfterSubmit(handleAfterSubmit)
+        window.webit.ui.Form.onBeforeSubmit(handleBeforeSubmit)
+        window.webit.ui.Form.onAfterSubmit(handleAfterSubmit)
     }
 }
