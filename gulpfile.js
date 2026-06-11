@@ -476,6 +476,12 @@ function incrementTag() {
     execSync(`git tag -a ${nextTag} -m "Version ${nextTag}"`)
 }
 
+function hasStagedChanges() {
+    let stagedFiles = execSync('git diff --cached --name-only', { encoding: 'utf8' });
+
+    return stagedFiles.trim() !== '';
+}
+
 /**
  * Tasks
  */
@@ -511,6 +517,12 @@ function taskDist(done) {
                     execSync('git add -f '+cssFileName, { encoding: 'utf8' });
                     execSync('git add -f '+componentJsFiles, { encoding: 'utf8' });
                 })
+
+                if (!hasStagedChanges()) {
+                    console.log('No bundle changes to commit');
+                    done();
+                    return;
+                }
 
                 execSync(`git commit -m "Bundle version ${package.version}"`, { encoding: 'utf8' });
 
