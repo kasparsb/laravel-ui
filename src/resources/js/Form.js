@@ -10,11 +10,6 @@ import handleDropdownMenuHideFromEl from './helpers/handleDropdownMenuHideFromEl
 import LimitedBatch from './helpers/LimitedBatch';
 import ScrollIntoViewportObserver from './helpers/ScrollIntoViewportObserver';
 
-/**
- * Indivudual komponentes, kuras ielādē ar savu js
- */
-let ButtonLoading = window.webit.ui.ButtonLoading;
-
 let onBeforeSubmitListeners = {};
 let onAfterSubmitListeners = {};
 let onAfterReplaceHtmlListeners = {};
@@ -95,13 +90,13 @@ function submitForm(formEl, url, method, customData) {
  */
 function setButtonLoadingOnSubmit(formEl) {
     qa(formEl, 'button[data-loading="onsubmit"]').forEach(buttonEl => {
-        ButtonLoading.loading(buttonEl);
+        window.webit.ui.ButtonLoading.loading(buttonEl);
     })
 }
 
 function setButtonIdleAfterSubmit(formEl) {
     qa(formEl, 'button[data-loading="loading"]').forEach(buttonEl => {
-        ButtonLoading.idle(buttonEl);
+        window.webit.ui.ButtonLoading.idle(buttonEl);
     })
 }
 
@@ -255,7 +250,7 @@ function reset(formEl) {
     formEl = replace(formEl, clone(originalEl[formEl.dataset.originalElId]));
     let buttonEl = q(formEl, '[type=submit]');
     if (buttonEl) {
-        ButtonLoading.idle(buttonEl);
+        window.webit.ui.ButtonLoading.idle(buttonEl);
     }
     return formEl;
 }
@@ -263,14 +258,14 @@ function reset(formEl) {
 function setBusy(formEl) {
     let buttonEl = q(formEl, '[type=submit]');
     if (buttonEl) {
-        ButtonLoading.loading(buttonEl);
+        window.webit.ui.ButtonLoading.loading(buttonEl);
     }
 }
 
 function setNotBusy(formEl) {
     let buttonEl = q(formEl, '[type=submit]');
     if (buttonEl) {
-        ButtonLoading.idle(buttonEl);
+        window.webit.ui.ButtonLoading.idle(buttonEl);
     }
 }
 
