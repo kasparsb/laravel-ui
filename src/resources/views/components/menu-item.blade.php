@@ -55,6 +55,9 @@
     if ($menu) {
         $jsComponents[] = 'DropdownMenu';
     }
+    if ($loading) {
+        $jsComponents[] = 'ButtonLoading';
+    }
     $jsComponents = array_unique($jsComponents);
 @endphp
 <{{ $menuItemTagName }}
