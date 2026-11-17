@@ -7,7 +7,9 @@ export default {
         clickp('[data-button-get]', (ev, buttonEl) => {
             if (buttonEl.dataset.url) {
 
-                window.webit.ui.ButtonLoading.maybeLoading(buttonEl, 'get');
+                if (window.webit.ui.ButtonLoading) {
+                    window.webit.ui.ButtonLoading.maybeLoading(buttonEl, 'get');
+                }
 
                 let elReplacer = new ReplaceElWithNewHtmlIfNecessary(buttonEl);
 
@@ -30,7 +32,9 @@ export default {
                                     window.location.href = r[redirectFieldName]
                                 }
                                 else {
-                                    window.webit.ui.ButtonLoading.idle(buttonEl);
+                                    if (window.webit.ui.ButtonLoading) {
+                                        window.webit.ui.ButtonLoading.idle(buttonEl);
+                                    }
                                 }
                             }
                             else {
@@ -39,7 +43,9 @@ export default {
                         }
                         else {
                             elReplacer.replace(r)
-                            window.webit.ui.ButtonLoading.idle(buttonEl);
+                            if (window.webit.ui.ButtonLoading) {
+                                window.webit.ui.ButtonLoading.idle(buttonEl);
+                            }
                             handleDropdownMenuHideFromEl(buttonEl, 'aftersubmit');
                         }
                     })

@@ -8,7 +8,9 @@ export default {
 
             if (buttonEl.dataset.url) {
 
-                window.webit.ui.ButtonLoading.maybeLoading(buttonEl, 'post');
+                if (window.webit.ui.ButtonLoading) {
+                    window.webit.ui.ButtonLoading.maybeLoading(buttonEl, 'post');
+                }
 
                 let elReplacer = new ReplaceElWithNewHtmlIfNecessary(buttonEl);
 
@@ -31,7 +33,9 @@ export default {
                                     window.location.href = r[redirectFieldName]
                                 }
                                 else {
-                                    window.webit.ui.ButtonLoading.idle(buttonEl);
+                                    if (window.webit.ui.ButtonLoading) {
+                                        window.webit.ui.ButtonLoading.idle(buttonEl);
+                                    }
                                 }
                             }
                             else {
@@ -40,7 +44,9 @@ export default {
                         }
                         else {
                             elReplacer.replace(r)
-                            window.webit.ui.ButtonLoading.idle(buttonEl);
+                            if (window.webit.ui.ButtonLoading) {
+                                window.webit.ui.ButtonLoading.idle(buttonEl);
+                            }
                             handleDropdownMenuHideFromEl(buttonEl, 'aftersubmit');
                         }
                     })
