@@ -1,5 +1,4 @@
 import {replace, ensureDomNode, qr} from 'dom-helpers';
-import DropdownMenu from '../DropdownMenu';
 import Container from '../Container';
 
 /**
@@ -38,7 +37,8 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
         if (this.originalEl.dataset.replaceHtmlTarget == 'dropdownMenuOpenTrigger') {
             this.shouldReplaceOriginalEl = false;
 
-            this.elToReplace = DropdownMenu.getOpenTriggerByChild(this.originalEl)
+
+            this.elToReplace = window.webit.ui.DropdownMenu.getOpenTriggerByChild(this.originalEl)
         }
     }
 
@@ -57,7 +57,11 @@ function ReplaceElWithNewHtmlIfNecessary(originalEl) {
         Container.maybeLoading(this.elToReplace, 'replace');
     }
     else {
-        console.error('UI.Form el to replace not defined')
+        console.warn('UI.Form el to replace not defined', {
+            originalEl: this.originalEl,
+            replaceHtmlTarget: 'replaceHtmlTarget' in this.originalEl.dataset ? window.webit.ui.DropdownMenu.getOpenTriggerByChild(this.originalEl) : 'notset',
+            replaceHtml: this.originalEl.dataset.replaceHtml
+        });
     }
 }
 
